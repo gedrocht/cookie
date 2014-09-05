@@ -110,20 +110,24 @@ function startAllIntervals(){
     for( var key in intervals ){
         intervals[key].start();
     }
+    printIntervalStatus();
 }
 
 function stopAllIntervals(){
     for( var key in intervals ){
         intervals[key].stop();
     }
+    printIntervalStatus();
 }
 
 function startInterval(name){
     intervals[name].start();
+    printIntervalStatus();
 }
 
 function stopInterval(name){
     intervals[name].stop();
+    printIntervalStatus();
 }
 
 function getInterval(name){
