@@ -163,3 +163,5 @@ function ljust( str, len ){
     
     return str;
 }
+startAllIntervals();
+printIntervalStatus();
