@@ -35,6 +35,11 @@ addInterval("Buy Buildings",function(){
         }
         d[g]('productOwned'+lowestNum).click();
         return;
+    } else {
+        for(var i=11;i>-1;i--){
+            x=d[g]('productOwned'+i);
+            if(x==null)continue;
+            x.click();
     }
 
     for(var i=11;i>-1;i--){
