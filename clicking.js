@@ -81,6 +81,9 @@ addInterval("Click Wrinklers",function(){
             }}},100);
 addInterval("Set Title",function(){d.title=Beautify(Game.cookiesPs,0) + " CpS";},0);
 
+//addInterval("Reset",function(){if(Game.cookiesEarned / 1000000000000000000000>1){Game.Reset(1);}},1000); //reset every 1 sextillion cookies in bank
+  addInterval("Reset",function(){if(((Game.time - Game.startDate)/1000)/60 > 60){Game.Reset(1);}},1000); //reset every hour
+
 function Interval(name,intervalFunction,intervalDelay){
     this.name = name;
     this.intervalFunction = intervalFunction;
@@ -168,3 +171,15 @@ function ljust( str, len ){
     return str;
 }
 startAllIntervals();
+
+/*
+INTERVAL_LOL = setInterval(function(){
+    var hours=((cookieGoal-Game.cookies) / cookieDiff)/(60.0*60.0);
+    var numHours = Math.floor(hours);
+    var numMinutes = Math.floor((hours-numHours)*60,0);
+    var minStr = numMinutes.toString();
+    if(minStr.length==1){minStr="0"+minStr;}
+    var timeStr = numHours.toString() + ":" + minStr + " Remaining";
+    document.title = timeStr;
+    },0);
+*/
