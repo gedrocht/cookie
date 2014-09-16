@@ -88,7 +88,7 @@ addInterval("Click Wrinklers",function(){
 addInterval("Set Title",function(){d.title=Beautify(Game.cookiesPs,0) + " CpS";},0);
 
 //addInterval("Reset",function(){if(Game.cookiesEarned / 1000000000000000000000>1){Game.Reset(1);}},1000); //reset every 1 sextillion cookies in bank
-  addInterval("Reset",function(){if(((Game.time - Game.startDate)/1000)/60 > 60){stopAllIntervals();Game.Reset(1);setTimeout(function(){startAllIntervals()},1000);}},1000); //reset every hour
+  addInterval("Reset",function(){if(((Game.time - Game.startDate)/1000)/60 > 120){stopAllIntervals();Game.Reset(1);setTimeout(function(){startAllIntervals()},1000);}},1000); //reset every 2 hours
 
 function Interval(name,intervalFunction,intervalDelay){
     this.name = name;
