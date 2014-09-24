@@ -1,0 +1,179 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+div {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    font-family: Arial;
+}
+
+table {
+    border-spacing: 0;
+    border: solid 1px black;
+}
+
+tr {
+}
+
+td {
+    border: solid 1px black;
+    margin: 0;
+    padding: 10px;
+    width: 230px;
+    height: 160px;
+    text-align: center;
+}
+</style>
+<script>
+possibilities = 
+['Futuristic space gun',
+'“Prototype"',
+'Faster-than-light travel',
+'Time travel',
+'Hologram',
+'Explosion of sparks',
+'Waiting on something to charge (energy)',
+'“Capacitor”',
+'“Polarity”',
+'“Dimension”',
+'Relativity',
+'Acid',
+'English-speaking aliens',
+'Zero gravity',
+'Phase shift / Out of phase',
+'“Galactic” / "Galaxy"',
+'“Failsafe” / "Foolproof" / "Unbreakable" / "Impregnable"   ',
+'Something magnetic',
+'“Invasion”',
+'Suicide mission',
+'Someone has to stay behind',
+'“I’ll be fine / I’m fine”',
+'“It’s probably nothing / It’s your imagination”',
+'“We’re all that’s left”',
+'Keys turned / passwords entered simultaneously',
+'A transmission is jammed',
+'Storm in space (asteroid, energy, radiation)',
+'Forcefield / Energy shield',
+'AI',
+'Jetpack',
+'Grappling hook',
+'Teleportation',
+'Running out of air',
+'Explosive decompression',
+'Especially horrific death',
+'Lab-created monster',
+'Creations turn on their creators',
+'“Pandemic / Epidemic”',
+'Energy beam',
+'Airlock',
+'“Sensors”',
+'Bomb',
+'On-screen ticking timer',
+'Burning up in the atmosphere',
+'Person who died (that we didn\'t see the corpse of) turns out to be alive',
+'"Paradox"',
+'Failsafe fails',
+'Ultimatum',
+'Mind control',
+'Someone investigates something alone',
+'Telepathy',
+'Person reports inexplicable familiarity with alien technology/building/language',
+'Someone dies because they panicked',
+'Someone dies because they didn\'t follow orders/instructions',
+'Something that was warned about happens',
+'A prediction/legend/prophecy comes true or turns out to be real',
+'"I don\'t like this / I have a bad feeling about this',
+'A transmission cuts out',
+'The lights go out / The power goes out',
+'Someone on the other end of a transmission/recording is warned about something after they\'ve already left',
+'Radiation',
+'Energy field (non-forcefield)',
+'Someone drops something into a pit to see how deep it is',
+'Black guy dies first',
+'Someone trips while running away from something',
+'"Brace for impact"',
+'Someone being held at gunpoint turns the tables',
+'During the struggle for a gun, it is fired wildly',
+'During a struggle, a weapon is slowly turned in an opposite direction',
+'"It\'s too late for"',
+'"They\'re counting on us"',
+'"Bogeys"',
+'A defeated enemy momentarily revives for one last attack',
+'Deus ex machina',
+'Disarming something that\'s about to go off',
+'Grenade antics (frantic struggle to grab it or its pin / it rolls out of a dying person\'s hand)',
+'Torture',
+'A weapon is kicked out of someone\'s hand or accross the floor',
+'"Drop your weapons"',
+'Rising tension over an approaching enemy turns out to have been a false alarm',
+'A crack in glass splinters dramatically',
+'Night vision sequence',
+'High-pitched whining after an explosion',
+'Cheesey one-liner',
+'Can\'t see the evil bad guy\'s face',
+'The evil bad guy has a scary voice',
+'Easily-usable enemy/alien equipment',
+'High-tech restraints/confinement',
+'Surrender',
+'Something that is supposed to be very rare happens',
+'Betrayal',
+'Implosion',
+'Super-human powers (mental or physical)',
+'Rescue mission',
+'Protagonist(s) turn out to have been evil all along',
+'Sound in space'
+];
+
+var used = [];
+var rows = 5;
+var cols = 5;
+var middle = Math.round((Math.round(rows/2)+Math.round(cols/2))/2);
+
+function init(){
+    var str = "<table>";
+    
+    for( var x = 1 ; x <= rows ; x++ ){
+        str += "<tr>";
+        for( var y = 1 ; y <= cols ; y++ ){
+            str += "<td>" + getCell(x,y) + "</td>";
+        }
+        str += "</tr>";
+    }
+    str += "</table>";
+    
+    document.getElementById("fart").innerHTML = str;
+}
+
+function getUnused(){
+    var result;
+    while(true){
+        result = Math.floor(Math.random()*possibilities.length);
+        if (used.indexOf(result) != -1)
+            continue;
+        break;
+    }
+    
+    used.push(result);
+    return possibilities[result];
+}
+
+function getCell(x,y){
+    if (x == middle && y == middle)
+        return "FREE SPACE";
+        
+    return getUnused();
+}
+</script>
+</head>
+<body onLoad="init();">
+<br><br><br><br>
+<center>
+<div id="fart">
+</div>
+</center>
+</body>
+</html>

@@ -6,7 +6,7 @@ ClickingCooker.g='getElementById';
 ClickingCooker.bigCookie = ClickingCooker.d[ClickingCooker.g]('bigCookie');
 
 ClickingCooker.intervals = {};
-ClickingCooker.resetTimeLimit = 120;
+ClickingCooker.resetTimeLimit = 24*60;//120
 
 ClickingCooker.Interval = function(name,intervalFunction,intervalDelay){
     this.name = name;
@@ -65,11 +65,13 @@ ClickingCooker.addInterval("Buy Buildings",function(){
         ClickingCooker.d[ClickingCooker.g]('productOwned'+lowestNum).click();
         return;
     } else {
+        /*
         for(var i=11;i>-1;i--){
             x=ClickingCooker.d[ClickingCooker.g]('productOwned'+i);
             if(x==null)continue;
             x.click();
         }
+        */
     }
 
     for(var i=11;i>-1;i--){
