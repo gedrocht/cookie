@@ -29,106 +29,102 @@ td {
 }
 </style>
 <script>
+
+var paramStr = location.search;
+var params = [];
+
+if (paramStr.length != 0){
+    paramStr = paramStr.substring(1);
+    params = paramStr.split(",");
+}
+
+var SciFi      = "SciFi";
+var Space      = "Space";
+var Aliens     = "Aliens";
+var Futuristic = "Futuristic";
+var TimeTravel = "TimeTravel";
+
 possibilities = 
-['Futuristic space gun',
-'“Prototype"',
-'Faster-than-light travel',
-'Time travel',
-'Hologram',
-'Explosion of sparks',
-'Waiting on something to charge (energy)',
-'“Capacitor”',
-'“Polarity”',
-'“Dimension”',
-'Relativity',
-'Acid',
-'English-speaking aliens',
-'Zero gravity',
-'Phase shift / Out of phase',
-'“Galactic” / "Galaxy"',
-'“Failsafe” / "Foolproof" / "Unbreakable" / "Impregnable"   ',
-'Something magnetic',
-'“Invasion”',
-'Suicide mission',
-'Someone has to stay behind',
-'“I’ll be fine / I’m fine”',
-'“It’s probably nothing / It’s your imagination”',
-'“We’re all that’s left”',
-'Keys turned / passwords entered simultaneously',
-'A transmission is jammed',
-'Storm in space (asteroid, energy, radiation)',
-'Forcefield / Energy shield',
-'AI',
-'Jetpack',
-'Grappling hook',
-'Teleportation',
-'Running out of air',
-'Explosive decompression',
-'Especially horrific death',
-'Lab-created monster',
-'Creations turn on their creators',
-'“Pandemic / Epidemic”',
-'Energy beam',
-'Airlock',
-'“Sensors”',
-'Bomb',
-'On-screen ticking timer',
-'Burning up in the atmosphere',
-'Person who died (that we didn\'t see the corpse of) turns out to be alive',
-'"Paradox"',
-'Failsafe fails',
-'Ultimatum',
-'Mind control',
-'Someone investigates something alone',
-'Telepathy',
-'Person reports inexplicable familiarity with alien technology/building/language',
-'Someone dies because they panicked',
-'Someone dies because they didn\'t follow orders/instructions',
-'Something that was warned about happens',
-'A prediction/legend/prophecy comes true or turns out to be real',
-'"I don\'t like this / I have a bad feeling about this',
-'A transmission cuts out',
-'The lights go out / The power goes out',
-'Someone on the other end of a transmission/recording is warned about something after they\'ve already left',
-'Radiation',
-'Energy field (non-forcefield)',
-'Someone drops something into a pit to see how deep it is',
-'Black guy dies first',
-'Someone trips while running away from something',
-'"Brace for impact"',
-'Someone being held at gunpoint turns the tables',
-'During the struggle for a gun, it is fired wildly',
-'During a struggle, a weapon is slowly turned in an opposite direction',
-'"It\'s too late for"',
-'"They\'re counting on us"',
-'"Bogeys"',
-'A defeated enemy momentarily revives for one last attack',
-'Deus ex machina',
-'Disarming something that\'s about to go off',
-'Grenade antics (frantic struggle to grab it or its pin / it rolls out of a dying person\'s hand)',
-'Torture',
-'A weapon is kicked out of someone\'s hand or accross the floor',
-'"Drop your weapons"',
-'Rising tension over an approaching enemy turns out to have been a false alarm',
-'A crack in glass splinters dramatically',
-'Night vision sequence',
-'High-pitched whining after an explosion',
-'Cheesey one-liner',
-'Can\'t see the evil bad guy\'s face',
-'The evil bad guy has a scary voice',
-'Easily-usable enemy/alien equipment',
-'High-tech restraints/confinement',
-'Surrender',
-'Something that is supposed to be very rare happens',
-'Betrayal',
-'Implosion',
-'Super-human powers (mental or physical)',
-'Rescue mission',
-'Protagonist(s) turn out to have been evil all along',
-'Sound in space',
-'Someone is keeping secrets about the REAL reason for the mission',
-'Glowy-ass alien-ass future-ass technology'
+[['Futuristic weapon/gun',SciFi,Futuristic],
+ ['“Prototype"',SciFi],
+ ['Faster-than-light travel',SciFi,Futuristic,Space],
+ ['Hologram',SciFi,Futuristic],
+ ['Explosion of sparks',SciFi],
+ ['Waiting on something to charge / spin up / start',SciFi],
+ ['Something deadly to humans on contact (space, lava, acid, exposed electrical wires, etc.)',SciFi],
+ ['English-speaking aliens',SciFi,Aliens],
+ ['Zero gravity',SciFi,Space],
+ ['Phase shift / Out of phase',SciFi,Futuristic],
+ ['“Failsafe” / "Foolproof" / "Unbreakable" / "Impregnable"',SciFi],
+ ['Something magnetic',SciFi,Futuristic],
+ ['“Invasion”',SciFi],
+ ['Suicide mission',SciFi],
+ ['Someone has to stay behind',SciFi],
+ ['“I’ll be fine / I’m fine / It’s probably nothing / It’s your imagination”',SciFi],
+ ['“We’re all that’s left”',SciFi],
+ ['Keys turned / passwords entered simultaneously',SciFi],
+ ['A transmission is cut off / jammed',SciFi],
+ ['Storm in space (asteroid, energy, radiation)',SciFi,Space],
+ ['Forcefield / Energy shield',SciFi,Futuristic],
+ ['AI',SciFi,Futuristic],
+ ['Jetpack',SciFi,Futuristic],
+ ['Grappling hook / zipline / rope climbing',SciFi],
+ ['Teleportation',SciFi,Futuristic],
+ ['Running out of air',SciFi,Space],
+ ['Explosive decompression',SciFi,Space],
+ ['Especially horrific death',SciFi],
+ ['Creations turn on their creators',SciFi],
+ ['Energy beam',SciFi,Futuristic],
+ ['Airlock',SciFi,Space],
+ ['“Sensors”',SciFi,Futuristic],
+ ['Bomb',SciFi],
+ ['On-screen ticking timer',SciFi],
+ ['Burning up in the atmosphere',SciFi,Space],
+ ['Person who died (that we didn\'t see the corpse of) turns out to be alive',SciFi],
+ ['"Paradox"',SciFi,TimeTravel],
+ ['Something that was supposed to be impossible happens',SciFi],
+ ['Someone goes off on their own from a group',SciFi],
+ ['Person reports inexplicable familiarity with alien technology/building/language',SciFi,Aliens],
+ ['Someone dies because they panicked or didn\'t follow orders/instructions',SciFi],
+ ['Something that was warned about ends up happening',SciFi],
+ ['A prediction/legend/prophecy comes true or turns out to be real',SciFi],
+ ['"I don\'t like this / I have a bad feeling about this"',SciFi],
+ ['The lights go out / The power goes out',SciFi],
+ ['Someone on the other end of a transmission/recording is warned about something after they\'ve already left',SciFi],
+ ['Radiation',SciFi],
+ ['Energy field (non-forcefield)',SciFi],
+ ['Someone drops something into a pit to see how deep it is',SciFi],
+ ['Someone trips while running away from something',SciFi],
+ ['"Brace for impact" / "Hang on"',SciFi],
+ ['Someone being held at gunpoint/weapon point turns the tables',SciFi],
+ ['During the struggle for a gun, it is fired wildly',SciFi],
+ ['During a struggle, a weapon is slowly turned in an opposite direction',SciFi],
+ ['A defeated enemy momentarily revives for one last attack',SciFi],
+ ['Disarming something that\'s about to go off',SciFi],
+ ['Grenade antics (frantic struggle to grab it or its pin / it rolls out of a dying person\'s hand)',SciFi],
+ ['A weapon is kicked out of someone\'s hand or accross the floor',SciFi],
+ ['Rising tension over an approaching enemy turns out to have been a false alarm',SciFi],
+ ['A crack in glass splinters dramatically',SciFi,Space],
+ ['Night vision sequence',SciFi],
+ ['High-pitched whining after an explosion',SciFi],
+ ['Cheesey one-liner',SciFi],
+ ['The evil bad guy has a scary voice OR we can\'t see their face',SciFi],
+ ['Easily-usable enemy/alien equipment',SciFi],
+ ['High-tech restraints/confinement',SciFi,Futuristic],
+ ['Something that we were told is supposed to be very rare happens',SciFi],
+ ['Obvious/Inevitable betrayal',SciFi],
+ ['Super-human powers (mental or physical)',SciFi],
+ ['Rescue mission OR Suicide mission (or both)',SciFi],
+ ['Protagonist(s) turn out to have been evil all along',SciFi],
+ ['Sound in space',SciFi,Space],
+ ['Someone is keeping secrets about the REAL reason for the mission',SciFi],
+ ['Glowy-ass alien-ass future-ass technology',SciFi,Futuristic],
+ ['Techno-babble ("capacitor", "polarity", etc)',SciFi,Futuristic],
+ ["Motivational/Dramatic speech / Pep talk",SciFi],
+ ["Crash landing",SciFi]
 ];
+
+var workingSet = getWorkingSet(params);
 
 var used = [];
 var rows = 5;
@@ -153,14 +149,14 @@ function init(){
 function getUnused(){
     var result;
     while(true){
-        result = Math.floor(Math.random()*possibilities.length);
+        result = Math.floor(Math.random()*workingSet.length);
         if (used.indexOf(result) != -1)
             continue;
         break;
     }
     
     used.push(result);
-    return possibilities[result];
+    return workingSet[result];
 }
 
 function getCell(x,y){
@@ -168,6 +164,27 @@ function getCell(x,y){
         return "FREE SPACE";
         
     return getUnused();
+}
+
+function getWorkingSet( tags ){
+    var set = [];
+    
+    var p;
+    var allFound;
+    for( var i = 0 ; i < possibilities.length ; i++ ){
+        p = possibilities[i];
+        allFound = true;
+        for( var t = 1 ; t < p.length ; t++ ){
+            if (tags.indexOf(p[t]) == -1){
+                allFound = false;
+                break;
+            }
+        }
+        if (allFound)
+            set.push(p[0]);
+    }
+    
+    return set;
 }
 </script>
 </head>
