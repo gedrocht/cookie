@@ -6,7 +6,7 @@ ClickingCooker.g='getElementById';
 ClickingCooker.bigCookie = ClickingCooker.d[ClickingCooker.g]('bigCookie');
 
 ClickingCooker.intervals = {};
-ClickingCooker.resetTimeLimit = 24*60;//120
+ClickingCooker.resetTimeLimit = 12*60;//120
 
 ClickingCooker.Interval = function(name,intervalFunction,intervalDelay){
     this.name = name;
@@ -199,7 +199,7 @@ Beans.timeLeft = function(){
 Beans.heavenlyChips = function(){return Game.HowMuchPrestige(Game.cookiesReset)/1000000;};
 
 ClickingCooker.startAllIntervals();
-ClickingCooker.addInterval("Set Title",function(){ClickingCooker.d.title=Beautify(Game.cookiesPs,0) + " CpS";},0);
+//ClickingCooker.addInterval("Set Title",function(){ClickingCooker.d.title=Beautify(Game.cookiesPs,0) + " CpS";},0);
 Beans.timeLeft();
 
 /*
