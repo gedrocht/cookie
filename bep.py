@@ -167,15 +167,17 @@ def ws_handleConnection( connection, address ):
             if len(data) == 0: continue;
             
             wsPacketPayload = decodeWsPacket(data);
-            decodedPacket = convertFromPacket( bytearray(wsPacketPayload) )
             
-            decodedPayload = decodedPacket["data"];
+            decodedPayload = wsPacketPayload.split(",");
             
-            decodedPacket["origin_id"] = id;
-            _print( cs + ": " + str(decodedPacket) )
+            packet_origin_id = int(decodedPayload[0]);
+            packet_type = int(decodedPayload[1]);
+            packet_data = decodedPayload[2];
             
-            if( decodedPacket["packet_type"] == toByte(TYPE.chat_all[0]) ):
-                newPacket = convertToPacket( id, TYPE.chat_all[0], decodedPayload );
+            _print( cs + ": " + "{'data': " + str(packet_data) + ", 'packet_type': " + str(packet_type) + ", 'origin_id': " + str(id) + "}" );
+            
+            if( packet_type == toByte(TYPE.chat_all[0]) ):
+                newPacket = convertToPacket( id, TYPE.chat_all[0], packet_data );
                 sendToAllOthers( connection, CONNECTION_WS, newPacket )
             
     except Exception:

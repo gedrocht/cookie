@@ -1,0 +1,203 @@
+<html>
+<head>
+<script>
+
+var mouseX = 300;
+var mouseY = 300;
+
+var DisplayObject = function() {
+    this.type = "DisplayObject";
+    this.rotation = [0,0,0];
+    this.position = [0,0,0];
+    this.shape = null;
+    
+    this.setRotation = function( array ){
+        this.rotation[0] = array[0];
+        this.rotation[1] = array[1];
+        this.rotation[2] = array[2];
+    }
+    
+    this.setPosition = function( array ){
+        this.position[0] = array[0];
+        this.position[1] = array[1];
+        this.position[2] = array[2];
+    }
+    
+    this.setXRotation = function( x ){ this.rotation[0] = x; }
+    this.setYRotation = function( y ){ this.rotation[1] = y; }
+    this.setZRotation = function( z ){ this.rotation[2] = z; }
+    
+    this.setXPosition = function( x ){ this.position[0] = x; }
+    this.setYPosition = function( y ){ this.position[1] = y; }
+    this.setZPosition = function( z ){ this.position[2] = z; }
+}
+
+var Point = function(_x,_y) {
+    this.x = _x;
+    this.y = _y;
+    
+    this.toString = function(){
+        return this.x + " " + this.y;
+    }
+}
+
+function init(){
+    star = new DisplayObject();
+    star.shape = document.getElementsByTagName("svg")[0]
+    
+    addShapes();
+}
+
+function addShapes(){
+    var numShapes = 33;
+    var minRadius = 5;
+    var maxRadius = 15;
+    var minRotationRate = -(1/1);
+    var maxRotationRate =  (1/1);
+    var minPoints = 3;
+    var maxPoints = 12;
+    var minX = 100;
+    var maxX = document.body.offsetWidth-minX;
+    var minY = 100;
+    var maxY = document.body.offsetHeight-minY;
+    
+    document.getElementById("paths").setAttribute("width", maxX + minX);
+    document.getElementById("paths").setAttribute("height",maxY + minY);
+    
+    var hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
+    
+    var strokeColor;
+    var strokeWidth;
+    var fillColor;
+    
+    var minStrokeWidth = 1;
+    var maxStrokeWidth = 4;
+    
+    function getRandHex(){
+        var color = "";
+        for( var i = 0 ; i < 6 ; i++ ){
+            color += hex[Math.floor(Math.random()*16)]
+        }
+        return color;
+    }
+    
+    var paths = "";
+    for( var i = 0 ; i < numShapes ; i++ ){
+        strokeColor = getRandHex();
+        strokeWidth = rand(minStrokeWidth,maxStrokeWidth);
+        fillColor   = getRandHex();
+        paths += '<path id="'+i+'" stroke="#'+strokeColor+'" stroke-width="'+strokeWidth+'" fill="#'+fillColor+'" />\n';
+    }
+    
+    document.getElementById("paths").innerHTML += paths;
+    
+    for( var i = 0 ; i < numShapes ; i++ ){
+        startPointsAnimation( {
+            radius: rand(minRadius, maxRadius),
+            elementID:i+"",
+            rotationRate: rand(minRotationRate, maxRotationRate),
+            numPoints: Math.round(rand(minPoints, maxPoints)),
+            x: rand(minX, maxX),
+            y: rand(minY, maxY),
+            connector:"L",
+            fps: 60
+        } );
+    }
+}
+
+function rand( min, max ){
+    return (Math.random()*(max-min))+min;
+}
+
+function startPointsAnimation( options ){
+    var offset = 0;
+    var radius = options.radius;
+    var path = document.getElementById(options.elementID);
+    var degToRad = (Math.PI/180);
+    var rotRate = degToRad*options.rotationRate;
+    var perToRad = 2*Math.PI;
+    var numPoints = options.numPoints;
+    var points = [];
+    var x = options.x;
+    var y = options.y;
+    var Vx = 0;
+    var Vy = 0;
+    var xLimit = document.body.offsetWidth;
+    var yLimit = document.body.offsetHeight;
+    
+    for( var i = 0 ; i < numPoints ; i++ ){
+        points.push( new Point(0,0) );
+    }
+    
+    var doToPoints = function(p,i){
+        theta = (i/numPoints)*perToRad + offset;
+        p.x = Math.cos(theta)*radius + x;
+        p.y = Math.sin(theta)*radius + y;
+    }
+    
+    var setPoints = function(){
+        var theta;
+        points.forEach(doToPoints);
+        var acceleration = getAcceleration(x,y);
+        Vx += acceleration[0];
+        Vy += acceleration[1];
+        x += Vx;
+        y += Vy;
+        
+        if(x + Vx < 0 || x + Vx > xLimit) Vx *= -0.9;
+        if(y + Vy < 0 || y + Vy > yLimit) Vy *= -0.9;
+        
+        offset += rotRate;
+        
+        path.setAttribute("d",buildPath( points, options.connector ));
+    }
+    
+    setPoints();
+    setInterval(setPoints,1000/options.fps);
+}
+
+function getAcceleration(x,y){
+    var acceleration = [0,0];
+    
+    var dx = mouseX-x;
+    var dy = mouseY-y;
+    var theta = Math.atan2(dy,dx);
+    var r = Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2));
+    if( r < 100 ){ r = 100; }
+    var multiplier = 1000;
+    
+    acceleration[0] = multiplier * Math.cos(theta)/Math.pow(r,2);
+    acceleration[1] = multiplier * Math.sin(theta)/Math.pow(r,2);
+    
+    return acceleration;
+}
+
+function buildPath( points, connector ){
+    if( points.length == 0 ) return "";
+    var path = "";
+    path += "M"+points[0];
+    for( var i = 1 ; i < points.length ; i++ ){
+        path += connector + points[i];
+    }
+    path += "Z";
+    return path;
+}
+
+(function() {
+    window.onmousemove = handleMouseMove;
+    function handleMouseMove(event) {
+        event = event || window.event;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+    }
+})();
+
+</script>
+</head>
+<body onLoad="init();">
+<center>
+
+<svg id="paths" width="800" height="600">
+</svg>
+</center>
+</body>

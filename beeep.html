@@ -4,13 +4,108 @@
     <title>Web Socket Example</title>
     <meta charset="UTF-8">
     <script>
-        var s;
+        TYPE = {
+            position_z     :[0,Number],
+            position_y     :[1,Number],
+            position_z     :[2,Number],
+            rotation_x     :[3,Number],
+            rotation_y     :[4,Number],
+            rotation_z     :[5,Number],
+            cur_weapon     :[6,Number],
+            chat_all       :[7,String],
+            chat_team      :[8,String],
+            new_player     :[9,String],
+            new_object     :[10,Number],
+            sound_start    :[11,Number],
+            sound_stop     :[12,Number],
+            cur_state      :[13,Number],
+            equipment_on   :[14,Number],
+            equipment_off  :[15,Number],
+            team_join      :[16,Number],
+            health         :[17,Number],
+            name_change    :[18,String],
+            server_message :[19,String],
+            velocity_x     :[20,Number],
+            velocity_y     :[21,Number],
+            velocity_z     :[22,Number],
+            item_get       :[23,Number],
+            item_use       :[24,Number],
+            item_lose      :[25,Number]
+        };
+        
+      var s;
       window.onload = function() {
         s = new WebSocket("ws://localhost:8999");
         s.onopen = function(e) { console.log("opened"); }
         s.onclose = function(e) { console.log("closed"); }
-        s.onmessage = function(e) { console.log("got: " + e.data); }
+        s.onmessage = function(e) { console.log("received:", decode(e.data)); }
       };
+      
+      function decode(data){
+        var origin_id   = data.charCodeAt(0);
+        var packet_type = data.charCodeAt(1);
+        var data_length = data.charCodeAt(2);
+        var packet_data = "";
+        for( var i = 3 ; i < data.length ; i++ )
+            packet_data += data[i];
+        
+        return {"origin_id":origin_id, "packet_type":packet_type, "data_length":data_length, "data":packet_data};
+      }
+      
+      function encode( id, type, data ){
+        if( data.length == 0 )
+            return "";
+        
+        var packet = [id,type,data];
+        
+        return packet;
+      }
+      
+      /*
+      function encode( id, type, data ){
+        if( data.length == 0 )
+            return "";
+        
+        var length = data.length + (4-(data.length + 3) % 4)
+        
+        var byteArray = new Int32Array((length+3)/4);
+        
+        //console.log(" "+(id<<24).toString(2));
+        //console.log(" "+(type<<16).toString(2));
+        //console.log("         "+(length<<8).toString(2));
+        //console.log(" "+((type<<16)|(length<<8)).toString(2))
+        //console.log("             "+(data.charCodeAt(0)).toString(2));
+        //console.log(" "+((type<<16)|(length<<8)|(data.charCodeAt(0))).toString(2));
+        
+        //var newByte = (type<<16)|(length<<8)|((data.charCodeAt(0)).toString(2));
+        
+        
+        var id_binary     = pad(id.toString(2),8);
+        var type_binary   = pad(type.toString(2),8);
+        var length_binary = pad(length.toString(2),8);
+        var char_binary   = pad(data.charCodeAt(0).toString(2),8);
+        
+        var byte_string = id_binary + type_binary + length_binary + char_binary;
+        
+        byteArray[0] = parseInt(byte_string,2);
+        
+        for( var i = 0 ; i < (length-data.length) ; i++ ){
+            data += '\0';
+        }
+        
+        for( var i = 4 ; i < length+3 ; i+=4 ){
+            byteArray[i/4] = parseInt( pad(data.charCodeAt(i/4).toString(2),8) + pad(data.charCodeAt(i/4+1).toString(2),8) + pad(data.charCodeAt(i/4+2).toString(2),8) + pad(data.charCodeAt(i/4+3).toString(2),8), 2 );
+        }
+        
+        return byteArray;
+      }
+      */
+      
+      function pad( s, digits ){
+        while(s.length < digits)
+            s="0"+s
+        return s;
+      }
     </script>
   </head>
     <body>

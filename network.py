@@ -72,12 +72,12 @@ def convertToPacket( id, msg_type, data ):
 
 def convertFromPacket( packet ):
     result = dict();
-    origin_id = packet[0];
+    origin_id   = packet[0];
     packet_type = packet[1];
     data_length = packet[2];
     
     if type(origin_id) == str:
-        origin_id = ord(packet[0])
+        origin_id   = ord(packet[0])
         packet_type = ord(packet[1])
         data_length = ord(packet[2])
     
