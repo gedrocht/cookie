@@ -50,6 +50,9 @@ def convertToPacket( id, msg_type, data ):
     packet_bits = [];
     
     packet_bits.extend(toBits(toBinary(id).zfill(8)));
+    
+    if type(msg_type) == int:
+        msg_type = toBits(toBinary(msg_type).zfill(8));
     packet_bits.extend(msg_type);
     
     if type(data) != str:

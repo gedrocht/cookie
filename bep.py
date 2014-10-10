@@ -11,6 +11,7 @@ from network import *
 
 CONNECTION_TCP = 0;
 CONNECTION_WS  = 1;
+CONNECTION_UDP = 2;
 
 connections = [];
 connectionLock = 0;
@@ -174,11 +175,14 @@ def ws_handleConnection( connection, address ):
             packet_type = int(decodedPayload[1]);
             packet_data = decodedPayload[2];
             
-            _print( cs + ": " + "{'data': " + str(packet_data) + ", 'packet_type': " + str(packet_type) + ", 'origin_id': " + str(id) + "}" );
+            #_print( cs + ": " + "{'data': " + str(packet_data) + ", 'packet_type': " + str(packet_type) + ", 'origin_id': " + str(id) + "}" );
             
+            new_packet_id = packet_origin_id;
             if( packet_type == toByte(TYPE.chat_all[0]) ):
-                newPacket = convertToPacket( id, TYPE.chat_all[0], packet_data );
-                sendToAllOthers( connection, CONNECTION_WS, newPacket )
+                new_packet_id = id;
+            
+            newPacket = convertToPacket( new_packet_id, packet_type, packet_data );
+            sendToAllOthers( connection, CONNECTION_WS, newPacket )
             
     except Exception:
         pass;
@@ -238,10 +242,26 @@ def sendToWs( connection, data ):
     for character in _payload:
         bytes.append(toByte(toBits(str(bin(ord(character)))[2:].zfill(8))))
     connection.sendall(bytes);
-
+    
 def sendToTCP( connection, data ):
     connection.send(data);
-        
+
+def udp_startServer():
+    t = threading.Thread(target=udp_acceptConnections);
+    t.daemon = True;
+    t.start();
+    
+def udp_acceptConnections():
+    ip = "127.0.0.1";
+    port = 7999;
+    
+    _print( "Starting UDP server at " + str(ip) + ":" + str(port) );
+    
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM);
+    s.bind((ip,port));
+    
+    _print( "UDP Server Online (inoperable)" );
+    
 def tcp_startServer():
     t = threading.Thread(target=tcp_acceptConnections);
     t.daemon = True;
@@ -311,7 +331,8 @@ def setInterval( func, params, interval ):
 
 def say(s): _print( s );
 
-server = tcp_startServer();
+tcp_startServer();
+udp_startServer();
 ws_startServer()
 
 '''

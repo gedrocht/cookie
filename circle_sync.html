@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8">
+    <script src="config.js"></script> <!--config.js must be imported before network.js-->
+    <script src="network.js"></script>
+    <script>
+        var degToRad = (Math.PI/180);
+        var svg;
+        
+        var Point = function(_x,_y) {
+            this.x = _x;
+            this.y = _y;
+            
+            this.toString = function(){
+                return this.x + " " + this.y;
+            }
+        }
+        
+        Shape = function(id){
+            this.id = id;
+            this.x = 0;
+            this.y = 0;
+            this.numPoints = 0;
+            this.radius = 0;
+            this.path;
+            
+            this.toBlankPath = function(){
+                return '<path id="path_'+this.id+'" />\n';
+            }
+        }
+        
+        function init(){
+            svg = document.getElementById("svg");
+            var svg_innerHTML = "";
+            
+            var id = 30;
+            
+            shape = new Shape(id);
+            
+            svg_innerHTML += shape.toBlankPath();
+            svg.innerHTML = svg_innerHTML;
+            shape.path = document.getElementById("path_"+shape.id);
+            shape.x = Math.round(Math.random()*100)+30;
+            shape.y = Math.round(Math.random()*100)+30;
+            shape.numPoints = 3;
+            shape.radius = 10;
+            
+            setInterval(
+                function(){
+                    shape.x+=0.1
+                    shape.y+=0.1
+                    send_position( shape.id, shape );
+                }
+            ,32)
+            
+            otherShape = new Shape(id+1)
+            svg_innerHTML += otherShape.toBlankPath();
+            svg.innerHTML = svg_innerHTML;
+            otherShape.path = document.getElementById("path_"+otherShape.id);
+            otherShape.numPoints = 3;
+            otherShape.radius = 10;
+            
+            setInterval(
+                function(){
+                    setPath(shape.path,buildPath(buildShape(shape.numPoints,shape.radius,shape.x,shape.y),"L"));
+                    setPath(otherShape.path,buildPath(buildShape(otherShape.numPoints,otherShape.radius,otherShape.x,otherShape.y),"L"));
+                },16);
+        }
+        
+        Network.handleReceivedPacket = function(e){
+            switch(e.packet_type){
+                case Network.TYPE.position_x[0]:
+                    //console.log(e.origin_id + " x = " + Number(e.data));
+                    otherShape.x = Number(e.data);
+                    break;
+                case Network.TYPE.position_y[0]:
+                    //console.log(e.origin_id + " y = " + Number(e.data));
+                    otherShape.y = Number(e.data);
+                    break;
+            }
+        }
+        
+        function send_position( id, obj ){
+            send_x_position(id, obj.x);
+            send_y_position(id, obj.y);
+        }
+        
+        function send_x_position(id,x){
+            Network.server.send(Network.encode(id,Network.TYPE.position_x[0],x))
+        }
+        
+        function send_y_position(id,y){
+            Network.server.send(Network.encode(id,Network.TYPE.position_y[0],y))
+        }
+        
+        function setPath( path, d ){
+            document.getElementById(path.id).setAttribute("d",d);
+        }
+        
+        function buildShape( numPoints, radius, x, y ){
+            var points = [];
+            var theta;
+            for( var i = 0 ; i < numPoints ; i++ ){
+                theta = (i/numPoints)*2*Math.PI;
+                points.push( new Point(
+                    radius * Math.cos(theta) + x,
+                    radius * Math.sin(theta) + y ) );
+            }
+            return points;
+        }
+        
+        function buildPath( points, connector ){
+            if( points.length == 0 ) return "";
+            var path = "M"+points[0];
+            for( var i = 1 ; i < points.length ; i++ ){
+                path += connector + points[i];
+            }
+            path += "Z";
+            return path;
+        }
+    </script>
+  </head>
+    <body onLoad="init();">
+      <svg id="svg" width="800" height="600">
+      </svg>
+    </body>
+</html>
