@@ -211,12 +211,13 @@ def printAllEvents():
     
 eventsToSchedule = []
 
-daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+daysOfTheWeek = ["Monday 10/20", "Tuesday 10/21", "Wednesday 10/22", "Thursday 10/23", "Friday 10/24", \
+                 "Monday 10/27", "Tuesday 10/28", "Wednesday 10/29", "Thursday 10/30" ];
 
 #addTimeframe( "Morning",  "5:30",  "8:00" );
 addTimeframe( "Monday Evening", "15:30", "20:00" );
 
-for i in range(1,5):
+for i in range(1,len(daysOfTheWeek)):
     addTimeframe( daysOfTheWeek[i] + " Morning",  str(i*24+5)+":45",  str(i*24+8)+":00" );
     addTimeframe( daysOfTheWeek[i] + " Evening", str(i*24+15)+":30", str(i*24+20)+":00" );
     
@@ -232,6 +233,21 @@ eventsToSchedule.append(["Watch The Blair Witch Project",81]);
 eventsToSchedule.append(["The Descent",99]);
 eventsToSchedule.append(["Watch Event Horizon",96]);
 eventsToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
+
+eventsToSchedule.append(["Watch Saw II",93]);
+eventsToSchedule.append(["Watch 28 Weeks Later",100]);
+eventsToSchedule.append(["Watch The Grudge",92]);
+eventsToSchedule.append(["Watch Silent Hill",125]);
+eventsToSchedule.append(["Watch Jeepers Creepers",90]);
+eventsToSchedule.append(["Watch [Rec]",78]);
+eventsToSchedule.append(["Watch The Hills Have Eyes",107]);
+eventsToSchedule.append(["Watch Pandorum",108]);
+eventsToSchedule.append(["Watch Final Destination",98]);
+eventsToSchedule.append(["Watch The Purge: Anarchy",103]);
+eventsToSchedule.append(["Watch Children of the Corn",92]);
+eventsToSchedule.append(["Watch The Amityville Horror",90]);
+eventsToSchedule.append(["Watch V/H/S",116]);
+
 
 for e in eventsToSchedule:
     scheduleEvent( e[0], e[1] )
