@@ -214,11 +214,11 @@ eventsToSchedule = []
 daysOfTheWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
 #addTimeframe( "Morning",  "5:30",  "8:00" );
-addTimeframe( "Monday Evening", "15:30", "21:00" );
+addTimeframe( "Monday Evening", "15:30", "20:00" );
 
 for i in range(1,5):
     addTimeframe( daysOfTheWeek[i] + " Morning",  str(i*24+5)+":45",  str(i*24+8)+":00" );
-    addTimeframe( daysOfTheWeek[i] + " Evening", str(i*24+15)+":30", str(i*24+21)+":00" );
+    addTimeframe( daysOfTheWeek[i] + " Evening", str(i*24+15)+":30", str(i*24+20)+":00" );
     
 eventsToSchedule.append(["Watch Alien",117]);
 eventsToSchedule.append(["Watch Aliens",137]);
