@@ -229,6 +229,7 @@ eventsToSchedule.append(["Watch A Nightmare on Elm Street",91]);
 eventsToSchedule.append(["Watch The Ring",115]);
 eventsToSchedule.append(["Watch Poltergeist",114]);
 eventsToSchedule.append(["Watch The Blair Witch Project",81]);
+eventsToSchedule.append(["The Descent",99]);
 eventsToSchedule.append(["Watch Event Horizon",96]);
 eventsToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 
