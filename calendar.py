@@ -21,6 +21,7 @@ DICT_LENGTH = "length"
 
 LABEL_MORNING = "Morning"
 LABEL_EVENING = "Evening"
+LABEL_REMOVE  = "REMOVE"
 
 ERR_INVALID_TIME  = "Invalid time specification"
 ERR_INVALID_LABEL = "Invalid label specification"
@@ -236,40 +237,59 @@ def printAllEvents():
 def shiftEvent( event, minutes ):
     event[DICT_RANGE][DICT_START] = addTimes( event[DICT_RANGE][DICT_START], secToTime(minutes*60.0) );
     event[DICT_RANGE][DICT_END]   = addTimes( event[DICT_RANGE][DICT_END]  , secToTime(minutes*60.0) );
+    event[DICT_RANGE][DICT_DUR]   = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_START] );
         
+def areEventsEqual( event_a, event_b ):
+    return ( areTimesEqual(event_a[DICT_RANGE][DICT_START], event_b[DICT_RANGE][DICT_START]) and \
+             areTimesEqual(event_a[DICT_RANGE][DICT_END],   event_b[DICT_RANGE][DICT_END])   and \
+             event_a[DICT_NAME] == event_b[DICT_NAME] );
+        
+def getEventRightAfterwards( event ):
+    for otherEvent in events:
+        if areEventsEqual( event, otherEvent ):
+            continue;
+        if areTimesEqual( event[DICT_RANGE][DICT_END], otherEvent[DICT_RANGE][DICT_START] ):
+            return otherEvent;
+    return None;
+    
+def getAllBackToBackEventsAfterwards( event ):
+    result = [];
+    
+    curEvent = event;
+    nextEvent = None;
+    
+    while True:
+        nextEvent = getEventRightAfterwards(curEvent);
+        if nextEvent is None:
+            break;
+        result.append(nextEvent);
+        curEvent = nextEvent;
+    
+    return result;
+    
 def roundAllEventStartTimes( multiple = 10 ):
     for event in events:
         min = event[DICT_RANGE][DICT_START][DICT_MIN];
         remainder = multiple - min % multiple;
+        
         if not remainder == 0 and min != 0:
-            eventAtEnd = None;
-            for otherEvent in events:
-                if otherEvent[DICT_NAME] == event[DICT_NAME]:
-                    continue;
-                
-                if areTimesEqual( event[DICT_RANGE][DICT_END], otherEvent[DICT_RANGE][DICT_START] ):
-                    eventAtEnd = otherEvent;
-                    break;
+            eventsAfterwards = getAllBackToBackEventsAfterwards( event );
             shiftEvent( event, remainder );
-            if eventAtEnd is not None:
-                shiftEvent( eventAtEnd, remainder );
+            
+            for otherEvent in eventsAfterwards:
+                shiftEvent( otherEvent, remainder );
                 
 def roundAllEventEndTimes( multiple = 10 ):
     for event in events:
         min = event[DICT_RANGE][DICT_END][DICT_MIN];
         remainder = multiple - min % multiple;
         if not remainder == 0 and min != 0:
-            eventAtEnd = None;
-            for otherEvent in events:
-                if otherEvent[DICT_NAME] == event[DICT_NAME]:
-                    continue;
-                
-                if areTimesEqual( event[DICT_RANGE][DICT_END], otherEvent[DICT_RANGE][DICT_START] ):
-                    eventAtEnd = otherEvent;
-                    break;
+            eventsAfterwards = getAllBackToBackEventsAfterwards( event );
             event[DICT_RANGE][DICT_END] = addTimes( event[DICT_RANGE][DICT_END], secToTime(remainder*60) );
-            if eventAtEnd is not None:
-                eventAtEnd[DICT_RANGE][DICT_START] = addTimes( event[DICT_RANGE][DICT_START], secToTime(remainder*60) );
+            event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
+            
+            for otherEvent in eventsAfterwards:
+                shiftEvent( otherEvent, remainder );
         
 def prepareEventsForPrinting():
     printableEvents = {};
@@ -335,8 +355,7 @@ def printBox( text, rjust=0 ):
     print midStr.rjust(rjust);
     print botStr.rjust(rjust);
     
-    
-def printPreparedEvents():
+def printPreparedEvents( daysToSkip=0 ):
     longestEventLength = 0;
     longestBoxLength   = 0;
     
@@ -351,18 +370,39 @@ def printPreparedEvents():
     
     curDay = "";
     
+    daysSkipped = 0;
+    skippedMorning = False;
+    justSkippedDay = False;
+    
     for pair in orderedPrintableEvents:
-        print "\n"
+        if daysSkipped > daysToSkip or not justSkippedDay:
+            print "\n"
         
         day = pair[0].split(" ")[1];
         if day != curDay:
             curDay = day;
-            print "======================================================================\n"
+            daysSkipped += 1;
+            if daysSkipped >= daysToSkip:
+                print "======================================================================\n"
+            justSkippedDay = True;
+        else:
+            justSkippedDay = False;
         
-        printBox(removeIndex(pair[0]),longestBoxLength+5);
+        if daysSkipped >= daysToSkip:
+            if skippedMorning:
+                printBox(removeIndex(pair[0]),longestBoxLength+5);
         
         for event in pair[1]:
-            print eventToStr(event,longestEventLength+3)
+            if daysSkipped >= daysToSkip:
+                if skippedMorning:
+                    print eventToStr(event,longestEventLength+3)
+                else:
+                    if event[DICT_RANGE][DICT_START][DICT_HOURS] % 24 > time.localtime().tm_hour:
+                        print eventToStr(event,longestEventLength+3)
+        
+        if daysSkipped >= daysToSkip and justSkippedDay:
+            skippedMorning = True;
+                
     print "\n\n======================================================================\n"
 
 def setNewTimeframeTime( new_time, start_or_end, morning_or_evening ):
@@ -394,11 +434,90 @@ def setNewTimeframeTime( new_time, start_or_end, morning_or_evening ):
             timeframe[DICT_RANGE][start_or_end] = addTimes( timeframe[DICT_RANGE][start_or_end], timeDifference );
             timeframe[DICT_RANGE][DICT_DUR] = getDuration( timeframe[DICT_RANGE][DICT_START], timeframe[DICT_RANGE][DICT_END] );
     
+def clipOverRounding( eventPool ):
+    timeframe = None;
+    for event in events:
+        timeframe = getEventTimeframe(event);
+        if timeframe is None:
+            event[DICT_NAME] = LABEL_REMOVE;
+            continue;
+        if timeGreaterThan( event[DICT_RANGE][DICT_END], timeframe[DICT_RANGE][DICT_END] ):
+            for poolEvent in eventPool:
+                if poolEvent[0] == event[DICT_NAME]:
+                    if poolEvent[2]:
+                        event[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END]
+                        event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
+                        if timeToSec(event[DICT_RANGE][DICT_DUR]) == 0:
+                            event[DICT_NAME] = LABEL_REMOVE;
+                    else:
+                        event[DICT_NAME] = LABEL_REMOVE;
+                        
+                        newEvent = None;
+                        while True:
+                            newEvent = eventPool[int(math.floor(random.random()*len(eventPool)))]
+                            if newEvent[2]:
+                                break;
+                        if newEvent is not None:
+                            event[DICT_NAME] = newEvent[0]
+                            event[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END];
+                            event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
+                            if timeToSec(event[DICT_RANGE][DICT_DUR]) == 0:
+                                event[DICT_NAME] = LABEL_REMOVE;
+
+def updateEventDuration( event ):
+    event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
+
+def extendExtendableEvents( eventPool ):
+    for timeframe in timeframes:
+        latestEvent = getLastEventInTimeframe(timeframe);
+        if latestEvent is None:
+            continue;
+        if areTimesEqual( latestEvent[DICT_RANGE][DICT_END], timeframe[DICT_RANGE][DICT_END] ):
+            continue;
+        
+        for poolEvent in eventPool:
+            if not poolEvent[2]:
+                continue;
+            if poolEvent[0] != latestEvent[DICT_NAME]:
+                continue;
+            latestEvent[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END];
+            updateEventDuration( latestEvent );
+            
+                                
+def updateRemovedEvents():
+    newEvents = [];
+    for event in events:
+        if event[DICT_NAME] == LABEL_REMOVE:
+            continue;
+        newEvents.append(event);
+    return newEvents;
+
+def getAllEventsInTimeframe(timeframe):
+    result = [];
+    
+    for event in events:
+        if isEventWithinTimeframe(event,timeframe):
+            result.append(event);
+    
+    return result;
+
+def getLatestEvent( eventList ):
+    latestEvent = None;
+    latestEventSec = 0;
+    
+    sec = 0;
+    for event in eventList:
+        sec = timeToSec(event[DICT_RANGE][DICT_END]);
+        if sec > latestEventSec:
+            latestEventSec = sec;
+            latestEvent = event;
+    
+    return latestEvent;
+    
+def getLastEventInTimeframe( timeframe ):
+    return getLatestEvent( getAllEventsInTimeframe(timeframe) );
+    
 moviesToSchedule = []
-
-daysOfTheWeek = ["Wednesday 10/22", "Thursday 10/23", "Friday 10/24", "Saturday 10/25", "Sunday 10/26",\
-                 "Monday 10/27", "Tuesday 10/28", "Wednesday 10/29", "Thursday 10/30" ];
-
 
 ##########################################
 morningStart =  "6:00";
@@ -432,13 +551,18 @@ morningHours_end   = int(morningHours_end_str);
 eveningHours_start = int(eveningHours_start_str);
 eveningHours_end   = int(eveningHours_end_str);
 
-addTimeframe( str(0) + " " + "Tuesday 10/21 Evening", eveningHours_start_str + eveningMinutes_start_str, eveningHours_end_str + eveningMinutes_end_str );
 
-for i in range(1,len(daysOfTheWeek)):
+daysOfTheWeek = ["Tuesday 10/21", "Wednesday 10/22", "Thursday 10/23", "Friday 10/24", "Saturday 10/25", "Sunday 10/26",\
+                 "Monday 10/27", "Tuesday 10/28", "Wednesday 10/29", "Thursday 10/30" ];
+#addTimeframe( str(0) + " " + "Tuesday 10/22 Evening", eveningHours_start_str + eveningMinutes_start_str, eveningHours_end_str + eveningMinutes_end_str );
+
+startDayIndex = 0;
+for i in range(startDayIndex,len(daysOfTheWeek)):
     offset = i*24;
     dayOfWeekStr = " " + daysOfTheWeek[i];
     
-    addTimeframe( str(i*2-1) + dayOfWeekStr + " " + LABEL_MORNING, str(offset+morningHours_start)+morningMinutes_start_str, str(offset+morningHours_end)+morningMinutes_end_str );
+    if i != startDayIndex:
+        addTimeframe( str(i*2-1) + dayOfWeekStr + " " + LABEL_MORNING, str(offset+morningHours_start)+morningMinutes_start_str, str(offset+morningHours_end)+morningMinutes_end_str );
     addTimeframe( str(i*2)   + dayOfWeekStr + " " + LABEL_EVENING, str(offset+eveningHours_start)+eveningMinutes_start_str, str(offset+eveningHours_end)+eveningMinutes_end_str );
     
 moviesToSchedule.append(["Watch Aliens",137]);
@@ -472,33 +596,31 @@ for e in moviesToSchedule:
     scheduleEvent( e[0], e[1] )
 
 randomEventsPool = []
-randomEventsPool.append(["Play TF2",45]);
-randomEventsPool.append(["Play Halo: ODST",30]);
-randomEventsPool.append(["Play CS:GO",45]);
-randomEventsPool.append(["Play Worms: Revolution",45]);
-randomEventsPool.append(["Play Left 4 Dead 2",30])
-randomEventsPool.append(["Play Battleblock Theater",30]);
-randomEventsPool.append(["Play a new Steam game",20]);
-randomEventsPool.append(["Watch an anime",22])
-randomEventsPool.append(["Watch Breaking Bad",47]);
-randomEventsPool.append(["Watch The Walking Dead",44]);
-randomEventsPool.append(["Watch The Office",22]);
-randomEventsPool.append(["Watch Tim and Eric",11]);
-randomEventsPool.append(["Watch Mad Men",45]);
-randomEventsPool.append(["Watch Parks and Recreation",22]);
-randomEventsPool.append(["Watch It's Always Sunny in Philadelphia",22]);
-randomEventsPool.append(["Watch 30 Rock",21]);
-randomEventsPool.append(["Watch The Legend of Korra",23]);
+randomEventsPool.append(["Play TF2",45,True]);
+randomEventsPool.append(["Play Halo: ODST",30,True]);
+randomEventsPool.append(["Play CS:GO",45,False]);
+randomEventsPool.append(["Play Worms: Revolution",45,True]);
+randomEventsPool.append(["Play Left 4 Dead 2",30,False])
+randomEventsPool.append(["Play Battleblock Theater",30,True]);
+randomEventsPool.append(["Play a new Steam game",20,True]);
+randomEventsPool.append(["Watch an anime",22,False])
+randomEventsPool.append(["Watch Breaking Bad",47,False]);
+randomEventsPool.append(["Watch The Walking Dead",44,False]);
+randomEventsPool.append(["Watch The Office",22,False]);
+randomEventsPool.append(["Watch Tim and Eric",11,False]);
+randomEventsPool.append(["Watch Mad Men",45,False]);
+randomEventsPool.append(["Watch Parks and Recreation",22,False]);
+randomEventsPool.append(["Watch It's Always Sunny in Philadelphia",22,False]);
+randomEventsPool.append(["Watch 30 Rock",21,False]);
+randomEventsPool.append(["Watch The Legend of Korra",23,False]);
 
 #############################
 newMorningEndTime =  "8:00"
-newEveningEndTime = "20:40"
+newEveningEndTime = "21:00"
 #############################
 
 setNewTimeframeTime( newMorningEndTime, DICT_END, LABEL_MORNING );
 setNewTimeframeTime( newEveningEndTime, DICT_END, LABEL_EVENING );
-
-
 
 maxNumRandomEvents = 999+int(math.ceil(len(randomEventsPool)/3));
 
@@ -521,13 +643,13 @@ for timeframe in timeframes:
 
 roundAllEventStartTimes(10);
 roundAllEventEndTimes(5);
+
+clipOverRounding(randomEventsPool);
+events = updateRemovedEvents();
+extendExtendableEvents(randomEventsPool);
+
 orderedPrintableEvents = prepareEventsForPrinting();
-printPreparedEvents();
-
-
-
-
-
+printPreparedEvents(2);
 
 
 
