@@ -1,6 +1,31 @@
 import time
 import math
 import random
+
+#############################
+morningStart =  "6:00";
+morningEnd   =  "7:45";
+eveningStart = "16:00";
+eveningEnd   = "19:15";
+#############################
+newMorningEndTime =  "8:00"
+newEveningEndTime = "21:00"
+#############################
+morningGapLength  =  "0:15"
+morningGapTime    =  "7:15"
+eveningGapLength  =  "0:45"
+eveningGapTime    = "18:30"
+#############################
+numDaysToGenerate = 14;
+#############################
+
+blackoutDates = ["Friday 10/31/2014 Evening", \
+                 "Saturday 11/01/2014 Evening", \
+                 "Thursday 11/27/2014 Evening", \
+                 "Monday 12/08/2014 Evening", \
+                 "Thursday 12/25/2014 Evening", \
+                 "Thursday 01/01/2015 Evening" ];
+
 random.seed("BEANS!!")
 
 timeframes = [];
@@ -19,12 +44,20 @@ DICT_NAME   = "name"
 DICT_RANGE  = "range"
 DICT_LENGTH = "length"
 
-LABEL_MORNING = "Morning"
-LABEL_EVENING = "Evening"
-LABEL_REMOVE  = "REMOVE"
+DICT_MONTH  = "month"
+DICT_DAY    = "day"
+DICT_YEAR   = "year"
+
+LABEL_MORNING  = "Morning"
+LABEL_EVENING  = "Evening"
+LABEL_REMOVE   = "REMOVE"
+LABEL_GAP      = "UNSCHEDULED"
+LABEL_BLACKOUT = "PRE-SCHEDULED EVENTS"
 
 ERR_INVALID_TIME  = "Invalid time specification"
 ERR_INVALID_LABEL = "Invalid label specification"
+
+daysOfTheWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 def timeToSec( time ):
     return time[DICT_SEC] + (time[DICT_MIN] + time[DICT_HOURS]*60.0) * 60.0;
@@ -115,6 +148,8 @@ def addTimeframe( name, startString, endString ):
     timeframes.append( {DICT_NAME:name, DICT_RANGE:newTimeRange( strToTime(startString), strToTime(endString) )} );
 
 def eventToStr( event, rjust = 0 ):
+    if event[DICT_NAME] == LABEL_BLACKOUT:
+        return LABEL_BLACKOUT.rjust(rjust)
     return timeframeToStr(event,rjust);
     
 def timeframeToStr( timeframe, rjust = 0 ):
@@ -159,6 +194,11 @@ def subtractTimes( time_a, time_b ):
     return secToTime( timeToSec(time_a) - timeToSec(time_b) );
     
 def getGapsInTimeframe( timeframe ):
+    allTimeframeEvents = getEventsInTimeframe( timeframe );
+    for event in allTimeframeEvents:
+        if event[DICT_NAME] == LABEL_BLACKOUT:
+            return [];
+
     gaps = [];
     events_in_timeframe = getEventsInTimeframe( timeframe );
     if len(events_in_timeframe) == 0:
@@ -167,7 +207,7 @@ def getGapsInTimeframe( timeframe ):
     if len(events_in_timeframe) == 1:
         if areTimesEqual(events_in_timeframe[0][DICT_RANGE][DICT_START], timeframe[DICT_RANGE][DICT_START] ) and \
            areTimesEqual(events_in_timeframe[0][DICT_RANGE][DICT_END],   timeframe[DICT_RANGE][DICT_END] ):
-            return None;
+            return [];
     
     if not areTimesEqual(events_in_timeframe[0][DICT_RANGE][DICT_START], timeframe[DICT_RANGE][DICT_START]):
         gaps.append( newTimeRange( timeframe[DICT_RANGE][DICT_START], events_in_timeframe[0][DICT_RANGE][DICT_START] ) );
@@ -198,6 +238,11 @@ def scheduleEvent( name, minutes ):
     return False;
     
 def scheduleEventInTimeframe( timeframe, name, minutes ):
+    allTimeframeEvents = getEventsInTimeframe( timeframe );
+    for event in allTimeframeEvents:
+        if event[DICT_NAME] == LABEL_BLACKOUT:
+            return False;
+
     gaps = getGapsInTimeframe(timeframe);
     event_time = secToTime(minutes*60.0);
     
@@ -269,6 +314,8 @@ def getAllBackToBackEventsAfterwards( event ):
     
 def roundAllEventStartTimes( multiple = 10 ):
     for event in events:
+        if event[DICT_NAME] == LABEL_BLACKOUT:
+            continue;
         min = event[DICT_RANGE][DICT_START][DICT_MIN];
         remainder = multiple - min % multiple;
         
@@ -281,6 +328,8 @@ def roundAllEventStartTimes( multiple = 10 ):
                 
 def roundAllEventEndTimes( multiple = 10 ):
     for event in events:
+        if event[DICT_NAME] == LABEL_BLACKOUT:
+            continue;
         min = event[DICT_RANGE][DICT_END][DICT_MIN];
         remainder = multiple - min % multiple;
         if not remainder == 0 and min != 0:
@@ -437,11 +486,17 @@ def setNewTimeframeTime( new_time, start_or_end, morning_or_evening ):
 def clipOverRounding( eventPool ):
     timeframe = None;
     for event in events:
+        if event[DICT_NAME] == LABEL_BLACKOUT:
+            continue;
         timeframe = getEventTimeframe(event);
         if timeframe is None:
             event[DICT_NAME] = LABEL_REMOVE;
             continue;
         if timeGreaterThan( event[DICT_RANGE][DICT_END], timeframe[DICT_RANGE][DICT_END] ):
+            if event[DICT_NAME] == LABEL_GAP and timeframe[DICT_NAME].split(" ")[-1] == LABEL_MORNING:
+                event[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END];
+                updateEventDuration(event);
+                continue;
             for poolEvent in eventPool:
                 if poolEvent[0] == event[DICT_NAME]:
                     if poolEvent[2]:
@@ -516,15 +571,127 @@ def getLatestEvent( eventList ):
     
 def getLastEventInTimeframe( timeframe ):
     return getLatestEvent( getAllEventsInTimeframe(timeframe) );
+
+def getNumDaysToSkip():
+    result    = 1;
+    localtime = getLocaltimeDate();
+    
+    for day in scheduleableDays:
+        date = strToDate(day.split(" ")[1]);
+        
+        if dateLessThan( date, localtime ):
+           result += 1;
+    
+    return result;
+    
+def newDate( month, day, year ):
+    if len(str(year)) == 2:
+        year = int(str(time.localtime().tm_year)[0:2] + str(year))
+    
+    return {DICT_MONTH:month, DICT_DAY:day, DICT_YEAR:year};
+    
+def strToDate( dateStr ):
+    dateSplit = dateStr.split("/");
+    
+    if len(dateSplit) == 2:
+        return newDate( int(dateSplit[0]), int(dateSplit[1]), time.localtime().tm_year );
+    else:
+        return newDate( int(dateSplit[0]), int(dateSplit[1]), int(dateSplit[2]) );
+    
+def dateToStr( date, numValues=2 ):
+    if numValues == 2:
+        return str(date[DICT_MONTH]).zfill(2) + "/" + str(date[DICT_DAY]).zfill(2);
+    elif numValues == 3:
+        return str(date[DICT_MONTH]).zfill(2) + "/" + str(date[DICT_DAY]).zfill(2) + "/" + str(date[DICT_YEAR]);
+    else:
+       raise Exception("Invalid number of values specified");
+
+def getNumDaysInMonth( monthValue ):
+    if monthValue == 2:
+        return 28;
+    elif monthValue == 9 or \
+         monthValue == 4 or \
+         monthValue == 6 or \
+         monthValue == 11:
+        return 30;
+    else:
+        return 31
+       
+def validateDate( date ):
+    while date[DICT_MONTH] > 12:
+        date[DICT_MONTH] -= 12;
+        date[DICT_YEAR]  += 1;
+    
+    while date[DICT_DAY] > getNumDaysInMonth(date[DICT_MONTH]):
+        date[DICT_DAY]  -= getNumDaysInMonth(date[DICT_MONTH]);
+        date[DICT_MONTH] += 1;
+        
+        while date[DICT_MONTH] > 12:
+            date[DICT_MONTH] -= 12;
+            date[DICT_YEAR]  += 1;
+       
+def addDaysToDate( date, days ):
+    date[DICT_DAY] += days;
+    validateDate(date);
+    
+def dateToTotalDays( date ):
+    totalDays = 0;
+    
+    totalDays += date[DICT_YEAR]*365;
+    
+    for i in range(1,date[DICT_MONTH]):
+        totalDays += getNumDaysInMonth(i);
+    totalDays += date[DICT_DAY]
+    
+    return totalDays;
+    
+def dateLessThan( date_a, date_b ):
+    return (dateToTotalDays(date_a) < dateToTotalDays(date_b));
+    
+def pyTimeToDate( pyTime ):
+    return newDate( pyTime.tm_mon, pyTime.tm_mday, pyTime.tm_year );
+
+def getLocaltimeDate():
+    return pyTimeToDate( time.localtime() );
+    
+def numDaysBetweenDates( date_a, date_b ):
+    return dateToTotalDays(date_a) - dateToTotalDays(date_b);
+    
+def generateDays( startingDay, numDaysToGenerate ):
+    days = [];
+    
+    numDaysToGenerate += numDaysBetweenDates( getLocaltimeDate(), strToDate(startingDay.split(" ")[1]) );
+    
+    dateSplit = startingDay.split(" ");
+    dayOfWeek = dateSplit[0];
+    date = strToDate(dateSplit[1]);
+    
+    dayIndex = 0;
+    for dayName in daysOfTheWeek:
+        if dayName == dayOfWeek:
+            break;
+        dayIndex += 1;
+    
+    for i in range(0,numDaysToGenerate):
+        days.append( daysOfTheWeek[dayIndex] + " " + dateToStr(date,3) );
+        dayIndex += 1;
+        if dayIndex > 6:
+            dayIndex = 0;
+        addDaysToDate( date, 1 );
+    
+    return days;
+    
+def removeBlackoutDates():
+    for timeframe in timeframes:
+        removedIndex = removeIndex(timeframe[DICT_NAME]).strip();
+        for date in blackoutDates:
+            if date == removedIndex:
+                scheduleEventInTimeframe( timeframe, LABEL_BLACKOUT, timeToSec(timeframe[DICT_RANGE][DICT_DUR])/60.0 );
+                break;
     
 moviesToSchedule = []
 
-##########################################
-morningStart =  "6:00";
-morningEnd   =  "7:45";
-eveningStart = "16:00";
-eveningEnd   = "19:15";
-##########################################
+scheduleableDays = generateDays("Tuesday 10/21",numDaysToGenerate);
 
 morningMinutes_start_str = morningStart.split(":")[1];
 morningMinutes_end_str   = morningEnd.split(":")[1];
@@ -551,19 +718,16 @@ morningHours_end   = int(morningHours_end_str);
 eveningHours_start = int(eveningHours_start_str);
 eveningHours_end   = int(eveningHours_end_str);
 
-
-daysOfTheWeek = ["Tuesday 10/21", "Wednesday 10/22", "Thursday 10/23", "Friday 10/24", "Saturday 10/25", "Sunday 10/26",\
-                 "Monday 10/27", "Tuesday 10/28", "Wednesday 10/29", "Thursday 10/30" ];
-#addTimeframe( str(0) + " " + "Tuesday 10/22 Evening", eveningHours_start_str + eveningMinutes_start_str, eveningHours_end_str + eveningMinutes_end_str );
-
 startDayIndex = 0;
-for i in range(startDayIndex,len(daysOfTheWeek)):
+for i in range(startDayIndex,len(scheduleableDays)):
     offset = i*24;
-    dayOfWeekStr = " " + daysOfTheWeek[i];
+    dayOfWeekStr = " " + scheduleableDays[i];
     
     if i != startDayIndex:
         addTimeframe( str(i*2-1) + dayOfWeekStr + " " + LABEL_MORNING, str(offset+morningHours_start)+morningMinutes_start_str, str(offset+morningHours_end)+morningMinutes_end_str );
     addTimeframe( str(i*2)   + dayOfWeekStr + " " + LABEL_EVENING, str(offset+eveningHours_start)+eveningMinutes_start_str, str(offset+eveningHours_end)+eveningMinutes_end_str );
+    
+removeBlackoutDates();
     
 moviesToSchedule.append(["Watch Aliens",137]);
 moviesToSchedule.append(["Watch Saw",103]);
@@ -591,6 +755,142 @@ moviesToSchedule.append(["Watch Children of the Corn",92]);
 moviesToSchedule.append(["Watch The Amityville Horror",90]);
 moviesToSchedule.append(["Watch V/H/S",116]);
 
+moviesToSchedule.append(["Watch Saw III",180]);
+moviesToSchedule.append(["Watch Saw IV",93]);
+moviesToSchedule.append(["Watch Saw V",92]);
+moviesToSchedule.append(["Watch Saw VI",90]);
+moviesToSchedule.append(["Watch Saw VII",90]);
+moviesToSchedule.append(["Watch Final Destination 2",90]);
+moviesToSchedule.append(["Watch Final Destination 3",93]);
+moviesToSchedule.append(["Watch Final Destination 4",82]);
+moviesToSchedule.append(["Watch Final Destination 5",92]);
+moviesToSchedule.append(["Watch Alien 3",114]);
+moviesToSchedule.append(["Watch Alien: Resurrection",109]);
+moviesToSchedule.append(["Watch The Ring Two",110]);
+moviesToSchedule.append(["Watch V/H/S/2",96]);
+moviesToSchedule.append(["Watch V/H/S: Viral",97]);
+
+moviesToSchedule.append(["Watch Judgment and Nuremberg",186]);
+moviesToSchedule.append(["Watch The Caine Mutiny",124]);
+moviesToSchedule.append(["Watch Die Hard",131]);
+moviesToSchedule.append(["Watch Bull Durham",108]);
+moviesToSchedule.append(["Watch The Transporter",92]);
+moviesToSchedule.append(["Watch The Fast and the Furious",106]);
+moviesToSchedule.append(["Watch Grindhouse",191]);
+moviesToSchedule.append(["Watch It's a Wonderful Life",130]);
+moviesToSchedule.append(["Watch Casablanca",102]);
+moviesToSchedule.append(["Watch Life is Beautiful",116]);
+moviesToSchedule.append(["Watch City Lights",87]);
+moviesToSchedule.append(["Watch The Intouchables",112]);
+moviesToSchedule.append(["Watch Modern Times",87]);
+moviesToSchedule.append(["Watch Sunset Blvd.",110]);
+moviesToSchedule.append(["Watch The Pianist",150]);
+moviesToSchedule.append(["Watch Apocalypse Now",153]);
+moviesToSchedule.append(["Watch The Green Mile",189]);
+moviesToSchedule.append(["Watch The Lives of Others",137]);
+moviesToSchedule.append(["Watch Cinema Paradiso",155]);
+moviesToSchedule.append(["Watch Paths of Glory",88]);
+moviesToSchedule.append(["Watch Vertigo",128]);
+moviesToSchedule.append(["Watch M",99]);
+moviesToSchedule.append(["Watch A Clockwork Orange",136]);
+moviesToSchedule.append(["Watch Taxi Driver",113]);
+moviesToSchedule.append(["Watch Double Indemnity",107]);
+moviesToSchedule.append(["Watch Once Upon a Time in America",229]);
+moviesToSchedule.append(["Watch Braveheart",177]);
+moviesToSchedule.append(["Watch Witness for the Prosecution",116]);
+moviesToSchedule.append(["Watch Singin' in the Rain",103]);
+moviesToSchedule.append(["Watch The Sting",129]);
+moviesToSchedule.append(["Watch Bicycle Thieves",93]);
+moviesToSchedule.append(["Watch Amadeus",160]);
+moviesToSchedule.append(["Watch Snatch.",102]);
+moviesToSchedule.append(["Watch All About Eve",138]);
+moviesToSchedule.append(["Watch Rashomon",88]);
+moviesToSchedule.append(["Watch L.A. Confidential",138]);
+moviesToSchedule.append(["Watch The Treasure of the Sierra Madre",126]);
+moviesToSchedule.append(["Watch The Apartment",125]);
+moviesToSchedule.append(["Watch Some Like It Hot",120]);
+moviesToSchedule.append(["Watch The Third Man",93]);
+moviesToSchedule.append(["Watch The Rover",103]);
+moviesToSchedule.append(["Watch The Thieves",135]);
+moviesToSchedule.append(["Watch Gardens of Stone",111]);
+moviesToSchedule.append(["Watch Top Gun",110]);
+moviesToSchedule.append(["Watch Coherence",89]);
+moviesToSchedule.append(["Watch John Dies at the End",99]);
+moviesToSchedule.append(["Watch Safety Not Guaranteed",86]);
+moviesToSchedule.append(["Watch Primer",77]);
+moviesToSchedule.append(["Watch Cube",90]);
+moviesToSchedule.append(["Watch Cube 2: Hypercube",94]);
+moviesToSchedule.append(["Watch Moon",97]);
+moviesToSchedule.append(["Watch Jurassic Park",127]);
+moviesToSchedule.append(["Watch GoldenEye",130]);
+moviesToSchedule.append(["Watch Enemy at the Gates",131]);
+moviesToSchedule.append(["Watch Dark City",100]);
+moviesToSchedule.append(["Watch The Maze Runner",113]);
+moviesToSchedule.append(["Watch The Adjustment Bureau",106]);
+moviesToSchedule.append(["Watch Push",111]);
+moviesToSchedule.append(["Watch The Secret Life of Walter Mitty",114]);
+moviesToSchedule.append(["Watch Oblivion",124]);
+moviesToSchedule.append(["Watch The Signal",97]);
+moviesToSchedule.append(["Watch John Carter",132]);
+moviesToSchedule.append(["Watch Predator",107]);
+moviesToSchedule.append(["Watch In Time",109]);
+moviesToSchedule.append(["Watch 3:10 to Yuma",122]);
+moviesToSchedule.append(["Watch American Psycho",102]);
+moviesToSchedule.append(["Watch The Machinist",101]);
+moviesToSchedule.append(["Watch Face/Off",138]);
+moviesToSchedule.append(["Watch Reign of Fire",101]);
+moviesToSchedule.append(["Watch Cowboys & Aliens",119]);
+moviesToSchedule.append(["Watch The Island",136]);
+moviesToSchedule.append(["Watch Limitless",105]);
+moviesToSchedule.append(["Watch Left Behind",110]);
+moviesToSchedule.append(["Watch World War Z",116]);
+moviesToSchedule.append(["Watch AVP: Alien vs Predator",101]);
+moviesToSchedule.append(["Watch Interstellar",169]);
+moviesToSchedule.append(["Watch Collateral Damage",108]);
+moviesToSchedule.append(["Watch The Thirteenth Floor",100]);
+moviesToSchedule.append(["Watch Timecrimes",92]);
+moviesToSchedule.append(["Watch Cargo",112]);
+moviesToSchedule.append(["Watch Europa Report",90]);
+moviesToSchedule.append(["Watch Pandorum",108]);
+moviesToSchedule.append(["Watch The Andromeda Strain",131]);
+moviesToSchedule.append(["Watch The Core",135]);
+moviesToSchedule.append(["Watch Godzilla",123]);
+moviesToSchedule.append(["Watch Hollow Man",112]);
+moviesToSchedule.append(["Watch Maximum Overdrive",97]);
+moviesToSchedule.append(["Watch Species",108]);
+moviesToSchedule.append(["Watch 9",79]);
+moviesToSchedule.append(["Watch Escape from New York",99]);
+moviesToSchedule.append(["Watch The Spy Who Loved Me",125]);
+moviesToSchedule.append(["Watch Moonraker",126]);
+moviesToSchedule.append(["Watch The Anomaly",97]);
+moviesToSchedule.append(["Watch Thunderball",130]);
+moviesToSchedule.append(["Watch Universal Soldier",102]);
+moviesToSchedule.append(["Watch Videodrome",87]);
+moviesToSchedule.append(["Watch Stealth",121]);
+moviesToSchedule.append(["Watch Frankenstein's Army",84]);
+moviesToSchedule.append(["Watch Timecop",99]);
+moviesToSchedule.append(["Watch The Animatrix",102]);
+moviesToSchedule.append(["Watch Outpost 37 (WRONG TIME)",120]);
+moviesToSchedule.append(["Watch NGE: The End of Evangelion",90]);
+moviesToSchedule.append(["Watch Evangelion: 2.0",112]);
+moviesToSchedule.append(["Watch Dawn of the Planet of the Apes",130]);
+moviesToSchedule.append(["Watch Predators",107]);
+moviesToSchedule.append(["Watch Vampire Hunter D: Bloodlust",103]);
+moviesToSchedule.append(["Watch Firestarter 2: Rekindled",168]);
+moviesToSchedule.append(["Watch Mr. & Mrs. Smith",120]);
+moviesToSchedule.append(["Watch Who Am I?",108]);
+moviesToSchedule.append(["Watch Citizenfour",114]);
+moviesToSchedule.append(["Watch Eraserhead",89]);
+moviesToSchedule.append(["Watch The Birds",119]);
+moviesToSchedule.append(["Watch Pitch Black",109]);
+moviesToSchedule.append(["Watch The Crazies",101]);
+moviesToSchedule.append(["Watch Psycho",109]);
+moviesToSchedule.append(["Watch The Shining",144]);
+moviesToSchedule.append(["Watch Dawn of the Dead",127]);
+moviesToSchedule.append(["Watch Night of the Living Dead",96]);
+moviesToSchedule.append(["Watch Frankenstein",74]);
+moviesToSchedule.append(["Watch Untraceable",101]);
+moviesToSchedule.append(["Watch Phone Booth",81]);
 
 for e in moviesToSchedule:
     scheduleEvent( e[0], e[1] )
@@ -602,7 +902,7 @@ randomEventsPool.append(["Play CS:GO",45,False]);
 randomEventsPool.append(["Play Worms: Revolution",45,True]);
 randomEventsPool.append(["Play Left 4 Dead 2",30,False])
 randomEventsPool.append(["Play Battleblock Theater",30,True]);
-randomEventsPool.append(["Play a new Steam game",20,True]);
+randomEventsPool.append(["Play a new Steam game",15,True]);
 randomEventsPool.append(["Watch an anime",22,False])
 randomEventsPool.append(["Watch Breaking Bad",47,False]);
 randomEventsPool.append(["Watch The Walking Dead",44,False]);
@@ -613,22 +913,53 @@ randomEventsPool.append(["Watch Parks and Recreation",22,False]);
 randomEventsPool.append(["Watch It's Always Sunny in Philadelphia",22,False]);
 randomEventsPool.append(["Watch 30 Rock",21,False]);
 randomEventsPool.append(["Watch The Legend of Korra",23,False]);
-
-#############################
-newMorningEndTime =  "8:00"
-newEveningEndTime = "21:00"
-#############################
-
-setNewTimeframeTime( newMorningEndTime, DICT_END, LABEL_MORNING );
-setNewTimeframeTime( newEveningEndTime, DICT_END, LABEL_EVENING );
+randomEventsPool.append(["Watch Arrested Development",22,False]);
+randomEventsPool.append(["Play Hitman: Blood Money",30,True]);
+randomEventsPool.append(["Play Elder Scrolls V: Skyrim",30,True]);
+randomEventsPool.append(["Play God of War",25,True]);
+randomEventsPool.append(["Play GTA: V",30,True]);
+randomEventsPool.append(["Watch House of Cards",55,False]);
+randomEventsPool.append(["Play Katamari Damacy",20,True]);
+randomEventsPool.append(["Watch Boardwalk Empire",55,False]);
 
 maxNumRandomEvents = 999+int(math.ceil(len(randomEventsPool)/3));
 
-randomEvent = None;
+eveningGapHours = int(eveningGapTime.split(":")[0]) + int(eveningGapTime.split(":")[1])/60.0;
+morningGapHours = int(morningGapTime.split(":")[0]) + int(morningGapTime.split(":")[1])/60.0;
+
+eveningGapLengthMinutes = timeToSec(strToTime(eveningGapLength))/60.0;
+morningGapLengthMinutes = timeToSec(strToTime(morningGapLength))/60.0;
+
+setNewTimeframeTime( newMorningEndTime, DICT_END, LABEL_MORNING );
+setNewTimeframeTime( newEveningEndTime, DICT_END, LABEL_EVENING );
+removeBlackoutDates();
+
+randomEvent     = None;
+eveningGapAdded = False;
+morningGapAdded = False;
 for timeframe in timeframes:
+    eveningGapAdded = False;
+    morningGapAdded = False;
     usedIndexes = [];
     timesFailed = 0;
     while True:
+        if not eveningGapAdded and timeframe[DICT_NAME].split(" ")[-1] == LABEL_EVENING:
+            lastEvent  = getLastEventInTimeframe(timeframe);
+            if lastEvent is not None:
+                endHours   = lastEvent[DICT_RANGE][DICT_END][DICT_HOURS] % 24 + lastEvent[DICT_RANGE][DICT_END][DICT_MIN]/60.0;
+                if endHours >= eveningGapHours:
+                    scheduleEventInTimeframe( timeframe, LABEL_GAP, eveningGapLengthMinutes );
+                    eveningGapAdded = True;
+                    continue;
+        if not morningGapAdded and timeframe[DICT_NAME].split(" ")[-1] == LABEL_MORNING:
+            lastEvent = getLastEventInTimeframe(timeframe);
+            if lastEvent is not None:
+                endHours   = lastEvent[DICT_RANGE][DICT_END][DICT_HOURS] % 24 + lastEvent[DICT_RANGE][DICT_END][DICT_MIN]/60.0;
+                if endHours >= morningGapHours:
+                    scheduleEventInTimeframe( timeframe, LABEL_GAP, morningGapLengthMinutes );
+                    morningGapAdded = True;
+                    continue;
+        
         if len(usedIndexes) >= len(randomEventsPool) or len(usedIndexes) >= maxNumRandomEvents:
             break;
         randomIndex = -1;
@@ -649,7 +980,7 @@ events = updateRemovedEvents();
 extendExtendableEvents(randomEventsPool);
 
 orderedPrintableEvents = prepareEventsForPrinting();
-printPreparedEvents(2);
+printPreparedEvents(getNumDaysToSkip());
 
 
 
