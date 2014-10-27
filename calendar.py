@@ -16,7 +16,7 @@ morningGapTime    =  "7:15"
 eveningGapLength  =  "0:50"
 eveningGapTime    = "18:15"
 #############################
-numDaysToGenerate = 7;
+numDaysToGenerate = 100;
 #############################
 
 blackoutDates = ["Thursday 10/23/2014 Morning", \
@@ -785,7 +785,7 @@ moviesToSchedule.append(["Watch V/H/S",116]);
 
 sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
 moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 180] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 108] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:3], sawSequels[3], 93] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:4], sawSequels[4], 92] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:5], sawSequels[5], 90] );
@@ -797,9 +797,9 @@ moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:2], destSequels[2], 93] );
 moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:3], destSequels[3], 82] );
 moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:4], destSequels[4], 92] );
 
-alienSequels = ["Watch Alien", "Watch Aliens", "Watch Alien 3", "Watch Alien: Resurrection"];
-moviesToSchedule.append( [LABEL_SEQUEL, alienSequels[0:2], alienSequels[2], 114] );
-moviesToSchedule.append( [LABEL_SEQUEL, alienSequels[0:3], alienSequels[3], 109] );
+alienSequels = ["Watch Alien 3", "Watch Alien: Resurrection"];
+moviesToSchedule.append( [alienSequels[0], 114] );
+moviesToSchedule.append( [LABEL_SEQUEL, [alienSequels[0]], alienSequels[1], 109] );
 
 moviesToSchedule.append(["Watch The Ring Two",110]);
 
