@@ -3,23 +3,30 @@ import math
 import random
 
 #############################
-morningStart =  "6:00";
+morningStart =  "6:15";
 morningEnd   =  "7:45";
 eveningStart = "16:00";
-eveningEnd   = "19:15";
+eveningEnd   = "18:55";
 #############################
 newMorningEndTime =  "8:00"
 newEveningEndTime = "21:00"
 #############################
-morningGapLength  =  "0:15"
+morningGapLength  =  "0:20"
 morningGapTime    =  "7:15"
-eveningGapLength  =  "0:45"
-eveningGapTime    = "18:30"
+eveningGapLength  =  "0:50"
+eveningGapTime    = "18:15"
 #############################
-numDaysToGenerate = 14;
+numDaysToGenerate = 7;
 #############################
 
-blackoutDates = ["Friday 10/31/2014 Evening", \
+blackoutDates = ["Thursday 10/23/2014 Morning", \
+                 "Friday 10/24/2014 Morning", \
+                 "Saturday 10/25/2014 Morning", \
+                 "Saturday 10/25/2014 Evening", \
+                 "Sunday 10/26/2014 Morning", \
+                 "Sunday 10/26/2014 Evening", \
+                 "Monday 10/27/2014 Morning", \
+                 "Friday 10/31/2014 Evening", \
                  "Saturday 11/01/2014 Evening", \
                  "Thursday 11/27/2014 Evening", \
                  "Monday 12/08/2014 Evening", \
@@ -53,6 +60,7 @@ LABEL_EVENING  = "Evening"
 LABEL_REMOVE   = "REMOVE"
 LABEL_GAP      = "UNSCHEDULED"
 LABEL_BLACKOUT = "PRE-SCHEDULED EVENTS"
+LABEL_SEQUEL   = "SEQUEL"
 
 ERR_INVALID_TIME  = "Invalid time specification"
 ERR_INVALID_LABEL = "Invalid label specification"
@@ -227,12 +235,25 @@ def getAllTimeframeGaps():
         gaps.extend(getGapsInTimeframe(timeframe));
     return gaps;
     
-def scheduleEvent( name, minutes ):
+def scheduleEvent( event ):
+    name    = None;
+    minutes = None;
+    
+    if event[0] == LABEL_SEQUEL:
+        name    = event[2]
+        minutes = event[3]
+    else:
+        name    = event[0]
+        minutes = event[1];
+    
     gaps = getAllTimeframeGaps();
     event_time = secToTime(minutes*60.0);
     
     for gap in gaps:
         if timeGreaterThan( gap[DICT_DUR], event_time ) or areTimesEqual( gap[DICT_DUR], event_time ):
+            if event[0] == LABEL_SEQUEL:
+                if not validateSequel(event, gap[DICT_START]):
+                    continue;
             events.append( newScheduledEvent_time( name, gap[DICT_START], addTimes(gap[DICT_START], event_time) ) );
             return True;
     return False;
@@ -689,6 +710,18 @@ def removeBlackoutDates():
                 scheduleEventInTimeframe( timeframe, LABEL_BLACKOUT, timeToSec(timeframe[DICT_RANGE][DICT_DUR])/60.0 );
                 break;
     
+def hasEventBeenScheduledBefore( event, time ):
+    for e in events:
+        if e[DICT_NAME] == event:
+            return timeLessThan(e[DICT_RANGE][DICT_START], time);
+    return False;
+    
+def validateSequel( sequel, time ):
+    for prev in sequel[1]:
+        if not hasEventBeenScheduledBefore( prev, time ):
+            return False;
+    return True;
+    
 moviesToSchedule = []
 
 scheduleableDays = generateDays("Tuesday 10/21",numDaysToGenerate);
@@ -733,15 +766,10 @@ moviesToSchedule.append(["Watch Aliens",137]);
 moviesToSchedule.append(["Watch Saw",103]);
 moviesToSchedule.append(["Watch The Exorcist",122]);
 moviesToSchedule.append(["Watch 28 Days Later",113]);
-moviesToSchedule.append(["Watch A Nightmare on Elm Street",91]);
-moviesToSchedule.append(["Watch The Ring",115]);
-moviesToSchedule.append(["Watch Poltergeist",114]);
 moviesToSchedule.append(["Watch The Blair Witch Project",81]);
-moviesToSchedule.append(["The Descent",99]);
 moviesToSchedule.append(["Watch Event Horizon",96]);
 moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 
-moviesToSchedule.append(["Watch Saw II",93]);
 moviesToSchedule.append(["Watch 28 Weeks Later",100]);
 moviesToSchedule.append(["Watch The Grudge",92]);
 moviesToSchedule.append(["Watch Silent Hill",125]);
@@ -755,18 +783,26 @@ moviesToSchedule.append(["Watch Children of the Corn",92]);
 moviesToSchedule.append(["Watch The Amityville Horror",90]);
 moviesToSchedule.append(["Watch V/H/S",116]);
 
-moviesToSchedule.append(["Watch Saw III",180]);
-moviesToSchedule.append(["Watch Saw IV",93]);
-moviesToSchedule.append(["Watch Saw V",92]);
-moviesToSchedule.append(["Watch Saw VI",90]);
-moviesToSchedule.append(["Watch Saw VII",90]);
-moviesToSchedule.append(["Watch Final Destination 2",90]);
-moviesToSchedule.append(["Watch Final Destination 3",93]);
-moviesToSchedule.append(["Watch Final Destination 4",82]);
-moviesToSchedule.append(["Watch Final Destination 5",92]);
-moviesToSchedule.append(["Watch Alien 3",114]);
-moviesToSchedule.append(["Watch Alien: Resurrection",109]);
+sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
+moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 180] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:3], sawSequels[3], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:4], sawSequels[4], 92] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:5], sawSequels[5], 90] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:6], sawSequels[6], 90] );
+
+destSequels = ["Watch Final Destination", "Watch Final Destination 2", "Watch Final Destination 3","Watch Final Destination 4","Watch Final Destination 5"];
+moviesToSchedule.append( [LABEL_SEQUEL, [destSequels[0]], destSequels[1], 90] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:2], destSequels[2], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:3], destSequels[3], 82] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:4], destSequels[4], 92] );
+
+alienSequels = ["Watch Alien", "Watch Aliens", "Watch Alien 3", "Watch Alien: Resurrection"];
+moviesToSchedule.append( [LABEL_SEQUEL, alienSequels[0:2], alienSequels[2], 114] );
+moviesToSchedule.append( [LABEL_SEQUEL, alienSequels[0:3], alienSequels[3], 109] );
+
 moviesToSchedule.append(["Watch The Ring Two",110]);
+
 moviesToSchedule.append(["Watch V/H/S/2",96]);
 moviesToSchedule.append(["Watch V/H/S: Viral",97]);
 
@@ -890,10 +926,17 @@ moviesToSchedule.append(["Watch Dawn of the Dead",127]);
 moviesToSchedule.append(["Watch Night of the Living Dead",96]);
 moviesToSchedule.append(["Watch Frankenstein",74]);
 moviesToSchedule.append(["Watch Untraceable",101]);
+moviesToSchedule.append(["Watch Good Will Hunting",126]);
+moviesToSchedule.append(["Watch Bad Boys II",147]);
+moviesToSchedule.append(["Watch Fight Club",139]);
+moviesToSchedule.append(["Watch Hot Fuzz",121]);
+moviesToSchedule.append(["Watch Clockstoppers",94]);
+moviesToSchedule.append(["Watch Quicksand",95]);
+moviesToSchedule.append(["Watch White Noise",101]);
 moviesToSchedule.append(["Watch Phone Booth",81]);
 
 for e in moviesToSchedule:
-    scheduleEvent( e[0], e[1] )
+    scheduleEvent( e );
 
 randomEventsPool = []
 randomEventsPool.append(["Play TF2",45,True]);
