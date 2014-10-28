@@ -6,7 +6,7 @@ import random
 morningStart =  "6:15";
 morningEnd   =  "7:45";
 eveningStart = "16:00";
-eveningEnd   = "18:55";
+eveningEnd   = "18:30";
 #############################
 newMorningEndTime =  "8:00"
 newEveningEndTime = "21:00"
@@ -26,6 +26,7 @@ blackoutDates = ["Thursday 10/23/2014 Morning", \
                  "Sunday 10/26/2014 Morning", \
                  "Sunday 10/26/2014 Evening", \
                  "Monday 10/27/2014 Morning", \
+                 "Monday 10/27/2014 Evening", \
                  "Friday 10/31/2014 Evening", \
                  "Saturday 11/01/2014 Evening", \
                  "Thursday 11/27/2014 Evening", \
@@ -724,7 +725,7 @@ def validateSequel( sequel, time ):
     
 moviesToSchedule = []
 
-scheduleableDays = generateDays("Tuesday 10/21",numDaysToGenerate);
+scheduleableDays = generateDays("Sunday 10/26",numDaysToGenerate);
 
 morningMinutes_start_str = morningStart.split(":")[1];
 morningMinutes_end_str   = morningEnd.split(":")[1];
@@ -761,27 +762,30 @@ for i in range(startDayIndex,len(scheduleableDays)):
     addTimeframe( str(i*2)   + dayOfWeekStr + " " + LABEL_EVENING, str(offset+eveningHours_start)+eveningMinutes_start_str, str(offset+eveningHours_end)+eveningMinutes_end_str );
     
 removeBlackoutDates();
-    
-moviesToSchedule.append(["Watch Aliens",137]);
-moviesToSchedule.append(["Watch Saw",103]);
-moviesToSchedule.append(["Watch The Exorcist",122]);
-moviesToSchedule.append(["Watch 28 Days Later",113]);
-moviesToSchedule.append(["Watch The Blair Witch Project",81]);
-moviesToSchedule.append(["Watch Event Horizon",96]);
-moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 
-moviesToSchedule.append(["Watch 28 Weeks Later",100]);
-moviesToSchedule.append(["Watch The Grudge",92]);
-moviesToSchedule.append(["Watch Silent Hill",125]);
 moviesToSchedule.append(["Watch Jeepers Creepers",90]);
-moviesToSchedule.append(["Watch [Rec]",78]);
+moviesToSchedule.append(["Watch The Amityville Horror",90]);
+moviesToSchedule.append(["Watch Children of the Corn",92]);
+moviesToSchedule.append(["Watch The Grudge",92]);
+moviesToSchedule.append(["Watch Event Horizon",96]);
+moviesToSchedule.append(["Watch V/H/S/2",96]);
+moviesToSchedule.append(["Watch V/H/S: Viral",97]);
+moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
+moviesToSchedule.append(["Watch Final Destination",98]);
+moviesToSchedule.append(["Watch 28 Weeks Later",100]);
+moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
 moviesToSchedule.append(["Watch The Hills Have Eyes",107]);
 moviesToSchedule.append(["Watch Pandorum",108]);
-moviesToSchedule.append(["Watch Final Destination",98]);
-moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
-moviesToSchedule.append(["Watch Children of the Corn",92]);
-moviesToSchedule.append(["Watch The Amityville Horror",90]);
+moviesToSchedule.append(["Watch The Ring Two",110]);
 moviesToSchedule.append(["Watch V/H/S",116]);
+moviesToSchedule.append(["Watch Silent Hill",125]);
+
+
+
+
+
+
+
 
 sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
 moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
@@ -801,10 +805,9 @@ alienSequels = ["Watch Alien 3", "Watch Alien: Resurrection"];
 moviesToSchedule.append( [alienSequels[0], 114] );
 moviesToSchedule.append( [LABEL_SEQUEL, [alienSequels[0]], alienSequels[1], 109] );
 
-moviesToSchedule.append(["Watch The Ring Two",110]);
 
-moviesToSchedule.append(["Watch V/H/S/2",96]);
-moviesToSchedule.append(["Watch V/H/S: Viral",97]);
+
+
 
 moviesToSchedule.append(["Watch Judgment and Nuremberg",186]);
 moviesToSchedule.append(["Watch The Caine Mutiny",124]);
