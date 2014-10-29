@@ -13,10 +13,10 @@ newEveningEndTime = "21:00"
 #############################
 morningGapLength  =  "0:20"
 morningGapTime    =  "7:15"
-eveningGapLength  =  "0:50"
-eveningGapTime    = "18:15"
+eveningGapLength  =  "1:25"
+eveningGapTime    = "17:45"
 #############################
-numDaysToGenerate = 7;
+numDaysToGenerate = 100;
 #############################
 
 blackoutDates = ["Thursday 10/23/2014 Morning", \
@@ -33,7 +33,7 @@ blackoutDates = ["Thursday 10/23/2014 Morning", \
                  "Thursday 12/25/2014 Evening", \
                  "Thursday 01/01/2015 Evening" ];
 
-random.seed("BEANS!!")
+random.seed("BEANS!")
 
 timeframes = [];
 events = [];
@@ -529,7 +529,7 @@ def clipOverRounding( eventPool ):
                     if poolEvent[2]:
                         event[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END]
                         event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
-                        if timeToSec(event[DICT_RANGE][DICT_DUR]) == 0:
+                        if areTimesEqual(event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END]) or timeToSec(event[DICT_RANGE][DICT_DUR]) <= 300:
                             event[DICT_NAME] = LABEL_REMOVE;
                     else:
                         event[DICT_NAME] = LABEL_REMOVE;
@@ -543,8 +543,13 @@ def clipOverRounding( eventPool ):
                             event[DICT_NAME] = newEvent[0]
                             event[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END];
                             event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
-                            if timeToSec(event[DICT_RANGE][DICT_DUR]) == 0:
+                            if areTimesEqual(event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END]) or timeToSec(event[DICT_RANGE][DICT_DUR]) <= 300:
                                 event[DICT_NAME] = LABEL_REMOVE;
+    for event in events:
+        if event[DICT_NAME] == LABEL_REMOVE:
+            continue;
+        if areTimesEqual(event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END]):
+            event[DICT_NAME] = LABEL_REMOVE;
 
 def updateEventDuration( event ):
     event[DICT_RANGE][DICT_DUR] = getDuration( event[DICT_RANGE][DICT_START], event[DICT_RANGE][DICT_END] );
@@ -776,7 +781,7 @@ moviesToSchedule.append(["Watch The Blair Witch Project",81]);
 moviesToSchedule.append(["Watch Event Horizon",96]);
 moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 
-moviesToSchedule.append(["Watch 28 Weeks Later",100]);
+#moviesToSchedule.append(["Watch 28 Weeks Later",100]);
 moviesToSchedule.append(["Watch The Grudge",92]);
 moviesToSchedule.append(["Watch Silent Hill",125]);
 moviesToSchedule.append(["Watch Jeepers Creepers",90]);
@@ -944,15 +949,26 @@ moviesToSchedule.append(["Watch Phone Booth",81]);
 for e in moviesToSchedule:
     scheduleEvent( e );
 
-randomEventsPool = []
-#randomEventsPool.append(["Play TF2",45,True]);
+randomEventsPool = [];
+'''
+randomEventsPool.append(["Play TF2",45,True]);
 randomEventsPool.append(["Play Halo: ODST",30,True]);
+randomEventsPool.append(["Play a new Steam game",15,True]);
 randomEventsPool.append(["Play CS:GO",45,False]);
 randomEventsPool.append(["Play Worms: Revolution",30,True]);
 randomEventsPool.append(["Play Left 4 Dead 2",30,False])
 randomEventsPool.append(["Play Battleblock Theater",30,True]);
-randomEventsPool.append(["Play a new Steam game",15,True]);
-randomEventsPool.append(["Watch an anime",22,False])
+randomEventsPool.append(["Play Hitman: Blood Money",30,True]);
+randomEventsPool.append(["Play Elder Scrolls V: Skyrim",30,True]);
+randomEventsPool.append(["Play God of War",25,True]);
+randomEventsPool.append(["Play GTA: V",30,True]);
+randomEventsPool.append(["Play Katamari Damacy",20,True]);
+'''
+#randomEventsPool.append(["Watch an anime",22,False])
+
+randomEventsPool.append([LABEL_GAP,15,True]);
+
+
 randomEventsPool.append(["Watch Breaking Bad",47,False]);
 randomEventsPool.append(["Watch The Walking Dead",44,False]);
 randomEventsPool.append(["Watch The Office",22,False]);
@@ -963,12 +979,7 @@ randomEventsPool.append(["Watch It's Always Sunny in Philadelphia",22,False]);
 randomEventsPool.append(["Watch 30 Rock",21,False]);
 randomEventsPool.append(["Watch The Legend of Korra",23,False]);
 randomEventsPool.append(["Watch Arrested Development",22,False]);
-randomEventsPool.append(["Play Hitman: Blood Money",30,True]);
-randomEventsPool.append(["Play Elder Scrolls V: Skyrim",30,True]);
-#randomEventsPool.append(["Play God of War",25,True]);
-#randomEventsPool.append(["Play GTA: V",30,True]);
 randomEventsPool.append(["Watch House of Cards",55,False]);
-randomEventsPool.append(["Play Katamari Damacy",20,True]);
 randomEventsPool.append(["Watch Boardwalk Empire",55,False]);
 
 maxNumRandomEvents = 999+int(math.ceil(len(randomEventsPool)/3));
