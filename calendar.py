@@ -4,7 +4,7 @@ import random
 
 #############################
 morningStart =  "6:15";
-morningEnd   =  "7:45";
+morningEnd   =  "6:45";
 eveningStart = "16:00";
 eveningEnd   = "18:30";
 #############################
@@ -16,7 +16,7 @@ morningGapTime    =  "7:15"
 eveningGapLength  =  "0:50"
 eveningGapTime    = "18:15"
 #############################
-numDaysToGenerate = 100;
+numDaysToGenerate = 7;
 #############################
 
 blackoutDates = ["Thursday 10/23/2014 Morning", \
@@ -26,7 +26,6 @@ blackoutDates = ["Thursday 10/23/2014 Morning", \
                  "Sunday 10/26/2014 Morning", \
                  "Sunday 10/26/2014 Evening", \
                  "Monday 10/27/2014 Morning", \
-                 "Monday 10/27/2014 Evening", \
                  "Friday 10/31/2014 Evening", \
                  "Saturday 11/01/2014 Evening", \
                  "Thursday 11/27/2014 Evening", \
@@ -444,9 +443,10 @@ def printPreparedEvents( daysToSkip=0 ):
     daysSkipped = 0;
     skippedMorning = False;
     justSkippedDay = False;
+    havePrintedFirstLine = False;
     
     for pair in orderedPrintableEvents:
-        if daysSkipped > daysToSkip or not justSkippedDay:
+        if havePrintedFirstLine:
             print "\n"
         
         day = pair[0].split(" ")[1];
@@ -454,26 +454,31 @@ def printPreparedEvents( daysToSkip=0 ):
             curDay = day;
             daysSkipped += 1;
             if daysSkipped >= daysToSkip:
-                print "======================================================================\n"
+                if not havePrintedFirstLine:
+                    print "";
+                print "======================================================================"
+                if havePrintedFirstLine:
+                    print ""
+                havePrintedFirstLine = True;
             justSkippedDay = True;
         else:
             justSkippedDay = False;
         
-        if daysSkipped >= daysToSkip:
+        if havePrintedFirstLine:
             if skippedMorning:
                 printBox(removeIndex(pair[0]),longestBoxLength+5);
         
         for event in pair[1]:
-            if daysSkipped >= daysToSkip:
+            if havePrintedFirstLine:
                 if skippedMorning:
                     print eventToStr(event,longestEventLength+3)
                 else:
                     if event[DICT_RANGE][DICT_START][DICT_HOURS] % 24 > time.localtime().tm_hour:
                         print eventToStr(event,longestEventLength+3)
         
-        if daysSkipped >= daysToSkip and justSkippedDay:
+        if havePrintedFirstLine and justSkippedDay:
             skippedMorning = True;
-                
+           
     print "\n\n======================================================================\n"
 
 def setNewTimeframeTime( new_time, start_or_end, morning_or_evening ):
@@ -725,7 +730,7 @@ def validateSequel( sequel, time ):
     
 moviesToSchedule = []
 
-scheduleableDays = generateDays("Sunday 10/26",numDaysToGenerate);
+scheduleableDays = generateDays("Tuesday 10/21",numDaysToGenerate);
 
 morningMinutes_start_str = morningStart.split(":")[1];
 morningMinutes_end_str   = morningEnd.split(":")[1];
@@ -762,30 +767,27 @@ for i in range(startDayIndex,len(scheduleableDays)):
     addTimeframe( str(i*2)   + dayOfWeekStr + " " + LABEL_EVENING, str(offset+eveningHours_start)+eveningMinutes_start_str, str(offset+eveningHours_end)+eveningMinutes_end_str );
     
 removeBlackoutDates();
-
-moviesToSchedule.append(["Watch Jeepers Creepers",90]);
-moviesToSchedule.append(["Watch The Amityville Horror",90]);
-moviesToSchedule.append(["Watch Children of the Corn",92]);
-moviesToSchedule.append(["Watch The Grudge",92]);
+    
+moviesToSchedule.append(["Watch Aliens",137]);
+moviesToSchedule.append(["Watch Saw",103]);
+moviesToSchedule.append(["Watch The Exorcist",122]);
+moviesToSchedule.append(["Watch 28 Days Later",113]);
+moviesToSchedule.append(["Watch The Blair Witch Project",81]);
 moviesToSchedule.append(["Watch Event Horizon",96]);
-moviesToSchedule.append(["Watch V/H/S/2",96]);
-moviesToSchedule.append(["Watch V/H/S: Viral",97]);
 moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
-moviesToSchedule.append(["Watch Final Destination",98]);
+
 moviesToSchedule.append(["Watch 28 Weeks Later",100]);
-moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
+moviesToSchedule.append(["Watch The Grudge",92]);
+moviesToSchedule.append(["Watch Silent Hill",125]);
+moviesToSchedule.append(["Watch Jeepers Creepers",90]);
+moviesToSchedule.append(["Watch [Rec]",78]);
 moviesToSchedule.append(["Watch The Hills Have Eyes",107]);
 moviesToSchedule.append(["Watch Pandorum",108]);
-moviesToSchedule.append(["Watch The Ring Two",110]);
+moviesToSchedule.append(["Watch Final Destination",98]);
+moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
+moviesToSchedule.append(["Watch Children of the Corn",92]);
+moviesToSchedule.append(["Watch The Amityville Horror",90]);
 moviesToSchedule.append(["Watch V/H/S",116]);
-moviesToSchedule.append(["Watch Silent Hill",125]);
-
-
-
-
-
-
-
 
 sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
 moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
@@ -805,9 +807,10 @@ alienSequels = ["Watch Alien 3", "Watch Alien: Resurrection"];
 moviesToSchedule.append( [alienSequels[0], 114] );
 moviesToSchedule.append( [LABEL_SEQUEL, [alienSequels[0]], alienSequels[1], 109] );
 
-
-
-
+moviesToSchedule.append(["Watch The Ring Two",110]);
+moviesToSchedule.append(["Watch V/H/S/2",96]);
+moviesToSchedule.append(["Watch V/H/S: Viral",97]);
+moviesToSchedule.append(["The Descent: Part 2",94]);
 
 moviesToSchedule.append(["Watch Judgment and Nuremberg",186]);
 moviesToSchedule.append(["Watch The Caine Mutiny",124]);
@@ -942,10 +945,10 @@ for e in moviesToSchedule:
     scheduleEvent( e );
 
 randomEventsPool = []
-randomEventsPool.append(["Play TF2",45,True]);
+#randomEventsPool.append(["Play TF2",45,True]);
 randomEventsPool.append(["Play Halo: ODST",30,True]);
 randomEventsPool.append(["Play CS:GO",45,False]);
-randomEventsPool.append(["Play Worms: Revolution",45,True]);
+randomEventsPool.append(["Play Worms: Revolution",30,True]);
 randomEventsPool.append(["Play Left 4 Dead 2",30,False])
 randomEventsPool.append(["Play Battleblock Theater",30,True]);
 randomEventsPool.append(["Play a new Steam game",15,True]);
@@ -962,8 +965,8 @@ randomEventsPool.append(["Watch The Legend of Korra",23,False]);
 randomEventsPool.append(["Watch Arrested Development",22,False]);
 randomEventsPool.append(["Play Hitman: Blood Money",30,True]);
 randomEventsPool.append(["Play Elder Scrolls V: Skyrim",30,True]);
-randomEventsPool.append(["Play God of War",25,True]);
-randomEventsPool.append(["Play GTA: V",30,True]);
+#randomEventsPool.append(["Play God of War",25,True]);
+#randomEventsPool.append(["Play GTA: V",30,True]);
 randomEventsPool.append(["Watch House of Cards",55,False]);
 randomEventsPool.append(["Play Katamari Damacy",20,True]);
 randomEventsPool.append(["Watch Boardwalk Empire",55,False]);
