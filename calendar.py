@@ -799,8 +799,6 @@ moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 #moviesToSchedule.append(["Watch 28 Weeks Later",100]);
 moviesToSchedule.append(["Watch The Grudge",92]);
 moviesToSchedule.append(["Watch Silent Hill",125]);
-moviesToSchedule.append(["Watch Jeepers Creepers",90]);
-moviesToSchedule.append(["Watch [Rec]",78]);
 moviesToSchedule.append(["Watch The Hills Have Eyes",107]);
 moviesToSchedule.append(["Watch Pandorum",108]);
 moviesToSchedule.append(["Watch Final Destination",98]);
