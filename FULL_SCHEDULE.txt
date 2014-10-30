@@ -2,32 +2,12 @@
 ======================================================================
 
 
-  +------------------------------+
-  | Wednesday 10/29/2014 Evening |
-  +------------------------------+
-       Watch The Texas Chainsaw Massacre:  4:00 pm -  5:40 pm
-                      Watch Breaking Bad:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
-                        Watch The Office:  8:00 pm -  8:25 pm
-              Watch Arrested Development:  8:30 pm -  8:55 pm
-
-
-======================================================================
-
-   +-----------------------------+
-   | Thursday 10/30/2014 Morning |
-   +-----------------------------+
-                      Watch Tim and Eric:  6:20 am -  6:35 am
-                    Watch House of Cards:  6:40 am -  7:40 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
-
-
    +-----------------------------+
    | Thursday 10/30/2014 Evening |
    +-----------------------------+
                         Watch The Grudge:  4:00 pm -  5:35 pm
-                           Watch Mad Men:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                           Watch Mad Men:  7:10 pm -  8:00 pm
                       Watch Tim and Eric:  8:00 pm -  8:15 pm
                         Watch The Office:  8:20 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -40,7 +20,7 @@
      +---------------------------+
                       Watch Tim and Eric:  6:20 am -  6:35 am
                            Watch Mad Men:  6:40 am -  7:30 am
-               Watch The Legend of Korra:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
      +---------------------------+
@@ -102,8 +82,8 @@
      | Monday 11/03/2014 Evening |
      +---------------------------+
                   Watch Jeepers Creepers:  4:00 pm -  5:35 pm
-                        Watch The Office:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                        Watch The Office:  7:10 pm -  7:35 pm
                       Watch Breaking Bad:  7:40 pm -  8:30 pm
  Watch It's Always Sunny in Philadelphia:  8:30 pm -  8:55 pm
 
@@ -123,8 +103,8 @@
     | Tuesday 11/04/2014 Evening |
     +----------------------------+
                              Watch [Rec]:  4:00 pm -  5:20 pm
-                  Watch Boardwalk Empire:  5:20 pm -  6:20 pm
-                             UNSCHEDULED:  6:20 pm -  7:50 pm
+                             UNSCHEDULED:  5:20 pm -  6:50 pm
+                  Watch Boardwalk Empire:  6:50 pm -  7:50 pm
                       Watch Tim and Eric:  7:50 pm -  8:05 pm
                       Watch Breaking Bad:  8:10 pm -  9:00 pm
 
@@ -156,7 +136,7 @@
    +-----------------------------+
                   Watch The Walking Dead:  6:20 am -  7:05 am
                       Watch Tim and Eric:  7:10 am -  7:25 am
- Watch It's Always Sunny in Philadelphia:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
    +-----------------------------+
@@ -183,8 +163,8 @@
      | Friday 11/07/2014 Evening |
      +---------------------------+
                  Watch Final Destination:  4:00 pm -  5:40 pm
-                      Watch Tim and Eric:  5:40 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                      Watch Tim and Eric:  7:10 pm -  7:25 pm
                   Watch The Walking Dead:  7:30 pm -  8:15 pm
               Watch Arrested Development:  8:20 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -204,8 +184,8 @@
    | Saturday 11/08/2014 Evening |
    +-----------------------------+
                 Watch The Purge: Anarchy:  4:00 pm -  5:45 pm
-                        Watch The Office:  5:50 pm -  6:15 pm
-                             UNSCHEDULED:  6:20 pm -  7:50 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                        Watch The Office:  7:20 pm -  7:45 pm
  Watch It's Always Sunny in Philadelphia:  7:50 pm -  8:15 pm
                              UNSCHEDULED:  8:20 pm -  9:00 pm
 
@@ -224,8 +204,8 @@
      | Sunday 11/09/2014 Evening |
      +---------------------------+
               Watch Children of the Corn:  4:00 pm -  5:35 pm
-                           Watch 30 Rock:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                           Watch 30 Rock:  7:10 pm -  7:35 pm
                     Watch House of Cards:  7:40 pm -  8:40 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -236,15 +216,16 @@
      | Monday 11/10/2014 Morning |
      +---------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
      +---------------------------+
      | Monday 11/10/2014 Evening |
      +---------------------------+
              Watch The Amityville Horror:  4:00 pm -  5:35 pm
-                  Watch Boardwalk Empire:  5:40 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                  Watch Boardwalk Empire:  7:10 pm -  8:10 pm
                Watch The Legend of Korra:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -278,15 +259,15 @@
   +------------------------------+
                            Watch Mad Men:  6:20 am -  7:10 am
                       Watch Tim and Eric:  7:10 am -  7:25 am
-              Watch Arrested Development:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
   +------------------------------+
   | Wednesday 11/12/2014 Evening |
   +------------------------------+
                             Watch Saw II:  4:00 pm -  5:35 pm
-              Watch Parks and Recreation:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Parks and Recreation:  7:10 pm -  7:35 pm
                         Watch The Office:  7:40 pm -  8:05 pm
                       Watch Breaking Bad:  8:10 pm -  9:00 pm
 
@@ -324,8 +305,8 @@
      | Friday 11/14/2014 Evening |
      +---------------------------+
                             Watch Saw IV:  4:00 pm -  5:35 pm
-                  Watch Boardwalk Empire:  5:40 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                  Watch Boardwalk Empire:  7:10 pm -  8:10 pm
  Watch It's Always Sunny in Philadelphia:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -344,8 +325,8 @@
    | Saturday 11/15/2014 Evening |
    +-----------------------------+
                              Watch Saw V:  4:00 pm -  5:35 pm
-                             UNSCHEDULED:  5:40 pm -  6:00 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                             UNSCHEDULED:  7:10 pm -  7:30 pm
                       Watch Tim and Eric:  7:30 pm -  7:45 pm
                   Watch The Walking Dead:  7:50 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
@@ -365,8 +346,8 @@
      | Sunday 11/16/2014 Evening |
      +---------------------------+
                             Watch Saw VI:  4:00 pm -  5:35 pm
-                  Watch Boardwalk Empire:  5:40 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                  Watch Boardwalk Empire:  7:10 pm -  8:10 pm
                              UNSCHEDULED:  8:10 pm -  8:30 pm
                       Watch Tim and Eric:  8:30 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -386,8 +367,8 @@
      | Monday 11/17/2014 Evening |
      +---------------------------+
                            Watch Saw VII:  4:00 pm -  5:35 pm
-                      Watch Breaking Bad:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                      Watch Breaking Bad:  7:10 pm -  8:00 pm
                         Watch The Office:  8:00 pm -  8:25 pm
                            Watch 30 Rock:  8:30 pm -  8:55 pm
 
@@ -399,15 +380,15 @@
     +----------------------------+
                       Watch Tim and Eric:  6:20 am -  6:35 am
                   Watch The Walking Dead:  6:40 am -  7:25 am
-              Watch Parks and Recreation:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
     +----------------------------+
     | Tuesday 11/18/2014 Evening |
     +----------------------------+
                Watch Final Destination 2:  4:00 pm -  5:35 pm
-               Watch The Legend of Korra:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+               Watch The Legend of Korra:  7:10 pm -  7:35 pm
                              UNSCHEDULED:  7:40 pm -  8:00 pm
               Watch Parks and Recreation:  8:00 pm -  8:25 pm
                              UNSCHEDULED:  8:30 pm -  9:00 pm
@@ -420,15 +401,15 @@
   +------------------------------+
                   Watch The Walking Dead:  6:20 am -  7:05 am
                       Watch Tim and Eric:  7:10 am -  7:25 am
-                           Watch 30 Rock:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
   +------------------------------+
   | Wednesday 11/19/2014 Evening |
   +------------------------------+
                Watch Final Destination 3:  4:00 pm -  5:35 pm
-               Watch The Legend of Korra:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+               Watch The Legend of Korra:  7:10 pm -  7:35 pm
                       Watch Tim and Eric:  7:40 pm -  7:55 pm
               Watch Arrested Development:  8:00 pm -  8:25 pm
               Watch Parks and Recreation:  8:30 pm -  8:55 pm
@@ -449,9 +430,9 @@
    | Thursday 11/20/2014 Evening |
    +-----------------------------+
                Watch Final Destination 4:  4:00 pm -  5:25 pm
-                      Watch Tim and Eric:  5:30 pm -  5:45 pm
-                           Watch Mad Men:  5:50 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+                      Watch Tim and Eric:  7:00 pm -  7:15 pm
+                           Watch Mad Men:  7:20 pm -  8:10 pm
                              UNSCHEDULED:  8:10 pm -  8:30 pm
               Watch Parks and Recreation:  8:30 pm -  8:55 pm
 
@@ -470,8 +451,8 @@
      | Friday 11/21/2014 Evening |
      +---------------------------+
                Watch Final Destination 5:  4:00 pm -  5:35 pm
-              Watch Arrested Development:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Arrested Development:  7:10 pm -  7:35 pm
                       Watch Breaking Bad:  7:40 pm -  8:30 pm
               Watch Parks and Recreation:  8:30 pm -  8:55 pm
 
@@ -482,7 +463,7 @@
    | Saturday 11/22/2014 Morning |
    +-----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                           Watch 30 Rock:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -502,7 +483,7 @@
      | Sunday 11/23/2014 Morning |
      +---------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                           Watch 30 Rock:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -550,8 +531,8 @@
     | Tuesday 11/25/2014 Evening |
     +----------------------------+
                            Watch V/H/S/2:  4:00 pm -  5:40 pm
-              Watch Arrested Development:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Arrested Development:  7:10 pm -  7:35 pm
                            Watch Mad Men:  7:40 pm -  8:30 pm
               Watch Parks and Recreation:  8:30 pm -  8:55 pm
 
@@ -562,16 +543,16 @@
   | Wednesday 11/26/2014 Morning |
   +------------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-                      Watch Tim and Eric:  7:20 am -  7:35 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
   +------------------------------+
   | Wednesday 11/26/2014 Evening |
   +------------------------------+
                       Watch V/H/S: Viral:  4:00 pm -  5:40 pm
-                        Watch The Office:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                        Watch The Office:  7:10 pm -  7:35 pm
               Watch Arrested Development:  7:40 pm -  8:05 pm
                       Watch Breaking Bad:  8:10 pm -  9:00 pm
 
@@ -582,8 +563,8 @@
    | Thursday 11/27/2014 Morning |
    +-----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                      Watch Tim and Eric:  7:20 am -  7:35 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
    +-----------------------------+
@@ -606,8 +587,8 @@
      | Friday 11/28/2014 Evening |
      +---------------------------+
                      The Descent: Part 2:  4:00 pm -  5:35 pm
-                      Watch Tim and Eric:  5:40 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                      Watch Tim and Eric:  7:10 pm -  7:25 pm
                            Watch 30 Rock:  7:30 pm -  7:55 pm
                   Watch The Walking Dead:  8:00 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -679,15 +660,16 @@
     | Tuesday 12/02/2014 Morning |
     +----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
     +----------------------------+
     | Tuesday 12/02/2014 Evening |
     +----------------------------+
                    Watch The Transporter:  4:00 pm -  5:35 pm
-                      Watch Breaking Bad:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                      Watch Breaking Bad:  7:10 pm -  8:00 pm
               Watch Parks and Recreation:  8:00 pm -  8:25 pm
                              UNSCHEDULED:  8:30 pm -  9:00 pm
 
@@ -747,8 +729,8 @@
      | Friday 12/05/2014 Evening |
      +---------------------------+
                         Watch Casablanca:  4:00 pm -  5:45 pm
-                  Watch The Walking Dead:  5:50 pm -  6:35 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                  Watch The Walking Dead:  7:20 pm -  8:05 pm
                Watch The Legend of Korra:  8:10 pm -  8:35 pm
                       Watch Tim and Eric:  8:40 pm -  8:55 pm
 
@@ -787,8 +769,8 @@
      | Sunday 12/07/2014 Evening |
      +---------------------------+
                        Watch City Lights:  4:00 pm -  5:30 pm
-               Watch The Legend of Korra:  5:30 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+               Watch The Legend of Korra:  7:00 pm -  7:25 pm
                            Watch 30 Rock:  7:30 pm -  7:55 pm
  Watch It's Always Sunny in Philadelphia:  8:00 pm -  8:25 pm
               Watch Arrested Development:  8:30 pm -  8:55 pm
@@ -835,15 +817,15 @@
                            Watch 30 Rock:  6:20 am -  6:45 am
                         Watch The Office:  6:50 am -  7:15 am
                              UNSCHEDULED:  7:20 am -  7:40 am
-                      Watch Tim and Eric:  7:40 am -  7:55 am
+                             UNSCHEDULED:  7:40 am -  8:00 am
 
 
   +------------------------------+
   | Wednesday 12/10/2014 Evening |
   +------------------------------+
                       Watch Modern Times:  4:00 pm -  5:30 pm
-              Watch Parks and Recreation:  5:30 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+              Watch Parks and Recreation:  7:00 pm -  7:25 pm
                            Watch Mad Men:  7:30 pm -  8:20 pm
                            Watch 30 Rock:  8:20 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -873,8 +855,8 @@
      | Friday 12/12/2014 Morning |
      +---------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  7:40 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
      +---------------------------+
@@ -891,7 +873,7 @@
    | Saturday 12/13/2014 Morning |
    +-----------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-              Watch Parks and Recreation:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -910,15 +892,16 @@
      | Sunday 12/14/2014 Morning |
      +---------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
      +---------------------------+
      | Sunday 12/14/2014 Evening |
      +---------------------------+
                     Watch Paths of Glory:  4:00 pm -  5:30 pm
-               Watch The Legend of Korra:  5:30 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+               Watch The Legend of Korra:  7:00 pm -  7:25 pm
               Watch Arrested Development:  7:30 pm -  7:55 pm
               Watch Parks and Recreation:  8:00 pm -  8:25 pm
  Watch It's Always Sunny in Philadelphia:  8:30 pm -  8:55 pm
@@ -931,7 +914,7 @@
      +---------------------------+
                       Watch Breaking Bad:  6:20 am -  7:10 am
                       Watch Tim and Eric:  7:10 am -  7:25 am
-              Watch Parks and Recreation:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
      +---------------------------+
@@ -949,16 +932,16 @@
     | Tuesday 12/16/2014 Morning |
     +----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                      Watch Tim and Eric:  7:20 am -  7:35 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
     +----------------------------+
     | Tuesday 12/16/2014 Evening |
     +----------------------------+
                                  Watch M:  4:00 pm -  5:40 pm
-                           Watch Mad Men:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                           Watch Mad Men:  7:10 pm -  8:00 pm
                   Watch The Walking Dead:  8:00 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
 
@@ -989,7 +972,7 @@
    | Thursday 12/18/2014 Morning |
    +-----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-              Watch Arrested Development:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -1057,8 +1040,8 @@
      | Sunday 12/21/2014 Evening |
      +---------------------------+
                Watch Singin' in the Rain:  4:00 pm -  5:45 pm
-                        Watch The Office:  5:50 pm -  6:15 pm
-                             UNSCHEDULED:  6:20 pm -  7:50 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                        Watch The Office:  7:20 pm -  7:45 pm
                     Watch House of Cards:  7:50 pm -  8:50 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
 
@@ -1095,8 +1078,8 @@
     | Tuesday 12/23/2014 Evening |
     +----------------------------+
                    Watch Bicycle Thieves:  4:00 pm -  5:35 pm
-              Watch Arrested Development:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Arrested Development:  7:10 pm -  7:35 pm
                   Watch Boardwalk Empire:  7:40 pm -  8:40 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -1107,7 +1090,7 @@
   | Wednesday 12/24/2014 Morning |
   +------------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-               Watch The Legend of Korra:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -1115,8 +1098,8 @@
   | Wednesday 12/24/2014 Evening |
   +------------------------------+
                            Watch Snatch.:  4:00 pm -  5:45 pm
-              Watch Arrested Development:  5:50 pm -  6:15 pm
-                             UNSCHEDULED:  6:20 pm -  7:50 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+              Watch Arrested Development:  7:20 pm -  7:45 pm
                            Watch Mad Men:  7:50 pm -  8:40 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -1144,7 +1127,7 @@
      | Friday 12/26/2014 Morning |
      +---------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
- Watch It's Always Sunny in Philadelphia:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -1171,8 +1154,8 @@
    | Saturday 12/27/2014 Evening |
    +-----------------------------+
                           Watch Rashomon:  4:00 pm -  5:30 pm
-                    Watch House of Cards:  5:30 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+                    Watch House of Cards:  7:00 pm -  8:00 pm
                   Watch The Walking Dead:  8:00 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
 
@@ -1263,7 +1246,8 @@
    | Thursday 01/01/2015 Morning |
    +-----------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
    +-----------------------------+
@@ -1286,8 +1270,8 @@
      | Friday 01/02/2015 Evening |
      +---------------------------+
                      Watch The Third Man:  4:00 pm -  5:35 pm
-                  Watch Boardwalk Empire:  5:40 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                  Watch Boardwalk Empire:  7:10 pm -  8:10 pm
                              UNSCHEDULED:  8:10 pm -  9:00 pm
 
 
@@ -1305,8 +1289,8 @@
    | Saturday 01/03/2015 Evening |
    +-----------------------------+
                          Watch The Rover:  4:00 pm -  5:45 pm
-                    Watch House of Cards:  5:50 pm -  6:50 pm
-                             UNSCHEDULED:  6:50 pm -  8:20 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                    Watch House of Cards:  7:20 pm -  8:20 pm
  Watch It's Always Sunny in Philadelphia:  8:20 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
 
@@ -1317,7 +1301,8 @@
      | Sunday 01/04/2015 Morning |
      +---------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
      +---------------------------+
@@ -1375,16 +1360,16 @@
   | Wednesday 01/07/2015 Morning |
   +------------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
-                      Watch Tim and Eric:  7:20 am -  7:35 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
   +------------------------------+
   | Wednesday 01/07/2015 Evening |
   +------------------------------+
                          Watch Coherence:  4:00 pm -  5:30 pm
- Watch It's Always Sunny in Philadelphia:  5:30 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+ Watch It's Always Sunny in Philadelphia:  7:00 pm -  7:25 pm
                              UNSCHEDULED:  7:30 pm -  7:50 pm
                            Watch 30 Rock:  7:50 pm -  8:15 pm
                              UNSCHEDULED:  8:20 pm -  9:00 pm
@@ -1404,8 +1389,8 @@
    | Thursday 01/08/2015 Evening |
    +-----------------------------+
               Watch John Dies at the End:  4:00 pm -  5:40 pm
-              Watch Arrested Development:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Arrested Development:  7:10 pm -  7:35 pm
                         Watch The Office:  7:40 pm -  8:05 pm
  Watch It's Always Sunny in Philadelphia:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
@@ -1425,8 +1410,8 @@
      | Friday 01/09/2015 Evening |
      +---------------------------+
              Watch Safety Not Guaranteed:  4:00 pm -  5:30 pm
- Watch It's Always Sunny in Philadelphia:  5:30 pm -  5:55 pm
-                             UNSCHEDULED:  6:00 pm -  7:30 pm
+                             UNSCHEDULED:  5:30 pm -  7:00 pm
+ Watch It's Always Sunny in Philadelphia:  7:00 pm -  7:25 pm
                              UNSCHEDULED:  7:30 pm -  7:50 pm
                            Watch 30 Rock:  7:50 pm -  8:15 pm
               Watch Parks and Recreation:  8:20 pm -  8:45 pm
@@ -1447,9 +1432,9 @@
    | Saturday 01/10/2015 Evening |
    +-----------------------------+
                             Watch Primer:  4:00 pm -  5:20 pm
-                           Watch 30 Rock:  5:20 pm -  5:45 pm
-                    Watch House of Cards:  5:50 pm -  6:50 pm
-                             UNSCHEDULED:  6:50 pm -  8:20 pm
+                             UNSCHEDULED:  5:20 pm -  6:50 pm
+                           Watch 30 Rock:  6:50 pm -  7:15 pm
+                    Watch House of Cards:  7:20 pm -  8:20 pm
                              UNSCHEDULED:  8:20 pm -  9:00 pm
 
 
@@ -1467,8 +1452,8 @@
      | Sunday 01/11/2015 Evening |
      +---------------------------+
                               Watch Cube:  4:00 pm -  5:35 pm
-                           Watch 30 Rock:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                           Watch 30 Rock:  7:10 pm -  7:35 pm
                Watch The Legend of Korra:  7:40 pm -  8:05 pm
  Watch It's Always Sunny in Philadelphia:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
@@ -1489,8 +1474,8 @@
      | Monday 01/12/2015 Evening |
      +---------------------------+
                  Watch Cube 2: Hypercube:  4:00 pm -  5:35 pm
- Watch It's Always Sunny in Philadelphia:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+ Watch It's Always Sunny in Philadelphia:  7:10 pm -  7:35 pm
                            Watch Mad Men:  7:40 pm -  8:30 pm
                              UNSCHEDULED:  8:30 pm -  9:00 pm
 
@@ -1501,16 +1486,16 @@
     | Tuesday 01/13/2015 Morning |
     +----------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  7:40 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
     +----------------------------+
     | Tuesday 01/13/2015 Evening |
     +----------------------------+
                               Watch Moon:  4:00 pm -  5:40 pm
-              Watch Parks and Recreation:  5:40 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+              Watch Parks and Recreation:  7:10 pm -  7:35 pm
                   Watch The Walking Dead:  7:40 pm -  8:25 pm
                            Watch 30 Rock:  8:30 pm -  8:55 pm
 
@@ -1589,8 +1574,8 @@
    | Saturday 01/17/2015 Evening |
    +-----------------------------+
                          Watch Dark City:  4:00 pm -  5:45 pm
-                  Watch The Walking Dead:  5:50 pm -  6:35 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                  Watch The Walking Dead:  7:20 pm -  8:05 pm
               Watch Arrested Development:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -1602,7 +1587,7 @@
      +---------------------------+
                   Watch The Walking Dead:  6:20 am -  7:05 am
                       Watch Tim and Eric:  7:10 am -  7:25 am
-              Watch Parks and Recreation:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
      +---------------------------+
@@ -1662,7 +1647,7 @@
   +------------------------------+
                       Watch Tim and Eric:  6:20 am -  6:35 am
                   Watch The Walking Dead:  6:40 am -  7:25 am
-              Watch Arrested Development:  7:30 am -  7:55 am
+                             UNSCHEDULED:  7:30 am -  8:00 am
 
 
   +------------------------------+
@@ -1681,8 +1666,8 @@
    | Thursday 01/22/2015 Morning |
    +-----------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-                             UNSCHEDULED:  7:20 am -  7:40 am
-                             UNSCHEDULED:  7:40 am -  8:00 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
 
 
    +-----------------------------+
@@ -1709,8 +1694,8 @@
      | Friday 01/23/2015 Evening |
      +---------------------------+
                         Watch The Signal:  4:00 pm -  5:40 pm
-                           Watch Mad Men:  5:40 pm -  6:30 pm
-                             UNSCHEDULED:  6:30 pm -  8:00 pm
+                             UNSCHEDULED:  5:40 pm -  7:10 pm
+                           Watch Mad Men:  7:10 pm -  8:00 pm
                       Watch Tim and Eric:  8:00 pm -  8:15 pm
                            Watch 30 Rock:  8:20 pm -  8:45 pm
                              UNSCHEDULED:  8:50 pm -  9:00 pm
@@ -1779,7 +1764,7 @@
     | Tuesday 01/27/2015 Morning |
     +----------------------------+
                     Watch House of Cards:  6:20 am -  7:20 am
- Watch It's Always Sunny in Philadelphia:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -1805,8 +1790,8 @@
   | Wednesday 01/28/2015 Evening |
   +------------------------------+
                    Watch American Psycho:  4:00 pm -  5:45 pm
-                  Watch The Walking Dead:  5:50 pm -  6:35 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                  Watch The Walking Dead:  7:20 pm -  8:05 pm
                         Watch The Office:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -1825,8 +1810,8 @@
    | Thursday 01/29/2015 Evening |
    +-----------------------------+
                      Watch The Machinist:  4:00 pm -  5:45 pm
-                      Watch Tim and Eric:  5:50 pm -  6:05 pm
-                             UNSCHEDULED:  6:10 pm -  7:40 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                      Watch Tim and Eric:  7:20 pm -  7:35 pm
                         Watch The Office:  7:40 pm -  8:05 pm
               Watch Arrested Development:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
@@ -1857,7 +1842,7 @@
    | Saturday 01/31/2015 Morning |
    +-----------------------------+
                   Watch Boardwalk Empire:  6:20 am -  7:20 am
-              Watch Arrested Development:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:20 am -  7:50 am
                              UNSCHEDULED:  7:50 am -  8:00 am
 
 
@@ -1865,8 +1850,8 @@
    | Saturday 01/31/2015 Evening |
    +-----------------------------+
                      Watch Reign of Fire:  4:00 pm -  5:45 pm
-                           Watch Mad Men:  5:50 pm -  6:40 pm
-                             UNSCHEDULED:  6:40 pm -  8:10 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                           Watch Mad Men:  7:20 pm -  8:10 pm
               Watch Parks and Recreation:  8:10 pm -  8:35 pm
                              UNSCHEDULED:  8:40 pm -  9:00 pm
 
@@ -1966,6 +1951,27 @@
                         Watch The Office:  7:30 pm -  7:55 pm
                            Watch 30 Rock:  8:00 pm -  8:25 pm
                              UNSCHEDULED:  8:30 pm -  9:00 pm
+
+
+======================================================================
+
+     +---------------------------+
+     | Friday 02/06/2015 Morning |
+     +---------------------------+
+               Watch The Legend of Korra:  6:20 am -  6:45 am
+                        Watch The Office:  6:50 am -  7:15 am
+              Watch Parks and Recreation:  7:20 am -  7:45 am
+                             UNSCHEDULED:  7:50 am -  8:00 am
+
+
+     +---------------------------+
+     | Friday 02/06/2015 Evening |
+     +---------------------------+
+            Watch AVP: Alien vs Predator:  4:00 pm -  5:45 pm
+                             UNSCHEDULED:  5:50 pm -  7:20 pm
+                        Watch The Office:  7:20 pm -  7:45 pm
+                  Watch The Walking Dead:  7:50 pm -  8:35 pm
+                      Watch Tim and Eric:  8:40 pm -  8:55 pm
 
 
 ======================================================================

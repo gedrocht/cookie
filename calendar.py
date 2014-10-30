@@ -11,10 +11,10 @@ eveningEnd   = "18:30";
 newMorningEndTime =  "8:00"
 newEveningEndTime = "21:00"
 #############################
-morningGapLength  =  "0:20"
-morningGapTime    =  "7:15"
+morningGapLength  =  "0:25"
+morningGapTime    =  "7:10"
 eveningGapLength  =  "1:25"
-eveningGapTime    = "17:45"
+eveningGapTime    = "16:15"
 #############################
 numDaysToGenerate = 100;
 #############################
@@ -1041,9 +1041,6 @@ extendExtendableEvents(randomEventsPool);
 
 orderedPrintableEvents = prepareEventsForPrinting();
 printPreparedEvents(getNumDaysToSkip());
-
-
-
 
 
 
