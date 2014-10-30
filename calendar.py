@@ -16,7 +16,7 @@ morningGapTime    =  "7:10"
 eveningGapLength  =  "1:25"
 eveningGapTime    = "16:15"
 #############################
-numDaysToGenerate = 100;
+numDaysToGenerate = 200;
 #############################
 
 blackoutDates = ["Thursday 10/23/2014 Morning", \
@@ -570,7 +570,6 @@ def extendExtendableEvents( eventPool ):
             latestEvent[DICT_RANGE][DICT_END] = timeframe[DICT_RANGE][DICT_END];
             updateEventDuration( latestEvent );
             
-                                
 def updateRemovedEvents():
     newEvents = [];
     for event in events:
@@ -732,6 +731,22 @@ def validateSequel( sequel, time ):
         if not hasEventBeenScheduledBefore( prev, time ):
             return False;
     return True;
+    
+def consolodateGaps():
+    for event in events:
+        if event[DICT_NAME] != LABEL_GAP:
+            continue;
+        nextEvent = getEventRightAfterwards(event);
+        if nextEvent is None:
+            continue;
+        if nextEvent[DICT_NAME] != LABEL_GAP:
+            continue;
+        consolodateEvents( event, nextEvent );
+            
+def consolodateEvents( event_a, event_b ):
+    event_a[DICT_RANGE][DICT_END] = event_b[DICT_RANGE][DICT_END]
+    updateEventDuration(event_a);
+    event_b[DICT_NAME] = LABEL_REMOVE;
     
 moviesToSchedule = []
 
@@ -1036,6 +1051,7 @@ roundAllEventStartTimes(10);
 roundAllEventEndTimes(5);
 
 clipOverRounding(randomEventsPool);
+consolodateGaps();
 events = updateRemovedEvents();
 extendExtendableEvents(randomEventsPool);
 
