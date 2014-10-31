@@ -13,6 +13,57 @@ div {
     text-shadow: none;
 }
 
+div.dateOverlay {
+    position: absolute;
+    font-size: 60;
+    font-weight: bold;
+    margin-top: -90px;
+    width: 210px;
+    text-align: right;
+    left: 52.1%;
+    z-index: 99999;
+    opacity: 0.7;
+    
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+div.dateOverlay-Monday {
+    color: rgba(68,109,150,0.999);
+    text-shadow: 0px 1px 1px rgba(102,165,226,0.9);
+}
+
+div.dateOverlay-Tuesday {
+    color: rgba(68,150,109,0.999);
+    text-shadow: 0px 1px 1px rgba(102,226,165,0.9);
+}
+
+div.dateOverlay-Wednesday {
+    color: rgba(150,68,109,0.999);
+    text-shadow: 0px 1px 1px rgba(226,102,165,0.9);
+}
+
+div.dateOverlay-Thursday {
+    color: rgba(150,109,68,0.999);
+    text-shadow: 0px 1px 1px rgba(226,165,102,0.9);
+}
+
+div.dateOverlay-Friday {
+    color: rgba(108,68,136,0.999);
+    text-shadow: 0px 1px 1px rgba(165,102,206,0.9);
+}
+
+div.dateOverlay-Saturday {
+    color: rgba(95,150,68,0.999);
+    text-shadow: 0px 1px 1px rgba(144,226,103,0.9);
+}
+
+div.dateOverlay-Sunday {
+    color: rgba(109,109,150,0.999);
+    text-shadow: 0px 1px 1px rgba(165,165,226,0.9);
+}
+
 div.day {
     border: 1px black solid;
     width: 26%;
@@ -251,7 +302,26 @@ function strToDate( str ){
 }
 
 function formatDate( date ){
-    return '<p class="date">' + clipDate(date) + '</p>';
+    return '<p class="date">' + clipDate(date) + '</p>' + getDateOverlay(date);
+}
+
+function getDateOverlay( date ){
+    var dayOfWeek = date.split(" ")[0];
+    return '<div class="dateOverlay dateOverlay-' + dayOfWeek + '">' + cleanDate(date.split(" ")[1]) + '</div>';
+}
+
+function cleanDate( dateStr ){
+    var split = dateStr.split("/");
+    var mStr  = split[0];
+    var dStr  = split[1];
+    var yStr  = split[2];
+    
+    if( mStr[0] == "0" )
+        mStr = mStr[1];
+    if( dStr[0] == "0" )
+        dStr = dStr[1];
+        
+    return mStr + "/" + dStr;
 }
 
 function clipDate( date ){

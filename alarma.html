@@ -1,0 +1,61 @@
+<html>
+<head>
+<style>
+input {
+    font-size: 30pt;
+    padding: 3px;
+}
+
+#time {
+    text-align: right;
+    width: 300px;
+    margin-right: 1px;
+}
+
+div.textbox-container {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    width: 40%;
+    text-align: center;
+}
+</style>
+<script>
+var alarmsDiv;
+var textbox;
+var sound = new Audio("alarm.mp3");
+
+var alarms = [];
+
+function init(){
+    alarmsDiv = document.getElementById("alarms");
+    textbox   = document.getElementById("time");
+    setInterval( update, 1000 );
+}
+
+function update(){
+    var d = new Date();
+    var alarm;
+    for( var i = 0 ; i < alarms.length ; i++ ){
+        alarm = alarms[i];
+        if( alarm == 0 )
+        if( alarm == 1 ){
+            alarm--;
+            alarm
+        }
+    }
+}
+
+function addAlarm(){
+}
+</script>
+</head>
+<body onLoad="init();">
+<div class="textbox-container">
+    <input type="textbox" id="time"></input>
+    <input type="button"  id="timeButton" width="100px" value=" GO " onclick="addAlarm();"></input>
+    <div id="alarms">
+    </div>
+</div>
+</body>
+</html>

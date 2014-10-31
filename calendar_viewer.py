@@ -53,7 +53,7 @@ def getSchedule( filename="FULL_SCHEDULE.txt" ):
         schedule.append(scheduleDay);
     
     return schedule;
-    
+        
 def getEventURL( name ):
     if URLs.has_key(name):
         return URLs[name];
