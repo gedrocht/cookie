@@ -15,11 +15,12 @@ div {
 
 div.dateOverlay {
     position: absolute;
+    font-weight: bold;
     font-size: 24;
-    margin-top: -71px;
-    width: 11.28%;
+    margin-top: -69px;
+    width: 491px;
     text-align: right;
-    left: 51.9%;
+    left: auto;
     z-index: 99999;
     opacity: 0.666;
     
@@ -65,7 +66,7 @@ div.dateOverlay-Sunday {
 
 div.day {
     border: 1px black solid;
-    width: 26%;
+    width: 491px;
     color: #f0f0f0;
     margin-left: auto;
     margin-right: auto;
@@ -124,9 +125,16 @@ div.eventRow:hover {
     z-index: 999;
 }
 
+div.eventRow-game {
+    color: #000;
+    background-color: #444;
+    background-image: url(tile.png);
+    text-shadow: 0px 1px 1px rgba(0,0,0,0.15);
+}
+
 div.eventRow-unscheduled {
     color: #ddd;
-    background-color: #333333;
+    background-color: #333;
     border-top: 0px solid #333333;
     border-bottom: 0px solid #333333;
 }
@@ -179,6 +187,10 @@ p.eventRange {
     float:right;
 }
 
+p.eventRange-game {
+    text-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+}
+
 a {
     text-decoration:none;
 }
@@ -186,9 +198,17 @@ a {
 a:hover, a:visited, a:link, a:active{
     color: #000;
 }
+
+a.game:hover, a.game:visited, a.game:link, a.game:active {
+    color: #000;
+}
 </style>
+<title>Schedule</title>
 <script src="calendar.js"></script>
+<script src="randomGames.js"></script>
 <script>
+var curGame = 0;
+
 var curDate = getDateString();
 
 function init(){
@@ -217,17 +237,21 @@ function zfill( str, num ){
     return str;
 }
 
-var listEvent = function(r){
+function addGame( game ){
+    return formatGame( game ) + "<br>\n";
+}
+
+var listEvent = function(r,offset){
     return function(event,index){
-        if( index != 0 )
-            return r.esult += "<br>" + formatEvent(event,index) + "\n";
-        return r.esult += formatEvent(event,index) + "\n";
+        if( index+offset != 0 )
+            return r.esult += "<br>" + formatEvent(event,index+offset) + "\n";
+        return r.esult += formatEvent(event,index+offset) + "\n";
     }
 }
 
-function listEvents( events ){
+function listEvents( events, offset ){
     var r={esult:'\n'}
-    events.forEach(listEvent(r));
+    events.forEach(listEvent(r,offset));
     return r.esult + "<br>\n";
 }
 
@@ -237,11 +261,20 @@ var listDay = function(r){
     }
 }
 
+function getRandomGame(){
+    if( curGame == randomGames.length )
+        curGame = 0;
+    
+    return randomGames[curGame++];
+}
+
 var daysListed = 0;
 function listDayEvents( day ){
+    var game = getRandomGame();
+
     if( isDayBeforeToday(day) )
         return "";
-        
+    
     daysListed += 1;
     if( daysListed > 8 )
         return "";
@@ -255,7 +288,7 @@ function listDayEvents( day ){
     if( day.events_morning.length != 0 ){
         result += '<div class="' + classes + '">';
         result += formatDate(day.date_morning);
-        result += listEvents(day.events_morning);
+        result += listEvents(day.events_morning,0);
         result += '</div>';
     }
     if( day.events_evening.length != 0 ){
@@ -264,7 +297,8 @@ function listDayEvents( day ){
         
         result += '<div class="' + classes + '">';
         result += formatDate(day.date_evening);
-        result += listEvents(day.events_evening);
+        result += addGame(game);
+        result += listEvents(day.events_evening,0);
         result += '</div>';
     }
     if( result.length != 0 )
@@ -343,6 +377,23 @@ function formatEvent( event, index ){
     return formatEventRow(link + innerText, index) + "\n";
 }
 
+function formatGame( game ){
+    var name  = game[0];
+    var appid = game[1];
+    
+    if( name.length > 35 ){
+        name = name.substr(0,35) + "...";
+    }
+    
+    var result = '<a class="game" href="steam://run/' + appid + '">' + name + '</a>' + formatGameOfTheDay( "[Game of the Day]" );
+    
+    return formatEventRow( result, 1, true ) + '\n';
+}
+
+function formatGameOfTheDay( text ){
+    return '<p class="eventRange eventRange-game">' + text + '</p>'
+}
+
 function formatEventName( name ){
     return '<p class="eventName">' + clipEventName(name) + '</p>';
 }
@@ -366,15 +417,19 @@ function formatEventRange( start, end ){
     return '<p class="eventRange">' + start + " - " + end + '</p>'
 }
 
-function formatEventRow( row, index ){
+function formatEventRow( row, index, isGame ){
     classes = "eventRow";
-    if( row.indexOf("UNSCHEDULED") != -1 ){
-        classes += " eventRow-unscheduled";
+    if( isGame ){
+        classes += " eventRow-game";
     } else {
-        if( index % 2 == 0 )
-            classes += " eventRow-even";
-        else
-            classes += " eventRow-odd";
+        if( row.indexOf("UNSCHEDULED") != -1 ){
+            classes += " eventRow-unscheduled";
+        } else {
+            if( index % 2 == 0 )
+                classes += " eventRow-even";
+            else
+                classes += " eventRow-odd";
+        }
     }
     
     return '<div class="' + classes + '">' + row + '</div>';
