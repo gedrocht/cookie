@@ -1,0 +1,140 @@
+The Grudge|5.9
+Silent Hill|6.6
+The Hills Have Eyes|6.4
+Pandorum|6.8
+Final Destination|6.8
+The Purge: Anarchy|6.5
+Children of the Corn|5.6
+The Amityville Horror|6
+V/H/S|5.8
+Saw II|6.6
+Saw III|6.2
+Saw IV|5.9
+Saw V|5.8
+Saw VI|6
+Saw VII|5.6
+Final Destination 2|6.2
+Final Destination 3|5.8
+Final Destination 4|5.1
+Final Destination 5|5.9
+Alien 3|6.4
+Alien: Resurrection|6.3
+The Ring Two|5.3
+V/H/S/2|6.1
+V/H/S: Viral|4.7
+The Caine Mutiny|7.9
+Die Hard|8.3
+Bull Durham|7.1
+The Transporter|6.8
+The Fast and the Furious|6.6
+It's a Wonderful Life|8.7
+Casablanca|8.6
+Life is Beautiful|8.6
+City Lights|8.6
+The Intouchables|8.6
+Modern Times|8.6
+Sunset Blvd.|8.6
+The Pianist|8.5
+The Lives of Others|8.5
+Paths of Glory|8.5
+Vertigo|8.4
+M|5.9
+A Clockwork Orange|8.4
+Taxi Driver|8.4
+Double Indemnity|8.4
+Witness for the Prosecution|8.5
+Singin' in the Rain|8.4
+The Sting|8.4
+Bicycle Thieves|8.4
+Snatch.|8.3
+All About Eve|8.4
+Rashomon|8.4
+L.A. Confidential|8.3
+The Treasure of the Sierra Madre|8.4
+The Apartment|8.4
+Some Like It Hot|8.3
+The Third Man|8.4
+The Rover|6.5
+The Thieves|6.8
+Gardens of Stone|6.4
+Top Gun|6.8
+Coherence|7.1
+John Dies at the End|6.5
+Safety Not Guaranteed|7.1
+Primer|7
+Cube|7.3
+Cube 2: Hypercube|5.6
+Moon|8
+Jurassic Park|8
+GoldenEye|7.2
+Enemy at the Gates|7.6
+Dark City|7.8
+The Maze Runner|7.4
+The Adjustment Bureau|7.1
+Push|6.1
+The Secret Life of Walter Mitty|7.4
+Oblivion|7
+The Signal|6.2
+John Carter|6.6
+Predator|7.9
+In Time|6.7
+3:10 to Yuma|7.8
+American Psycho|7.6
+The Machinist|7.8
+Face/Off|7.3
+Reign of Fire|6.2
+Cowboys & Aliens|8.1
+The Island|6.9
+Limitless|7.4
+Left Behind|3.3
+World War Z|7
+AVP: Alien vs Predator|5.5
+Collateral Damage|5.4
+The Thirteenth Floor|7
+Timecrimes|7.2
+Cargo|6.2
+Europa Report|6.5
+The Andromeda Strain|7.2
+The Core|5.4
+Godzilla|6.7
+Hollow Man|5.7
+Maximum Overdrive|5.4
+Species|5.8
+9|7.1
+Escape from New York|7.2
+The Spy Who Loved Me|7.1
+Moonraker|6.2
+The Anomaly|4.9
+Thunderball|7
+Universal Soldier|5.9
+Videodrome|7.3
+Stealth|5
+Frankenstein's Army|5.3
+Timecop|5.8
+The Animatrix|7.4
+Outpost 37 (WRONG TIME)|8
+NGE: The End of Evangelion|6.8
+Evangelion: 2.0|8.1
+Dawn of the Planet of the Apes|8
+Predators|6.4
+Vampire Hunter D: Bloodlust|7.8
+Who Am I?|6.8
+Citizenfour|8.1
+Eraserhead|7.4
+The Birds|7.8
+Pitch Black|7.1
+The Crazies|6.6
+Psycho|8.6
+The Shining|8.5
+Dawn of the Dead|7.4
+Night of the Living Dead|8
+Frankenstein|5.2
+Untraceable|6.2
+Good Will Hunting|8.2
+Bad Boys II|6.5
+Fight Club|8.9
+Hot Fuzz|7.9
+Clockstoppers|5.2
+Quicksand|5.2
+White Noise|5.5
+Phone Booth|7.1

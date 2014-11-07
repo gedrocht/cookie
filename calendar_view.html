@@ -127,7 +127,7 @@ div.eventRow:hover {
 
 div.eventRow-game {
     color: #000;
-    background-color: #444;
+    background-color: #afafaf;
     background-image: url(tile.png);
     text-shadow: 0px 1px 1px rgba(0,0,0,0.15);
 }
@@ -167,6 +167,21 @@ p {
     margin: 0px;
     padding: 0px;
     padding-top: 0px;
+}
+
+div.rating {
+    position: absolute;
+    width: 295px;
+    text-align:right;
+    left: auto;
+    font-family:  'Lucida Console';
+    float: left;
+    margin-left: 11px;
+    opacity: 0.5;
+    font-size: 13px;
+    margin-top: 4px;
+    color: #777;
+    text-shadow: 0px 0px 1px rgba(255,255,255,1);
 }
 
 p.eventName {
@@ -285,11 +300,14 @@ function listDayEvents( day ){
     
     var classes = "day " + dayOfWeek;
     
-    if( day.events_morning.length != 0 ){
-        result += '<div class="' + classes + '">';
-        result += formatDate(day.date_morning);
-        result += listEvents(day.events_morning,0);
-        result += '</div>';
+    if( !isDayToday(day) || (new Date()).getHours() < 8 ){
+        if( day.events_morning.length != 0 ){
+            result += '<div class="' + classes + '">';
+            result += formatDate(day.date_morning);
+            result += addGame(game);
+            result += listEvents(day.events_morning,0);
+            result += '</div>';
+        }
     }
     if( day.events_evening.length != 0 ){
         if( result.length != 0 )
@@ -310,6 +328,10 @@ function isDayBeforeToday( day ){
     return dateLessThan( getDateFromDay(day), curDate );
 }
 
+function isDayToday( day ){
+    return dateEqualTo( getDateFromDay(day), curDate );
+}
+
 function getDateFromDay( day ){
     return (day.date_morning || day.date_evening).split(" ")[1];
 }
@@ -327,6 +349,13 @@ function dateLessThan( date_a, date_b ) {
     if( a[1] < b[1] ) return true;
     
     return false;
+}
+
+function dateEqualTo( date_a, date_b ){
+    var a = strToDate(date_a);
+    var b = strToDate(date_b);
+    
+    return (a[0] == b[0] && a[1] == b[1] && a[2] == b[2]);
 }
 
 function strToDate( str ){
@@ -372,10 +401,20 @@ function formatEvent( event, index ){
         linkEnd = '</a>';
     }
     
-    innerText = formatEventName(event.name) + linkEnd + " " + formatEventRange(event.start,event.end);
+    innerText = formatEventName(event.name) +  formatEventRating(event.rating) + linkEnd + " " + formatEventRange(event.start,event.end);
     
     return formatEventRow(link + innerText, index) + "\n";
 }
+
+function formatEventRating( rating ){
+    if( rating == 0 )
+        return "";
+    var ratingStr = rating.toString();
+    if( ratingStr.indexOf(".") == -1 )
+        ratingStr += ".0";
+    return '<div class="rating">' + ratingStr + '</div>';
+}
+
 
 function formatGame( game ){
     var name  = game[0];
@@ -395,7 +434,11 @@ function formatGameOfTheDay( text ){
 }
 
 function formatEventName( name ){
-    return '<p class="eventName">' + clipEventName(name) + '</p>';
+    var nameStr = name.toString();
+    if(nameStr == "Watch Tim and Eric Awesome Show, Great Job!")
+        nameStr = "Watch Tim And Eric";
+    
+    return '<p class="eventName">' + clipEventName(nameStr) + '</p>';
 }
 
 function clipEventName( name ){
@@ -433,6 +476,58 @@ function formatEventRow( row, index, isGame ){
     }
     
     return '<div class="' + classes + '">' + row + '</div>';
+}
+
+function listRatings(){
+    var event;
+    var day;
+    var events = [];
+    var eventsListed = [];
+    
+    //var tv_shows = ["Watch Mad Men", "Watch The Walking Dead", "Watch Boardwalk Empire", "Watch The Legend of Korra", "Watch Breaking Bad", "Watch The Office", "Watch 30 Rock", "Watch It's Always Sunny in Philadelphia", "Watch Parks and Recreation", "Watch Tim and Eric", "Watch House of Cards", "Watch Arrested Development"];
+    var tv_shows = [];
+
+    function addEvent( event ){
+        if( contains(events, event) )
+            return;
+        events.push(event);
+        //console.log( event.name + "|" + event.rating );
+        //moviesToSchedule.append(["Watch Vertigo",128]);
+    }
+    
+    function listEventsInOrder(){
+        var event;
+        for( var i = 10.0 ; i >= 0.0 ; i -= 0.1 ){
+            i = Math.round(i*10)/10.0;
+            for( var a = 0 ; a < events.length ; a++ ){
+                event = events[a];
+                if( contains(tv_shows,event.name) || event.name == "UNSCHEDULED" )
+                    continue;
+                if( event.rating == i )
+                    console.log( 'moviesToSchedule.append(["' + event.name + '",' + event.duration + ',' + event.rating + ']);' );
+            }
+        }
+    }
+
+    function contains( arr, elem ){
+        for( var i = 0 ; i < arr.length ; i++ ){
+            if( arr[i] == elem )
+                return true;
+        }
+        return false;
+    }
+
+    for( var i = 0 ; i < schedule.length ; i++ ){
+        day = schedule[i];
+        for( var a = 0 ; a < day.events_morning.length ; a++ ){
+            addEvent(day.events_morning[a]);
+        }
+        for( var b = 0 ; b < day.events_evening.length ; b++ ){
+            addEvent(day.events_evening[b]);
+        }
+    }
+    
+    listEventsInOrder()
 }
 </script>
 </head>

@@ -1,6 +1,8 @@
 import urllib2
 
 URLs = {"Watch an anime":None};
+Ratings = {};
+Durations = {};
 
 def getSchedule( filename="FULL_SCHEDULE.txt" ):
     result = "";
@@ -94,7 +96,40 @@ def getWatchURL( name ):
     search = '<a href="/title/'
     page = page[page.find(search)+9:]
     return "http://www.imdb.com" + page[0:page.find("?")-1];
+    
+def getStarRating( pageURL ):
+    if pageURL is None or pageURL == "undefined":
+        return 0;
+    if Ratings.has_key(pageURL):
+        return Ratings[pageURL];
+    page = getPage(pageURL);
+    search = '"titlePageSprite star-box-giga-star"'
+    page = page[page.find(search)+38:]
+    page = page[:3]
+    if page[1] != '.':
+        return 0;
+    Ratings[pageURL] = float(page);
+    return float(page);
 
+def getDuration( pageURL ):
+    if pageURL is None or pageURL == "undefined":
+        return 0.0;
+    if Durations.has_key(pageURL):
+        return Durations[pageURL];
+    page = getPage(pageURL);
+    search = 'itemprop="duration"';
+    
+    page = page[page.find(search):]
+    page = page[page.find('min')-5:]
+    page = page[0:9].strip();
+    page = page.split(" ")[0];
+    
+    if len(page) == 0:
+        return 0.0;
+    
+    Durations[pageURL] = float(page);
+    return float(page);
+    
 def getPlayURL( name ):
     return None;
 
@@ -110,7 +145,9 @@ for day in schedule:
 
     for event in day["events_morning"]:
         name = event["name"]
-        url = getEventURL(name);
+        url  = getEventURL(name);
+        rating   = getStarRating(url);
+        duration = getDuration(url);
         
         debug_js += '{name:"' + name + '",';
         debug_js += 'url:';
@@ -119,6 +156,8 @@ for day in schedule:
         else:
             debug_js += "undefined";
         debug_js += ','
+        debug_js += 'rating:' + str(rating) + ',';
+        debug_js += 'duration:' + str(duration) + ',';
         debug_js += 'start:"' + event["range"]["start"] + '",';
         debug_js += 'end:"' + event["range"]["end"] + '"},'
     debug_js = debug_js[:-1] + "],";
@@ -127,7 +166,9 @@ for day in schedule:
     debug_js += "events_evening:[  ";
     for event in day["events_evening"]:
         name = event["name"]
-        url = getEventURL(name);
+        url  = getEventURL(name);
+        rating   = getStarRating(url);
+        duration = getDuration(url);
         
         debug_js += '{name:"' + name + '",';
         debug_js += 'url:';
@@ -136,6 +177,8 @@ for day in schedule:
         else:
             debug_js += "undefined";
         debug_js += ','
+        debug_js += 'rating:' + str(rating) + ',';
+        debug_js += 'duration:' + str(duration) + ',';
         debug_js += 'start:"' + event["range"]["start"] + '",';
         debug_js += 'end:"' + event["range"]["end"] + '"},'    
     
@@ -143,6 +186,7 @@ for day in schedule:
     js += debug_js;
     print debug_js;
 js = js[:-1] + "];"
+
 writer = open("calendar.js","w");
 writer.write(js);
 writer.flush();
