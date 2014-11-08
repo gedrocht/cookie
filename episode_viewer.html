@@ -1,0 +1,77 @@
+<html>
+<head>
+<style>
+body {
+    background-color: #f0f0f0;
+}
+
+div.episode {
+    font-family: Arial;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img {
+    min-height: 300px;
+    max-height: 400px;
+    min-width: 500px;
+    max-width: 600px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+</style>
+
+<script src="Stargate_SG-1.js"></script>
+<script src="Star_Trek_The_Next_Generation.js"></script>
+<script src="Tim_And_Eric_Awesome_Show_Great_Job.js"></script>
+<script src="Whose_Line_Is_It_Anyway_1998.js"></script>
+<script src="Star_Trek_Original_Series.js"></script>
+<script src="Seinfeld.js"></script>
+<script src="Star_Trek_Deep_Space_Nine.js"></script>
+<script src="Stargate_Atlantis.js"></script>
+<script src="Qi.js"></script>
+<script src="Top_Gear.js"></script>
+
+<script>
+function init(){
+    rand = getRandomEpisodeList();
+    episodes = rand[0];
+    episode = episodes[Math.floor(Math.random()*episodes.length)];
+    div = document.getElementsByClassName("episode")[0];
+    var s = "";
+    s += "<b>" + episode[0] + "</b><br>";
+    s += rand[1] + "<br>"
+    s += "Season " + episode[3] + ", Episode " + episode[4] + "<br>";
+    s += '<img src="' + episode[2] + '" onload="imageLoaded(this)"></img><br>';
+
+    if( episode[1].indexOf("<a") == -1 )
+        s += episode[1];
+    div.innerHTML = s;
+    
+    interval = setInterval(function(){div.style.width=document.getElementsByTagName("img")[0].width},10);
+}
+
+function getRandomEpisodeList(){
+    episodeLists = [[Stargate_SG_1_episodes,"Stargate SG-1"],
+                    [Star_Trek_The_Next_Generation_episodes, "Star Trek The Next Generation"],
+                    [Whose_Line_Is_It_Anyway_1998_episodes, "Whose Line is it Anyway?"],
+                    [Star_Trek_Original_Series_episodes, "Star Trek"],
+                    [Seinfeld_episodes, "Seinfeld"],
+                    [Star_Trek_Deep_Space_Nine_episodes, "Star Trek Deep Space Nine"],
+                    [Stargate_Atlantis_episodes, "Stargate Atlantis"],
+                    [Qi_episodes, "Qi"],
+                    [Top_Gear_episodes, "Top Gear"]];
+    return episodeLists[Math.floor(Math.random()*episodeLists.length)];
+}
+
+function imageLoaded(img){
+    clearInterval(interval);
+}
+</script>
+</head>
+<body onLoad="init();">
+<br><br><br><br><br>
+<div class="episode">
+</div>
+</body>
