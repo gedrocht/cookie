@@ -1,3 +1,3 @@
 del FULL_SCHEDULE.txt
-calendar.py >> FULL_SCHEDULE.txt
-calendar_viewer.py
+python calendar.py >> FULL_SCHEDULE.txt
+python calendar_viewer.py

@@ -330,7 +330,27 @@ var curGame = 0;
 
 var curDate = getDateString();
 
-var tv_shows = ["Mad Men", "The Walking Dead", "Boardwalk Empire", "The Legend of Korra", "Breaking Bad", "The Office", "30 Rock", "It's Always Sunny in Philadelphia", "Parks and Recreation", "Tim And Eric", "House of Cards", "Arrested Development"];
+var tv_shows = ["Mad Men",
+                "The Walking Dead",
+                "Boardwalk Empire",
+                "The Legend of Korra",
+                "Breaking Bad",
+                "The Office",
+                "30 Rock",
+                "It's Always Sunny in Philadelphia",
+                "Parks and Recreation",
+                "Tim And Eric",
+                "House of Cards",
+                "Arrested Development",
+                "Stargate: SG-1",
+                "Babylon 5",
+                "South Park",
+                "Stargate: Atlantis",
+                "Star Trek",
+                "Star Trek: The Next Generation",
+                "Star Trek: Deep Space Nine",
+                "Qi",
+                "Top Gear"];
 
 function init(){
     var r={esult:""};
@@ -479,6 +499,8 @@ function getDateOverlay( date ){
 }
 
 function cleanDate( dateStr ){
+    if( dateStr == undefined )
+        return "??/??";
     var split = dateStr.split("/");
     var mStr  = split[0];
     var dStr  = split[1];

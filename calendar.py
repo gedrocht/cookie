@@ -804,26 +804,6 @@ moviesToSchedule.append(["Watch Pandorum",108]);
 moviesToSchedule.append(["Watch Final Destination",98]);
 moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
 moviesToSchedule.append(["Watch Children of the Corn",92]);
-moviesToSchedule.append(["Watch The Amityville Horror",90]);
-moviesToSchedule.append(["Watch V/H/S",116]);
-
-sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
-moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 108] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:3], sawSequels[3], 93] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:4], sawSequels[4], 92] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:5], sawSequels[5], 90] );
-moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:6], sawSequels[6], 90] );
-
-destSequels = ["Watch Final Destination", "Watch Final Destination 2", "Watch Final Destination 3","Watch Final Destination 4","Watch Final Destination 5"];
-moviesToSchedule.append( [LABEL_SEQUEL, [destSequels[0]], destSequels[1], 90] );
-moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:2], destSequels[2], 93] );
-moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:3], destSequels[3], 82] );
-moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:4], destSequels[4], 92] );
-
-alienSequels = ["Watch Alien 3", "Watch Alien: Resurrection"];
-moviesToSchedule.append( [alienSequels[0], 114] );
-moviesToSchedule.append( [LABEL_SEQUEL, [alienSequels[0]], alienSequels[1], 109] );
 
 moviesToSchedule.append(["Watch Fight Club",139,8.9]);
 moviesToSchedule.append(["Watch It's a Wonderful Life",130,8.7]);
@@ -929,6 +909,7 @@ moviesToSchedule.append(["Watch Gardens of Stone",111,6.4]);
 moviesToSchedule.append(["Watch Predators",107,6.4]);
 moviesToSchedule.append(["Watch The Signal",97,6.2]);
 moviesToSchedule.append(["Watch Reign of Fire",101,6.2]);
+moviesToSchedule.append(["A Million Ways to Die in the West",116,6.2]);
 moviesToSchedule.append(["Watch Cargo",112,6.2]);
 moviesToSchedule.append(["Watch Moonraker",126,6.2]);
 moviesToSchedule.append(["Watch Untraceable",101,6.2]);
@@ -961,6 +942,28 @@ moviesToSchedule.append(["Watch Left Behind",110,3.3]);
 moviesToSchedule.append(["The Descent: Part 2",94,0]);
 moviesToSchedule.append(["Watch Mr. & Mrs. Smith",51,0]);
 
+
+destSequels = ["Watch Final Destination", "Watch Final Destination 2", "Watch Final Destination 3","Watch Final Destination 4","Watch Final Destination 5"];
+moviesToSchedule.append( [LABEL_SEQUEL, [destSequels[0]], destSequels[1], 90] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:2], destSequels[2], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:3], destSequels[3], 82] );
+moviesToSchedule.append( [LABEL_SEQUEL, destSequels[0:4], destSequels[4], 92] );
+
+alienSequels = ["Watch Alien 3", "Watch Alien: Resurrection"];
+moviesToSchedule.append( [alienSequels[0], 114] );
+moviesToSchedule.append( [LABEL_SEQUEL, [alienSequels[0]], alienSequels[1], 109] );
+
+moviesToSchedule.append(["Watch The Amityville Horror",90]);
+moviesToSchedule.append(["Watch V/H/S",116]);
+
+sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
+moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 108] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:3], sawSequels[3], 93] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:4], sawSequels[4], 92] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:5], sawSequels[5], 90] );
+moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:6], sawSequels[6], 90] );
+
 for e in moviesToSchedule:
     scheduleEvent( e );
 
@@ -983,7 +986,6 @@ randomEventsPool.append(["Play Katamari Damacy",20,True]);
 
 randomEventsPool.append([LABEL_GAP,15,True]);
 
-
 randomEventsPool.append(["Watch Breaking Bad",47,False]);
 randomEventsPool.append(["Watch The Walking Dead",44,False]);
 randomEventsPool.append(["Watch The Office",22,False]);
@@ -996,6 +998,15 @@ randomEventsPool.append(["Watch The Legend of Korra",23,False]);
 randomEventsPool.append(["Watch Arrested Development",22,False]);
 randomEventsPool.append(["Watch House of Cards",55,False]);
 randomEventsPool.append(["Watch Boardwalk Empire",55,False]);
+randomEventsPool.append(["Watch Stargate: SG-1",44,False]);
+randomEventsPool.append(["Watch Babylon 5",45,False]);
+randomEventsPool.append(["Watch South Park",22,False]);
+randomEventsPool.append(["Watch Stargate: Atlantis",45,False]);
+randomEventsPool.append(["Watch Star Trek",50,False]);
+randomEventsPool.append(["Watch Star Trek: The Next Generation",44,False]);
+randomEventsPool.append(["Watch Star Trek: Deep Space Nine",45,False]);
+randomEventsPool.append(["Watch Qi",30,False]);
+randomEventsPool.append(["Watch Top Gear",60,False]);
 
 maxNumRandomEvents = 999+int(math.ceil(len(randomEventsPool)/3));
 

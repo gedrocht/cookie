@@ -103,21 +103,33 @@ def getImageURL( showName, name ):
     import urllib2
     import simplejson
     
-    searchTerm = showName + " " + name + " screenshot";
+    numTries = 0;
+    numTriesLimit = 3;
     
-    searchTerm = searchTerm.replace(' ','%20')
+    while True:
+        try:
+            numTries += 1;
+            if numTries > numTriesLimit:
+                return "";
+            
+            searchTerm = '"' + showName + '" episode "' + name + '" -set -amazon -TUBE+ -Anniversary';
+            searchTerm = searchTerm.replace(' ','%20')
+            
+            url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q='+searchTerm+'&start=0&userip=MyIP')
+            
+            request = urllib2.Request(url, None, {'Referer': 'testing'})
+            response = urllib2.urlopen(request)
+            
+            results = simplejson.load(response)
+            data = results['responseData']
+            dataInfo = data['results']
+            
+            result = dataInfo[0]['unescapedUrl']
+            
+            return result;
+        except Exception,e:
+            print e;
     
-    url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q='+searchTerm+'&start=0&userip=MyIP')
-    
-    request = urllib2.Request(url, None, {'Referer': 'testing'})
-    response = urllib2.urlopen(request)
-    
-    results = simplejson.load(response)
-    data = results['responseData']
-    dataInfo = data['results']
-    
-    result = dataInfo[0]['unescapedUrl']
-    return result;
     
 def writeFile( showName, episodes ):
     f = file(showName.replace(" ","_")+".js", "w");

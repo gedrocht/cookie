@@ -127,7 +127,10 @@ def getDuration( pageURL ):
     if len(page) == 0:
         return 0.0;
     
-    Durations[pageURL] = float(page);
+    try:
+        Durations[pageURL] = float(page);
+    except Exception,e:
+        return 0.0;
     return float(page);
     
 def getPlayURL( name ):

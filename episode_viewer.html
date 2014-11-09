@@ -1,6 +1,14 @@
 <html>
 <head>
 <style>
+a {
+    text-decoration: none;
+}
+
+a:hover, a:active, a:visited, a:link {
+    color:black;
+}
+
 body {
     background-color: #f0f0f0;
 }
@@ -40,16 +48,39 @@ function init(){
     episode = episodes[Math.floor(Math.random()*episodes.length)];
     div = document.getElementsByClassName("episode")[0];
     var s = "";
+    s += '<a target="_blank" href="https://www.google.com/search?q=' + escape(rand[1] + " " + episode[0] + " s" + pad(episode[3]) + "e" + pad(episode[4]) + " watch online") + '">';
     s += "<b>" + episode[0] + "</b><br>";
     s += rand[1] + "<br>"
     s += "Season " + episode[3] + ", Episode " + episode[4] + "<br>";
-    s += '<img src="' + episode[2] + '" onload="imageLoaded(this)"></img><br>';
+    if( rand[1] == "Qi" )
+        s += '<img src="http://upload.wikimedia.org/wikipedia/en/9/9d/QI_Logo.png" onload="imageLoaded(this)"></a>'
+    else
+        s += '<img src="' + episode[2] + '" onload="imageLoaded(this)">';
+    s += "</img><br>";
 
     if( episode[1].indexOf("<a") == -1 )
         s += episode[1];
     div.innerHTML = s;
     
     interval = setInterval(function(){div.style.width=document.getElementsByTagName("img")[0].width},10);
+}
+
+function pad( str ){
+    if( str.toString().length < 2 )
+        return "0" + str;
+    return str;
+}
+
+function escape( str ){
+    while( str.indexOf(" ") != -1 )
+        str = str.replace(" ","%20");
+    return str;
+}
+
+function unescape( str ){
+    while( str.indexOf("%20") != -1 )
+        str = str.replace("%20"," ");
+    return str;
 }
 
 function getRandomEpisodeList(){
@@ -62,7 +93,16 @@ function getRandomEpisodeList(){
                     [Stargate_Atlantis_episodes, "Stargate Atlantis"],
                     [Qi_episodes, "Qi"],
                     [Top_Gear_episodes, "Top Gear"]];
-    return episodeLists[Math.floor(Math.random()*episodeLists.length)];
+
+    if( location.search.length > 0 ){
+        var unescapedSearch = unescape(location.search).substr(1);
+        for( var i = 0 ; i < episodeLists.length ; i++ ){
+            if( unescapedSearch == episodeLists[i][1] )
+                return episodeLists[i];
+        }
+    }
+    
+    return episodeLists[Math.floor(Math.random()*episodeLists.length)*0];
 }
 
 function imageLoaded(img){
