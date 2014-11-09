@@ -49,6 +49,8 @@ def getNumSeasons( pageURL ):
         return 18;
     if pageURL.find("tt0912343") != -1:
         return 5;
+    if pageURL.find("tt1628033") != -1:
+        return 21;
 
     page = getPage(pageURL);
     search = pageURL[15:] + "/episodes?season=";
@@ -86,6 +88,8 @@ def getEpisodes( showName, seasonNumber, seasonURL ):
         if (page[:100]).find('itemprop="url"') != -1:
             continue;
         episodeInfo = getEpisodeInfo( showName, page[:1000] )
+        if episodeInfo is None:
+            continue;
         episodeInfo.extend([seasonNumber,episodeNumber])
         episodes.append( episodeInfo );
         episodeNumber += 1;
@@ -97,6 +101,9 @@ def getEpisodeInfo( showName, episode ):
     
     episode = episode[episode.find(name_search)+len(name_search):];
     name = episode[:episode.find('</a>')];
+    name = name.replace("#","");
+    if name.find(">") != -1:
+        return None;
     
     episode = episode[episode.find(description_search)+len(description_search):];
     description = episode[:episode.find('</div>')].replace('\n','').replace('\r','').strip();
@@ -118,7 +125,15 @@ def getImageURL( showName, name ):
             if numTries > numTriesLimit:
                 return "";
             
-            searchTerm = '"' + showName + '" episode "' + name + '" -set -amazon -TUBE+ -Anniversary';
+            searchTerm = "";
+            if showName == "Top Gear":
+                split = name.split(".");
+                season_num = split[0];
+                episode_num = split[1];
+                searchTerm = '"Top Gear" episode season ' + season_num + ' episode ' + episode_num + ' -set -amazon -TUBE+ -Anniversary BCC';
+            else:
+                searchTerm = '"' + showName + '" episode "' + name + '" -set -amazon -TUBE+ -Anniversary';
+            
             searchTerm = searchTerm.replace(' ','%20')
             
             url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q='+searchTerm+'&start=0&userip=MyIP')
