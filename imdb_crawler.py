@@ -1,5 +1,6 @@
 import urllib;
 import sys;
+import time;
 
 def init():
     showName = getShowName();
@@ -44,6 +45,11 @@ def getPageURL( searchURL ):
     return page;
     
 def getNumSeasons( pageURL ):
+    if pageURL.find("tt0121955") != -1:
+        return 18;
+    if pageURL.find("tt0912343") != -1:
+        return 5;
+
     page = getPage(pageURL);
     search = pageURL[15:] + "/episodes?season=";
     
@@ -129,6 +135,7 @@ def getImageURL( showName, name ):
             return result;
         except Exception,e:
             print e;
+            time.sleep(1)
     
     
 def writeFile( showName, episodes ):

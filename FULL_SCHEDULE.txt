@@ -1,7 +1,5 @@
 
 ======================================================================
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
 
 
      +---------------------------+
@@ -18,7 +16,7 @@
      | Monday 11/10/2014 Morning |
      +---------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-                          Watch Breaking Bad:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -55,8 +53,7 @@
   | Wednesday 11/12/2014 Morning |
   +------------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -95,7 +92,7 @@
      | Friday 11/14/2014 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -171,8 +168,7 @@
     +----------------------------+
                             Watch The Office:  6:20 am -  6:45 am
      Watch It's Always Sunny in Philadelphia:  6:50 am -  7:15 am
-                  Watch Arrested Development:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
     +----------------------------+
@@ -229,7 +225,7 @@
      | Friday 11/21/2014 Morning |
      +---------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -247,8 +243,8 @@
    | Saturday 11/22/2014 Morning |
    +-----------------------------+
                    Watch The Legend of Korra:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+                                 UNSCHEDULED:  7:40 am -  8:00 am
 
 
    +-----------------------------+
@@ -285,8 +281,7 @@
      +---------------------------+
                   Watch Arrested Development:  6:20 am -  6:45 am
                   Watch Parks and Recreation:  6:50 am -  7:15 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:20 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -324,8 +319,7 @@
   | Wednesday 11/26/2014 Morning |
   +------------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                            Watch South Park:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -490,8 +484,7 @@
      | Friday 12/05/2014 Morning |
      +---------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
-                            Watch South Park:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -567,8 +560,7 @@
     +----------------------------+
      Watch It's Always Sunny in Philadelphia:  6:20 am -  6:45 am
                   Watch Arrested Development:  6:50 am -  7:15 am
-                  Watch Parks and Recreation:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
     +----------------------------+
@@ -586,8 +578,7 @@
   | Wednesday 12/10/2014 Morning |
   +------------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
-                   Watch The Legend of Korra:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -624,8 +615,8 @@
      | Friday 12/12/2014 Morning |
      +---------------------------+
                   Watch Arrested Development:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
-        Watch Star Trek: The Next Generation:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+                                 UNSCHEDULED:  7:40 am -  8:00 am
 
 
      +---------------------------+
@@ -644,8 +635,7 @@
    | Saturday 12/13/2014 Morning |
    +-----------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                  Watch Parks and Recreation:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -665,7 +655,8 @@
      | Sunday 12/14/2014 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -720,7 +711,7 @@
   | Wednesday 12/17/2014 Morning |
   +------------------------------+
                              Watch Babylon 5:  6:20 am -  7:10 am
-                          Watch Breaking Bad:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -759,8 +750,7 @@
      +---------------------------+
                                  UNSCHEDULED:  6:20 am -  6:40 am
                   Watch Parks and Recreation:  6:40 am -  7:05 am
-                            Watch The Office:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -874,7 +864,7 @@
    | Thursday 12/25/2014 Morning |
    +-----------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -889,7 +879,7 @@
      | Friday 12/26/2014 Morning |
      +---------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                             Watch Star Trek:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -907,8 +897,8 @@
    | Saturday 12/27/2014 Morning |
    +-----------------------------+
                   Watch Parks and Recreation:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
-                        Watch Stargate: SG-1:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+                                 UNSCHEDULED:  7:40 am -  8:00 am
 
 
    +-----------------------------+
@@ -947,7 +937,8 @@
      | Monday 12/29/2014 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                                 UNSCHEDULED:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -967,8 +958,7 @@
     +----------------------------+
                             Watch The Office:  6:20 am -  6:45 am
                   Watch Arrested Development:  6:50 am -  7:15 am
-                               Watch 30 Rock:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
     +----------------------------+
@@ -986,8 +976,7 @@
   | Wednesday 12/31/2014 Morning |
   +------------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                  Watch Arrested Development:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -1007,8 +996,7 @@
    +-----------------------------+
                             Watch The Office:  6:20 am -  6:45 am
                   Watch Parks and Recreation:  6:50 am -  7:15 am
-                               Watch 30 Rock:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
    +-----------------------------+
@@ -1023,8 +1011,7 @@
      | Friday 01/02/2015 Morning |
      +---------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1043,8 +1030,7 @@
    | Saturday 01/03/2015 Morning |
    +-----------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -1062,8 +1048,7 @@
      | Sunday 01/04/2015 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1122,8 +1107,8 @@
   | Wednesday 01/07/2015 Morning |
   +------------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:10 am -  7:25 am
-                                 UNSCHEDULED:  7:30 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
   +------------------------------+
@@ -1159,8 +1144,7 @@
      | Friday 01/09/2015 Morning |
      +---------------------------+
                              Watch Star Trek:  6:20 am -  7:15 am
-                               Watch 30 Rock:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -1198,7 +1182,7 @@
      | Sunday 01/11/2015 Morning |
      +---------------------------+
                              Watch Babylon 5:  6:20 am -  7:10 am
-                      Watch The Walking Dead:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1218,8 +1202,7 @@
      +---------------------------+
                   Watch Arrested Development:  6:20 am -  6:45 am
                             Watch South Park:  6:50 am -  7:15 am
-                  Watch Parks and Recreation:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -1236,8 +1219,7 @@
     | Tuesday 01/13/2015 Morning |
     +----------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                   Watch The Legend of Korra:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
     +----------------------------+
@@ -1276,8 +1258,7 @@
    | Thursday 01/15/2015 Morning |
    +-----------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -1297,7 +1278,7 @@
      | Friday 01/16/2015 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                        Watch Stargate: SG-1:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1474,7 +1455,8 @@
      | Sunday 01/25/2015 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                                 UNSCHEDULED:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -1492,7 +1474,7 @@
      | Monday 01/26/2015 Morning |
      +---------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                      Watch The Walking Dead:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1510,7 +1492,7 @@
     | Tuesday 01/27/2015 Morning |
     +----------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-        Watch Star Trek: The Next Generation:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
     +----------------------------+
@@ -1566,8 +1548,7 @@
      +---------------------------+
      Watch It's Always Sunny in Philadelphia:  6:20 am -  6:45 am
                   Watch Arrested Development:  6:50 am -  7:15 am
-                            Watch South Park:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -1585,8 +1566,7 @@
    | Saturday 01/31/2015 Morning |
    +-----------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -1604,7 +1584,8 @@
      | Sunday 02/01/2015 Morning |
      +---------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -1718,8 +1699,7 @@
    | Saturday 02/07/2015 Morning |
    +-----------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -1737,7 +1717,7 @@
      | Sunday 02/08/2015 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1814,7 +1794,8 @@
    | Thursday 02/12/2015 Morning |
    +-----------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
    +-----------------------------+
@@ -1833,7 +1814,7 @@
      | Friday 02/13/2015 Morning |
      +---------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-            Watch Star Trek: Deep Space Nine:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -1909,7 +1890,7 @@
     | Tuesday 02/17/2015 Morning |
     +----------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-                             Watch Star Trek:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
     +----------------------------+
@@ -1929,8 +1910,7 @@
   | Wednesday 02/18/2015 Morning |
   +------------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                            Watch South Park:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -1968,8 +1948,7 @@
      +---------------------------+
                   Watch Parks and Recreation:  6:20 am -  6:45 am
                    Watch The Legend of Korra:  6:50 am -  7:15 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:20 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -2048,8 +2027,7 @@
     +----------------------------+
                   Watch Parks and Recreation:  6:20 am -  6:45 am
                   Watch Arrested Development:  6:50 am -  7:15 am
-                               Watch 30 Rock:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
     +----------------------------+
@@ -2109,7 +2087,7 @@
      +---------------------------+
                    Watch The Legend of Korra:  6:20 am -  6:45 am
                             Watch The Office:  6:50 am -  7:15 am
-                                    Watch Qi:  7:20 am -  7:55 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -2204,8 +2182,7 @@
   | Wednesday 03/04/2015 Morning |
   +------------------------------+
                              Watch Star Trek:  6:20 am -  7:15 am
-                            Watch South Park:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
   +------------------------------+
@@ -2243,7 +2220,7 @@
      | Friday 03/06/2015 Morning |
      +---------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-                        Watch Stargate: SG-1:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2300,8 +2277,7 @@
      | Monday 03/09/2015 Morning |
      +---------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-                               Watch 30 Rock:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2339,7 +2315,7 @@
   | Wednesday 03/11/2015 Morning |
   +------------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -2358,7 +2334,7 @@
    | Thursday 03/12/2015 Morning |
    +-----------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                          Watch Breaking Bad:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -2377,8 +2353,7 @@
      | Friday 03/13/2015 Morning |
      +---------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2514,7 +2489,7 @@
      | Friday 03/20/2015 Morning |
      +---------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                             Watch Babylon 5:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2574,7 +2549,8 @@
      | Monday 03/23/2015 Morning |
      +---------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                          Watch Breaking Bad:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -2613,9 +2589,8 @@
   | Wednesday 03/25/2015 Morning |
   +------------------------------+
      Watch It's Always Sunny in Philadelphia:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+                                 UNSCHEDULED:  7:40 am -  8:00 am
 
 
   +------------------------------+
@@ -2671,7 +2646,7 @@
    | Saturday 03/28/2015 Morning |
    +-----------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                          Watch Breaking Bad:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -2690,7 +2665,7 @@
      | Sunday 03/29/2015 Morning |
      +---------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-        Watch Star Trek: The Next Generation:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2709,7 +2684,7 @@
      +---------------------------+
                             Watch The Office:  6:20 am -  6:45 am
                                     Watch Qi:  6:50 am -  7:25 am
-                  Watch Parks and Recreation:  7:30 am -  7:55 am
+                                 UNSCHEDULED:  7:30 am -  8:00 am
 
 
      +---------------------------+
@@ -2727,7 +2702,8 @@
     | Tuesday 03/31/2015 Morning |
     +----------------------------+
                              Watch Babylon 5:  6:20 am -  7:10 am
-            Watch Star Trek: Deep Space Nine:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
     +----------------------------+
@@ -2746,8 +2722,7 @@
   | Wednesday 04/01/2015 Morning |
   +------------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -2765,8 +2740,7 @@
    | Thursday 04/02/2015 Morning |
    +-----------------------------+
                              Watch Star Trek:  6:20 am -  7:15 am
-                            Watch South Park:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
    +-----------------------------+
@@ -2805,8 +2779,7 @@
    | Saturday 04/04/2015 Morning |
    +-----------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-                                    Watch Qi:  7:10 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -2843,7 +2816,7 @@
      | Monday 04/06/2015 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -2863,8 +2836,7 @@
     | Tuesday 04/07/2015 Morning |
     +----------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
     +----------------------------+
@@ -2925,8 +2897,8 @@
      | Friday 04/10/2015 Morning |
      +---------------------------+
                                Watch 30 Rock:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+                                 UNSCHEDULED:  7:40 am -  8:00 am
 
 
      +---------------------------+
@@ -2989,8 +2961,8 @@
      | Monday 04/13/2015 Morning |
      +---------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:10 am -  7:25 am
-                                 UNSCHEDULED:  7:30 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -3073,8 +3045,8 @@
      | Friday 04/17/2015 Morning |
      +---------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:10 am -  7:25 am
-                                 UNSCHEDULED:  7:30 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -3094,9 +3066,8 @@
    | Saturday 04/18/2015 Morning |
    +-----------------------------+
                             Watch South Park:  6:20 am -  6:45 am
-                                 UNSCHEDULED:  6:50 am -  7:10 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:10 am -  7:25 am
-                                 UNSCHEDULED:  7:30 am -  8:00 am
+                                 UNSCHEDULED:  6:50 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
    +-----------------------------+
@@ -3157,8 +3128,7 @@
     | Tuesday 04/21/2015 Morning |
     +----------------------------+
                                Watch Mad Men:  6:20 am -  7:10 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
     +----------------------------+
@@ -3179,7 +3149,7 @@
   | Wednesday 04/22/2015 Morning |
   +------------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
-                             Watch Star Trek:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -3198,7 +3168,7 @@
    | Thursday 04/23/2015 Morning |
    +-----------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -3239,8 +3209,7 @@
    | Saturday 04/25/2015 Morning |
    +-----------------------------+
                              Watch Babylon 5:  6:20 am -  7:10 am
-     Watch It's Always Sunny in Philadelphia:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -3262,8 +3231,7 @@
      | Sunday 04/26/2015 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                  Watch Arrested Development:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -3284,8 +3252,7 @@
      | Monday 04/27/2015 Morning |
      +---------------------------+
                              Watch Star Trek:  6:20 am -  7:15 am
-                  Watch Arrested Development:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -3325,7 +3292,8 @@
   | Wednesday 04/29/2015 Morning |
   +------------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                                 UNSCHEDULED:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
   +------------------------------+
@@ -3366,7 +3334,8 @@
      | Friday 05/01/2015 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                    Watch Stargate: Atlantis:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+
@@ -3429,8 +3398,7 @@
      | Monday 05/04/2015 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                            Watch The Office:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -3472,7 +3440,7 @@
   | Wednesday 05/06/2015 Morning |
   +------------------------------+
             Watch Star Trek: Deep Space Nine:  6:20 am -  7:10 am
-                             Watch Babylon 5:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -3513,7 +3481,7 @@
      | Friday 05/08/2015 Morning |
      +---------------------------+
                       Watch The Walking Dead:  6:20 am -  7:05 am
-                        Watch Stargate: SG-1:  7:10 am -  7:55 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -3532,8 +3500,8 @@
    | Saturday 05/09/2015 Morning |
    +-----------------------------+
                     Watch Stargate: Atlantis:  6:20 am -  7:10 am
- Watch Tim and Eric Awesome Show, Great Job!:  7:10 am -  7:25 am
-                                 UNSCHEDULED:  7:30 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
    +-----------------------------+
@@ -3594,8 +3562,7 @@
     +----------------------------+
                    Watch The Legend of Korra:  6:20 am -  6:45 am
                   Watch Parks and Recreation:  6:50 am -  7:15 am
-                  Watch Arrested Development:  7:20 am -  7:45 am
-                                 UNSCHEDULED:  7:50 am -  8:00 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
     +----------------------------+
@@ -3614,8 +3581,7 @@
   | Wednesday 05/13/2015 Morning |
   +------------------------------+
         Watch Star Trek: The Next Generation:  6:20 am -  7:05 am
-                               Watch 30 Rock:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
   +------------------------------+
@@ -3701,7 +3667,7 @@
      +---------------------------+
                                Watch 30 Rock:  6:20 am -  6:45 am
                                     Watch Qi:  6:50 am -  7:25 am
-                  Watch Arrested Development:  7:30 am -  7:55 am
+                                 UNSCHEDULED:  7:30 am -  8:00 am
 
 
      +---------------------------+
@@ -3722,7 +3688,7 @@
      +---------------------------+
                             Watch South Park:  6:20 am -  6:45 am
                   Watch Arrested Development:  6:50 am -  7:15 am
-                                    Watch Qi:  7:20 am -  7:55 am
+                                 UNSCHEDULED:  7:20 am -  8:00 am
 
 
      +---------------------------+
@@ -3804,8 +3770,7 @@
      | Friday 05/22/2015 Morning |
      +---------------------------+
                         Watch Stargate: SG-1:  6:20 am -  7:05 am
-                            Watch South Park:  7:10 am -  7:35 am
-                                 UNSCHEDULED:  7:40 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
      +---------------------------+
@@ -3826,7 +3791,7 @@
    | Saturday 05/23/2015 Morning |
    +-----------------------------+
                           Watch Breaking Bad:  6:20 am -  7:10 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  8:00 am
 
 
    +-----------------------------+
@@ -3846,7 +3811,8 @@
      | Sunday 05/24/2015 Morning |
      +---------------------------+
                              Watch Babylon 5:  6:20 am -  7:10 am
-                               Watch Mad Men:  7:10 am -  8:00 am
+                                 UNSCHEDULED:  7:10 am -  7:40 am
+ Watch Tim and Eric Awesome Show, Great Job!:  7:40 am -  7:55 am
 
 
      +---------------------------+

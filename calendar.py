@@ -12,7 +12,7 @@ newMorningEndTime =  "8:00"
 newEveningEndTime = "21:00"
 #############################
 morningGapLength  =  "0:25"
-morningGapTime    =  "7:10"
+morningGapTime    =  "6:50"
 eveningGapLength  =  "1:25"
 eveningGapTime    = "16:15"
 #############################

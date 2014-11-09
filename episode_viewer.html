@@ -40,10 +40,12 @@ img {
 <script src="Stargate_Atlantis.js"></script>
 <script src="Qi.js"></script>
 <script src="Top_Gear.js"></script>
+<script src="South_Park.js"></script>
 
 <script>
 function init(){
     rand = getRandomEpisodeList();
+    document.title = rand[1]
     episodes = rand[0];
     episode = episodes[Math.floor(Math.random()*episodes.length)];
     div = document.getElementsByClassName("episode")[0];
@@ -89,10 +91,12 @@ function getRandomEpisodeList(){
                     [Whose_Line_Is_It_Anyway_1998_episodes, "Whose Line is it Anyway?"],
                     [Star_Trek_Original_Series_episodes, "Star Trek"],
                     [Seinfeld_episodes, "Seinfeld"],
+                    [South_Park_episodes, "South Park"],
                     [Star_Trek_Deep_Space_Nine_episodes, "Star Trek Deep Space Nine"],
                     [Stargate_Atlantis_episodes, "Stargate Atlantis"],
                     [Qi_episodes, "Qi"],
-                    [Top_Gear_episodes, "Top Gear"]];
+                    [Top_Gear_episodes, "Top Gear"],
+                    [Tim_and_Eric_Awesome_Show_Great_Job_episodes, "Tim and Eric Awesome Show, Great Job!"]];
 
     if( location.search.length > 0 ){
         var unescapedSearch = unescape(location.search).substr(1);
@@ -102,7 +106,7 @@ function getRandomEpisodeList(){
         }
     }
     
-    return episodeLists[Math.floor(Math.random()*episodeLists.length)*0];
+    return episodeLists[Math.floor(Math.random()*episodeLists.length)];
 }
 
 function imageLoaded(img){
