@@ -4,6 +4,14 @@ URLs = {"Watch an anime":None};
 Ratings = {};
 Durations = {};
 
+tv_shows = ["Watch Stargate: SG-1",\
+            "Watch Stargate: Atlantis",\
+            "Watch Star Trek",\
+            "Watch Star Trek: The Next Generation",\
+            "Watch Star Trek: Deep Space Nine",\
+            "Watch Qi",\
+            "Watch Top Gear"];
+
 def getSchedule( filename="FULL_SCHEDULE.txt" ):
     result = "";
     
@@ -152,6 +160,9 @@ for day in schedule:
         rating   = getStarRating(url);
         duration = getDuration(url);
         
+        if tv_shows.__contains__(name):
+            url = "episode_viewer.html?" + sjoin(name.split(" ")[1:]).replace(" ","%20").replace(":","");
+        
         debug_js += '{name:"' + name + '",';
         debug_js += 'url:';
         if url is not None:
@@ -172,6 +183,9 @@ for day in schedule:
         url  = getEventURL(name);
         rating   = getStarRating(url);
         duration = getDuration(url);
+        
+        if tv_shows.__contains__(name):
+            url = "episode_viewer.html?" + sjoin(name.split(" ")[1:]).replace(" ","%20").replace(":","");
         
         debug_js += '{name:"' + name + '",';
         debug_js += 'url:';
