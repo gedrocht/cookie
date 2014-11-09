@@ -1,0 +1,286 @@
+<html>
+<head>
+<style>
+body {
+    font-family: Arial;
+}
+input {
+    font-family: Arial;
+    font-size: 24pt;
+    text-align: right;
+}
+div {
+    font-family: Arial;
+    line-height: 1.3;
+    font-size: 24pt;
+    margin-top: 10px;
+}
+</style>
+<script>
+timers = new Array();
+alarms = []
+
+function init(){
+    main      = document.getElementById("main");
+    startTime = document.getElementById("start");
+    stopTime  = document.getElementById("stop");
+    intervals = document.getElementById("intervals");
+    nowButton = document.getElementById("nowButton");
+    
+    alarm = new Audio("TakeOneShot.wav");
+    alarm.volume = 1.0;
+    alarms.push(alarm);
+    
+    alarm_alt = new Audio("drink.mp3");
+    alarm_alt.volume = 1.0;
+    alarms.push(alarm_alt);
+    
+    autoSetStartTime();
+    //setInterval(autoSetStartTime,1000);
+    
+    setInterval(handleTimers,1000);
+}
+
+function setVolume( vol ){
+    alarms.forEach(function(a){a.volume=vol;});
+    printVolume();
+}
+
+function printVolume(){
+    alarms.forEach(function(a){console.log(a.volume);});
+}
+
+function autoSetStartTime(){
+    var time = (new Date());
+    
+    if( time.getMinutes() == 59 ){
+        time.setMinutes(0);
+        time.setHours(time.getHours()+1);
+    } else {
+        time.setMinutes(time.getMinutes()+1);
+    }
+    
+    var hoursString = (time.getHours()>12?time.getHours()-12:time.getHours()).toString();
+    var minutesString = (time.getMinutes().toString().length==2?time.getMinutes():"0"+time.getMinutes()).toString();
+    
+    startTime.value = hoursString + ":" + minutesString + (time.getHours()>12?" PM":" AM");
+}
+
+function go(){
+    var startSet = startTime.value.length != 0;
+    var stopSet  = stopTime.value.length  != 0;
+    var intSet   = intervals.value.length != 0;
+    
+    var times = new Array();
+    
+    if (startSet && intSet) {
+        var numIntervals;
+        var intervalMinutes;
+        var totalStartMinutes = getTotalMinutes(getTimeFromAMPM(startTime.value));
+        var totalStopMinutes;
+        
+        var now = new Date();
+        var currentMinutes = getTotalMinutes(now.getHours()+":"+now.getMinutes());
+        var timeOffset = totalStartMinutes - currentMinutes;
+        
+        if (stopSet) {
+            numIntervals = Number(intervals.value);
+            totalStopMinutes  = getTotalMinutes(stopTime.value);
+            intervalMinutes = (totalStopMinutes-totalStartMinutes)/numIntervals;
+        } else {
+            var intervalSplit = intervals.value.split(",");
+            intervalMinutes = getTotalMinutes(intervalSplit[0]);
+            numIntervals = Number(intervalSplit[1]);
+        }
+        
+        var offset = (timeOffset==0?1:0);
+        
+        for( var i = offset ; i < numIntervals+offset ; i++ ){
+            times.push(getTimeFromMinutes(totalStartMinutes+intervalMinutes*i));
+        }
+    }
+    
+    if (times.length != 0) {
+        addTimers(totalStartMinutes,times,timeOffset);
+    }
+}
+
+function getTotalMinutes( str ){
+    var val = str.split(":");
+    return Number(val[0])*60 + Number(val[1]);
+}
+
+function getTimeFromMinutes( mins ){
+    var time_hours = mins/60;
+    var time_minutes = Math.round((time_hours - Math.floor(time_hours))*60);
+    var time_hours = Math.floor(time_hours);
+    return [time_hours,time_minutes,0,true];
+}
+
+function getTimeString( timeArr, am_pm ){
+
+    var secondsString = timeArr[2].toString();
+    if (secondsString.length == 1)
+        secondsString = "0" + secondsString;
+
+    var minutesString = timeArr[1].toString();
+    if (minutesString.length == 1)
+        minutesString = "0" + minutesString;
+    
+    var pm = false;
+    hoursString = timeArr[0].toString();
+    if( timeArr[0] > 12 && am_pm ){
+        pm = true;
+        hoursString = (timeArr[0]-12).toString();
+    }
+    
+    if ( am_pm )
+        return hoursString+":"+minutesString+":"+secondsString+(pm?" PM":" AM");
+    else
+        return hoursString+":"+minutesString+":"+secondsString;
+}
+
+function getTimeFromAMPM( str ){
+    var str_split = str.split(" ");
+    var pm = str_split[1] == "PM";
+    var time_split = str_split[0].split(":");
+    
+    console.log(str + " = " + (Number(time_split[0])+(pm&&time_split[0]!=12?12:0)) + ":" + time_split[1]);
+    
+    return (Number(time_split[0])+(pm&&time_split[0]!=12?12:0)) + ":" + time_split[1];
+}
+
+function addTimers( totalStartMinutes, times, timeOffset ){
+    while(timers.length>0)timers.pop();
+    
+    var time;
+    var timer;
+    
+    for( var i = 0 ; i < times.length ; i++ ){
+        time = times[i];
+        timer = new Array();
+        
+        timers.push( getTimeFromMinutes(getTotalMinutes(getTimeString(time,false))-totalStartMinutes+timeOffset) )
+    }
+    
+    var str = "";
+    for( var i = 0 ; i < timers.length ; i++ ){
+        str += '<div id='+i+'>';
+        str += getTimeString(timers[i],false) + '</font><img src="x.jpeg" height="25px" width="25px" onclick="removeTimer('+i+')"></img></div>\n';
+    }
+    main.innerHTML = str;
+}
+
+function handleTimers(){
+    var timersToRemove = new Array();
+    var timer;
+    var str = "";
+    
+    /*
+    var displayNoneIndex = -1;
+    
+    for( var i = 0 ; i < timers.length ; i++ ){
+        if (document.getElementById(i).style.display == "none"){
+            displayNoneIndex = i;
+            break;
+        }
+    }
+    
+    if (displayNoneIndex != -1){
+        var newTimers = new Array();
+        for( var i = 0 ; i < timers.length ; i++ ){
+            if(i==displayNoneIndex)continue;
+            newTimers.push(timers[i]);
+        }
+        timers = newTimers;
+    }
+    */
+    
+    for( var i = 0 ; i < timers.length ; i++ ){
+        timer = timers[i];
+        
+        str += '<div id='+i+'>';
+        if (!timer[3]){
+            str += '<font color="#gray">' + getTimeString(timer,false) + "</font>"
+            continue;
+        }
+            
+            if (timer[2] > 0) {
+                timer[2]--;
+            } else if (timer[1] > 0) {
+                timer[1]--;
+                timer[2] = 59;
+            } else if (timer[0] > 0) {
+                timer[0]--;
+                timer[1] = 59;
+                timer[2] = 59;
+            } else {
+                playAlarm();
+                timer[3] = false;
+            }
+        str += getTimeString(timer,false) + '</font><img src="x.jpeg" height="25px" width="25px" onclick="removeTimer('+i+')"></img></div>\n';
+    }
+    
+    main.innerHTML = str;
+}
+
+function removeTimer(x){
+    document.getElementById(x).style.opacity="0.9";
+    
+    // /*
+    var newTimers = new Array();
+    for( var i = 0 ; i < timers.length ; i++ ){
+        if(i==x)continue;
+        newTimers.push(timers[i]);
+    }
+    timers = newTimers;
+    // */
+}
+
+setInterval(function(){
+    var divs = document.getElementsByTagName("div");
+    for( var i = 0 ; i < divs.length ; i++ ){
+        if (divs[i].style.opacity.length == 0) continue;
+        divs[i].style.opacity -= 0.05;
+        if (divs[i].style.opacity <= 0)
+            divs[i].style.display = "none";
+    }},10);
+    
+setInterval(function(){
+    var timeStr;
+    
+    var time = (new Date());
+    var hoursString = (time.getHours()>12?time.getHours()-12:time.getHours()).toString();
+    var minutesString = (time.getMinutes().toString().length==2?time.getMinutes():"0"+time.getMinutes()).toString();
+    
+    timeStr = hoursString + ":" + minutesString + (time.getHours()>12?" PM":" AM");
+    
+    now.disabled = timeStr == startTime.value
+},250);
+
+function playAlarm(){
+    if( Math.random() > 0.1 )
+        alarm.play();
+    else
+        alarm_alt.play();
+}
+    
+</script>
+</head>
+<body onLoad="init();">
+<br>
+<br>
+<br>
+<br>
+<br>
+<center>
+<input type="button"  id="now" value=" NOW " onClick="autoSetStartTime();"></input> 
+<input type="textbox" id="start" style="width:180px;"></input> 
+<input type="textbox" id="stop"  style="width:180px;"></input> 
+<input type="textbox" id="intervals"  style="width:180px;" value="0:11,8"></input> 
+<input type="button" value="  GO  " onClick="go();"></input> 
+<div id="main">
+</center>
+</div>
+</body>
+</html>
