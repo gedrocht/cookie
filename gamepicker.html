@@ -1,0 +1,419 @@
+<html>
+<head>
+<style>
+body {
+    background-color: #f0f0f0;
+    color: white;
+    font-size: 16pt;
+    text-shadow: 0px 0px 3px rgba(0,0,0,1);
+}
+
+div {
+    font-family: Arial;
+}
+
+img {
+    margin-bottom: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+div.genres {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15%;
+    text-align: center;
+}
+
+div.genre {
+    font-size: 30;
+    color: #f0f0f0;
+    float: left;
+    width: 220;
+    height: 70px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #333;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div.genre-0 {
+    background-color: >>genre-0;
+}
+
+div.genre-1 {
+    background-color: >>genre-1;
+}
+
+div.genre-2 {
+    background-color: >>genre-2;
+}
+
+div.genre-3 {
+    background-color: >>genre-3;
+}
+
+div.genre-4 {
+    background-color: >>genre-4;
+}
+
+div.genre-5 {
+    background-color: >>genre-5;
+}
+
+div.genre-6 {
+    background-color: >>genre-6;
+}
+
+div.genre-7 {
+    background-color: >>genre-7;
+}
+
+div.genre-8 {
+    background-color: >>genre-8;
+}
+
+div.genreElement {
+    color: white;
+    text-shadow: 0px 0px 3px rgba(0,0,0,1);
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+div.gameGenre {
+    font-size: 36pt;
+}
+
+div.games {
+    line-height: 1.5;
+    display: none;
+    width: 1386px;
+    height: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0%;
+    text-align: center;
+}
+
+div.game {
+    width: 460;
+    margin-left: 1px;
+    margin-right: 1px;
+    float: left;
+}
+</style>
+<script src="gameDB_shaymus22.js"></script>
+<script>
+NUM_RAND_GENRES = 3;
+NUM_RAND_GAMES = 3;
+COLOR_ADJUSTMENT = 0.8;
+
+CSS_variablePairs = [
+    [">>genre-0","#4488bb"],
+    [">>genre-1","#ffd451"],
+    [">>genre-2","#ffb551"],
+    [">>genre-3","#ff8351"],
+    [">>genre-4","#38af7c"],
+    [">>genre-5","#e44878"],
+    [">>genre-6","#44bbb3"],
+    [">>genre-7","#bb8844"],
+    [">>genre-8","#5353c3"]
+    ];
+    
+function init(){
+    adjust_variablePairs();
+    init_CSS();
+    init_database();
+    init_display();
+}
+
+function adjust_variablePairs(){
+    CSS_variablePairs.forEach( function(pair){
+        if( pair[0].indexOf("genre-") == -1 )
+            return;
+        console.log(pair[1]);
+        pair[1] = adjustColorValue(pair[1]);
+        console.log(pair[1]);
+        console.log("---------");
+    } );
+}
+
+function adjustColorValue( val ){
+    var r_val = adjustChannelValue(parseInt(val.substr(1,2),16));
+    var g_val = adjustChannelValue(parseInt(val.substr(3,2),16));
+    var b_val = adjustChannelValue(parseInt(val.substr(5,2),16));
+    
+    return "#" + r_val.toString(16) + g_val.toString(16) + b_val.toString(16);
+}
+
+function adjustChannelValue( val ){
+    return Math.floor(val * COLOR_ADJUSTMENT);
+}
+
+function init_CSS(){
+    var style = document.getElementsByTagName("style")[0].innerHTML;
+    
+    while( style.indexOf(">>") != -1 ){
+        CSS_variablePairs.forEach( function(pair){
+            style = style.replace(pair[0], pair[1]);
+        } );
+    }
+    
+    document.getElementsByTagName("style")[0].innerHTML = style;
+}
+
+function init_database(){
+    var before = new Date();
+    uniqueGenres = collectGenres();
+    genreDatabase = populateDatabase();
+    var after = new Date();
+    gloat_database( before, after );
+}
+
+function init_display(){
+    var before = new Date();
+    var genre_div = document.getElementById("0");
+    genre_div.innerHTML += HTML_getRandomGenres(NUM_RAND_GENRES);
+    var after = new Date();
+    gloat_display( before, after );
+}
+
+function HTML_getRandomGenres( count ){
+    var genres = getRandomGenres(count);
+    var html = "";
+    genres.forEach( function(genre){
+        html += HTML_formatGenre(genre, getGenreID(genre));
+    } );
+    return html;
+}
+
+function getRandomGenres( count ){
+    var genres = [];
+    
+    while( genres.length < count )
+        pushNoRepeats(genres, getRandomGenre());
+    
+    return genres;
+}
+
+function getRandomGenre(){
+    var randomGenre;
+    while( true ){
+        randomGenre = uniqueGenres[Math.floor(uniqueGenres.length*Math.random())];
+        if( validateGenre( randomGenre ) )
+            break;
+    }
+    return randomGenre;
+}
+
+function validateGenre( genre ){
+    return (genreDatabase[genre].length >= (NUM_RAND_GAMES+10));
+}
+
+function getGenreID( genre ){
+    var id = 0;
+    uniqueGenres.forEach( function(g,index){
+        if( g == genre ){
+            id = index;
+        }
+    } );
+    return id;
+}
+
+function HTML_formatGenre( genre, genre_id ){
+    console.log("genre_id:", genre_id);
+    return '<div class="genre genre-' + genre_id + '" onClick="generate_games(this,\'' + genre + '\')"><div class="genreElement">' + genre + '</div></div>';
+}
+
+function generate_games( div, genre ){
+    if( div != undefined ){
+        CSS_variablePairs.forEach( function(pair) {
+            if( pair[0] == ">>" + div.classList[1] )
+                document.body.style.backgroundColor = pair[1];
+        } );
+    }
+    document.title = genre + " Games";
+    document.getElementById("0").style.display = "none";
+    var games_div = document.getElementById("1");
+    games_div.style.display = "block";
+    games_div.innerHTML = HTML_getRandomGames( genre );
+}
+
+function HTML_getRandomGames( genre ){
+    var games = getRandomGames( genre, NUM_RAND_GAMES );
+    var html = "";
+    html += '<div onClick="generate_games(undefined,\'' + genre + '\')" class="gameGenre">' + genre + " Games</div><br>";
+    games.forEach( function(game){
+        html += HTML_formatGame(game);
+    } );
+    return html;
+}
+
+function getRandomGames( genre, count ){
+    var games = [];
+    
+    while( games.length < count )
+        pushNoRepeats(games, getRandomGame(genre));
+    
+    return games;
+}
+
+function getRandomGame( genre ){
+    return genreDatabase[genre][Math.floor(genreDatabase[genre].length*Math.random())];
+}
+
+function HTML_formatGame( game ){
+    var html =
+        '<div class="game">' +
+        '<a href="' + getSteamRunURL(game.appid) + '">' +
+        '<img width="460" height="215" src="' + getSteamImage(game.appid) + '"><br>' +
+        '</img></a>' +
+        HTML_getAllTags(game) +
+        '</div>';
+    
+    return html;
+}
+
+function getSteamRunURL( appid ){   
+    return "steam://run/" + appid;
+}
+
+function getSteamImage( appid ){
+    return "http://cdn.akamai.steamstatic.com/steam/apps/" + appid + "/header.jpg";
+}
+
+function HTML_getAllTags( game ){
+    var tags = "";
+    game.tags.forEach( function(tag,index){
+        if( index < 10 )
+            tags += tag + "<br>";
+    } );
+    return tags;
+}
+
+function collectGenres(){
+    var genres = [];
+    game_db.forEach( function(game){
+        game[0].genres.forEach( function(genre){
+            pushNoRepeats(genres, genre);
+        });
+    });
+    return genres;
+}
+
+function pushNoRepeats( arr, elem ){
+    if( contains(arr,elem) )
+        return;
+    arr.push(elem);
+}
+
+function contains( arr, elem ){
+    var found = false;
+    arr.forEach( function(e){
+        if(found)
+            return;
+        if( e == elem )
+            found = true;
+    } );
+    return found;
+}
+
+function populateDatabase(){
+    var database = {};
+    uniqueGenres.forEach( function(genre){
+        database[genre] = getAllGamesWithGenre(genre);
+    } );
+    return database;
+}
+
+function getAllGamesWithGenre( genre ){
+    var games = [];
+    
+    game_db.forEach( function(game){
+        if( contains( game[0].genres, genre ) )
+            games.push(game[0]);
+    } );
+    
+    return games;
+}
+
+function getTimeBetween( before, after ){
+    var before_ms = getTotalMilliseconds(before);
+    var after_ms = getTotalMilliseconds(after);
+    return after_ms - before_ms;
+}
+
+function getTotalMilliseconds( date ){
+    return
+        date.getMilliseconds() +
+        1000 * (date.getSeconds() +
+        60 * (date.getMinutes() +
+        60 * (date.getHours() +
+        24 * (getDayOfYear(date.getMonth(), date.getDate()) +
+        365 * (date.getFullYear())))));
+}
+
+function getDayOfYear( month, day ){
+    var totalDays = day;
+    for( var i = 1 ; i < month ; i++ ){
+        totalDays += getDaysOfMonth(i);
+    }
+    return totalDays;
+}
+
+function getDaysOfMonth( month ){
+    switch( month ){
+        case 9:
+        case 4:
+        case 6:
+        case 11:
+            return 30;
+        case 2:
+            return 28;
+        default:
+            return 31;
+    }
+}
+
+function gloat_database( before, after ){
+    console.log( "Database generation complete" );
+    console.log( uniqueGenres.length + " unique genres found" );
+    var totalGames = 0;
+    uniqueGenres.forEach( function(genre){
+        totalGames += genreDatabase[genre].length;
+    } );
+    console.log( totalGames + " database entries added" );
+    console.log( "Generation time: Approximately " + getTimeBetween(before,after) + " milliseconds" );
+}
+
+function gloat_display( before, after ){
+    console.log( "Display generated in approximately " + getTimeBetween(before,after) + " milliseconds" );
+}
+</script>
+</head>
+<body onLoad="init();">
+<br>
+<div id="0" class="genres"></div>
+<div id="1" class="games"></div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
