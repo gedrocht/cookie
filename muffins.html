@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>
+MUFFINS!!!
+</title>
+<style>
+img {
+    position: absolute;
+    max-width: 300px;
+}
+</style>
+<script src="muffins.js"></script>
+<script>
+function init(){
+    var s = "";
+    results.forEach(function(url){
+        s += getImageTag(url);
+    });
+    document.body.innerHTML = s;
+    startMoving();
+}
+
+function startMoving(){
+    var imgs = document.getElementsByTagName("img");
+    images = [];
+    for(var i = 0 ; i < 3 ; i++ ){
+        for( var i = 0 ; i < imgs.length ; i++ ){
+            images.push(imgs[i]);
+        }
+    }
+    frame = 0;
+    setInterval(moveImages,16);
+}
+
+function moveImages(){
+    frame += 0.01;
+    images.forEach(placeImage);
+}
+
+function placeImage( img, index ){
+    img.style.left = -frame*250+index*300-1000;
+    img.style.top  = 300*Math.sin(frame-index/2.0)+300;
+}
+
+function onError_img(img){
+    img.style.display = "none";
+}
+
+function getImageTag( url ){
+    return '<img onError="onError_img(this)" src="' + url + '"></img>';
+}
+</script>
+</head>
+<body onLoad="init()">
+</body>
+</html>
