@@ -39,6 +39,24 @@ function init(){
     //setInterval(autoSetStartTime,1000);
     
     setInterval(handleTimers,1000);
+    setInterval(setTitle,1000);
+}
+
+function setTitle(){
+    var timer = undefined;
+    for( var i = timers.length-1 ; i > -1 ; i-- ){
+        if( timers[i][3] )
+            timer = timers[i];
+    }
+    if( !timer )
+        return;
+    document.title = timer[0] + ":" + pad(timer[1].toString(),2) + ":" + pad(timer[2].toString(),2);
+}
+
+function pad( str, n ){
+    while( str.length < n )
+        str = "0" + str;
+    return str;
 }
 
 function setVolume( vol ){
@@ -255,7 +273,7 @@ setInterval(function(){
     
     timeStr = hoursString + ":" + minutesString + (time.getHours()>12?" PM":" AM");
     
-    now.disabled = timeStr == startTime.value
+    //now.disabled = timeStr == startTime.value
 },250);
 
 function playAlarm(){

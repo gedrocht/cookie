@@ -1,0 +1,326 @@
+<html>
+<head>
+<style>
+
+body {
+    background-color: #f0f0f0;
+    font-family: Arial;
+}
+
+div.main {
+    width: 1415px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    text-align: center;
+}
+
+img {
+    float: left;
+    margin-left: 6px;
+    border: 1px solid black;
+}
+
+div.rating {
+    position: absolute;
+    color: white;
+    font-size: 40pt;
+    font-weight: bold;
+    text-shadow:
+        0px 0px 2px #000,
+        0px 0px 3px #000,
+        0px 0px 3px #000,
+        0px 0px 3px #000,
+        0px 0px 3px #000,
+        0px 0px 3px #000,
+        0px 0px 3px #000,
+        0px 0px 4px #000,
+        0px 0px 4px #fff,
+        0px 0px 4px #fff,
+        0px 0px 5px #fff,
+        0px 0px 5px #fff,
+        0px 0px 5px #fff;
+    margin-top: 158px;
+}
+
+div.ratingBox {
+    position: absolute;
+    width: 81px;
+    height: 58px;
+    margin-left: -11px;
+    margin-top: 158px;
+    opacity: 0.75;
+}
+
+div.genre {
+    font-size: 24pt;
+    margin-bottom: -18px;
+    color: #252525;
+}
+
+div.genreBlock {
+    width: 1410px;
+    height: 300px;
+    margin-bottom: -10px;
+}
+
+div.tagBox {
+    position: absolute;
+    width: 460px;
+    height: 215px;
+    text-align: left;
+    color: #f0f0f0;
+    margin-top: 1px;
+    font-size: 18pt;
+    line-height: 1.5;
+    font-weight: bold;
+    background-color: rgba(200,200,200,0.66);
+    text-shadow:
+        1px 1px 1px   rgba(0,0,0,0.85),
+        1px -1px 1px  rgba(0,0,0,0.85),
+        -1px -1px 1px rgba(0,0,0,0.85),
+        -1px 1px 1px  rgba(0,0,0,0.85);
+    display: none;
+}
+</style>
+
+<script src="ratings_shaymus22.js"></script>
+<script>
+NUM_GENRES = 3;
+MAX_GAMES_PER_GENRE = 3;
+MAX_RATING = 100;
+MIN_RATING = 66;
+MAX_HOURS = 3;
+
+var mainDiv;
+var tagBoxes;
+var addedGames = [];
+
+var appid_skip = [340,17410,17390];
+
+function init(){
+    console.log("initializing...");
+    mainDiv = document.getElementById("main");
+    listGenres();
+    collectAllTagBoxes();
+}
+
+function collectAllTagBoxes(){
+    var boxes = document.getElementsByClassName( "tagBox" );
+    tagBoxes = [];
+    for( var i = 0 ; i < boxes.length ; i++ ){
+        tagBoxes.push(boxes[i]);
+    }
+}
+
+function showTagBox( tagBox ){
+    hideAllTagBoxes();
+    tagBox.style.display = 'block';
+}
+
+function hideAllTagBoxes(){
+    tagBoxes.forEach( function(box){
+        box.style.display = "none";
+    } );
+}
+
+function listAllGenres(){
+    ratedLists.forEach( function( list ){
+        listGenre( list[0], list[1] );
+    } );
+}
+
+function listGenres() {
+    console.log("listing genres...");
+    var usedGenres = [];
+    var index = -1;
+    var genre;
+    
+    validateNumGenres();
+    
+    for( var i = 0 ; i < NUM_GENRES ; i++ ) {
+        while( true ){
+            index = Math.floor(Math.random()*ratedLists.length);
+            genre = ratedLists[index];
+            if( getValidGenreCount(genre[1]) < MAX_GAMES_PER_GENRE*3 )
+                continue;
+            if( !contains(usedGenres, index) )
+                break;
+        }
+        usedGenres.push(index);
+        listGenre( genre[0], genre[1] );
+    }
+}
+
+function validateNumGenres(){
+    console.log("validating genres...");
+    var numValidGenres = getNumValidGenres();
+    if( numValidGenres < NUM_GENRES )
+        NUM_GENRES = numValidGenres;
+    console.log(numValidGenres + " valid genres");
+}
+
+function getNumValidGenres(){
+    var count = 0;
+    var validGenreCount;
+    ratedLists.forEach( function(list){
+        validGenreCount = getValidGenreCount(list[1]);
+        if( validGenreCount >= MAX_GAMES_PER_GENRE ){
+            console.log("valid " + list[0] + " game count: " + validGenreCount);
+            count++;
+        }
+    } );
+    return count;
+}
+
+function getValidGenreCount( genreList ){
+    var count = 0;
+    genreList.forEach( function(game){
+        if( validateGame(game) )
+            count++;
+    } );
+    return count;
+}
+
+function validateGame( game ){
+    if( game.rating < MIN_RATING )
+        return false;
+    if( game.rating > MAX_RATING )
+        return false;
+    if( game.hours_forever ){
+        if( game.hours_forever > MAX_HOURS )
+            return false;
+    }
+    if( contains( appid_skip, game.appid ) )
+        return false;
+    if( contains(addedGames,game.appid) )
+        return false;
+    return true;
+}
+
+function listGenre( genreName, list ){
+    if( list.length < MAX_GAMES_PER_GENRE )
+        return;
+
+    var html = "";
+    
+    html += startGenreBlock();
+    html += addGenreName( genreName );
+    
+    for( var i = 0 ; i < MAX_GAMES_PER_GENRE ; i++ ){
+        //html += addGame(list[i],i);
+        var randNumber = -1;
+        var game_temp;
+        while( true ){
+            randNumber = Math.floor(Math.random()*list.length);
+            game_temp = list[randNumber];
+            if( validateGame(game_temp) )
+                break;
+        }
+        addedGames.push(game_temp.appid);
+        html += addGame(game_temp,i);
+    }
+    
+    html += endGenreBlock();
+    
+    mainDiv.innerHTML += html;
+}
+
+function contains( arr, elem ){
+    for( var i = 0 ; i < arr.length ; i++ ){
+        if( arr[i] == elem )
+            return true;
+    }
+    return false;
+}
+
+function getRatingColor( rating ){
+    if( rating <= 55 )
+        return "#dd3333";
+    if( rating <= 65 )
+        return "#dd8833";
+    if( rating <= 75 )
+        return "#dddd33";
+    if( rating <= 85 )
+        return "#8edd33";
+    else
+        return "#3388dd";
+}
+
+function startGenreBlock() {
+    return '<div class="genreBlock">';
+}
+
+function endGenreBlock() {
+    return "</div><br>"
+}
+
+function addGenreName( genreName ){
+    return formatGenreName(genreName);
+}
+
+function formatGenreName( genreName ){
+    return '<div class="genre">' + genreName + "</div><br>";
+}
+
+function getSteamPlayURL( appid ){
+    return "steam://run/" + appid;
+}
+
+function addGame( game, index ){
+    return '<a onmouseout="hideAllTagBoxes()" onmouseover="showTagBox(this.getElementsByClassName(\'tagBox\')[0]);" href="' + getSteamPlayURL(game.appid) + '">' + formatGame(game,index) + "</a>";
+}
+
+function getGameImageURL( game ){
+    return "http://cdn.akamai.steamstatic.com/steam/apps/" + game.appid + "/header.jpg"
+}
+
+function formatGame( game, index ){
+    return formatImage(game) + " " + formatRating(game, index);
+}
+
+function formatImage( game ){
+    return "<img width='460px' height='215px' src='" + getGameImageURL(game) + "'></img>"
+}
+
+function formatRating( game, index ){
+    return '<div class="tagBox" onmouseout="hideAllTagBoxes()" style="left:'+(index*24.58+13.2)+'%;">' + getTags(game) + '</div>' +
+           '<div class="ratingBox" onmouseout="hideAllTagBoxes()" style="background-color:' + getRatingColor(game.rating) + '; left:'+(index*24.58+33.7)+'%;"></div>' +
+           '<div class="rating" onmouseout="hideAllTagBoxes()" style="left:'+(index*24.57+33.7)+'%; color:' + getRatingColor(game.rating) + '">' + game.rating + "</div>";
+}
+
+function getTags( game ){
+    var tags = "";
+    
+    
+    for( var i = 0 ; i < game.tags.length && i < 3 ; i++ ){
+        tags += "&nbsp;" + game.tags[i] + "<br>";
+    }
+    
+    tags += "<br><br>"
+    tags += "&nbsp;Hours: " + (game.hours_forever?game.hours_forever:"0.0");
+    
+    return tags;
+}
+</script>
+</head>
+<body onLoad="init();">
+<div id="main" class="main"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

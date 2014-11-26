@@ -13,6 +13,15 @@ body {
     background-color: #f0f0f0;
 }
 
+div.loading {
+    display: none;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+}
+
 div.episode {
     font-family: Arial;
     width: 500px;
@@ -21,13 +30,19 @@ div.episode {
 }
 
 img {
-    min-height: 300px;
-    max-height: 400px;
-    min-width: 500px;
-    max-width: 600px;
+    width: 550px;
+    min-height: 200px;
+    max-height: 500px;
     margin-top: 5px;
     margin-bottom: 10px;
 }
+<!--
+min-height: 300px;
+max-height: 400px;
+min-width: 500px;
+max-width: 600px;
+-->
+
 </style>
 
 <script src="Stargate_SG-1.js"></script>
@@ -41,14 +56,22 @@ img {
 <script src="Qi.js"></script>
 <script src="Top_Gear.js"></script>
 <script src="South_Park.js"></script>
-
+<script src="http://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js"></script>
 <script>
+
+Math.seedrandom();
+Math.random();
+Math.seedrandom('added entropy.', { entropy: true });
+Math.random();
+
 function init(){
     rand = getRandomEpisodeList();
     document.title = rand[1]
     episodes = rand[0];
     episode = episodes[Math.floor(Math.random()*episodes.length)];
-    div = document.getElementsByClassName("episode")[0];
+    div = document.getElementsByClassName("loading")[0];
+    show_div = document.getElementsByClassName("episode")[0];
+    button = document.getElementsByTagName("input")[0];
     var s = "";
     s += '<a target="_blank" href="https://www.google.com/search?q=' + escape(rand[1] + " " + episode[0] + " s" + pad(episode[3]) + "e" + pad(episode[4]) + " watch online") + '">';
     s += "<b>" + episode[0] + "</b><br>";
@@ -57,14 +80,15 @@ function init(){
     if( rand[1] == "Qi" )
         s += '<img src="http://upload.wikimedia.org/wikipedia/en/9/9d/QI_Logo.png" onload="imageLoaded(this)"></a>'
     else
-        s += '<img src="' + episode[2] + '" onload="imageLoaded(this)">';
+        s += '<img src="' + episode[2] + '" onerror="imageLoaded(this)" onload="imageLoaded(this)">';
     s += "</img><br>";
 
     if( episode[1].indexOf("<a") == -1 )
         s += episode[1];
     div.innerHTML = s;
     
-    interval = setInterval(function(){div.style.width=document.getElementsByTagName("img")[0].width},10);
+    button.style.opacity = 0.5;
+    //interval = setInterval(function(){div.style.width=document.getElementsByTagName("img")[0].width},1);
 }
 
 function pad( str ){
@@ -110,12 +134,16 @@ function getRandomEpisodeList(){
 }
 
 function imageLoaded(img){
-    clearInterval(interval);
+    //clearInterval(interval);
+    show_div.innerHTML = div.innerHTML.replace("imageLoaded","").replace("imageLoaded","");
+    button.style.opacity = 1;
 }
 </script>
 </head>
 <body onLoad="init();">
-<br><br><br><br><br>
-<div class="episode">
-</div>
+<br><br><br>
+<center><input type="button" value="Refresh" onClick="init();" id="asdf" style="font-size:30pt"></center>
+<br><br>
+<div class="episode"></div>
+<div class="loading"></div>
 </body>
