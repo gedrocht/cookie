@@ -6,7 +6,7 @@ ClickingCooker.g='getElementById';
 ClickingCooker.bigCookie = ClickingCooker.d[ClickingCooker.g]('bigCookie');
 
 ClickingCooker.intervals = {};
-ClickingCooker.resetTimeLimit = 12*60;//120
+ClickingCooker.resetTimeLimit = 99999*24*60;
 
 ClickingCooker.Interval = function(name,intervalFunction,intervalDelay){
     this.name = name;
@@ -117,7 +117,131 @@ ClickingCooker.addInterval("Click Wrinklers",function(){
 
 //addInterval("Reset",function(){if(Game.cookiesEarned / 1000000000000000000000>1){Game.Reset(1);}},1000); //reset every 1 sextillion cookies in bank
 ClickingCooker.addInterval("Reset",function(){if(((Game.time - Game.startDate)/1000)/60 > ClickingCooker.resetTimeLimit){ClickingCooker.stopAllIntervals();Game.Reset(1);setTimeout(function(){ClickingCooker.startAllIntervals()},1000);}},1000); //reset every 2 hours
- 
+
+
+ClickingCooker.unBeautify = function( val ){
+    var split = val.split(" ");
+    if( split.length == 1 || val.indexOf(",") != -1 )
+        return val;
+    var num = split[0];
+    var multiple;
+    switch( split[1] ){
+        case "thousand":   multiple = 3;  break;
+        case "million":    multiple = 6;  break;
+        case "billion":    multiple = 9;  break;
+        case "trillion":   multiple = 12; break;
+        case "quadrillion":multiple = 15; break;
+        case "quintillion":multiple = 18; break;
+        case "sextillion": multiple = 21; break;
+        case "septillion": multiple = 24; break;
+        case "octillion":  multiple = 27; break;
+        case "nonillion":  multiple = 30; break;
+        case "decillion":  multiple = 33; break;
+    }
+    
+    return num * Math.pow(10,multiple);
+}
+
+ClickingCooker.beautifyTime = function( seconds ){
+    var hours   = seconds/3600;
+    var minutes = (hours - Math.floor(hours))*60;
+    seconds     = (minutes - Math.floor(minutes))*60;
+    hours   = Math.round(hours).toString();
+    minutes = Math.round(minutes).toString();
+    seconds = Math.round(seconds).toString();
+    
+    if( minutes.length == 1 )
+        minutes = "0" + minutes;
+    if( seconds.length == 1 )
+        seconds = "0" + seconds;
+    
+    return hours + ":" + minutes + ":" + seconds;
+}
+
+ClickingCooker.addTime = function( elem ){
+    var rect = elem.getBoundingClientRect();
+    var div  = document.createElement("div");
+    div.style.position = "absolute";
+    div.style.width  = "100 px";
+    div.style.height = "32px";
+    div.style.fontSize = "10.5pt";
+    div.style.fontFamily = "Lucida Console";
+    div.style.color = "#f0f0f0";
+    div.style.textAlign = "right";
+    div.style.marginTop  = "8px";
+    div.style.marginLeft = "222px";
+    div.id = "time_"+elem.id;
+    div.style.textShadow = "1px 1px 3px rgba(0,0,0,1), 1px 1px 3px rgba(0,0,0,1)";
+    elem.appendChild(div);
+    return div;
+}
+
+ClickingCooker.updateTime = function( product, time ){
+    var elem = document.getElementById("time_"+product.id);
+    if( elem == null )
+        elem = ClickingCooker.addTime(product);
+    elem.innerHTML = time;
+}
+
+ClickingCooker.cookiesThreeSecondsAgo = Game.cookies;
+ClickingCooker.cookiesTwoSecondsAgo = Game.cookies;
+ClickingCooker.cookiesOneSecondAgo = Game.cookies;
+
+ClickingCooker.incomeOneSecondAgo = 0;
+ClickingCooker.incomeTwoSecondsAgo = 0;
+ClickingCooker.incomeRightNow = 0;
+
+ClickingCooker.getIncome = function(){
+    var income_a = Game.cookies - ClickingCooker.cookiesOneSecondAgo;
+    var income_b = (Game.cookies - ClickingCooker.cookiesThreeSecondsAgo)/3;
+    
+    var income = 0;
+    
+    if( income_a > 0 && income_b > 0 )
+        income = (income_a + income_b)/2;
+    else if( income_a > 0 )
+        income = income_a;
+    else if( income_b > 0 )
+        income = income_b;
+    
+    ClickingCooker.incomeTwoSecondsAgo = ClickingCooker.incomeOneSecondAgo;
+    ClickingCooker.incomeOneSecondAgo = ClickingCooker.incomeRightNow;
+    ClickingCooker.incomeRightNow = income;
+    
+    return (income+ClickingCooker.incomeOneSecondAgo+ClickingCooker.incomeTwoSecondsAgo)/3;
+}
+
+ClickingCooker.estimateTime = function(){
+    var income = ClickingCooker.getIncome();
+    
+    if( income > 0 ) {
+        var product;
+        var productName;
+        var productPrice;
+        var price;
+        var numSeconds;
+        for( var i = 0 ; i < 11 ; i++ ){
+            product = document.getElementById("product"+i);
+            productName = document.getElementById("productName"+i).innerHTML;
+            productPrice = document.getElementById("productPrice"+i);
+            price = ClickingCooker.unBeautify(productPrice.innerHTML)
+            if( Game.cookies > price ) {
+                numSeconds = 0;
+            } else {
+                price -=  Game.cookies;
+                numSeconds = price / income;
+                if( numSeconds < 0 )
+                    numSeconds = 0;
+            }
+            ClickingCooker.updateTime( product, ClickingCooker.beautifyTime(numSeconds) );
+        }
+    }
+    ClickingCooker.cookiesThreeSecondsAgo = ClickingCooker.cookiesTwoSecondsAgo;
+    ClickingCooker.cookiesTwoSecondsAgo = ClickingCooker.cookiesOneSecondAgo;
+    ClickingCooker.cookiesOneSecondAgo = Game.cookies;
+}
+ClickingCooker.addInterval("Time Estimation",ClickingCooker.estimateTime,1000);
+
 ClickingCooker.startAllIntervals = function(){
     for( var key in ClickingCooker.intervals ){
         ClickingCooker.intervals[key].start();
