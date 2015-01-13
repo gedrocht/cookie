@@ -3,7 +3,7 @@ from steam_time_shaymus22 import data
 remainingTime = {};
 
 def conv(s):
-    return s.replace('True','true').replace('False','false');
+    return s.replace('True','true').replace('False','false')
 
 game = None
 for g in data:
@@ -20,6 +20,16 @@ for i in range(0,len(sorted_keys)):
     sorted_keys[i] = float(sorted_keys[i]);
 sorted_keys.sort();
 
+output = "data=[";
 for k in sorted_keys:
     for g in remainingTime[str(k)]:
-        print str(k).rjust(8) + " " + g["name"]
+        output += conv("new Object({appid:" + str(g["appid"]) + ",name:'" + g["name"].replace("'","") + "',time:new Object(" + str(g["time_information"]) + ")}),");
+        
+output = output[:-1] + "];";
+
+js = open("steam_time_js.js","w");
+js.write(output);
+js.flush();
+js.close();
+
+

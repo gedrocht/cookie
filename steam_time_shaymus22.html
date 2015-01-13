@@ -1,0 +1,115 @@
+<html>
+<head>
+<style>
+#games {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    font-family: Arial;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+#game {
+    height: 30px;
+    padding-top: 13px;
+    margin-bottom: 0px;
+}
+
+.even {
+    background-color:#eee;
+    border-top: 1px solid #ccc;
+}
+
+.odd {
+    background-color:#ddd;
+    border-top: 1px solid #bbb;
+}
+
+#game-name {
+    float: left;
+    padding-left: 10px;
+}
+
+#game-hours {
+    float: right;
+    padding-right: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link    { color: #000; }
+a:visited { color: #222; }
+a:hover   { color: #444; }
+a:active  { color: #666; }
+</style>
+<script src="steam_time_js.js"></script>
+<script>
+
+function init(){
+    var games = document.getElementById("games");
+    games.innerHTML = getGames();
+}
+
+function getGames(){
+    var s = "";
+    for( var i = 0 ; i < data.length ; i++ ){
+        s += getGame(data[i]);
+    }
+    
+    return s;
+}
+
+function getGame( game ){
+    var s = "";
+    
+    s += getGameDiv( game.appid,
+                     game.name,
+                     game.time.hours_remaining,
+                     game.time.hours_played/game.time.hours_required*100.0 );
+    
+    return s;
+}
+
+function round( num ){
+    var s = (Math.round(num*10)/10).toString();
+    
+    if( s.indexOf(".") == -1 )
+        s = s + ".0";
+    
+    return s;
+}
+
+function makeRunLink( appid, name ){
+    return '<a href="steam://run/' + appid + '">' + name + '</a>';
+}
+
+function getGameDiv( appid, name, remaining, percentage ){
+    return "<div " + getEvenOddClass() + " id=\"game\">" + getGameNameDiv(makeRunLink(appid,name)) + getGameHoursDiv(round(remaining)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
+}
+
+var __EVEN_ODD = false;
+function getEvenOddClass(){
+    __EVEN_ODD = !__EVEN_ODD
+    if( __EVEN_ODD )
+        return "class=\"odd\"";
+    return "class=\"even\"";
+}
+
+function getGameNameDiv( s ){
+    return '<div id="game-name">' + s + '</div>';
+}
+
+function getGameHoursDiv( s ){
+    return '<div id="game-hours">' + s + '</div>';
+}
+</script>
+</head>
+<body onLoad="init();">
+<div id="games">
+</div>
+</body>
+</html>
