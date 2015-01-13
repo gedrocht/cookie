@@ -1,20 +1,24 @@
 <html>
 <head>
 <style>
+div {
+    margin: 0px;
+    padding: 0px;
+}
+
 #games {
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
-    width: 400px;
+    width: 540px;
     font-family: Arial;
     margin-bottom: 0px;
     padding: 0px;
 }
 
 #game {
-    height: 30px;
-    padding-top: 13px;
-    margin-bottom: 0px;
+    height: 215px;
+    margin-bottom: 30px;
 }
 
 .even {
@@ -29,12 +33,13 @@
 
 #game-name {
     float: left;
-    padding-left: 10px;
 }
 
 #game-hours {
     float: right;
+    padding-top: 10px;
     padding-right: 10px;
+    font-size: 30pt;
 }
 
 a {
@@ -49,6 +54,8 @@ a:active  { color: #666; }
 <script src="steam_time_js.js"></script>
 <script>
 
+bad_appids = [254270,21960,12230,12240,12250,228200,70660];
+
 function init(){
     var games = document.getElementById("games");
     games.innerHTML = getGames();
@@ -57,10 +64,15 @@ function init(){
 function getGames(){
     var s = "";
     for( var i = 0 ; i < data.length ; i++ ){
-        s += getGame(data[i]);
+        if( validate(data[i]) )
+            s += getGame(data[i]);
     }
     
     return s;
+}
+
+function validate( game ){
+    return !(bad_appids.indexOf(game.appid)!=-1);
 }
 
 function getGame( game ){
@@ -84,11 +96,28 @@ function round( num ){
 }
 
 function makeRunLink( appid, name ){
-    return '<a href="steam://run/' + appid + '">' + name + '</a>';
+    return '<a href="steam://run/' + appid + '" title="' + name + '">' + getGameImage(appid,name) + '</a>';
 }
 
 function getGameDiv( appid, name, remaining, percentage ){
-    return "<div " + getEvenOddClass() + " id=\"game\">" + getGameNameDiv(makeRunLink(appid,name)) + getGameHoursDiv(round(remaining)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
+    return "<div " + getEvenOddClass() + " id=\"game\" " + getStyle(percentage) + " >" + getGameNameDiv(appid,makeRunLink(appid,name)) + getGameHoursDiv(round(remaining)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
+}
+
+function getStyle( percentage ){
+
+    if( percentage > 1 )
+        return 'style="display:none;"'
+
+    var s = 'style="opacity:'
+    
+    var p = percentage;
+    if( p > 1 )
+        p = 1;
+    p = 1 - p;
+    
+    s += Math.round(p*10)/10 + ';"';
+    
+    return s;
 }
 
 var __EVEN_ODD = false;
@@ -99,12 +128,20 @@ function getEvenOddClass(){
     return "class=\"even\"";
 }
 
-function getGameNameDiv( s ){
+function getGameNameDiv( appid, s ){
     return '<div id="game-name">' + s + '</div>';
 }
 
 function getGameHoursDiv( s ){
     return '<div id="game-hours">' + s + '</div>';
+}
+
+function getGameImage( appid, name ){
+    return "<img src='" + getHeaderURL(appid) + "' alt='" + name + "'></img>";
+}
+
+function getHeaderURL( appid ){
+    return "http://cdn.akamai.steamstatic.com/steam/apps/" + appid + "/header.jpg";
 }
 </script>
 </head>
