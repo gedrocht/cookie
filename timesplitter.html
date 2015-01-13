@@ -21,6 +21,12 @@ timers = new Array();
 alarms = []
 
 function init(){
+    window.onbeforeunload = function() {
+        if ( !allTimersAreDone() ) {
+            return 'Not all alarms have sounded.';
+        }
+    };
+
     main      = document.getElementById("main");
     startTime = document.getElementById("start");
     stopTime  = document.getElementById("stop");
@@ -62,6 +68,11 @@ function pad( str, n ){
 function setVolume( vol ){
     alarms.forEach(function(a){a.volume=vol;});
     printVolume();
+}
+
+function setAlarms( file ){
+    alarm = new Audio(file);
+    alarm_alt = new Audio(file);
 }
 
 function printVolume(){
@@ -121,6 +132,18 @@ function go(){
     if (times.length != 0) {
         addTimers(totalStartMinutes,times,timeOffset);
     }
+}
+
+function allTimersAreDone(){
+    var allAreDone = true;
+    for( var i = 0 ; i < timers.length ; i++ ){
+        if( timers[i][3] ){
+            allAreDone = false;
+            break;
+        }
+    }
+    
+    return allAreDone;
 }
 
 function getTotalMinutes( str ){

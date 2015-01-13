@@ -47,7 +47,7 @@ def convertToSymbol( s ):
     return s
     
 def getGames( id ):
-    print "Loading " + id + "'s games:";
+    print "Loading " + id + "'s games...";
     page = getPage( getURL_games(id) );
     indexA = page.find("rgGames");
     if indexA == -1:
@@ -87,7 +87,7 @@ def getPlayerAchievements( id, games ):
     
     debug_count = 0;
     games_length = str(len(games));
-    print "Loading all unlocked achievements for all of " + id + "'s games:";
+    print "Loading all unlocked achievements for all of " + id + "'s games...";
     
     game = None
     for gameID in games:
@@ -168,7 +168,7 @@ def getGameAchievements( id ):
     debug_count = 0;
     games_length = str(len(games));
     
-    print "Loading all LOCKED achievements for all of " + id + "'s games:";
+    print "Loading all LOCKED achievements for all of " + id + "'s games...";
     
     game = None
     for gameID in games:

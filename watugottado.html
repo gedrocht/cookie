@@ -1,0 +1,80 @@
+<html>
+<head>
+<style>
+body {
+    padding-top: 300px;
+    font-family: Arial;
+    font-size: 30pt;
+}
+
+input {
+    font-family: Arial;
+    font-size: 25pt;
+}
+
+div {
+    position: relative;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+main {
+}
+
+rand {
+}
+</style>
+<script>
+var SCRAMBLE_COUNT = 15;
+var SCRAMBLE_DELAY = 65;
+
+var div_rand;
+
+letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
+things = ["   kees   ","  smuch  ","tuch leps","   mwuh   ","tuch face-mouths"," kees leps "," face-tuch "];
+
+function init(){
+    div_rand = document.getElementsByClassName("rand")[0];
+    div_rand.innerHTML = things[Math.floor(Math.random()*things.length)];
+}
+
+var scramble_num;
+function scramble(){
+    scramble_num = SCRAMBLE_COUNT;
+    do_scramble();
+}
+
+function do_scramble(){
+    if( scramble_num == 0 ){
+        div_rand.innerHTML = things[Math.floor(Math.random()*things.length)];
+        return;
+    }
+    scramble_num--;
+    var s = "";
+    var len = div_rand.innerHTML.length + Math.floor(Math.random()*4)-2;
+    if( len < 3 ) {
+        len = 3;
+    }
+    for( var i = 0 ; i < len ; i++ ){
+        s += letters[Math.floor(Math.random()*26)];
+    }
+    div_rand.innerHTML = s;
+    setTimeout(do_scramble,SCRAMBLE_DELAY);
+}
+
+</script>
+<title>
+</title>
+</head>
+<body onLoad="init();">
+<div>
+<div class="main">you gotta</div>
+<div class="rand">%RAND%</div>
+<br>
+<input type="button" onclick="scramble();" value="randomize"></input>
+</div>
+</body>
+</html>

@@ -9,7 +9,7 @@ def getID():
         return sys.argv[1];
         
 id = getID();
-print "Generating tagdb_"+str(id)+".js";
+print "Generating tagdb_"+str(id)+".js...";
 exec("from data_"+str(id)+" import data");
 
 uniqueTags = [];

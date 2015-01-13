@@ -1,0 +1,3544 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<games>
+<game>
+	<name>
+		Back to the Future: Ep 1 - It's About Time
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Wallace &amp; Gromit Ep 2: The Last Resort
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Dungeon Defenders
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					Daredevil
+				</name>
+				<description>
+					Earned Skin of Your Teeth Award on 6 Missions
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Smithy
+				</name>
+				<description>
+					You upgraded your first equipment. Keep it up!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					And This Is My Weapon
+				</name>
+				<description>
+					You upgraded an Equipment to its maximum potential!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Obedience Training
+				</name>
+				<description>
+					You raised a Pet to its maximum potential!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Pupil
+				</name>
+				<description>
+					Reached Hero Level 10
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Veteran
+				</name>
+				<description>
+					Reached Hero Level 30
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defender of Etheria
+				</name>
+				<description>
+					Reached Hero Level 70
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					To The Limit
+				</name>
+				<description>
+					Wore a complete set of maximum level Equipments
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					From The Depths
+				</name>
+				<description>
+					Completed all Area 1 levels on any difficulty setting
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					To The Rooftops
+				</name>
+				<description>
+					Completed all Area 2 levels on any difficulty setting
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Taste of Victory
+				</name>
+				<description>
+					Completed all Area 3 levels on any difficulty setting
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dungeon Crawler
+				</name>
+				<description>
+					Completed all levels on any difficulty setting
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Belly of the Beast
+				</name>
+				<description>
+					Completed all Area 1 levels on Hard
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Body of the Beast
+				</name>
+				<description>
+					Completed all Area 2 levels on Hard
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Crown of the Beast
+				</name>
+				<description>
+					Completed all Area 3 levels on Hard
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dungeon Raider
+				</name>
+				<description>
+					Completed all levels on Hard
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					From Fire with Brimstone
+				</name>
+				<description>
+					Completed all Area 1 levels on Insane
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Through The Crowded Keep
+				</name>
+				<description>
+					Completed all Area 2 levels on Insane
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					To The Lofty Summit
+				</name>
+				<description>
+					Completed all Area 3 levels on Insane
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dungeon Defender
+				</name>
+				<description>
+					Completed all levels on Insane! Congratulations Brave Dungeon Defender!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Where's the Blueprints?
+				</name>
+				<description>
+					Completed No Towers Allowed on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Friends Forever
+				</name>
+				<description>
+					Completed Unlikely Allies on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					88 Core
+				</name>
+				<description>
+					Completed Warping Core on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ella, Ella
+				</name>
+				<description>
+					Completed Raining Goblins on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Wizard Hunter
+				</name>
+				<description>
+					Completed Wizardry on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					You No Take Mushroom
+				</name>
+				<description>
+					Completed Ogre Crush on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Speed Freak
+				</name>
+				<description>
+					Completed Zippy Terror on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					In A Fowl Mood
+				</name>
+				<description>
+					Completed Chicken on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Core Cardio
+				</name>
+				<description>
+					Completed Moving Core on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Monster Mania
+				</name>
+				<description>
+					Completed Death From Above on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Core Destroyer
+				</name>
+				<description>
+					Completed Assault on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gold Rush
+				</name>
+				<description>
+					Completed Treasure Hunt on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Challenger Approaches
+				</name>
+				<description>
+					Completed All Challenges on INSANE Difficulty!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Weapon Master
+				</name>
+				<description>
+					Completed No Towers Allowed on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Kobold Exterminator
+				</name>
+				<description>
+					Completed Zippy Terror on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Monster Madness
+				</name>
+				<description>
+					Completed Death From Above on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dancing in the Rain
+				</name>
+				<description>
+					Completed Raining Goblins on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gold Blitz
+				</name>
+				<description>
+					Completed Treasure Hunt on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ogre Block Party
+				</name>
+				<description>
+					Completed Ogre Crush on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Survivalist
+				</name>
+				<description>
+					Reached Survival Wave 15 on Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Thick Skin
+				</name>
+				<description>
+					Reached Survival Wave 20 on Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Tough Guy
+				</name>
+				<description>
+					Reached Survival Wave 15 on Hard Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Iron Man
+				</name>
+				<description>
+					Reached Survival Wave 10 on Insane Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defense Is the Best Offense
+				</name>
+				<description>
+					Reached Wave 10 on all levels in Pure Strategy on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					True Nobility
+				</name>
+				<description>
+					Earned the Lord Award on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					O Mighty Smiter!
+				</name>
+				<description>
+					Wore a full set of Godly Items
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Divine Intention
+				</name>
+				<description>
+					Picked up a Godly Weapon
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Perfectionist
+				</name>
+				<description>
+					Earned the Flawless Victory Award on all Missions on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mastermind
+				</name>
+				<description>
+					Earned the Master Strategist Award on all Missions
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Brute Force
+				</name>
+				<description>
+					Earned the Gunslinger Award on all Missions
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Team Effort
+				</name>
+				<description>
+					Completed all levels with 4 active players on at least Medium Difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Matter of Perspective
+				</name>
+				<description>
+					Saw all four Hero endings
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Group Hug
+				</name>
+				<description>
+					Raised a Hero of each type to Level 70
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Catch 'em All
+				</name>
+				<description>
+					Stored all Pet types in your Item Box or on your Heroes
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Master Banker
+				</name>
+				<description>
+					Stored 15,000,000 Mana in your Mana Bank
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Good Student
+				</name>
+				<description>
+					Completed the Tutorial. You deserve a cookie!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Legendary Defender
+				</name>
+				<description>
+					You have earned every Dungeon Defenders Accomplishment! Trendy salutes you!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Jingled All the Way
+				</name>
+				<description>
+					Delivered all the presents, and saved Santa Tavernkeep from the vile clutches of Mega-Snowman in the 'Etherian Holiday Extravaganza Challenge Mission'!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eternia Shard Recovered: Purple
+				</name>
+				<description>
+					You retrieved the Purple Lost Eternia Shard from the depths of Mistymire Forest!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Eternia Shard Recovered: Purple
+				</name>
+				<description>
+					You retrieved the Purple Lost Eternia Shard from the depths of Mistymire Forest... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Portal Protector
+				</name>
+				<description>
+					You defended the portal against the rampaging Spider horde!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Portal Protector
+				</name>
+				<description>
+					You defended the portal against the rampaging Spider horde... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mythical Defender
+				</name>
+				<description>
+					You completed every mission in the original Campaign on Nightmare difficulty! Are you a god?
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Hardcore Mythical Defender
+				</name>
+				<description>
+					You completed every mission in the original campaign on Nightmare difficulty without dying. You are a god.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dungeon Raider
+				</name>
+				<description>
+					You completed every mission in the Assault Mission Pack!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mythical Dungeon Raider
+				</name>
+				<description>
+					You completed every mission in the Assault Mission Pack on Nightmare Difficulty!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Playin' Cupid
+				</name>
+				<description>
+					You played matchmaker for the gender mobs on the Sky O' Love challenge, and defeated Mega Cupid!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Playin' Mythical Cupid
+				</name>
+				<description>
+					You played matchmaker for the gender mobs on the Sky O' Love challenge, and defeated Mega Cupid... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Transcendent Challenge Champion
+				</name>
+				<description>
+					You completed every original Challenge on Nightmare Hardcore difficulty. The gods weep before your awesome might!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eternia Shard Recovered: Blue
+				</name>
+				<description>
+					You retrieved the Blue Lost Eternia Shard from the scorching sands of Moraggo!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Djinn Recruiter
+				</name>
+				<description>
+					You assembled an army to win the 'War of the Djinn' Challenge!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Eternia Shard Recovered: Blue
+				</name>
+				<description>
+					You retrieved the Blue Lost Eternia Shard from the scorching sands of Moraggo... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Djinn Recruiter
+				</name>
+				<description>
+					You assembled an army to win the 'War of the Djinn' Challenge... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Transcendent Survivalist
+				</name>
+				<description>
+					You achieved Nightmare Survival Victory on every Campaign mission, and are thus rewarded!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eternia Shard Recovered: Yellow
+				</name>
+				<description>
+					You retrieved the Yellow Lost Eternia Shard from the cold waters of Aquanos!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Puzzle Solver
+				</name>
+				<description>
+					You solved the 'Riddle of the Deep' Challenge!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Eternia Shard Recovered: Yellow
+				</name>
+				<description>
+					You retrieved the Yellow Lost Eternia Shard from the cold waters of Aquanos... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Puzzle Solver
+				</name>
+				<description>
+					You solved the 'Riddle of the Deep' Challenge... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Real Time Strategist
+				</name>
+				<description>
+					Completed the Campaign and 3 Eternia Shards Missions using only summoned minions and Overlord mode for your entire team, except for the Final Wave.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mythical Real Time Strategist
+				</name>
+				<description>
+					Completed the Campaign and 3 Eternia Shards Missions only using summoned minions and Overlord mode for your entire team, except for the Final Wave... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eternia Shard Recovered: Red
+				</name>
+				<description>
+					You retrieved the Red Lost Eternia Shard from the billowing clouds of Sky City!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Eternia Shard Recovered: Red
+				</name>
+				<description>
+					You retrieved the Red Lost Eternia Shard from the billowing clouds of Sky City... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Boss Crusher
+				</name>
+				<description>
+					You completed the Boss Rush Challenge!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Boss Crusher
+				</name>
+				<description>
+					You completed the Boss Rush Challenge... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Heroes to the Rescue
+				</name>
+				<description>
+					You journeyed to the Crystalline Dimension, rescued the Legendary Heroes, and defeated an ultimate evil!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Heroes to the Rescue
+				</name>
+				<description>
+					You journeyed to the Crystalline Dimension, rescued the Legendary Heroes, and defeated an ultimate evil... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I've Got Monsters in My Pocket
+				</name>
+				<description>
+					You collected every Pet in all Etheria in your Item Box!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ultimate Defender
+				</name>
+				<description>
+					You earned every Dungeon Defenders Accomplishment through the Eternia Shards Campaign! Trendy bows before your might!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Anniversary Defender
+				</name>
+				<description>
+					You defended your Tavern against the horde!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Anniversary Defender
+				</name>
+				<description>
+					You defended your Tavern against the horde... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Pumpkin Party
+				</name>
+				<description>
+					You completed the Halloween Spooktacular 2 Challenge!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Pumpkin Party Nightmare
+				</name>
+				<description>
+					You completed the Halloween Spooktacular 2 Challenge... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Greater Turkey Hunter
+				</name>
+				<description>
+					You purged the ruins of Karathiki of all Turkey interlopers!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Greater Turkey Hunter
+				</name>
+				<description>
+					You purged the ruins of Karathiki of all Turkey interlopers... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Not So Silent Night
+				</name>
+				<description>
+					You delivered Santa's goodies... and then took on the big man himself!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Not So Silent Night
+				</name>
+				<description>
+					You delivered Santa's goodies... and then took on the big man himself... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Winter Wonderland
+				</name>
+				<description>
+					You survived the onslaught of the Holiday Guardians!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Winter Wonderland
+				</name>
+				<description>
+					You survived the onslaught of the Holiday Guardians... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Playin' Anticupid
+				</name>
+				<description>
+					You successfully prevented hordes of mob matches in the Temple O' Love!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Playin' Anticupid
+				</name>
+				<description>
+					You successfully prevented hordes of mob matches in the Temple O' Love... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Tinkerer's Defender
+				</name>
+				<description>
+					You Defended the Tinker's Lab and cleared the way for EV's upgrade!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare Tinkerer's Defender
+				</name>
+				<description>
+					You Defended the Tinkerer's Lab and cleared the way for EV's upgrade... on Nightmare!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					EV Reprogrammer
+				</name>
+				<description>
+					You assaulted the Lab and eliminated the squad of corrupted EV's!
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nightmare EV Reprogrammer
+				</name>
+				<description>
+					You assaulted the Lab and eliminated the squad of corrupted EV's... on Nightmare!
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Solar 2
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					The Entity
+				</name>
+				<description>
+					What is the entity?
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Elite
+				</name>
+				<description>
+					Make a 6 star system.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Supremacy
+				</name>
+				<description>
+					As a star have an orbiting life planet with 100 kills.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Asteroid Nursery
+				</name>
+				<description>
+					Have 15 asteroid moons around your planet.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Overcrowding
+				</name>
+				<description>
+					Get the maximum possible life in your system.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Super Clock
+				</name>
+				<description>
+					Get 10 planets in your system orbiting clockwise.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Betrayal
+				</name>
+				<description>
+					Grow to a black hole from a multi star system.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Flying Blind
+				</name>
+				<description>
+					Go from a small black hole (&amp;lt;150k mass) to Big Crunch without the interface visible. 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Speed Cycle
+				</name>
+				<description>
+					Go from Big Bang to Big Crunch in under 20 minutes. No menu respawning. 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gentle But Firm
+				</name>
+				<description>
+					Complete the 2nd part of the &amp;quot;Fine Art&amp;quot; mission without dying and without evolved life on your planet. 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ninja
+				</name>
+				<description>
+					Complete each of the &amp;quot;Assassin&amp;quot; mission parts without dying.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I Got This
+				</name>
+				<description>
+					Kill all the attacking ships in the first part of the &amp;quot;Heist&amp;quot; mission before completing it.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Hobo Star
+				</name>
+				<description>
+					Start the 3rd part of the &amp;quot;Duel&amp;quot; mission as a single star with no planets and beat it in under 3 minutes. 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I'm Late!
+				</name>
+				<description>
+					Complete the first part of the &amp;quot;Concert&amp;quot; mission in under 1 minute.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Planetary Soloist
+				</name>
+				<description>
+					Complete the second part of the &amp;quot;Concert&amp;quot; mission with no evolved life on your planet.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Why did you kill me?
+				</name>
+				<description>
+					Why?
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Get Lost
+				</name>
+				<description>
+					Get Lost.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Grind Star
+				</name>
+				<description>
+					Make a 40 star system.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dude, I Don't Suck!
+				</name>
+				<description>
+					Beat all the missions without using Physics or God options.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dark Champion
+				</name>
+				<description>
+					Beat the final boss as a dark matter star without using Physics or God options.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Master Thief
+				</name>
+				<description>
+					Steal 10 planets on the &amp;quot;Planet Stealer&amp;quot; challenge mission.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Challenge Novice
+				</name>
+				<description>
+					Complete every challenge mission with any score.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Challenge Pro
+				</name>
+				<description>
+					Complete every challenge mission with a hard level score. 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Snowflake Star
+				</name>
+				<description>
+					Get 4 points in the star challenge mission &amp;quot;Snowball Fight&amp;quot;.
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Hector: Ep 2
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Divekick
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					Plot Matters
+				</name>
+				<description>
+					Beat story mode with all characters.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					You Only Live Once
+				</name>
+				<description>
+					Win a ranked match using the YOLO Gem.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Real Headache
+				</name>
+				<description>
+					Win a ranked match by getting TOTAL DOMINATION.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Found a Fraud
+				</name>
+				<description>
+					Fraud detect an opponent in a ranked match.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Choked Out
+				</name>
+				<description>
+					Choke detect an opponent in a ranked match.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Body Builder
+				</name>
+				<description>
+					Play 1000 matches in VS mode.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Real Divekicker
+				</name>
+				<description>
+					Play 500 ranked matches.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dat Triple
+				</name>
+				<description>
+					Get a triple S ranking in a ranked match.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					No Skills Needed
+				</name>
+				<description>
+					Win a ranked match without using any special moves.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Not a Factor
+				</name>
+				<description>
+					Win a ranked match without activating Kickfactor.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Perfection
+				</name>
+				<description>
+					Beat story mode using the YOLO gem.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Reversal of Fortune
+				</name>
+				<description>
+					Knock out an opponent who is in Kickfactor while you are concussed in a ranked match.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I Have My Reasons
+				</name>
+				<description>
+					Beat story mode with one character.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Grinder Supreme
+				</name>
+				<description>
+					Play 2000 ranked matches.
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		A Valley Without Wind 2
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					Defeat Fanzara
+				</name>
+				<description>
+					Defeat Fanzara in a fight.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defeat Elder
+				</name>
+				<description>
+					Defeat Elder in a fight.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defeat Lilith
+				</name>
+				<description>
+					Defeat Lilith in a fight.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defeat Vorgga
+				</name>
+				<description>
+					Defeat Vorgga in a fight.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Defeat Wordrak
+				</name>
+				<description>
+					Defeat Wordrak in a fight.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Fanzara is dead.
+				</name>
+				<description>
+					Kill Fanzara.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lilith is dead.
+				</name>
+				<description>
+					Kill Lilith
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Vorgga is dead.
+				</name>
+				<description>
+					Kill Vorgga.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Wordrak is dead.
+				</name>
+				<description>
+					Kill Wordrak
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lightweight Killer
+				</name>
+				<description>
+					Kill the Overlord on Featherweight difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Learning the Ropes
+				</name>
+				<description>
+					Kill the Overlord on Apprentice difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Real Accomplishment
+				</name>
+				<description>
+					Kill the Overlord on Adept difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That Takes Some Skill
+				</name>
+				<description>
+					Kill the Overlord on Skilled difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Hero of Environ
+				</name>
+				<description>
+					Kill the Overlord on Hero difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Hero of Heroes
+				</name>
+				<description>
+					Kill the Overlord on Master Hero difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This Is Why You Were Chosen
+				</name>
+				<description>
+					Kill the Overlord on The Chosen One difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					One Space at a Time
+				</name>
+				<description>
+					Kill the Overlord on Pawn strategic difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Two Up, One Across
+				</name>
+				<description>
+					Kill the Overlord on Knight strategic difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Not a Rookie
+				</name>
+				<description>
+					Kill the Overlord on Rook strategic difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Queen Takes Overlord
+				</name>
+				<description>
+					Kill the Overlord on Queen strategic difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I Can be Called That Too
+				</name>
+				<description>
+					Kill the Overlord on Overlord strategic difficulty.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Innocence Lost!
+				</name>
+				<description>
+					Be present at the death of a monster.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cutting Your Teeth
+				</name>
+				<description>
+					Be present at the death of 100 monsters.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Monster Control Specialist
+				</name>
+				<description>
+					Be present at the death of 1000 monsters.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Exterminator Extraordinare
+				</name>
+				<description>
+					Be present at the death of 10000 monsters.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Welcome to Environ!
+				</name>
+				<description>
+					Die.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Happens All The Time. Don't Worry About It.
+				</name>
+				<description>
+					Die 5 times.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Learning The Ropes
+				</name>
+				<description>
+					Die 25 times.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Losing Is Fun!
+				</name>
+				<description>
+					Die 50 times.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Congratulations, You Have Died!
+				</name>
+				<description>
+					Die 100 times.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					No, It Doesn't Lead To Extra Lives.
+				</name>
+				<description>
+					Pick up a Mercenary Coin.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Filty Lucre. But Not Very Much Of It.
+				</name>
+				<description>
+					Pick up 10 Mercenary Coins.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I Hope You're Using These.
+				</name>
+				<description>
+					Pick up 50 Mercenary Coins.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					You Can Only Hold 99, You Know.
+				</name>
+				<description>
+					Pick up 100 Mercenary Coins.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Perhaps If Used To Fill A Swimming Pool...
+				</name>
+				<description>
+					Pick up 500 Mercenary Coins
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Capitalism, Ho!
+				</name>
+				<description>
+					Pick up 1000 Mercenary Coins.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					It's Like A Documentary
+				</name>
+				<description>
+					Enter a Wilderness region.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Is There A Light Down Here?
+				</name>
+				<description>
+					Enter a cave.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Help me Doc!
+				</name>
+				<description>
+					Enter a region that contains a Clinic.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					It's Noisy in Here!
+				</name>
+				<description>
+					Enter a region that contains a Factory Building.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I'm Hungry
+				</name>
+				<description>
+					Enter a region that contains a farm.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nice Place
+				</name>
+				<description>
+					Enter a region that contains a large house.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Agent Called it Cute
+				</name>
+				<description>
+					Enter a region that contains a small house.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					There's a Lot of Junk Here.
+				</name>
+				<description>
+					Enter a region that contains a Salvage Yard.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That Place Looks Mean
+				</name>
+				<description>
+					Enter a region that contains an Evil Outpost.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					It's Nothing But Rubble
+				</name>
+				<description>
+					Enter region with a house that is completely destroyed.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Is There No Water Anywhere?
+				</name>
+				<description>
+					Enter a region with a Desert Amplifier Tower.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Did Someone Forget to Pay the Heating Bill?
+				</name>
+				<description>
+					Enter a region that contains a Cold Dispersal Transmission Tower.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					It's Getting Hot In Here.
+				</name>
+				<description>
+					Enter a region that contains a Heat Dispersal Transmission Tower.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Let There Be Light!
+				</name>
+				<description>
+					Enter a region that contains an Ivory Tower.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Watch Your Step!
+				</name>
+				<description>
+					Enter a region that is full of rubble.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Knowledge Raid!
+				</name>
+				<description>
+					Enter a region with a Skelebot Research Facility.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Does Lando Live There?
+				</name>
+				<description>
+					Enter a region with a Stratospheric Citadel.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That's Where The Big Guy Lives
+				</name>
+				<description>
+					Enter region containing the Overlord's Keep.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Getting Stronger Every Day
+				</name>
+				<description>
+					Enter a region with a Level-Up Tower.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					There's More Work To Be Done
+				</name>
+				<description>
+					Enter a region that has a building that can be converted.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					NONE SHALL PASS!
+				</name>
+				<description>
+					Enter a region with an impasse.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That's a lot of guns.
+				</name>
+				<description>
+					Enter a region with a Military Complex.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					There's Magic In The Air
+				</name>
+				<description>
+					Enter a region with a Desert Pyramid or Magic Focal Tower (both have special strategic powers).
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Is it Chicken?
+				</name>
+				<description>
+					Enter a region that contains an alternate food producer.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cozy
+				</name>
+				<description>
+					Enter a region with a Chateau.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Justice Served!
+				</name>
+				<description>
+					Enter a region with a City Hall
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Dilapidated
+				</name>
+				<description>
+					Enter a region with Junkyard shacks.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					There's a lot of Empty Space...
+				</name>
+				<description>
+					Enter a region with an abandoned warehouse
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Is This Where the Round Table Is?
+				</name>
+				<description>
+					Enter a region with a Swamp Castle.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This Stuff is Pretty Good
+				</name>
+				<description>
+					Equip a +5 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Sixth Time's the Charm... Twice
+				</name>
+				<description>
+					Equip a +6 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Seventh Heaven
+				</name>
+				<description>
+					Equip a +7 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eight is Great!
+				</name>
+				<description>
+					Equip a +8 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nine is Just Fine
+				</name>
+				<description>
+					Equip a +9 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This Should Last a While!
+				</name>
+				<description>
+					Equip a +10 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That's Terrible!
+				</name>
+				<description>
+					Equip an item with the Terribleness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blah Blah Blah
+				</name>
+				<description>
+					Equip an item with the Blahness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Average Joe
+				</name>
+				<description>
+					Equip an item with the Averageness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Better Than Some Others
+				</name>
+				<description>
+					Equip an item with the Somewhat Betterness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Awesome Sauce!
+				</name>
+				<description>
+					Equip an item with the Awesomeness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Stay Away!
+				</name>
+				<description>
+					Equip an item with the Leprosy trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Weakling
+				</name>
+				<description>
+					Equip an item with the Weakness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Bold, Brave, and Dark
+				</name>
+				<description>
+					Equip an item with the Stoutness trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Suddenly Heavy
+				</name>
+				<description>
+					Equip an item with the Rockskin trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Feeling Woozy
+				</name>
+				<description>
+					Equip an item with the Ghastly Health trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Well, That's Lousy!
+				</name>
+				<description>
+					Equip an item with the Lousy trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Sick as a Dog
+				</name>
+				<description>
+					Equip an item with the Poor Health trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Feelin Fine
+				</name>
+				<description>
+					Equip an item with the Good Health trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I can go on Forever
+				</name>
+				<description>
+					Equip an item with the Great Health trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I'm Blind!
+				</name>
+				<description>
+					Equip an item with the Bad Eyesight trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I've Never Seen That Before!
+				</name>
+				<description>
+					Equip an item with the Good Eyesight trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Seeing is Believing
+				</name>
+				<description>
+					Equip an item with the Excellent Eyesight trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Suddenly I See!
+				</name>
+				<description>
+					Equip an item with the Superior Eyesight trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					On Fire and Hating It
+				</name>
+				<description>
+					Equip an item with the Self Immolation trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Brrrrr
+				</name>
+				<description>
+					Equip an item with the Cold Immunity trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Leadfoot
+				</name>
+				<description>
+					Deadly Leadenness
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					I Can Reach Up There Now
+				</name>
+				<description>
+					Equip an item with the Helium trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Like a Fish
+				</name>
+				<description>
+					Equip an item with the Good Swimming trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Stormy Feet
+				</name>
+				<description>
+					Equip an item with the Lightning Running trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Empty!
+				</name>
+				<description>
+					Equip an item with the Paltry Ammunition trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That's All?
+				</name>
+				<description>
+					Equip an item with the Ammunition trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					More Bang For Your Buck
+				</name>
+				<description>
+					Equip an item with the More Ammunition trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Is There Such a Thing as Too Much?
+				</name>
+				<description>
+					Equip an item with the Excess Ammunition trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ow! That Hurts!
+				</name>
+				<description>
+					Equip an item with the Broken Toes trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Need a Wake Up Call
+				</name>
+				<description>
+					Equip an item with the Sleepy Feet trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Track Runner
+				</name>
+				<description>
+					Equip an item with the Quick Feet trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cheetah
+				</name>
+				<description>
+					Equip an item with the Hasty Feet trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					More Than I Bargained For
+				</name>
+				<description>
+					Equip an item with the Extra Shots trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Molasses in Winter
+				</name>
+				<description>
+					Equip an item with the Broken Ankles trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Sweating Bullets
+				</name>
+				<description>
+					Equip an item with the Heat Immunity trait.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Oh the Humiliation
+				</name>
+				<description>
+					Equip a Humiliating item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Horrible
+				</name>
+				<description>
+					Equip a Horrid item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Shame on You
+				</name>
+				<description>
+					Equip a Shameful item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Bad Workmanship
+				</name>
+				<description>
+					Equip a Shoddy item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mouldy
+				</name>
+				<description>
+					Equip a Rotten item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Needs Longer in the Oven
+				</name>
+				<description>
+					Equip a Half-Baked item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Needs More Polish
+				</name>
+				<description>
+					Equip a Lackluster item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Fresh off the Vine
+				</name>
+				<description>
+					Equip a Raw item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Meh
+				</name>
+				<description>
+					Equip a Mediocre item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Shhhh!
+				</name>
+				<description>
+					Equip a Muted item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					In the Now
+				</name>
+				<description>
+					Equip a Relevant item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Like a Rock!
+				</name>
+				<description>
+					Equip a Solid item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This is ok.
+				</name>
+				<description>
+					Equip a Fine item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Short and ...
+				</name>
+				<description>
+					Equip a Stout item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Got it Right This Time
+				</name>
+				<description>
+					Equip a Unmistakeable item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					It Burns My Eyes!
+				</name>
+				<description>
+					Equip a Shiny item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Don't Fall
+				</name>
+				<description>
+					Equip a Well Balanced item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Spent a Lot of Time in the Gym
+				</name>
+				<description>
+					Equip a Studded item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					So Smooth!
+				</name>
+				<description>
+					Equip a Suave item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Now, With More Energy!
+				</name>
+				<description>
+					Equip a Lively item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Made to Last!
+				</name>
+				<description>
+					Equip a Reinforced item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					What's my Motivation?
+				</name>
+				<description>
+					Equip a Motivated item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Do Whatever It Takes
+				</name>
+				<description>
+					Equip an Ambitions item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Like a Boss!
+				</name>
+				<description>
+					Equip a Powerful item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Was Old, Is New Again
+				</name>
+				<description>
+					Equip a Reinvented item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Something To Write Home About
+				</name>
+				<description>
+					Equip an Impressive item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					You've Got a Lot of Class
+				</name>
+				<description>
+					Equip a Refined item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Debonair
+				</name>
+				<description>
+					Equip a Stylish item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cuts Through The Air
+				</name>
+				<description>
+					Equip a Sleek item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This is Crucial
+				</name>
+				<description>
+					Equip an Important item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Sight To Behold
+				</name>
+				<description>
+					Equip a Beautiful item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Light and Airy
+				</name>
+				<description>
+					Equip a Flowing item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Are you Captivated Too?
+				</name>
+				<description>
+					Equip an Enrapturing item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Sure you can Afford That?
+				</name>
+				<description>
+					Equip a Expensive item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Au Shucks
+				</name>
+				<description>
+					Equip a Golden item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That Looks Delicate
+				</name>
+				<description>
+					Equip a Jewel Encrusted item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Been Around the Block a few Times
+				</name>
+				<description>
+					Equip an Enlightened item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That looks... Kinda Weird
+				</name>
+				<description>
+					Equip an Arcane item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Everyone Knows About You Now
+				</name>
+				<description>
+					Equip a Famed item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					That Really Makes Me Happy
+				</name>
+				<description>
+					Equip a Wonderful item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					You're not From Around Here, Are You?
+				</name>
+				<description>
+					Equip an Unworldly item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Wow... Just... Wow
+				</name>
+				<description>
+					Equip an Incredible item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					There's some Magic In There
+				</name>
+				<description>
+					Equip a Mystical item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Can That Be For Real?
+				</name>
+				<description>
+					Equip a Unbeliveable item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Now... That's Good.
+				</name>
+				<description>
+					Equip a Superior item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Never Seen One Of Those Before
+				</name>
+				<description>
+					Equip a Rare item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Sent From Above
+				</name>
+				<description>
+					Heavenly
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Courage Through Fear
+				</name>
+				<description>
+					Equip a Heroic item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Wait for it...
+				</name>
+				<description>
+					Equip a Legendary item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Simply The Best
+				</name>
+				<description>
+					Equip an Unequaled item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lasts All Day!
+				</name>
+				<description>
+					Equip a +11 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					On And On And On
+				</name>
+				<description>
+					Equip a +12 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Actually, Not That Unlucky
+				</name>
+				<description>
+					Equip a +13 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Four...teen Times the Fun
+				</name>
+				<description>
+					Equip a +14 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Must Be Made Of Nanotubes
+				</name>
+				<description>
+					Equip a +15 item.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Look Out Lumber
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Lumbermancer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Rocky Start
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Stonebinder mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Tidal Wave
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Aquaurgist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Wintery Mix
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Sleetlock mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Potion Mixer
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Apothekineticist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Let There Be Light
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Illuminologist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Burnt To A Crisp
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Forgician mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					What Kind of Zoo is That?
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Technozoologist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eye Of The Storm
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Draftlock mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Law and Order
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Entropicist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Not an Ent.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Silvacist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Avalanche
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Pebbliviter mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Don't Drown
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Littorist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Flurries
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Snowcerer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					He Could Go All The Way
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Staminist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Let There Be Light
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Lucencer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lighter Fluid
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Ashist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Light and Airy
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Featherologist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blown Away
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Zephyrlock mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Stench is Terrible
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Terminist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					TIMBER!!!!
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Timbermancer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Rock Slide
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Cragpeller mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Stormy Seas.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Hyetalist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Not so Thin Ice.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Floeturge mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Power Surge
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Vervician mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Enemy Illuminator
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Scintillist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eruption
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Lavalock mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This Bugs Me
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Plumicler mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					We Aren't In Kansas Anymore.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Tornamancer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Everything is Coming Apart.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Eradigist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Typhoon
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Pluvician mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Hurricane
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Hailbinder mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Perpetual Motion
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Vitacler mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blinding
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Sunbinder mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Everything is Embers.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Slagician mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Storm Watch
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Hurricanist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Into Oblivion
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Oblivicist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					From On High
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Mesalord mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Thorny Situation.
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Thicketmaster mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Deadly Rose
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Thorncerer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Streaking the Night Sky
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Meteorist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Water Water Everywhere
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Hydrolock mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Crushed Ice
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Glacician mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Kinetic Energy
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Vivancer mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Bright As The Sun
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Radiantist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nothing is Untamable
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Beastmaster mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lightning Always Strikes Twice!
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Boltlord mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Nothing Left
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Annihilist mage class.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ash to Ash, Dust to Dust
+				</name>
+				<description>
+					Kill 50 monsters while playing as the Cindermaster mage class.
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Rogue Legacy
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					Decidophobia
+				</name>
+				<description>
+					Put at least one point in every skill in the manor.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Plutophobia
+				</name>
+				<description>
+					Reach level 50 or higher.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Aurophilia
+				</name>
+				<description>
+					Open your very first gold chest.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gymnophobia
+				</name>
+				<description>
+					Have one piece of equipment in every item slot.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Disposophobia
+				</name>
+				<description>
+					Find all blueprints (purchase not necessary).
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cainotophilia
+				</name>
+				<description>
+					Have one rune equipped in every item slot.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ommetaphobia
+				</name>
+				<description>
+					Defeat the boss in Castle Hamson.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Phasmophobia
+				</name>
+				<description>
+					Defeat the boss in the Forest Abkhazia.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Pyrophobia
+				</name>
+				<description>
+					Defeat the boss in the Maya.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blennophobia
+				</name>
+				<description>
+					Defeat the boss in the Land of Darkness.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Paterphobia
+				</name>
+				<description>
+					Defeat the last boss.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Zoophobia
+				</name>
+				<description>
+					Defeat all the minibosses.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Geminiphobia
+				</name>
+				<description>
+					Beat the game... twice.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Bibliophilia
+				</name>
+				<description>
+					Read the last journal entry.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Barophobia
+				</name>
+				<description>
+					Use the special class at least once.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Somniphobia
+				</name>
+				<description>
+					Play the game for at least 20 hours.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Coulrophilia
+				</name>
+				<description>
+					Beat one of the clown's games at least once.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gnosiophilia
+				</name>
+				<description>
+					Find all the runes (purchase not necessary).
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Syngenesophobia
+				</name>
+				<description>
+					Defeat the brothers.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Chemophobia
+				</name>
+				<description>
+					Defeat the trademarked chemical.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Ostiophobia
+				</name>
+				<description>
+					Defeat the son.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Scotomaphobia
+				</name>
+				<description>
+					Defeat the doppleganger.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Astrophobia
+				</name>
+				<description>
+					Defeat the asteroids.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Katagelasticism
+				</name>
+				<description>
+					Mock the traitor.
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Half-Life 2: Lost Coast
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Portal
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					Lab Rat
+				</name>
+				<description>
+					Acquire the fully powered Aperture Science Handheld Portal Device.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Fratricide
+				</name>
+				<description>
+					Do whatever it takes to survive.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Partygoer
+				</name>
+				<description>
+					Make the correct party escort submission position decision.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Heartbreaker
+				</name>
+				<description>
+					Complete Portal.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Terminal Velocity
+				</name>
+				<description>
+					Fall 30,000 feet.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Long Jump
+				</name>
+				<description>
+					Jump 300 feet.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Cupcake
+				</name>
+				<description>
+					Beat two Portal advanced maps.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Fruitcake
+				</name>
+				<description>
+					Beat four Portal advanced maps.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Vanilla Crazy Cake
+				</name>
+				<description>
+					Beat all six Portal advanced maps.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Basic Science
+				</name>
+				<description>
+					Earn bronze medals on all Portal challenges.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Rocket Science
+				</name>
+				<description>
+					Earn silver medals on all Portal challenges.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Aperture Science
+				</name>
+				<description>
+					Earn gold medals on all Portal challenges.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Camera Shy
+				</name>
+				<description>
+					Detach security cameras from the walls.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Friendly Fire
+				</name>
+				<description>
+					Knock down a turret with another turret.
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Transmission Received
+				</name>
+				<description>
+					..?
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Anomaly Warzone Earth
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					First Blood
+				</name>
+				<description>
+					Destroy 10 towers
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Repairman
+				</name>
+				<description>
+					Repair 5 units
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					This Stuff Is Good
+				</name>
+				<description>
+					Collect 14 Carusaurum caches
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Little Collector
+				</name>
+				<description>
+					Collect 20 abilities
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Eureka
+				</name>
+				<description>
+					Protect deployed Decoy with Smoke Screen
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					The Suit Works Fine
+				</name>
+				<description>
+					Use every ability 10 times each
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Towerbane
+				</name>
+				<description>
+					Destroy every tower type 10 times each
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Pimp Your Squad
+				</name>
+				<description>
+					Fully upgrade a unit
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Master Technician
+				</name>
+				<description>
+					Fully upgrade every unit type 2 times each
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Millionaire
+				</name>
+				<description>
+					Earn 50.000 $
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Army Nurse
+				</name>
+				<description>
+					Use one Repair ability to fix 400 damage
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Death From Above
+				</name>
+				<description>
+					Use one Airstrike ability to kill 4 towers
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Baghdad Saviour
+				</name>
+				<description>
+					Complete Baghdad chapter of Story Mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Tokyo Saviour
+				</name>
+				<description>
+					Complete Tokyo chapter of Story Mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Earth Saviour
+				</name>
+				<description>
+					Complete Story Mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Mayhem Unleashed
+				</name>
+				<description>
+					Complete Baghdad Mayhem
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					A Bridge Too Far
+				</name>
+				<description>
+					Complete Tokyo Raid 
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blinded Enemy
+				</name>
+				<description>
+					Use one Smoke Screen ability to protect 6 units
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Gold Standard
+				</name>
+				<description>
+					Earn a gold medal
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Lightning Strike
+				</name>
+				<description>
+					Earn 10 gold Directness medals
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Fists of Stone
+				</name>
+				<description>
+					Earn 5 gold Ruthlessness medals
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Provident
+				</name>
+				<description>
+					Earn 10 gold Efficiency medals
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					War Hero
+				</name>
+				<description>
+					Earn every gold medal during Story Mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Neverending Legend
+				</name>
+				<description>
+					Earn every Squad Assault Mode gold medal
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Avenger
+				</name>
+				<description>
+					Destroy 5000 towers
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Diversity Is Fun
+				</name>
+				<description>
+					Complete a mission with squad composed of 6 different units
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Survivalist
+				</name>
+				<description>
+					Complete a mission without using Repair ability
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Multitasker
+				</name>
+				<description>
+					Use 4 different abilities simultaneously
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Charge Champ
+				</name>
+				<description>
+					Complete mission 1 having 7 Repair ability charges in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Tower Buster
+				</name>
+				<description>
+					Complete mission 2 with every tower killed in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					On Fire
+				</name>
+				<description>
+					Complete mission 3 while moving your squad in front each Scorcher in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					What You See
+				</name>
+				<description>
+					Complete mission 4 without using Decoy ability in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Charge Master
+				</name>
+				<description>
+					Complete mission 5 having 20 ability charges in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Blink Of An Eye
+				</name>
+				<description>
+					Complete mission 6 while beating timed part in less than 190 seconds in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					As it Comes
+				</name>
+				<description>
+					Complete mission 7 without a single unit upgrade in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Unscathed
+				</name>
+				<description>
+					Complete mission 8 with transporter not being hit in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Standing Tall
+				</name>
+				<description>
+					Complete mission 9 without Hero getting knocked down in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Foot Soldier
+				</name>
+				<description>
+					Complete mission 10 without using Air Strike ability in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					And Stay Down!
+				</name>
+				<description>
+					Complete mission 11 without letting Energizer towers respawn other towers in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Master Strategist
+				</name>
+				<description>
+					Complete mission 12 while killing at most 44 towers in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Down But Not Out
+				</name>
+				<description>
+					Complete mission 13 while letting at least 7 artillery strikes hit your squad in Advanced difficulty mode
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					Glutton For Punnishment
+				</name>
+				<description>
+					Complete the last Boss stage while allowing at most 6 respawn waves in Advanced difficulty mode
+				</description>
+			</achievement>
+		</achievements>
+</game>
+</games>

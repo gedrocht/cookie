@@ -1,3 +1,13 @@
-cheevos.py shaymus22
-cheevos_do.py shaymus22
-listTags.py shaymus22
+echo off
+del data_shaymus22.py
+copy steam_shaymus22.py data_shaymus22.py
+python cheevos.py shaymus22
+python cheevos_do.py shaymus22
+python listTags.py shaymus22
+del steam_shaymus22.py
+copy data_shaymus22.py steam_shaymus22.py
+python ratings_query.py shaymus22
+python steam_ratings.py shaymus22
+python ratings_query.py shaymus22
+python ratings_analyze.py shaymus22
+echo on
