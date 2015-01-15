@@ -1,3 +1,5 @@
+print "Building Steam + HowLongToBeat database..."
+
 from steam_time_shaymus22 import data
 
 remainingTime = {};
@@ -32,4 +34,4 @@ js.write(output);
 js.flush();
 js.close();
 
-
+print "Done."

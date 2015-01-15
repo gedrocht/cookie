@@ -100,9 +100,10 @@ def getPlayerAchievements( id, games ):
                 continue;
             
             if data.has_key(gameID):
-                if game["last_played"] == data[gameID]["last_played"]:
-                    games[gameID] = data[gameID]
-                    continue;
+                if game.has_key("last_played") and data[gameID].has_key("last_played"):
+                    if game["last_played"] == data[gameID]["last_played"]:
+                        games[gameID] = data[gameID]
+                        continue;
     
         if str(game["friendlyURL"]) == "False":
             game["achievements"] = [];
@@ -181,9 +182,10 @@ def getGameAchievements( id ):
                 continue;
             
             if data.has_key(gameID):
-                if game["last_played"] == data[gameID]["last_played"]:
-                    games[gameID] = data[gameID]
-                    continue;
+                if game.has_key("last_played") and data[gameID].has_key("last_played"):
+                    if game["last_played"] == data[gameID]["last_played"]:
+                        games[gameID] = data[gameID]
+                        continue;
         
         page = getPage( getURL_gameAchievements(game["friendlyURL"]) );
         

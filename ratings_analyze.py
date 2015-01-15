@@ -43,6 +43,8 @@ for d in data:
         continue;
     
     game = data[d];
+    if not game.has_key("rating"):
+        continue;
     rating = game["rating"];
     if rating == 0:
         continue;
@@ -61,8 +63,9 @@ for i in range(lowest,highest):
         
         game = data[d];
         
-        if game["rating"] == i:
-            sortedRatings.append(game);
+        if game.has_key("rating"):
+            if game["rating"] == i:
+                sortedRatings.append(game);
     
 total = 0;    
 for game in sortedRatings:

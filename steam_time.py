@@ -1,3 +1,5 @@
+print "Converting Steam + HowLongToBeat database to javascript..."
+
 from steam_shaymus22 import data
 
 game = None;
@@ -24,6 +26,10 @@ remainingTime = {}
 for g in data:
     game = data[g];
     gameName = game["name"].strip();
+    if not gameTimes.has_key(gameName):
+        print "WARNING: No HowLongToBeat time for game '" + gameName + "'"
+        continue;
+    
     timeNeeded = gameTimes[gameName];
     
     if timeNeeded == 0:
@@ -51,17 +57,19 @@ for g in remainingTime:
         highest = remainingTime[g]["hours_remaining"];
     
 sorted = [];
-t = 0.0;
-while True:
-    if not t < (highest + 1):
-        break;
-    t += 0.01;
-    for g in remainingTime:
-        if remainingTime[g] is None:
-            continue;
-        if str(remainingTime[g]["hours_remaining"]) == str(t):
-            print "Sorting " + str(len(sorted)+progress_offset).rjust(3) + "/" + str(len(remainingTime)-(progress_offset-1))
-            sorted.append({'name':g,'time':remainingTime[g]});
+#t = 0.0;
+#while True:
+    #if not t < (highest + 1):
+    #    break;
+    #t += 0.01;
+for g in remainingTime:
+    if remainingTime[g] is None:
+        continue;
+    #if str(remainingTime[g]["hours_remaining"]) == str(t):
+        #print "Sorting " + str(len(sorted)+progress_offset).rjust(3) + "/" + str(len(remainingTime)-(progress_offset-1))
+    sorted.append({'name':g,'time':remainingTime[g]});
+        
+    
     
 ljust_amount = len(str(highest))+1;
 #for g in sorted:
@@ -74,13 +82,12 @@ for s in sorted:
         game = data[g];
         if game["name"].strip() == s["name"]:
             game["time_information"] = s["time"]
-
-
+            
 steam_time.write("data = " + str(data));
 steam_time.flush();
 steam_time.close();
 
-
+print "Done."
 
 
 

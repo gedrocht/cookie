@@ -81,7 +81,7 @@ function getGame( game ){
     s += getGameDiv( game.appid,
                      game.name,
                      game.time.hours_remaining,
-                     game.time.hours_played/game.time.hours_required*100.0 );
+                     game.time.hours_played/game.time.hours_required );
     
     return s;
 }
@@ -105,9 +105,10 @@ function getGameDiv( appid, name, remaining, percentage ){
 
 function getStyle( percentage ){
 
-    if( percentage > 1 )
+    if( percentage >= 1 )
         return 'style="display:none;"'
 
+    /*
     var s = 'style="opacity:'
     
     var p = percentage;
@@ -115,9 +116,11 @@ function getStyle( percentage ){
         p = 1;
     p = 1 - p;
     
-    s += Math.round(p*10)/10 + ';"';
+    s += Math.round(p*10)/30 + ';"';
     
     return s;
+    */
+    return "";
 }
 
 var __EVEN_ODD = false;
