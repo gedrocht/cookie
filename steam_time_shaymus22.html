@@ -1,6 +1,14 @@
 <html>
 <head>
 <style>
+body {
+    background-color: #000;
+    background-image: url(http://steamcommunity-a.akamaihd.net/public/images/apphubs/blue_body_darker_repeat.jpg);
+    background-repeat: repeat-y;
+    background-position: center;
+    color: #c4c4c4;
+}
+
 div {
     margin: 0px;
     padding: 0px;
@@ -10,7 +18,7 @@ div {
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
-    width: 540px;
+    width: 560px;
     font-family: Arial;
     margin-bottom: 0px;
     padding: 0px;
@@ -19,16 +27,25 @@ div {
 #game {
     height: 215px;
     margin-bottom: 30px;
+    border: 1px solid #898989;
+}
+
+img {
+    border-right: 1px solid #898989;
 }
 
 .even {
-    background-color:#eee;
-    border-top: 1px solid #ccc;
+    background-color:#121925;
+    border-top: 1px solid #898989;
 }
 
 .odd {
-    background-color:#ddd;
-    border-top: 1px solid #bbb;
+    background-color:#121925;
+    border-top: 1px solid #898989;
+}
+
+hr {
+    border-color: #898989;
 }
 
 #game-name {
@@ -37,9 +54,11 @@ div {
 
 #game-hours {
     float: right;
-    padding-top: 10px;
-    padding-right: 10px;
+    padding-top: 15px;
+    padding-left: 4px;
+    width: 93px;
     font-size: 30pt;
+    text-align: center;
 }
 
 a {
@@ -54,7 +73,7 @@ a:active  { color: #666; }
 <script src="steam_time_js.js"></script>
 <script>
 
-bad_appids = [254270,21960,12230,12240,12250,228200,70660];
+bad_appids = [254270,21960,12230,12240,12250,228200,70660,98100,340,420,8870,219680,218130,233740,250320];
 
 function init(){
     var games = document.getElementById("games");
@@ -81,7 +100,8 @@ function getGame( game ){
     s += getGameDiv( game.appid,
                      game.name,
                      game.time.hours_remaining,
-                     game.time.hours_played/game.time.hours_required );
+                     game.time.hours_played/game.time.hours_required,
+                     game.time.hours_played );
     
     return s;
 }
@@ -99,27 +119,14 @@ function makeRunLink( appid, name ){
     return '<a href="steam://run/' + appid + '" title="' + name + '">' + getGameImage(appid,name) + '</a>';
 }
 
-function getGameDiv( appid, name, remaining, percentage ){
-    return "<div " + getEvenOddClass() + " id=\"game\" " + getStyle(percentage) + " >" + getGameNameDiv(appid,makeRunLink(appid,name)) + getGameHoursDiv(round(remaining)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
+function getGameDiv( appid, name, remaining, percentage, played ){
+    return "<div " + getEvenOddClass() + " id=\"game\" " + getStyle(percentage) + " >" + getGameNameDiv(appid,makeRunLink(appid,name)) + getGameHoursDiv(round(remaining), Math.round(percentage*100), round(played)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
 }
 
 function getStyle( percentage ){
-
-    if( percentage >= 1 )
+    if( percentage >= 0.9 )
         return 'style="display:none;"'
-
-    /*
-    var s = 'style="opacity:'
     
-    var p = percentage;
-    if( p > 1 )
-        p = 1;
-    p = 1 - p;
-    
-    s += Math.round(p*10)/30 + ';"';
-    
-    return s;
-    */
     return "";
 }
 
@@ -135,8 +142,12 @@ function getGameNameDiv( appid, s ){
     return '<div id="game-name">' + s + '</div>';
 }
 
-function getGameHoursDiv( s ){
-    return '<div id="game-hours">' + s + '</div>';
+function getGameHoursDiv( hours, percentage, played ){
+    return '<div id="game-hours">' + hours + getGameHoursDivider() + percentage + '%' + getGameHoursDivider() + played +'</div>'
+}
+
+function getGameHoursDivider(){
+    return "<hr width='96px' style='margin-top: 12px; margin-bottom: 12px; position:relative;left:-5px;'>"
 }
 
 function getGameImage( appid, name ){
