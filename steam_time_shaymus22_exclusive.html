@@ -1,0 +1,210 @@
+<html>
+<head>
+<style>
+body {
+    background-color: #000;
+    background-image: url(http://steamcommunity-a.akamaihd.net/public/images/apphubs/blue_body_darker_repeat.jpg);
+    background-repeat: repeat-y;
+    background-position: center;
+    color: #c4c4c4;
+}
+
+div {
+    margin: 0px;
+    padding: 0px;
+}
+
+#games {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 560px;
+    font-family: Arial;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+#game {
+    height: 215px;
+    margin-bottom: 30px;
+    border: 1px solid #898989;
+}
+
+img {
+    border-right: 1px solid #898989;
+}
+
+.even {
+    background-color:#121925;
+    border-top: 1px solid #898989;
+}
+
+.odd {
+    background-color:#121925;
+    border-top: 1px solid #898989;
+}
+
+hr {
+    border-color: #898989;
+}
+
+#game-name {
+    float: left;
+}
+
+#game-hours {
+    float: right;
+    padding-top: 15px;
+    padding-left: 4px;
+    width: 93px;
+    font-size: 30pt;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link    { color: #000; }
+a:visited { color: #222; }
+a:hover   { color: #444; }
+a:active  { color: #666; }
+</style>
+<script src="steam_time_js.js"></script>
+<script>
+
+bad_appids = [254270,21960,12230,12240,12250,228200,70660,98100,340,420,8870,219680,218130,233740,250320];
+
+good_appids =
+    [108710,
+    57300,
+    242050,
+    35140,
+    24960,
+    49520,
+    225080,
+    225260,
+    24740,
+    17300,
+    9050,
+    211420,
+    91310,
+    17470,
+    28050,
+    16450,
+    21100,
+    22380,
+    19900,
+    233270,
+    12100,
+    12120,
+    12110,
+    6860,
+    250180,
+    12150,
+    12140,
+    47870,
+    24240,
+    33320,
+    13600,
+    13530,
+    13500,
+    19980,
+    3830,
+    9480,
+    213610,
+    6060,
+    235600,
+    203160];
+
+
+function init(){
+    var games = document.getElementById("games");
+    games.innerHTML = getGames();
+}
+
+function getGames(){
+    var s = "";
+    for( var i = 0 ; i < data.length ; i++ ){
+        if( validate(data[i]) )
+            s += getGame(data[i]);
+    }
+    
+    return s;
+}
+
+function validate( game ){
+    return good_appids.indexOf(game.appid)!= -1;
+    //return !(bad_appids.indexOf(game.appid)!=-1);
+}
+
+function getGame( game ){
+    var s = "";
+    
+    s += getGameDiv( game.appid,
+                     game.name,
+                     game.time.hours_remaining,
+                     game.time.hours_played/game.time.hours_required,
+                     game.time.hours_played );
+    
+    return s;
+}
+
+function round( num ){
+    var s = (Math.round(num*10)/10).toString();
+    
+    if( s.indexOf(".") == -1 )
+        s = s + ".0";
+    
+    return s;
+}
+
+function makeRunLink( appid, name ){
+    return '<a href="steam://run/' + appid + '" title="' + name + '">' + getGameImage(appid,name) + '</a>';
+}
+
+function getGameDiv( appid, name, remaining, percentage, played ){
+    return "<div " + getEvenOddClass() + " id=\"game\" " + getStyle(percentage) + " >" + getGameNameDiv(appid,makeRunLink(appid,name)) + getGameHoursDiv(round(remaining), Math.round(percentage*100), round(played)) + "</div>";// + Math.round(percentage*10)/10 + "\%</div>";
+}
+
+function getStyle( percentage ){
+    if( percentage >= 0.9 )
+        return 'style="display:none;"'
+    
+    return "";
+}
+
+var __EVEN_ODD = false;
+function getEvenOddClass(){
+    __EVEN_ODD = !__EVEN_ODD
+    if( __EVEN_ODD )
+        return "class=\"odd\"";
+    return "class=\"even\"";
+}
+
+function getGameNameDiv( appid, s ){
+    return '<div id="game-name">' + s + '</div>';
+}
+
+function getGameHoursDiv( hours, percentage, played ){
+    return '<div id="game-hours">' + hours + getGameHoursDivider() + percentage + '%' + getGameHoursDivider() + played +'</div>'
+}
+
+function getGameHoursDivider(){
+    return "<hr width='96px' style='margin-top: 12px; margin-bottom: 12px; position:relative;left:-5px;'>"
+}
+
+function getGameImage( appid, name ){
+    return "<img src='" + getHeaderURL(appid) + "' alt='" + name + "'></img>";
+}
+
+function getHeaderURL( appid ){
+    return "http://cdn.akamai.steamstatic.com/steam/apps/" + appid + "/header.jpg";
+}
+</script>
+</head>
+<body onLoad="init();">
+<div id="games">
+</div>
+</body>
+</html>

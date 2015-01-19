@@ -1,0 +1,234 @@
+<head>
+<style>
+.tag {
+    float: left;
+    font-family: Arial;
+    padding: 6px;
+    margin: 1px;
+    background-color: #556069;
+    color: #e7e7e7;
+    -webkit-user-select: none;
+    border: 2px solid #121212;
+}
+.tag_playmode{
+    float: left;
+    font-family: Arial;
+    padding: 6px;
+    margin: 1px;
+    background-color:#557766;
+    color: #e7e7e7;
+    -webkit-user-select: none;
+    border: 2px solid #121212;
+}
+.tag_genre{
+    float: left;
+    font-family: Arial;
+    padding: 6px;
+    margin: 1px;
+    background-color:#776655;
+    color: #e7e7e7;
+    -webkit-user-select: none;
+    border: 2px solid #121212;
+}
+.tag_selected {
+    float: left;
+    font-family: Arial;
+    padding: 6px;
+    margin: 1px;
+    background-color: #50919e;
+    color: #f0f0f0;
+    -webkit-user-select: none;
+    border: 2px solid #ffffff;
+}
+.game {
+    float: left;
+    font-family: Arial;
+    margin: 3px;
+    background-color: #e0e0e0;
+    display: none;
+    -webkit-user-select: none;
+    width: 460px;
+    height: 215px;
+    border: 1px solid white;
+}
+</style>
+<script src="tagdb.js"></script>
+<script>
+
+curTags = [];
+gamesWithTags = [];
+playmodeTags = ["Singleplayer","Multiplayer","Coop","Online_CoOp","Local_Multiplayer","4_Player_Local","Local_CoOp"];
+genreTags = ["Action","Adventure","Casual","Strategy","Puzzle","Comedy","Platformer","RPG","Shooter","FPS","Tactical","RTS","Survival","Action_RPG","Hack_and_Slash","Horror","TurnBased_Strategy","PuzzlePlatformer","Tower_Defense","Roguelike","Fighting","Stealth","ThirdPerson_Shooter","Beat_em_up","Roguelite","Sports","Massively_Multiplayer","Survival_Horror","Rhythm","Parody","JRPG","25D","Education","Mystery","Diplomacy","Racing","Shoot_Em_Up","Card_Game","Twin_Stick_Shooter","ActionAdventure","Bullet_Hell","Political","Board_Game","God_Game","3D_Platformer","Pinball","Psychological_Horror","Real_Time_Tactics","PartyBased_RPG","CRPG","Trading_Card_Game","MOBA","2D_Fighter","Dark_Fantasy","MMORPG","Arena_Shooter","Tactical_RPG","SideScroller"];
+displaysToChange = [];
+displaysToChange_games = [];
+
+function init(){
+    tag_div = document.getElementById("tag_div");
+    games_div = document.getElementById("games_div");
+    initTags();
+    initGames();
+    setInterval(changeDisplays,2);
+    setInterval(changeDisplays_games,1);
+}
+
+function changeDisplays(){
+    if( displaysToChange.length == 0 ) return;
+
+    var rate = 1;
+    if( displaysToChange.length > 40 )
+        rate = 10;
+    else if( displaysToChange.length > 22 )
+        rate = 3;
+    else if( displayToChange.length > 10 )
+        rate = 1;
+
+    for( var i = 0 ; i < rate ; i++ ){
+        if( displaysToChange.length == 0 ) return;
+        change = displaysToChange.pop();
+        document.getElementById(change[0]).style.display = change[1];
+    }
+}
+
+function changeDisplays_games(){
+    while(true){
+        if( displaysToChange_games.length == 0 ) return;
+        
+        change = displaysToChange_games.pop();
+        document.getElementById(change[0]).style.display = change[1];
+    }
+}
+
+function tagClicked(tag){
+    div = document.getElementById(tag);
+    if(div.getAttribute("class") == "tag" ||
+       div.getAttribute("class") == "tag_playmode" ||
+       div.getAttribute("class") == "tag_genre" ){
+        div.setAttribute("class","tag_selected");
+        curTags.push(tag);
+    } else {
+        if( playmodeTags.indexOf(tag) != -1 )
+            div.setAttribute("class","tag_playmode");
+        else if( genreTags.indexOf(tag) != -1 )
+            div.setAttribute("class","tag_genre");
+        else
+            div.setAttribute("class","tag");
+        curTags.splice(curTags.indexOf(tag),1);
+    }
+    update();
+}
+
+function intersect( a, b ){
+    result = [];
+    
+    for( var i = 0 ; i < a.length ; i++ ){
+        found = false;
+        for( var k = 0 ; k < b.length ; k++ ){
+            if(a[i] == b[k]){
+                found = true;
+                break;
+            }
+        }
+        if( found )
+            result.push(a[i]);
+    }
+    
+    return result;
+}
+
+function updateGamesWithTags(){
+    gamesWithTags = [];
+    
+    if(curTags.length == 0){
+        for( var key in games ){
+            displaysToChange_games.push([key,"none"]);
+        }
+        return;
+    }
+    
+    gamesWithTags = tags[curTags[0]];
+    
+    for( var i = 1 ; i < curTags.length ; i++ ){
+        gamesWithTags = intersect( gamesWithTags, tags[curTags[i]] );
+    }
+    
+    for( var key in games ){
+        found = false;
+        for( var i = 0 ; i < gamesWithTags.length ; i++ ){
+            if( gamesWithTags[i] == key ){
+                found = true;
+                break;
+            }
+        }
+        if( found )
+            displaysToChange_games.push([key,"block"]);
+        else
+            displaysToChange_games.push([key,"none"]);
+    }
+}
+
+function updateAvailableTags(){
+    if( curTags.length == 0 ){
+        for( var key in tags ){
+            displaysToChange.push([key,"block"]);
+        }
+        return;
+    }
+    
+    availableTags = [];
+    
+    for( var i = 0 ; i < gamesWithTags.length ; i++ ){
+        var gameTags = games[gamesWithTags[i]];
+        for( var a = 0 ; a < gameTags.length ; a++ ){
+            if( availableTags.indexOf(gameTags[a]) == -1 ){
+                availableTags.push(gameTags[a]);
+            }
+        }
+    }
+    
+    for( var key in tags ){
+        found = false;
+        for( var i = 0 ; i < availableTags.length ; i++ ){
+            if(key == availableTags[i]){
+                found = true;
+                break;
+            }
+        }
+        if( found )
+            displaysToChange.push([key,"block"]);
+        else
+            displaysToChange.push([key,"none"]);
+    }
+}
+
+function update(){
+    updateGamesWithTags();
+    updateAvailableTags();
+}
+
+function initTags(){
+    tagText = "";
+    for( var key in tags ){
+        tagClass = "tag";
+        if( playmodeTags.indexOf(key) != -1 )
+            tagClass = "tag_playmode";
+        else if( genreTags.indexOf(key) != -1 )
+            tagClass = "tag_genre";
+        tagText += '<div class="' + tagClass + '" onclick="tagClicked(\''+key+'\')" id="'+key+'">'+ tags_realNames[key] +'</div>\n';
+    }
+    tag_div.innerHTML = tagText;
+}
+
+function initGames(){
+    gamesText = "";
+    for( var key in games ){
+        //gamesText += '<a title="'+ games_realNames[key] +'" href="steam://run/' + appids[key] + '"><div class="game" id="' + key + '" style="background-image:url(http://cdn.akamai.steamstatic.com/steam/apps/'+appids[key]+'/capsule_184x69.jpg)">' + '</div></a>\n';
+        gamesText += '<a title="'+ games_realNames[key] +'" href="steam://run/' + appids[key] + '"><div class="game" id="' + key + '" style="background-image:url(http://cdn.akamai.steamstatic.com/steam/apps/'+appids[key]+'/header.jpg)">' + '</div></a>\n';
+    }
+    games_div.innerHTML = gamesText;
+}
+</script>
+</head>
+<body onLoad="init();" bgcolor="#121212" style="text-align:center">
+<div id="tag_div" style="clear:left;"></div>
+<div id="games_div" style="clear:left;"></div>
+</body>
