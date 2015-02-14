@@ -1,0 +1,66 @@
+<head>
+<style>
+img {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+div {
+    width: 20%;
+    background-image: url('http://media.tumblr.com/a947b6578ea6a8c48579a02d4d265a95/tumblr_inline_mw84jeXTU21r4bfs0.gif');
+    float: left;
+    margin: 0px;
+    padding: 0px;
+}
+</style>
+<script>
+
+cur_img = 0;
+
+imgs = 
+['http://i.imgur.com/NF9Co99.gif',
+'http://i.imgur.com/Uq0lzri.gif',
+'http://i.imgur.com/GGsdWAv.gif',
+'http://i.imgur.com/SflDAiT.gif',
+'http://i.imgur.com/Z1JDyy9.gif',
+'http://i.imgur.com/SwdxGe0.gif',
+'http://i.imgur.com/lw41Gim.gif',
+'http://i.imgur.com/upj2Ars.gif',
+'http://i.imgur.com/C7pXtxY.gif',
+'http://i.imgur.com/lw41Gim.gif'];
+
+function get_img(){
+    if( cur_img+1 >= imgs.length )
+        cur_img = 0;
+    else
+        cur_img++;
+        
+    return imgs[cur_img]
+}
+
+function init(){
+    var s = "";
+    
+    for( var i = 0 ; i < 20 ; i++ ){
+        s += '<div id="' + i + '"></div>';
+        if( i % 5 == 0 && i != 0 )
+            s += '<br>';
+    }
+    
+    document.body.innerHTML = s;
+    
+    setTimeout( function(){
+        for( var i = 0 ; i < 20 ; i++ ){
+            setTimeout( function(a){
+                return function(){
+                    var div = document.getElementById(a);
+                    div.innerHTML = '<img src="' + get_img() + '">'
+                }}(i), 33*i );
+        }}, 100 );
+}
+</script>
+</head>
+<body style="padding:0px;margin:0px;" onLoad="init();">
+</body>
+</html>
