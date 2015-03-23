@@ -24,8 +24,8 @@ div.ticket-outer {
 	
 	position: relative;
 	
-	margin-left: auto;
-	margin-right: auto;
+	margin-left: 	3px;
+	margin-right: 	3px;
 	margin-top:		18px;
 	margin-bottom:  3px;
 
@@ -81,6 +81,12 @@ div.ticket-innerText {
 				  0px  0px 5px rgba(0,0,0,1);
 }
 
+div.faded {
+	margin: 	0px;
+	padding:	0px;
+	opacity:	0.33;
+}
+
 </style>
 <script>
 
@@ -91,6 +97,20 @@ var img_destiny				= "images/destiny.jpg";
 var img_gta_v_single_player = "images/gta_v_single_player.jpg";
 var img_youtube_playlist	= "images/youtube_playlist.jpg";
 var img_rick_and_morty		= "images/rick_and_morty.jpg";
+var img_breaking_bad		= "images/breaking_bad.jpg";
+var img_robot_chicken		= "images/robot_chicken.jpg";
+var img_south_park			= "images/south_park.jpg";
+var img_house_of_cards		= "images/house_of_cards.jpg";
+var img_mad_men				= "images/mad_men.jpg";
+var img_borderlands_2		= "images/borderlands_2.jpg";
+var img_boardwalk_empire	= "images/boardwalk_empire.jpg";
+var img_halo_mcc			= "images/halo_master_chief_collection.jpg";
+var img_top_gear			= "images/top_gear.jpg";
+var img_30_rock				= "images/30_rock.jpg";
+var img_babylon_5			= "images/babylon_5.jpg";
+var img_the_office			= "images/the_office.jpg";
+var img_stargate_sg1		= "images/stargate_sg1.jpg";
+var img_star_trek			= "images/star_trek.jpg";
 
 var parasyte 			= newTicket("Parasyte: The Maxim", img_parasyte);
 var walking_dead		= newTicket("Walking Dead", img_walking_dead);
@@ -99,6 +119,20 @@ var destiny				= newTicket("Destiny", img_destiny);
 var gta_v_single_player	= newTicket("GTA:V Single Player", img_gta_v_single_player);
 var youtube_playlist	= newTicket("YouTube Playlist", img_youtube_playlist);
 var rick_and_morty		= newTicket("Rick and Morty", img_rick_and_morty);
+var breaking_bad		= newTicket("Breaking Bad", img_breaking_bad);
+var robot_chicken		= newTicket("Robot Chicken", img_robot_chicken);
+var south_park			= newTicket("South Park", img_south_park);
+var house_of_cards		= newTicket("House of Cards", img_house_of_cards);
+var mad_men				= newTicket("Mad Men", img_mad_men);
+var borderlands_2		= newTicket("Borderlands 2", img_borderlands_2);
+var boardwalk_empire	= newTicket("Boardwalk Empire", img_boardwalk_empire);
+var halo_mcc			= newTicket("Halo: MCC", img_halo_mcc);
+var top_gear			= newTicket("Top Gear", img_top_gear);
+var thirty_rock			= newTicket("30 Rock", img_30_rock);
+var babylon_5			= newTicket("Babylon 5", img_babylon_5);
+var the_office			= newTicket("The Office", img_the_office);
+var stargate_sg1		= newTicket("Stargate: SG-1", img_stargate_sg1);
+var star_trek			= newTicket("Star Trek", img_star_trek);
 
 var blank				= newTicket("","");
 
@@ -106,17 +140,33 @@ function init(){
 	var s = '<div class="ticket-container">';
 	
 	s += parasyte +
-		 walking_dead +
 		 mario_party_10 +
 		 destiny +
 		 gta_v_single_player +
 		 youtube_playlist +
-		 blank +
-		 rick_and_morty;
-	 
+		 rick_and_morty + 
+		 borderlands_2 +
+		 halo_mcc +
+		 fade(walking_dead) +
+		 fade(boardwalk_empire) +
+		 fade(breaking_bad) +
+		 fade(robot_chicken) +
+		 fade(south_park) +
+		 fade(house_of_cards) +
+		 fade(mad_men) +
+		 fade(top_gear) +
+		 fade(thirty_rock) +
+		 fade(babylon_5) +
+		 fade(the_office) +
+		 fade(stargate_sg1) +
+		 fade(star_trek);
 	 
 	s += "</div>";
 	document.body.innerHTML = s;
+}
+
+function fade( ticket ){
+	return '<div class="faded" onmouseover="this.style.opacity=\'0.999\';" onmouseout="this.style.opacity=\'0.33\';">' + ticket + '</div>';
 }
 
 function newTicket( text, image ){
