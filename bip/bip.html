@@ -111,6 +111,13 @@ var img_babylon_5			= "images/babylon_5.jpg";
 var img_the_office			= "images/the_office.jpg";
 var img_stargate_sg1		= "images/stargate_sg1.jpg";
 var img_star_trek			= "images/star_trek.jpg";
+var img_movie				= "images/movie.jpg";
+var img_super_mario_3D_world= "images/super_mario_3D_world.png";
+var img_hotline_miami_2		= "images/hotline_miami_2.jpg";
+var img_legend_of_korra		= "images/legend_of_korra.jpg";
+var img_always_sunny		= "images/always_sunny.jpg";
+var img_arrested_development= "images/arrested_development.jpg";
+var img_parks_and_recreation= "images/parks_and_recreation.jpg";
 
 var parasyte 			= newTicket("Parasyte: The Maxim", img_parasyte);
 var walking_dead		= newTicket("Walking Dead", img_walking_dead);
@@ -133,6 +140,13 @@ var babylon_5			= newTicket("Babylon 5", img_babylon_5);
 var the_office			= newTicket("The Office", img_the_office);
 var stargate_sg1		= newTicket("Stargate: SG-1", img_stargate_sg1);
 var star_trek			= newTicket("Star Trek", img_star_trek);
+var movie				= newTicket("watch a movie", img_movie);
+var super_mario_3D_world= newTicket("Super Mario 3D World", img_super_mario_3D_world);
+var hotline_miami_2		= newTicket("Hotline Miami 2", img_hotline_miami_2);
+var legend_of_korra		= newTicket("Legend of Korra", img_legend_of_korra);
+var always_sunny		= newTicket("Always Sunny", img_always_sunny);
+var arrested_development= newTicket("Arrested Development", img_arrested_development);
+var parks_and_recreation= newTicket("Parks and Recreation", img_parks_and_recreation);
 
 var blank				= newTicket("","");
 
@@ -147,6 +161,9 @@ function init(){
 		 rick_and_morty + 
 		 borderlands_2 +
 		 halo_mcc +
+		 movie +
+		 hotline_miami_2 +
+		 super_mario_3D_world +
 		 fade(walking_dead) +
 		 fade(boardwalk_empire) +
 		 fade(breaking_bad) +
@@ -159,7 +176,11 @@ function init(){
 		 fade(babylon_5) +
 		 fade(the_office) +
 		 fade(stargate_sg1) +
-		 fade(star_trek);
+		 fade(star_trek) +
+		 fade(legend_of_korra) +
+		 fade(always_sunny) +
+		 fade(arrested_development) +
+		 fade(parks_and_recreation);
 	 
 	s += "</div>";
 	document.body.innerHTML = s;
