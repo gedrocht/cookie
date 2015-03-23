@@ -1,5 +1,8 @@
 <html>
 <head>
+<title>
+Bip!
+</title>
 <style>
 
 body {
@@ -65,7 +68,7 @@ div.ticket-innerText {
 	padding: 0px;
 	
 	position: absolute;
-	bottom:	76%;
+	bottom:	5%;
 	
 	width: 100%;
 	text-align: center;
@@ -76,6 +79,9 @@ div.ticket-innerText {
 	color: #eee;
 	
 	text-shadow:  0px  0px 2px rgba(0,0,0,1), 
+				  0px  0px 3px rgba(0,0,0,1),
+				  0px  0px 3px rgba(0,0,0,1),
+				  0px  0px 3px rgba(0,0,0,1),
 				  0px  0px 3px rgba(0,0,0,1),
 				  0px  0px 4px rgba(0,0,0,1),
 				  0px  0px 5px rgba(0,0,0,1);
@@ -118,6 +124,19 @@ var img_legend_of_korra		= "images/legend_of_korra.jpg";
 var img_always_sunny		= "images/always_sunny.jpg";
 var img_arrested_development= "images/arrested_development.jpg";
 var img_parks_and_recreation= "images/parks_and_recreation.jpg";
+var img_xcom_enemy_within	= "images/xcom_enemy_within.jpg";
+var img_team_fortress_2		= "images/team_fortress_2.jpg";
+var img_cs_go				= "images/cs_go.jpg";
+var img_black_flag			= "images/black_flag.png";
+var img_besiege				= "images/besiege.jpg";
+var img_hatoful_boyfriend	= "images/hatoful_boyfriend.jpg";
+var img_a_bird_story		= "images/a_bird_story.jpg";
+var img_tomb_raider			= "images/tomb_raider.jpg";
+var img_legend_of_grimrock_2= "images/legend_of_grimrock_2.png";
+var img_amnesia				= "images/amnesia.jpg";
+var img_the_witcher_2		= "images/the_witcher_2.png";
+var img_fallout_new_vegas	= "images/fallout_new_vegas.jpg";
+var img_dark_souls			= "images/dark_souls.jpg";
 
 var parasyte 			= newTicket("Parasyte: The Maxim", img_parasyte);
 var walking_dead		= newTicket("Walking Dead", img_walking_dead);
@@ -140,13 +159,26 @@ var babylon_5			= newTicket("Babylon 5", img_babylon_5);
 var the_office			= newTicket("The Office", img_the_office);
 var stargate_sg1		= newTicket("Stargate: SG-1", img_stargate_sg1);
 var star_trek			= newTicket("Star Trek", img_star_trek);
-var movie				= newTicket("watch a movie", img_movie);
+var movie				= newTicket("Watch a Movie", img_movie);
 var super_mario_3D_world= newTicket("Super Mario 3D World", img_super_mario_3D_world);
 var hotline_miami_2		= newTicket("Hotline Miami 2", img_hotline_miami_2);
 var legend_of_korra		= newTicket("Legend of Korra", img_legend_of_korra);
 var always_sunny		= newTicket("Always Sunny", img_always_sunny);
 var arrested_development= newTicket("Arrested Development", img_arrested_development);
 var parks_and_recreation= newTicket("Parks and Recreation", img_parks_and_recreation);
+var xcom_enemy_within	= newTicket("XCOM: Enemy Within", img_xcom_enemy_within);
+var team_fortress_2		= newTicket("Team Fortress 2", img_team_fortress_2);
+var cs_go				= newTicket("Global Offensive", img_cs_go);
+var black_flag			= newTicket("Black Flag", img_black_flag);
+var besiege				= newTicket("Beseige",	img_besiege);
+var hatoful_boyfriend	= newTicket("Hatoful Boyfriend", img_hatoful_boyfriend);
+var a_bird_story		= newTicket("A Bird Story",	img_a_bird_story);
+var tomb_raider 		= newTicket("Tomb Raider", img_tomb_raider);
+var legend_of_grimrock_2= newTicket("Legend of Grimrock 2", img_legend_of_grimrock_2);
+var amnesia				= newTicket("Amnesia", img_amnesia);
+var the_witcher_2		= newTicket("The Witcher 2", img_the_witcher_2);
+var fallout_new_vegas	= newTicket("Fallout New Vegas", img_fallout_new_vegas);
+var dark_souls			= newTicket("Dark Souls", img_dark_souls);
 
 var blank				= newTicket("","");
 
@@ -156,6 +188,7 @@ function init(){
 	s += parasyte +
 		 mario_party_10 +
 		 destiny +
+		 black_flag +
 		 gta_v_single_player +
 		 youtube_playlist +
 		 rick_and_morty + 
@@ -164,6 +197,18 @@ function init(){
 		 movie +
 		 hotline_miami_2 +
 		 super_mario_3D_world +
+		 xcom_enemy_within +
+		 besiege +
+		 team_fortress_2 +
+		 cs_go +
+		 fade(tomb_raider) +
+		 fade(legend_of_grimrock_2) +
+		 fade(amnesia) +
+		 fade(the_witcher_2) +
+		 fade(fallout_new_vegas) +
+		 fade(dark_souls) +
+		 //fade(hatoful_boyfriend) +
+		 //fade(a_bird_story) +
 		 fade(walking_dead) +
 		 fade(boardwalk_empire) +
 		 fade(breaking_bad) +
