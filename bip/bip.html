@@ -1,0 +1,154 @@
+<html>
+<head>
+<style>
+
+body {
+	padding-top: 5px;
+}
+
+br {
+	line-height: 2px;
+}
+
+div.ticket-container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	
+	text-align: center;
+}
+
+div.ticket-outer {
+	width: 	320px;
+	height: 180px;
+	
+	position: relative;
+	
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:		18px;
+	margin-bottom:  3px;
+
+	float: left;
+	
+	/*border: 	1px dotted #444;*/
+	
+	
+	/*border-right:	1px dotted #444;*/
+}
+
+div.ticket-inner {
+	margin-top: 	1px;
+	margin-bottom: 	1px;
+	
+	width:	312px;
+	height: 170px;
+	
+	position: relative;
+	
+	padding: 4px;
+	
+	box-shadow: inset 0px -5px 15px #fff,
+				inset 0px  5px 15px #fff;
+}
+
+div.ticket-innerImage {
+	margin: 0px;
+	padding: 0px;
+	
+	height:	170px;
+	width: 	312px;
+}
+
+div.ticket-innerText {
+	margin: 0px;
+	padding: 0px;
+	
+	position: absolute;
+	bottom:	76%;
+	
+	width: 100%;
+	text-align: center;
+	
+	font-family: Arial;
+	font-size: 180%;
+	font-weight: bold;
+	color: #eee;
+	
+	text-shadow:  0px  0px 2px rgba(0,0,0,1), 
+				  0px  0px 3px rgba(0,0,0,1),
+				  0px  0px 4px rgba(0,0,0,1),
+				  0px  0px 5px rgba(0,0,0,1);
+}
+
+</style>
+<script>
+
+var img_parasyte 			= "images/parasyte.jpg";
+var img_walking_dead 		= "images/walking_dead.jpg";
+var img_mario_party_10 		= "images/mario_party_10.jpg";
+var img_destiny				= "images/destiny.jpg";
+var img_gta_v_single_player = "images/gta_v_single_player.jpg";
+var img_youtube_playlist	= "images/youtube_playlist.jpg";
+var img_rick_and_morty		= "images/rick_and_morty.jpg";
+
+var parasyte 			= newTicket("Parasyte: The Maxim", img_parasyte);
+var walking_dead		= newTicket("Walking Dead", img_walking_dead);
+var mario_party_10		= newTicket("Mario Party 10", img_mario_party_10);
+var destiny				= newTicket("Destiny", img_destiny);
+var gta_v_single_player	= newTicket("GTA:V Single Player", img_gta_v_single_player);
+var youtube_playlist	= newTicket("YouTube Playlist", img_youtube_playlist);
+var rick_and_morty		= newTicket("Rick and Morty", img_rick_and_morty);
+
+var blank				= newTicket("","");
+
+function init(){
+	var s = '<div class="ticket-container">';
+	
+	s += parasyte +
+		 walking_dead +
+		 mario_party_10 +
+		 destiny +
+		 gta_v_single_player +
+		 youtube_playlist +
+		 blank +
+		 rick_and_morty;
+	 
+	 
+	s += "</div>";
+	document.body.innerHTML = s;
+}
+
+function newTicket( text, image ){
+	return '<div class="ticket-outer">' +
+				'<div class="ticket-inner" style="background-image:url(\'' + image + '\');">' +
+					'<div class="ticket-innerImage">' +
+						'<div class="ticket-innerText">' + 
+							text + 
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+}
+</script>
+</head>
+<body onLoad="init();">
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
