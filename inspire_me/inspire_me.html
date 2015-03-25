@@ -1,0 +1,127 @@
+<html>
+<head>
+<style>
+div.main-container {
+	width: 	610px;
+	height: 250px;
+	border: 1px solid #eee;
+	
+	margin-left: auto;
+	margin-right:auto;
+	margin-top: 12%;
+	
+	box-shadow:  10px   10px 45px #ddd,
+				-10px  -10px 45px #ddd,
+				-10px   10px 45px #ddd,
+				 10px  -10px 45px #ddd;
+}
+
+div.main-inner {
+	text-align:	center;
+	
+	font-family: Arial;
+	font-size: 25pt;
+	
+	color: #888;
+	
+	padding-top: 18%;
+}
+</style>
+<script src="nouns.js"></script>
+<script src="verbs.js"></script>
+<script src="adjectives.js"></script>
+<script src="adverbs.js"></script>
+<script>
+
+function init(){
+	inspire();
+}
+
+function inspire(){
+	document.getElementsByClassName("main-inner")[0].innerHTML = getInspiration();
+}
+
+function getInspiration(){
+	var action = Math.random() < 0.5;
+
+	var result = "";
+	
+	if( action || true )
+		result = getAction() + " ";
+	
+	result += getSubject();
+	
+	return result;
+}
+
+function getAction(){ 
+	var adverb = Math.random() < 0.5;
+	
+	var result = "";
+	
+	if( adverb )
+		result += getAdverb() + " ";
+	
+	result += getVerb();
+	
+	return result;
+}
+
+function getSubject(){
+	var plural 		= Math.random() < 0.5;
+	var adjective	= Math.random() < 0.5;
+	var the			= Math.random() < 0.5;
+	
+	var result = getNoun();
+	
+	if( plural )
+		result = pluralize(result);
+	
+	if( result[result.length-1] == 's' )
+		plural = true;
+	
+	if( adjective )
+		result = getAdjective() + " " + result;
+	
+	if( the )
+		result = "the " + result;
+	else if( !plural )
+		result = "a " + result;
+	
+	return result;
+}
+
+function getNoun(){ return nouns[Math.round(Math.random()*nouns.length)].trim(); }
+function getVerb(){ return verbs[Math.round(Math.random()*verbs.length)].trim(); }
+function getAdjective(){ return adjectives[Math.round(Math.random()*adjectives.length)].trim(); }
+function getAdverb(){ return adverbs[Math.round(Math.random()*adverbs.length)].trim(); }
+
+function pluralize( word ){
+	var lastChar = word[word.length-1];
+
+	if( lastChar == "y" && word != "x-ray" && word != "way" )
+		return word.substr(0,word.length-1) + "ies";
+	if( lastChar == "x" )
+		return word + "es";
+	if( lastChar == "s" )
+		return word;
+	return word + "s";
+}
+</script>
+</head>
+<body onLoad="init();">
+
+<div class="main-container">
+<div class="main-inner">
+</div>
+</div>
+<br>
+<br>
+<!--
+<center>
+<input type="button" value="Refresh" onclick="inspire();" style="font-size: 20px; position: relative; width: 200px; margin-left: auto; margin-right: auto;">
+</center>
+-->
+
+</body>
+</html>
