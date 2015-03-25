@@ -85,23 +85,28 @@ function getSubject(){
 	
 	if( the )
 		result = "the " + result;
-	else if( !plural )
-		result = "a " + result;
+	else if( !plural ){
+		var firstChar = result[0];
+		if( firstChar == 'a' || firstChar == 'e' || firstChar == 'i' || firstChar == 'u' )
+			result = "an " + result;
+		else
+			result = "a " + result;
+	}
 	
 	return result;
 }
 
-function getNoun(){ return nouns[Math.round(Math.random()*nouns.length)].trim(); }
-function getVerb(){ return verbs[Math.round(Math.random()*verbs.length)].trim(); }
-function getAdjective(){ return adjectives[Math.round(Math.random()*adjectives.length)].trim(); }
-function getAdverb(){ return adverbs[Math.round(Math.random()*adverbs.length)].trim(); }
+function getNoun(){ return nouns[Math.floor(Math.random()*nouns.length)].trim(); }
+function getVerb(){ return verbs[Math.floor(Math.random()*verbs.length)].trim(); }
+function getAdjective(){ return adjectives[Math.floor(Math.random()*adjectives.length)].trim(); }
+function getAdverb(){ return adverbs[Math.floor(Math.random()*adverbs.length)].trim(); }
 
 function pluralize( word ){
 	var lastChar = word[word.length-1];
 
 	if( lastChar == "y" && word != "x-ray" && word != "way" )
 		return word.substr(0,word.length-1) + "ies";
-	if( lastChar == "x" )
+	if( lastChar == "x" || lastChar == "h" )
 		return word + "es";
 	if( lastChar == "s" )
 		return word;

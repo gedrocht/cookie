@@ -1,0 +1,50 @@
+<html>
+<head>
+<style>
+div.slice {
+	float: left;
+	text-align: left;
+	width: 2.55in;
+	margin: 0px;
+	padding: 0px;
+	font-size: 12pt;
+}
+
+div.sample {
+	padding: 0px;
+	margin: 0px;
+	border-bottom: 1px solid #ccc;
+}
+</style>
+<script src="samples.js"></script>
+<script>
+function init(){
+	var first_third = "";
+	for( var i = 0 ; i < samples.length*(1/3) ; i++ ){
+		first_third += '<div class="sample">' + samples[i] + "</div>";
+	}
+	
+	var second_third = "";
+	for( var i = Math.round(samples.length*(1/3)) ; i < samples.length*(2/3) ; i++ ){
+		second_third += '<div class="sample">' + samples[i] + "</div>";
+	}
+	
+	var third_third = "";
+	for( var i = Math.round(samples.length*(2/3)) ; i < samples.length ; i++ ){
+		third_third += '<div class="sample">' + samples[i] + "</div>";
+	}
+	
+	document.getElementById("1/3").innerHTML = first_third;
+	document.getElementById("2/3").innerHTML = second_third;
+	document.getElementById("3/3").innerHTML = third_third;
+}
+</script>
+</head>
+<body onLoad="init();">
+<div width="8.5in">
+	<div class="slice" id="1/3"></div>
+	<div class="slice" id="2/3" style="border-left: 1px solid black; padding-left: 2px;"></div>
+	<div class="slice" id="3/3" style="border-left: 1px solid black; padding-left: 2px; /*text-align:right;*/"></div>
+</div>
+</body>
+</html>
