@@ -1,16 +1,21 @@
 <html>
 <head>
 <style>
+body {
+    background-color: #121212;
+}
+
 .preload {
 	display: none;
 }
 
 .card {
-	width:  288 px;
-	height: 178 px;
+	width:  460 px;
+	height: 215 px;
 	position: absolute;
 	margin:  0px;
 	padding: 0px;
+    background-repeat: no-repeat;
 }
 
 .container {
@@ -20,9 +25,12 @@
 	height: 100%;
 }
 </style>
+<script src="gameDB_shaymus22.js"></script>
 <script>
 
 var ACTIVE_CARDS = 8;
+var FPS = 30;
+
 
 var CARD_ID = 0;
 var preload_div;
@@ -31,8 +39,12 @@ var height;
 var width;
 
 var angleCounter = 0;
-var turnRate = 0.01;
+var turnRate = 0.003 * (45/FPS);
 
+var startFadeOut = 0.8;
+var angleCounterLimit = 1.1;
+
+/*
 var images = [
 	"colors/blue.jpg",
 	"colors/brown.jpg",
@@ -53,6 +65,8 @@ var images = [
 	"colors/red.jpg",
 	"colors/yellow.jpg"
 ];
+*/
+var images = [];
 
 var cards = [];
 var active_cards = [];
@@ -61,6 +75,8 @@ function init(){
 	height = document.body.clientHeight;
 	width  = document.body.clientWidth;
 
+    populateImages();
+    
 	container_div = document.getElementsByClassName("container")[0];
 
 	preload_div = document.getElementsByClassName("preload")[0];
@@ -70,7 +86,13 @@ function init(){
 	populateActiveCards();
 	assignAngles();
 	placeCards();
-	setInterval(move,16);
+	setInterval(move,1000/FPS);
+}
+
+function populateImages(){
+    game_db.forEach(function(game){
+        images.push(["http://cdn.akamai.steamstatic.com/steam/apps/" + game[0].appid + "/header.jpg",game[0].appid]);
+    });
 }
 
 function preload(){
@@ -78,14 +100,15 @@ function preload(){
 }
 
 function preloadImage( url ){
-	preload_div.innerHTML += '<img src="' + url + '" />';
+	preload_div.innerHTML += '<img src="' + url[0] + '" />';
 }
 
 function Card(url){
 	this.active = false;
 	this.angle = 0;
 	this.id = CARD_ID++;
-	this.url = url;
+	this.url = url[0];
+    this.appid = url[1];
 }
 
 function createCards(){
@@ -135,24 +158,28 @@ function deactivateCard( card ){
 function activateCard( card ){
 	card.active = true;
 	
+    var link_element = document.createElement("a");
+    link_element.id = card.id;
+    link_element.href = "steam://run/" + card.appid;
+    
 	var card_element = document.createElement("div");
-	card_element.id = card.id;
 	card_element.classList.add("card");
-	card_element.style.width  = "288px"
-	card_element.style.height = "178px"
+	card_element.style.width  = "460px"
+	card_element.style.height = "215px"
 	card_element.style.backgroundImage = " url(" + card.url + ")";
 	
 	placeCard(card_element, card.angle);
 	
-	container_div.appendChild(card_element);
+    link_element.appendChild(card_element);
+	container_div.appendChild(link_element);
 }
 
 function computeX(angle){
-	return width/2 + Math.cos(angle)*400 - 144;
+	return width/2 + Math.cos(angle)*620 - 230;
 }
 
 function computeY(angle){
-	return height/2 + Math.sin(angle)*50 - 89;
+	return height/2 + Math.sin(angle)*120 - 107;
 }
 
 function getZIndex(height){
@@ -168,7 +195,7 @@ function assignAngles(){
 function placeCards(){
 	var card;
 	for( var i = 0 ; i < active_cards.length ; i++ ){
-		card = document.getElementById(active_cards[i].id);
+		card = document.getElementById(active_cards[i].id).childNodes[0];
 		placeCard(card, active_cards[i].angle);
 	}
 }
@@ -181,8 +208,12 @@ function placeCard( card_element, angle ){
 
 function move(){
 	angleCounter += turnRate;
-	if( angleCounter >= 3.142 ){
+    if( angleCounter >= startFadeOut ) {
+        document.getElementById(active_cards[ACTIVE_CARDS-1].id).childNodes[0].style.opacity = 1-(angleCounter-startFadeOut)/(angleCounterLimit-startFadeOut);
+    }
+	if( angleCounter >= angleCounterLimit ){
 		angleCounter = 0;
+        document.getElementById(active_cards[ACTIVE_CARDS-1].id).childNodes[0].style.opacity = 1;
 		shiftActiveCards();
 	}
 		
