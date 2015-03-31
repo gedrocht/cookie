@@ -1,0 +1,202 @@
+<html>
+<head>
+<style>
+.preload {
+	display: none;
+}
+
+.card {
+	width:  288 px;
+	height: 178 px;
+	position: absolute;
+	margin:  0px;
+	padding: 0px;
+}
+
+.container {
+	margin:  0px;
+	padding: 0px;
+	width:  100%;
+	height: 100%;
+}
+</style>
+<script>
+
+var ACTIVE_CARDS = 8;
+
+var CARD_ID = 0;
+var preload_div;
+var container_div;
+var height;
+var width;
+
+var angleCounter = 0;
+var turnRate = 0.01;
+
+var images = [
+	"colors/blue.jpg",
+	"colors/brown.jpg",
+	"colors/dark_gray.jpg",
+	"colors/dark_green.jpg",
+	"colors/gray.jpg",
+	"colors/green.jpg",
+	"colors/light_blue.jpg",
+	"colors/light_orange.jpg",
+	"colors/light_purple.jpg",
+	"colors/light_yellow.jpg",
+	"colors/maroon.jpg",
+	"colors/navy_blue.jpg",
+	"colors/orange.jpg",
+	"colors/pale_blue.jpg",
+	"colors/pink.jpg",
+	"colors/purple.jpg",
+	"colors/red.jpg",
+	"colors/yellow.jpg"
+];
+
+var cards = [];
+var active_cards = [];
+
+function init(){
+	height = document.body.clientHeight;
+	width  = document.body.clientWidth;
+
+	container_div = document.getElementsByClassName("container")[0];
+
+	preload_div = document.getElementsByClassName("preload")[0];
+	preload();
+	
+	createCards();
+	populateActiveCards();
+	assignAngles();
+	placeCards();
+	setInterval(move,16);
+}
+
+function preload(){
+	images.forEach(preloadImage);
+}
+
+function preloadImage( url ){
+	preload_div.innerHTML += '<img src="' + url + '" />';
+}
+
+function Card(url){
+	this.active = false;
+	this.angle = 0;
+	this.id = CARD_ID++;
+	this.url = url;
+}
+
+function createCards(){
+	images.forEach(function(url){
+		cards.push(new Card(url));});
+}
+
+function populateActiveCards(){
+	for( var i = 0 ; i < ACTIVE_CARDS ; i++ ){
+		addNewActiveCard();
+	}
+}
+
+function addNewActiveCard(){
+	var newCard = getInactiveCard();
+	activateCard(newCard);
+	active_cards.push( newCard );
+}
+
+function getInactiveCard(){
+	while( true ){
+		var newCard = cards[Math.floor(Math.random()*cards.length)];
+		if( newCard.active )
+			continue;
+		return newCard;
+	}
+}
+
+function shiftActiveCards(){
+	var oldCard = active_cards[active_cards.length-1];
+	
+	for( var i = active_cards.length-1 ; i > 0 ; i-- ){
+		active_cards[i] = active_cards[i-1];
+	}
+	active_cards[0] = getInactiveCard();
+	active_cards[0].angle = oldCard.angle;
+	activateCard(active_cards[0]);
+	
+	deactivateCard(oldCard);
+}
+
+function deactivateCard( card ){
+	card.active = false;
+	container_div.removeChild(document.getElementById(card.id));
+}
+
+function activateCard( card ){
+	card.active = true;
+	
+	var card_element = document.createElement("div");
+	card_element.id = card.id;
+	card_element.classList.add("card");
+	card_element.style.width  = "288px"
+	card_element.style.height = "178px"
+	card_element.style.backgroundImage = " url(" + card.url + ")";
+	
+	placeCard(card_element, card.angle);
+	
+	container_div.appendChild(card_element);
+}
+
+function computeX(angle){
+	return width/2 + Math.cos(angle)*400 - 144;
+}
+
+function computeY(angle){
+	return height/2 + Math.sin(angle)*50 - 89;
+}
+
+function getZIndex(height){
+	return Math.round(height.substr(0,height.length-2));
+}
+
+function assignAngles(){
+	for( var i = 0.0 ; i < active_cards.length ; i++ ){
+		active_cards[i].angle = (i/active_cards.length)*2*Math.PI;
+	}
+}
+
+function placeCards(){
+	var card;
+	for( var i = 0 ; i < active_cards.length ; i++ ){
+		card = document.getElementById(active_cards[i].id);
+		placeCard(card, active_cards[i].angle);
+	}
+}
+
+function placeCard( card_element, angle ){
+	card_element.style.left 	= computeX(angle) + "px";
+	card_element.style.top  	= computeY(angle) + "px";
+	card_element.style.zIndex	= getZIndex(card_element.style.top);
+}
+
+function move(){
+	angleCounter += turnRate;
+	if( angleCounter >= 3.142 ){
+		angleCounter = 0;
+		shiftActiveCards();
+	}
+		
+	for( var i = 0 ; i < active_cards.length ; i++ ){
+		active_cards[i].angle += turnRate;
+		if( active_cards[i].angle >= 360 )
+			active_cards[i].angle -= 360;
+	}
+	placeCards();
+}
+</script>
+</head>
+<div class="preload"></div>
+<body onLoad="init();">
+<div class="container"></div>
+</body>
+</html>
