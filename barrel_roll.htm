@@ -1,0 +1,43 @@
+<html>
+<head>
+<style>
+
+</style>
+<script>
+
+var rotations = [0,0,0,0];
+var rotation_rates = [0,0,0,0];
+
+var rotation_factor = 0.5;
+
+function init(){
+    for( var i = 0 ; i < rotation_rates.length ; i++ ){
+        rotation_rates[i] = (Math.random()*rotation_factor)-rotation_factor/2;
+    }
+    
+    setRotationInterval("falco",0);
+    setRotationInterval("peppy",1);
+    setRotationInterval("slippy",2);
+    setRotationInterval("fox",3);
+}
+
+function setRotationInterval( id, num ){
+    var temp = document.getElementById(id);
+    setInterval( function(){
+        rotations[num] += rotation_rates[num];
+        if( rotations[num] >= 360 )
+            rotations[num] -= 360;
+        temp.style.transform = "rotate(" + rotations[num] + "deg)";
+    }, 3 );
+}
+
+</script>
+</head>
+<body onLoad="init();">
+<center>
+<img id="falco" src="http://img3.wikia.nocookie.net/__cb20120802002849/ssb/images/1/1b/Falco_Lombardi(Clear).png">
+<img id="peppy" src="http://starfoxwiki.info/w/images/thumb/c/c3/Peppy643D1.png/250px-Peppy643D1.png">
+<img id="slippy" src="http://starfoxwiki.info/w/images/thumb/a/a6/Slippy643D1.png/300px-Slippy643D1.png">
+<img id="fox" src="http://upload.wikimedia.org/wikipedia/en/4/45/Fox_McCloud,_Star_Fox_Command.png">
+</body>
+</html>
