@@ -1,0 +1,202 @@
+<html>
+<head>
+<style>
+.key {
+	border: 1px solid black;
+	width: 30px;
+	height: 30px;
+	margin: 3px;
+	padding: 10px;
+	float: left;
+	text-shadow: 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1),
+				 0px  0px 15px rgba(255,255,255,1);
+}
+
+.container {
+	margin-top: 14%;
+	width: 890px;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+<script src="keypress.js"></script>
+<script>
+keys = [
+		['1',0],
+		['2',0],
+		['3',0],
+		['4',0],
+		['5',0],
+		['6',0],
+		['7',0],
+		['8',0],
+		['9',0],
+		['0',0],
+		['-',0],
+		['=',0],
+		['backspace',0],
+		['tab',0],
+		['q',0],
+		['w',0],
+		['e',0],
+		['r',0],
+		['t',0],
+		['y',0],
+		['u',0],
+		['i',0],
+		['o',0],
+		['p',0],
+		['[',0],
+		[']',0],
+		['\\',0],
+		['a',0],
+		['s',0],
+		['d',0],
+		['f',0],
+		['g',0],
+		['h',0],
+		['j',0],
+		['k',0],
+		['l',0],
+		[';',0],
+		['\'',0],
+		['enter',0],
+		['shift',0],
+		['z',0],
+		['x',0],
+		['c',0],
+		['v',0],
+		['b',0],
+		['n',0],
+		['m',0],
+		[',',0],
+		['.',0],
+		['/',0],
+		['ctrl',0],
+		['alt',0],
+		['space',0]
+	   ];
+
+var total_count = 0;
+
+function init(){
+	init_listener();
+	add_keys();
+}
+
+function add_keys(){
+	var s = "";
+	
+	s += '<div class="container">';
+	
+	for( var i = 0 ; i < keys.length ; i++ ){
+		if( keys[i][0] == '1' )
+			s += '<div class="key" style="width: 30px;"></div>\n';
+		else if( keys[i][0] == 'a' )
+			s += '<div class="key" style="width: 65px;"></div>\n';
+		else if( keys[i][0] == 'alt' )
+			s += '<div class="key" style="width: 35px;"></div>\n';
+	
+		if( keys[i][0] == 'space' ) {
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 400px;">' + keys[i][0].toUpperCase() + '</div>\n';
+			s += '<div class="key" style="width: 31px;"></div>\n';
+			s += '<div class="key" style="width: 29px;"></div>\n';
+			s += '<div class="key" style="width: 29px;"></div>\n';
+			s += '<div class="key" style="width: 32px;"></div>\n';
+		}
+		else if( keys[i][0] == 'tab' || keys[i][0] == 'ctrl' || keys[i][0] == 'alt' )
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 50px;">' + keys[i][0].toUpperCase() + '</div>\n';
+		else if( keys[i][0] == '\\' )
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 80px;">' + keys[i][0].toUpperCase() + '</div>\n';
+		else if( keys[i][0] == 'shift' )
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 100px;">' + keys[i][0].toUpperCase() + '</div>\n';
+		else if( keys[i][0] == 'enter' )
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 123px;">' + keys[i][0].toUpperCase() + '</div>\n';
+		else if( keys[i][0] == 'backspace' )
+			s += '<div id="' + keys[i][0] + '" class="key" style="width: 100px;">' + keys[i][0].toUpperCase() + '</div>\n';
+		else
+			s += '<div id="' + keys[i][0] + '" class="key">' + keys[i][0].toUpperCase() + '</div>\n';
+		if( keys[i][0] == 'backspace'  ||
+			keys[i][0] == '\\' ||
+			keys[i][0] == 'enter' ||
+			keys[i][0] == '/' ){
+				if( keys[i][0] == '/' )
+					s += '<div class="key" style="width: 145px;"></div>\n';
+			 s += '<br><br><br style="line-height: 1.4">';
+		}
+	}
+	
+	s += '</div>';
+	
+	document.body.innerHTML = s;
+}
+
+function init_listener(){
+	var listener = new window.keypress.Listener();
+	for( var i = 0 ; i < keys.length ; i++ ){
+			listener.counting_combo(keys[i][0],
+				(function(x){
+					return function(e, count) {
+						keys[x][1]++;
+						//console.log(keys[x][1]);
+						update();
+					}
+				})(i)
+			);
+	}
+}
+
+function update(){
+	total_count++;
+	for( var i = 0 ; i < keys.length ; i++ ){
+		if( keys[i][1] == 0 )
+			continue;
+		//console.log(keys[i][0] + ": " + keys[i][1] + " (" + Math.round(keys[i][1]/total_count*100.0) + " %)");
+		//console.log("---------------------------------------------");
+		setColor( keys[i][0], getColor(keys[i][1], keys[i][1]/total_count) );
+	}
+}
+
+function getColor( count, percentage ){
+	var lowest = 1;
+	var highest = 0;
+	var p;
+	for( var i = 0 ; i < keys.length ; i++ ){
+		/*
+		if( keys[i][1] == 0 )
+			continue;
+		p = keys[i][1]/total_count;
+		*/
+		
+		p = keys[i][1];
+		if( p < lowest )
+			lowest = p;
+		else if( p > highest )
+			highest = p;
+	}
+	
+	highest -= lowest;
+	
+	var REAL_percentage = (count-lowest)/highest;
+
+	var color = Math.round(REAL_percentage * 224)+32;
+	//var color = Math.round(percentage * 224)+32;
+	return "rgb(" + color + ", " + color*0 + ", " + color*0 + ")";
+}
+
+function setColor( key, color ){
+	document.getElementById(key).style.backgroundColor = color;
+}
+</script>
+</head>
+<body onLoad="init();">
+</body>
+</html>
