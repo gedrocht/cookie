@@ -1,0 +1,101 @@
+<html>
+<head>
+<style>
+div {
+	margin:  0px;
+	padding: 0px;
+	
+	height: 100px;
+	float: left;
+}
+
+br {
+	line-height: 100px;
+}
+</style>
+<script>
+var letters = ['a','b','c','d','e','f','g','h','u','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
+function init(){
+	display('Hello')
+}
+
+function pad( str, count, c ){
+	for( var i = str.length ; i < count ; i++ ){
+		str = c + str;
+	}
+	return str;
+}
+
+function decToBin( dec, chars ){
+	return pad(dec.toString(2),5,'0');
+}
+
+function display( str ){
+	for( var i = 0 ; i < str.length ; i++ ){
+		displayLetter(str[i]);
+	}
+}
+
+function displayLetter( letter ){
+	addNewLetter();
+
+	var number = letterToNumber(letter.toLowerCase());
+	
+	displayCharacter(decToBin(number,5));
+	
+	clearIDs();
+}
+
+function addNewLetter(){
+	document.body.innerHTML += 
+		'<div style="height:300px; border: 0px solid black;">'+
+		'<div id="1"   style="width:200px;"></div>'+
+		'<div id="2-1" style="width:100px;"></div><br>'+
+		'<div id="3"   style="width:100px;"></div>'+
+		'<div id="4"   style="width:100px;"></div>'+
+		'<div id="2-2" style="width:100px;"></div><br>'+
+		'<div id="5"   style="width:300px;"></div>'+
+		'</div>';
+}
+
+function letterToNumber( letter ){
+	for( var i = 0 ; i < letters.length ; i++ ){
+		if( letter == letters[i] )
+			return i+1;
+	}
+}
+
+function displayCharacter( bin ){
+	for( var i = 0 ; i < bin.length ; i++ ){
+		set(i+1, bin[i]=="1");
+	}
+}
+
+function set( num, value ){
+	var color = "white";
+	if( value )
+		color = "black";
+
+	if( num == 2 ){
+		document.getElementById("2-1").style.backgroundColor = color;
+		document.getElementById("2-2").style.backgroundColor = color;
+	} else {
+		document.getElementById(num.toString()).style.backgroundColor = color;
+	}
+}
+
+function clearIDs(){
+	document.getElementById("1").id = "";
+	document.getElementById("2-1").id = "";
+	document.getElementById("2-2").id = "";
+	document.getElementById("3").id = "";
+	document.getElementById("4").id = "";
+	document.getElementById("5").id = "";
+}
+</script>
+</head>
+<body onLoad="init()">
+
+</body>
+</html>
