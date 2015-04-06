@@ -1,0 +1,56 @@
+<html>
+<head>
+<script>
+function generate(){
+    var start = hexColor_to_rgb(document.getElementById("start").value);
+    var end   = hexColor_to_rgb(document.getElementById("end").value);
+    var name  = document.getElementById("name").value;
+    
+    var r_interval = (end[0]-start[0])/name.length;
+    var g_interval = (end[1]-start[1])/name.length;
+    var b_interval = (end[2]-start[2])/name.length;
+    
+    var end_result = "";
+    var html_result = "";
+    
+    for( var i = 0 ; i < name.length ; i++ ){
+        if(name[i]==" "){
+            end_result += " ";
+            html_result += " ";
+            continue;
+        }
+        var result =  [dec_to_hex(Math.round(start[0]+i*r_interval)), 
+                       dec_to_hex(Math.round(start[1]+i*g_interval)),
+                       dec_to_hex(Math.round(start[2]+i*b_interval))];
+        end_result += '<c val="' + result[0].toUpperCase() + result[1].toUpperCase() + result[2].toUpperCase() + '">' + name[i] + '</c>';
+        html_result += '<font color="#' + result[0] + result[1] + result[2] + '">' + name[i] + '</font>';
+    }
+    
+    console.log(end_result);
+    return html_result;
+}
+
+function hexColor_to_rgb(color){
+    var r = hex_to_dec(color.substring(0,2));
+    var g = hex_to_dec(color.substring(2,4));
+    var b = hex_to_dec(color.substring(4,6));
+    return [r,g,b]
+}
+
+function hex_to_dec(hex){
+    return parseInt(hex, 16);
+}
+
+function dec_to_hex(dec){
+    var result = dec.toString(16);
+    if( result.length == 1 )
+        result += "0";
+    return result;
+}
+</script>
+</head>
+<body>
+Starting Color: <input type="textbox" width="300px" id="start" value="0000FF"> Ending Color: <input type="textbox" width="300px" id="end" value="0000AA">Name: <input type="textbox" width="300px" id="name" value="Who farted?"><br />
+<button onclick="body.innerHTML += generate()">Generate!</button>
+</body>
+</html>
