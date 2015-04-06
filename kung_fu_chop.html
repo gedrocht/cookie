@@ -1,0 +1,22 @@
+<html>
+<head>
+<script>
+function init(){
+	var img = document.getElementsByTagName("img")[0];
+	var rotation = 0;
+	setInterval(function(){
+		rotation += 3;
+		img.style.webkitTransform = "rotate(" + rotation + "deg)";
+		img.style.transform = "rotate(" + rotation + "deg)";
+		if( rotation >= 360 )
+			rotation -= 360;
+	},10)
+}
+</script>
+</head>
+<body onLoad="init()">
+<center><br/><br/><br/>
+<img src="http://upload.wikimedia.org/wikipedia/commons/5/58/Shuto.png">
+</center>
+</body>
+</html>
