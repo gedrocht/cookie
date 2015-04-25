@@ -1,0 +1,236 @@
+<html>
+<head>
+<style>
+.game {
+    width: 460px;
+    height: 215px;
+    float: left;
+    margin: 3px;
+    position: relative;
+    
+    border: 1px solid white;
+    
+    background-repeat: no-repeat;
+    
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -o-user-select: none; 
+}
+.game-genres {
+    width: 350px
+    margin: 3px;
+    margin-left: 55px;
+    margin-right: 55px;
+    margin-top: 11px;
+    color: white;
+    text-shadow: 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1);
+    font-size: 14pt;
+    font-family: Arial;
+    font-weight: bold;
+    text-align: center;
+}
+.game-percentage {
+    font-size: 18pt;
+    margin: 6px;
+    margin-left: 9px;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    color: white;
+    text-shadow: 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1);
+    font-weight: bold;
+    font-family: Arial;    
+}
+.game-time {
+    font-size: 18pt;
+    margin: 6px;
+    margin-right: 9px;
+    position:absolute;
+    top: 0px;
+    right: 0px;
+    color: white;
+    text-shadow: 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1);
+    font-weight: bold;
+    font-family: Arial;
+}
+.game-tags {
+    width: 454px;
+    padding: 3px;
+    position:absolute;
+    bottom: 0px;
+    color: white;
+    text-shadow: 0px 1px 2px rgba(0,0,0,1),
+                 1px 0px 2px rgba(0,0,0,1),
+                 0px -1px 2px rgba(0,0,0,1),
+                 -1px 0px 2px rgba(0,0,0,1);
+    font-size: 11pt;
+    font-family: Arial;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgba(255,255,255,0.5);
+}
+</style>
+<title>
+Random Games
+</title>
+<link rel="icon" type="image/png" href="../steam_favicon.png">
+<script src="../gameDB_shaymus22.js"></script>
+<script src="../steam_time_js.js"></script>
+<script>
+var NUM_GAMES = 3;
+var appids = [];
+var last_appids = [];
+
+function init(){
+    setGames();
+}
+
+function setGames(){
+    last_appids = [];
+    
+    for( var i = 0 ; i < appids.length ; i++ ){
+        last_appids.push(appids[i]);
+    }
+    
+    appids = [];
+
+    for( var i = 0 ; i < NUM_GAMES ; i++ ){
+        setGame(i,getRandomGame());
+    }
+}
+
+function setGame( id, game_and_percentage ){
+    var game = game_and_percentage[0];
+    var percentage_value = game_and_percentage[1];
+    
+    var game_div = document.getElementById(id);
+    var genres_div = document.getElementById(id + "-genres");
+    var tags_div = document.getElementById(id + "-tags");
+    var link = document.getElementById(id + "-link");
+    var time = document.getElementById(id + "-time");
+    var percentage = document.getElementById(id + "-percentage");
+    
+    game_div.style.backgroundImage = 'url(' + getHeaderImageURL( game.appid ) + ')'
+    genres_div.innerText = formatArray(game.genres);
+    tags_div.innerText = formatArray(game.tags);
+    link.href = getRunURL(game.appid);
+    link.title = game.name;
+    percentage.innerText = percentage_value + "%";
+    
+    var t = getTime(game.appid);
+    if( t != undefined )
+        time.innerText = Math.round(10*t.hours_remaining)/10;
+    else
+        console.log("WARNING: " + game.name + " has no time");
+}
+
+function getTime( appid ){
+    for( var i = 0 ; i < data.length ; i++ ){
+        if( data[i].appid == appid )
+            return data[i].time;
+    }
+}
+
+function formatArray( arr ){
+    var str = "";
+    
+    for( var i = 0 ; i < arr.length ; i++ ){
+        str += arr[i];
+        if( i+1 == arr.length )
+            continue;
+        str += ', ';
+    }
+    
+    return str;
+}
+
+function getHeaderImageURL( appid ){
+    return "http://cdn.akamai.steamstatic.com/steam/apps/" + appid + "/header.jpg";
+}
+
+function getRunURL( appid ){
+    return "steam://run/" + appid;
+}
+
+function getRandomGame(){
+    var game;
+    var found = false;
+    while( true ) {
+        game = game_db[Math.floor(Math.random()*game_db.length)];
+        if( game[0].tags.length == 0 || game[0].genres.length == 0 )
+            continue;
+        found = false;
+        for( var i = 0 ; i < appids.length ; i++ ){
+            if( game[0].appid == appids[i] ){
+                found = true;
+                break;
+            }
+        }
+        if( found )
+            continue;
+        for( var i = 0 ; i < last_appids.length ; i++ ){
+            if( game[0].appid == last_appids[i] ){
+                found = true;
+                break;
+            }
+        }
+        if( found )
+            continue;
+        appids.push(game[0].appid);
+        break;
+    }
+    return [game[0], game[2]];
+}
+
+function getGame( appid ){
+    var game_obj;
+    var percentage;
+    
+    for( var i = 0 ; i < game_db.length ; i++ ){
+        if( game_db[i][0].appid == appid ){
+            game_obj = game_db[i][0];
+            percentage = game_db[i][2];
+            break;
+        }
+    }
+    
+    if( game_obj == undefined )
+        console.log("getGame: Could not find game for " + appid );
+    
+    return [game_obj, percentage];
+}
+
+function goBack(){
+    //function setGame( id, game_and_percentage ){
+    appids = [];
+    var oldGame;
+    for( var i = 0 ; i < last_appids.length ; i++ ){
+        oldGame = getGame(last_appids[i]);
+        setGame(i,oldGame);
+        appids.push(oldGame[0].appid);
+    }
+}
+</script>
+</head>
+<body onLoad="init();" bgcolor="#121212">
+<div style="width:1404px; margin-left: auto; margin-right: auto; margin-top:15%; text-align:center;">
+<a href="" id="0-link"><div class="game" id="0"><div class="game-percentage" id="0-percentage"></div><div class="game-time" id="0-time"></div><div class="game-genres" id="0-genres"></div><div class="game-tags" id="0-tags"></div></div></a>
+<a href="" id="1-link"><div class="game" id="1"><div class="game-percentage" id="1-percentage"></div><div class="game-time" id="1-time"></div><div class="game-genres" id="1-genres"></div><div class="game-tags" id="1-tags"></div></div></a>
+<a href="" id="2-link"><div class="game" id="2"><div class="game-percentage" id="2-percentage"></div><div class="game-time" id="2-time"></div><div class="game-genres" id="2-genres"></div><div class="game-tags" id="2-tags"></div></div></a>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<center>
+<input type="button" value="Back" style="font-size:18pt;" onclick="goBack();"></button>
+<input type="button" value="REFRESH" style="font-size:18pt;" onclick="setGames();"></button>
+</center>
+</body>
