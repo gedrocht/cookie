@@ -1,0 +1,137 @@
+<html>
+<head>
+<style>
+div.pie-container {
+	width: 600px;
+	height: 600px;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 6%;
+	padding: 0px;
+}
+div.right-half {
+	width: 600px;
+	height: 600px;
+	position: absolute;
+	transform: rotate(180deg);
+}
+div.left-half {
+	width: 600px;
+	height: 600px;
+	position:absolute;
+	z-index:1;
+}
+
+div.number-slot {
+	border: 1px solid #aaa;
+	color: #aaa;
+	font-family: Consolas;
+	font-size: 24;
+	padding-left: 2px;
+	padding-right: 0px;
+	width: 15px;
+	height: 29px;
+	float: left;
+}
+div.number-slot-container {
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+<script>
+var start_time = timeToSec( 8, 15, 0, 0 );
+var end_time = timeToSec( 17, 30, 0, 0 );
+
+var numSlots = 7;
+
+var time_percentage = 0;
+
+function init(){
+	setInterval(updatePercentage,30);
+	updatePercentage();
+	
+	addNumberSlots("time-percentage-number-slots");
+	setInterval(function(){updateNumberSlots("time-percentage-number-slots",(function(){return time_percentage;})())},30);
+}
+
+function updatePercentage(){
+	var now = new Date();
+	var cur_time = timeToSec( now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds() );
+	
+	time_percentage=((cur_time-start_time)/(end_time-start_time)*100.0);
+	setPercentage( time_percentage );
+}
+
+function timeToSec( hours, minutes, seconds, milliseconds ){
+	return milliseconds/1000.0 + seconds + 60.0*(minutes + 60.0*(hours));
+}
+
+function setPercentage( percentage ){
+	if( percentage < 0 )
+		percentage = 0;
+	else if( percentage > 100 )
+		percentage = 100;
+	
+	var temp;
+	if( percentage <= 50 ){
+		if( (temp=document.getElementsByClassName("left-half")[0]).childNodes[1].src.split("/").pop() != "block.png" ){
+			temp.childNodes[1].src = "block.png";
+			temp.style.transform = "rotate(0deg)";
+			temp.style.zIndex = 10;
+		}
+		document.getElementsByClassName("right-half")[0].style.transform = "rotate(" + (percentage/50*180.0-180) + "deg)";
+	} else {
+		if( (temp=document.getElementsByClassName("left-half")[0]).childNodes[1].src.split("/").pop() != "half_circle.png" ){
+			temp.childNodes[1].src = "half_circle.png";
+			temp.style.zIndex = -10;
+		}
+		document.getElementsByClassName("right-half")[0].style.transform = "rotate(0deg)";
+		document.getElementsByClassName("left-half")[0].style.transform = "rotate(" + (180+(percentage-50)/50*180.0) + "deg)";
+	}
+}
+
+function addNumberSlots(id){
+	var container = document.getElementById(id);
+	var html = "";
+	var style;
+	for( var i = 0 ; i < numSlots ; i++ ){
+		style = "";
+		if( i < numSlots-1 )
+			style="border-right: 0px;";
+		html += '<div class="number-slot" style="' + style + '" id="' + id + '-' + i + '">&nbsp;</div>\n';
+	}
+	container.style.width = 18*numSlots+1;
+	container.innerHTML = html;
+}
+
+function updateNumberSlots(id,slotData){
+	var container = document.getElementById(id);
+	var slot;
+	
+	var slotStr = slotData.toString();
+	while( slotStr.length < numSlots )
+		slotStr += '0';
+	
+	for( var i = 0 ; i < numSlots ; i++ ){
+		slot = document.getElementById( id + "-" + i );
+		slot.innerHTML = slotStr.charAt(i)
+	}
+	
+	//document.getElementById(id+"-"+(numSlots-1)).innerHTML = "%"
+}
+</script>
+</head>
+<body onLoad="init();">
+<div class="pie-container">
+<div class="left-half">
+<img src="block.png" style="transform: rotate(180deg)">
+</div>
+<div class="right-half">
+<img src="half_circle.png" style="margin-left:300px;">
+</div>
+</div>
+<br><br>
+<div class="number-slot-container" id="time-percentage-number-slots"></div>
+</body>
+</html>

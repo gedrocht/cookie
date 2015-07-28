@@ -1,0 +1,74 @@
+<html>
+<head>
+<style>
+div.content {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 8%;
+}
+
+div.container {
+	width: 10px;
+	height: 10px;
+	float: left;
+}
+</style>
+<script>
+var start_time = timeToSec( 8, 15, 0, 0 );
+var end_time = timeToSec( 17, 30, 0, 0 );
+
+var containersX = 60;
+var containersY = 60;
+var numContainers = containersX * containersY;
+
+
+function init(){
+	addContainers(containersX, containersY);
+	setInterval( updateContainers, 30 );
+}
+
+function addContainers( numX, numY ){
+	var content = document.getElementsByClassName("content")[0];
+	var html = "";
+	
+	var i = 0;
+	for( var y = 0 ; y < numY ; y++ ){
+		for( var x = 0 ; x < numX ; x++ ){
+			html += '<div class="container" id="' + (i++) + '"></div>';
+		}
+		//html += '<br style="line-height:2px;" />';
+	}
+	
+	content.innerHTML = html;
+	content.style.width = numX * 10 + "px";
+}
+
+function updateContainers(){ 
+	var percentage = getPercentage();
+	var container;
+	for( var i = 0 ; i < numContainers ; i++ ){
+		container = document.getElementById(i);
+		if( Number(i)/Number(numContainers) < percentage )
+			container.style.backgroundColor = "#336699";
+		else
+			container.style.backgroundColor = "#ccc";
+	}
+}
+
+function getPercentage(){
+	var now = new Date();
+	var cur_time = timeToSec( now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds() );
+	
+	return (cur_time-start_time)/(end_time-start_time);
+}
+
+function timeToSec( hours, minutes, seconds, milliseconds ){
+	return milliseconds/1000.0 + seconds + 60.0*(minutes + 60.0*(hours));
+}
+</script>
+</head>
+<body onLoad="init();">
+<div class="content">
+</div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<html>
+<head>
+<title>
+Countdowns
+</title>
+<link href='http://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<style>
+body {
+	padding-top: 1px;
+}
+.timer {
+	font-family: 'Share Tech Mono';
+	font-size: 24pt;
+	width: 400px;
+	text-align: right;
+	border: 1px solid black;
+	margin: 7px;
+	padding: 9px;
+}
+.timer-title {
+}
+.timer-numbers {
+	margin-top: 3px;
+}
+.container {
+	float: left;
+}
+</style>
+<script>
+var _timer_id = 0;
+
+var DATE_TIME_DIFFERENCE_NONE = [0,0,0,0];
+
+var timers = [
+		getNewTimer( "Computer Parts", 7, 29, 2015, 12, 30, 0 ),
+		getNewTimer( "DBZ: Resurrection 'F'", 8, 4, 2015, 0, 0, 0 ),
+		getNewTimer( "Next Paycheck", 8, 6, 2015, 8, 0, 0 ),
+		getNewTimer( "New Keyboard", 8, 27, 2015, 17, 0, 0 ),
+		getNewTimer( "First Day of Fall", 9, 23, 2015, 0, 0, 0 ),
+		getNewTimer( "Bob's Burgers S6", 9, 27, 2015, 22, 0, 0 ),
+		getNewTimer( "Halo 5: Guardians", 10, 20, 2015, 0, 0, 0 ),
+		getNewTimer( "Halloween", 10, 31, 2015, 0, 0, 0 ),
+		getNewTimer( "Sarah's Birthday", 11, 1, 2015, 0, 0, 0 ),
+		getNewTimer( "Fallout 4", 11, 10, 2015, 0, 0, 0 ),
+		getNewTimer( "Thanksgiving", 11, 26, 2015, 0, 0, 0 ),
+		getNewTimer( "Lee's Birthday", 12, 8, 2015, 0, 0, 0 ),
+		getNewTimer( "Steam Holiday Sale", 12, 17, 2015, 13, 0, 0 ),
+		getNewTimer( "Star Wars Episode VII", 12, 18, 2015, 0, 0, 0 ),
+		getNewTimer( "First Day of Winter", 12, 22, 2015, 0, 0, 0 ),
+		getNewTimer( "Christmas", 12, 25, 2015, 0, 0, 0 ),
+		getNewTimer( "New Year's", 1, 1, 2016, 0, 0, 0 ),
+		getNewTimer( "Valentine's Day", 2, 14, 2016, 0, 0, 0 ),
+		getNewTimer( "St. Patrick's Day", 3, 17, 2016, 0, 0, 0 ),
+		getNewTimer( "PAX East 2016", 4, 22, 2016, 0, 0, 0 ),
+		getNewTimer( "Game of Thrones S6", 4, 24, 2016, 21, 0, 0 ),
+		getNewTimer( "Captain America", 5, 6, 2016, 0, 0, 0 ),
+		getNewTimer( "Steam Summer Sale", 6, 11, 2016, 13, 0, 0 ),
+		getNewTimer( "Thor: Ragnarok", 5, 5, 2017, 0, 0, 0 ),
+		getNewTimer( "Guardians of the Galaxy", 6, 28, 2017, 0, 0, 0 )
+	];
+
+function init(){
+	initTimerHTML();
+	updateTimers();
+	setInterval( updateTimers, 1000 );
+}
+
+function getNewDate( month, day, year ){
+	var d = new Date();
+	d.setMonth(month-1);
+	d.setDate(day);
+	d.setFullYear(year);
+	return d;
+}
+
+function getNewTime( hours, minutes, seconds ){
+	var d = new Date();
+	d.setHours(hours);
+	d.setMinutes(minutes);
+	d.setSeconds(seconds);
+	return d;
+}
+
+function getNewDateTime( month, day, year, hours, minutes, seconds ){
+	var d = new Date();
+	d.setMonth(month-1);
+	d.setDate(day);
+	d.setFullYear(year);
+	d.setHours(hours);
+	d.setMinutes(minutes);
+	d.setSeconds(seconds);
+	return d;
+}
+
+function setDate( dateObj, month, day, year ){
+	dateObj.setMonth(month-1);
+	dateObj.setDate(day);
+	dateObj.setFullYear(year);
+	return dateObj;
+}
+
+function setTime( dateObj, hours, minutes, seconds ){
+	dateObj.setHours(hours);
+	dateObj.setMinutes(minutes);
+	dateObj.setSeconds(seconds);
+	return dateObj;
+}
+
+function getDateTimeDifference( a, b ){
+	var days = Math.abs(a.getTime() - b.getTime()) / 86400000.0;
+	var hours = (days - Math.floor(days)) * 24;
+	var minutes = (hours - Math.floor(hours)) * 60;
+	var seconds = (minutes - Math.floor(minutes)) * 60;
+	days = Math.floor(days);
+	hours = Math.floor(hours);
+	minutes = Math.floor(minutes);
+	seconds = Math.round(seconds);
+	return [days, pad(hours,2), pad(minutes,2), pad(seconds,2)];
+}
+
+function pad( val, len ){
+	var str = val.toString();
+	
+	while( str.length < len )
+		str = "0" + str;
+	
+	return str;
+}
+
+function getTimerDiv( id, title, dateTimeDifference ){
+	return '<div class="timer" id="timer-' + id + '"><div class="timer-title">' + title + '</div><div class="timer-numbers">' +
+		   getDateTimeDifferenceString( dateTimeDifference ) + '</div></div>';
+}
+
+function getDateTimeDifferenceString( dateTimeDifference ){
+	return dateTimeDifference[0] + ' days ' + dateTimeDifference[1] + ':' + dateTimeDifference[2] + ':' + dateTimeDifference[3];
+}
+
+function getTimerHTML(){
+	var html = "";
+	var timer;
+	
+	html += '<div class="container">'
+	for( var i = 0 ; i < timers.length ; i++ ){
+		timer = timers[i];
+		html += getTimerDiv( timer.id, timer.title, timer.dateTimeDifference );
+		if( i != 0 && (i+1) % 9 == 0 ){
+			html += '</div><div class="container">'
+		}
+	}
+	html += '</div>'
+	
+	return html;
+}
+
+function initTimerHTML(){
+	document.body.innerHTML = getTimerHTML();
+}
+
+function updateTimers(){
+	var now = new Date();
+	
+	var timer;
+	var div;
+	
+	for( var i = 0 ; i < timers.length ; i++ ){
+		timer = timers[i];
+		if( now.getTime() > timer.time.getTime() ){
+			timers[i].dateTimeDifference = DATE_TIME_DIFFERENCE_NONE;
+		} else {
+			timers[i].dateTimeDifference = getDateTimeDifference( now, timer.time );
+		}
+		
+		div = document.getElementById("timer-"+timer.id).getElementsByClassName("timer-numbers")[0];
+		div.innerHTML = getDateTimeDifferenceString( timer.dateTimeDifference );
+	}
+}
+
+function getNewTimer( title, month, day, year, hours, minutes, seconds ){
+	var timer = new Object();
+	
+	timer.title = title;
+	timer.id = _timer_id++;
+	timer.time = getNewDateTime( month, day, year, hours, minutes, seconds );
+	timer.dateTimeDifference = getDateTimeDifference( new Date(), timer.time );
+	
+	return timer;
+}
+</script>
+</head>
+<body onLoad="init();">
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

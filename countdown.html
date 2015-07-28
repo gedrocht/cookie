@@ -1,0 +1,74 @@
+<html>
+<head>
+<script>
+var SECONDS_IN_YEAR = 31536000;
+var MINUTES_IN_YEAR = 525600;
+var HOURS_IN_YEAR   = 8760;
+
+function init(){
+}
+
+function defaultParam( originalValue, defaultValue ){
+	if( typeof originalValue == "undefined" )
+		return defaultValue;
+	return originalValue;
+}
+
+function newDateTime( month, day, year, hour, minute, second ){
+	month = defaultParam(month,1);
+	day	= defaultParam(day,1);
+	year = defaultParam(year,1970);
+	hour = defaultParam(hour,0);
+	minute = defaultParam(minute,0);
+	second = defaultParam(second,0);
+	
+	return {
+		month:month,
+		day:day,
+		year:year,
+		hour:hour,
+		minute:minute,
+		second:second
+	};
+}
+
+function getMonthDays( month ){
+	var days = 0;
+	
+	for( var i = 0 ; i < month ; i++ ){
+		switch(month){
+			case 9:
+			case 4:
+			case 6:
+			case 11:
+				days += 30;
+				break;
+			case 2:
+				days += 28;
+				break;
+			default:
+				days += 31;
+				 break;
+		}
+	}
+	
+	return days;
+}
+
+function date_to_secs( date ){
+	return date.second +
+		   60* (date.minute +
+		   60* (date.hour +
+		   24* ((date.day-1) +
+		   getMonthDays(date.month-1) +
+		   365* (date.year))));
+}
+
+function secs_to_date( secs ){
+	var years = secs/SECONDS_IN_YEAR;
+}
+</script>
+</head>
+<body onLoad="init();">
+</body>
+</html>
