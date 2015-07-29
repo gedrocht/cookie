@@ -24,10 +24,16 @@
     margin-right: 55px;
     margin-top: 11px;
     color: white;
+    
     text-shadow: 0px 1px 3px rgba(0,0,0,1),
                  1px 0px 3px rgba(0,0,0,1),
                  0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1),
+                 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
                  -1px 0px 3px rgba(0,0,0,1);
+    
     font-size: 14pt;
     font-family: Arial;
     font-weight: bold;
@@ -41,10 +47,16 @@
     top: 0px;
     left: 0px;
     color: white;
+    
     text-shadow: 0px 1px 3px rgba(0,0,0,1),
                  1px 0px 3px rgba(0,0,0,1),
                  0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1),
+                 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
                  -1px 0px 3px rgba(0,0,0,1);
+    
     font-weight: bold;
     font-family: Arial;    
 }
@@ -56,10 +68,58 @@
     top: 0px;
     right: 0px;
     color: white;
+    
     text-shadow: 0px 1px 3px rgba(0,0,0,1),
                  1px 0px 3px rgba(0,0,0,1),
                  0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1),
+                 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
                  -1px 0px 3px rgba(0,0,0,1);
+    
+    font-weight: bold;
+    font-family: Arial;
+}
+.game-rating {
+    font-size: 18pt;
+    margin: 6px;
+    margin-right: 9px;
+    position:absolute;
+    top: 97px;
+    right: 0px;
+    color: white;
+    
+    text-shadow: 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1),
+                 0px 1px 3px rgba(0,0,0,1),
+                 1px 0px 3px rgba(0,0,0,1),
+                 0px -1px 3px rgba(0,0,0,1),
+                 -1px 0px 3px rgba(0,0,0,1);
+    
+    font-weight: bold;
+    font-family: Arial;
+}
+.game-releaseDate {
+    font-size: 18pt;
+    margin: 6px;
+    margin-right: 9px;
+    position:absolute;
+    top: 97px;
+    left: 0px;
+    color: white;
+    
+    text-shadow: 0px 1px 2px rgba(0,0,0,1),
+                 1px 0px 2px rgba(0,0,0,1),
+                 0px -1px 2px rgba(0,0,0,1),
+                 -1px 0px 2px rgba(0,0,0,1),
+                 0px 1px 2px rgba(0,0,0,1),
+                 1px 0px 2px rgba(0,0,0,1),
+                 0px -1px 2px rgba(0,0,0,1),
+                 -1px 0px 2px rgba(0,0,0,1);
+    
     font-weight: bold;
     font-family: Arial;
 }
@@ -69,10 +129,16 @@
     position:absolute;
     bottom: 0px;
     color: white;
+    
     text-shadow: 0px 1px 2px rgba(0,0,0,1),
                  1px 0px 2px rgba(0,0,0,1),
                  0px -1px 2px rgba(0,0,0,1),
+                 -1px 0px 2px rgba(0,0,0,1),
+                 0px 1px 2px rgba(0,0,0,1),
+                 1px 0px 2px rgba(0,0,0,1),
+                 0px -1px 2px rgba(0,0,0,1),
                  -1px 0px 2px rgba(0,0,0,1);
+    
     font-size: 11pt;
     font-family: Arial;
     font-weight: bold;
@@ -85,14 +151,49 @@ Random Games
 </title>
 <link rel="icon" type="image/png" href="../steam_favicon.png">
 <script src="../gameDB_shaymus22.js"></script>
+<script src="../ratingDB_shaymus22.js"></script>
+<script src="../releaseDateDB_shaymus22.js"></script>
 <script src="../steam_time_js.js"></script>
 <script>
-var NUM_GAMES = 3;
+var NO_RESTRICTIONS = true;
+var NUM_GAMES = 1;
 var appids = [];
 var last_appids = [];
+var textShadowColor = 0;
+var textShadowChangeRate = 500;
+
+var used_appids = [];
 
 function init(){
+    preloadImages();
+    addGameFrames();
     setGames();
+}
+
+function preloadImages(){
+    var s = "";
+    for( var i = 0 ; i < game_db.length ; i++ ){
+        s += '<img src="' + getHeaderImageURL( game_db[i][0].appid ) + '"></img>';
+    }
+    document.getElementById("preload").innerHTML = s;
+}
+
+function addGameFrames(){
+    var s = "";
+    for( var i = 0 ; i < NUM_GAMES ; i++ ){
+        s += '<a href="" id="'+i+'-link">' +
+                '<div class="game" id="'+i+'">' +
+                    '<div class="game-releaseDate" id="'+i+'-releaseDate"></div>' +
+                    '<div class="game-rating" id="'+i+'-rating"></div>' +
+                    '<div class="game-percentage" id="'+i+'-percentage"></div>' +
+                    '<div class="game-time" id="'+i+'-time"></div>' +
+                    '<div class="game-genres" id="'+i+'-genres"></div>' +
+                    '<div class="game-tags" id="'+i+'-tags"></div>' +
+                '</div>' +
+             '</a>';
+    }
+    document.getElementById("main").innerHTML = s;
+    document.getElementById("main").style.width = 468*NUM_GAMES + "px";
 }
 
 function setGames(){
@@ -109,9 +210,14 @@ function setGames(){
     }
 }
 
-function setGame( id, game_and_percentage ){
-    var game = game_and_percentage[0];
-    var percentage_value = game_and_percentage[1];
+function setGame( id, game_and_percentage_and_rating ){
+    var game = game_and_percentage_and_rating[0];
+    var percentage_value = game_and_percentage_and_rating[1];
+    var release_date_value = game_and_percentage_and_rating[3];
+    
+    release_date_value -= 2010;
+    if( release_date_value >= 0 )
+        release_date_value = "+" + release_date_value;
     
     var game_div = document.getElementById(id);
     var genres_div = document.getElementById(id + "-genres");
@@ -119,13 +225,22 @@ function setGame( id, game_and_percentage ){
     var link = document.getElementById(id + "-link");
     var time = document.getElementById(id + "-time");
     var percentage = document.getElementById(id + "-percentage");
+    var rating = document.getElementById(id + "-rating");
+    var releaseDate = document.getElementById(id + "-releaseDate");
     
     game_div.style.backgroundImage = 'url(' + getHeaderImageURL( game.appid ) + ')'
-    genres_div.innerText = formatArray(game.genres);
-    tags_div.innerText = formatArray(game.tags);
+    genres_div.innerText = formatArray(game.genres,5);
+    tags_div.innerText = formatArray(game.tags,5);
     link.href = getRunURL(game.appid);
     link.title = game.name;
     percentage.innerText = percentage_value + "%";
+    var rating_value = game_and_percentage_and_rating[2];
+    if( rating_value != "" ){
+        if( rating_value[rating_value.length-1] != '%' )
+            rating_value += '%';
+    }
+    rating.innerText = rating_value;
+    releaseDate.innerText = release_date_value;
     
     var t = getTime(game.appid);
     if( t != undefined )
@@ -141,12 +256,12 @@ function getTime( appid ){
     }
 }
 
-function formatArray( arr ){
+function formatArray( arr, limit ){
     var str = "";
     
-    for( var i = 0 ; i < arr.length ; i++ ){
+    for( var i = 0 ; i < arr.length && i < limit ; i++ ){
         str += arr[i];
-        if( i+1 == arr.length )
+        if( i+1 == arr.length || i+1 == limit )
             continue;
         str += ', ';
     }
@@ -165,10 +280,28 @@ function getRunURL( appid ){
 function getRandomGame(){
     var game;
     var found = false;
+    var rating = 0;
+    var releaseDate = 0;
+    var time;
     while( true ) {
         game = game_db[Math.floor(Math.random()*game_db.length)];
-        if( game[0].tags.length == 0 || game[0].genres.length == 0 )
+        if( !NO_RESTRICTIONS ){
+            if( game[0].tags.length == 0 || game[0].genres.length == 0 )
+                continue;
+            time = getTime(game[0].appid);
+            if( time != undefined && time.hours_remaining < 0 )
+                continue;
+            releaseDate = getReleaseDate(game[0].appid);
+            var indie = game[0].genres.indexOf("Indie") != -1;
+            var casual = game[0].genres.indexOf("Casual") != -1;
+            var action = game[0].genres.indexOf("Action") != -1;
+            if( releaseDate >= 2011 && !casual && !(indie && !action) )
+                continue;
+        }
+        
+        if( hasBeenUsed(game[0].appid) )
             continue;
+        
         found = false;
         for( var i = 0 ; i < appids.length ; i++ ){
             if( game[0].appid == appids[i] ){
@@ -187,19 +320,44 @@ function getRandomGame(){
         if( found )
             continue;
         appids.push(game[0].appid);
+        rating = getRating(game[0].appid);
         break;
     }
-    return [game[0], game[2]];
+    return [game[0], game[2], rating, releaseDate];
+}
+
+function hasBeenUsed( appid ){
+    if( NO_RESTRICTIONS ){
+        if( used_appids.length == game_db.length ){
+            used_appids = [];
+            return false;
+        }
+        
+        var found = false;
+        for( var i = 0 ; i < used_appids.length ; i++ ){
+            if( used_appids[i] == appid ){
+                found = true;
+                break;
+            }
+        }
+        if( found ) return true;
+        used_appids.push(appid);
+        return false;
+    } else throw new Error("Functionality not yet implemented");
 }
 
 function getGame( appid ){
     var game_obj;
     var percentage;
+    var rating;
+    var releaseDate;
     
     for( var i = 0 ; i < game_db.length ; i++ ){
         if( game_db[i][0].appid == appid ){
             game_obj = game_db[i][0];
             percentage = game_db[i][2];
+            rating = getRating(appid);
+            releaseDate = getReleaseDate(appid);
             break;
         }
     }
@@ -207,7 +365,7 @@ function getGame( appid ){
     if( game_obj == undefined )
         console.log("getGame: Could not find game for " + appid );
     
-    return [game_obj, percentage];
+    return [game_obj, percentage, rating, releaseDate];
 }
 
 function goBack(){
@@ -220,13 +378,92 @@ function goBack(){
         appids.push(oldGame[0].appid);
     }
 }
+
+function getRating( appid ){
+    var rating = rating_db[appid].rating;
+    if( rating == undefined )
+        rating = "";
+    return rating;
+}
+
+function getReleaseDate( appid ){
+    var releaseDate = releaseDate_db[appid].releaseDate;
+    if( releaseDate == undefined )
+        releaseDate = "";
+    return releaseDate;
+}
+
+function getGameByName( name ){
+    var game_obj;
+    var percentage;
+    var rating;
+    var releaseDate;
+    
+    for( var i = 0 ; i < game_db.length ; i++ ){
+        if( game_db[i][0].name.toLowerCase() == name.toLowerCase() ){
+            game_obj = game_db[i][0];
+            percentage = game_db[i][2];
+            rating = getRating(game_obj.appid);
+            releaseDate = getReleaseDate(game_obj.appid);
+            break;
+        }
+    }
+    
+    if( game_obj == undefined ){
+        console.log("getGameByName Could not find game with the name of \"" + name + "\"" );
+        return undefined;
+    }
+    
+    return [game_obj, percentage, rating, releaseDate];
+}
+
+function setGameByName( id, name ){
+    var game_arr = getGameByName(name);
+    if( game_arr != undefined )
+        setGame( id, game_arr );
+}
+
+function updateTextShadow(){
+    textShadowColor += textShadowChangeRate;
+    
+    if( textShadowColor > 16777215 ){
+        textShadowColor = 16777215;
+        textShadowChangeRate *= -1;
+    } else if( textShadowColor < 0 ) {
+        textShadowColor = 0;
+        textShadowChangeRate *= -1;
+    }
+    var colorString = textShadowColor.toString(16);
+    while( colorString.length < 6 )
+        colorString = "0" + colorString;
+    
+    console.log(colorString);
+    setAllTextShadow(colorString);
+}
+
+function setAllTextShadow( color ){
+    var textShadow = getTextShadow(color);
+    
+    for( var i = 0 ; i < NUM_GAMES ; i++ ){
+        document.getElementById(i).style.textShadow = textShadow;
+    }
+}
+
+function getTextShadow( color ){
+    return "0px 1px 3px #" + color + "," + 
+           "1px 0px 3px #" + color + "," +
+           "0px -1px 3px #" + color + "," +
+           "-1px 0px 3px #" + color + "," +
+           "0px 1px 3px #" + color + "," +
+           "1px 0px 3px #" + color + "," +
+           "0px -1px 3px #" + color + "," +
+           "-1px 0px 3px #" + color;
+}
 </script>
 </head>
 <body onLoad="init();" bgcolor="#121212">
-<div style="width:1404px; margin-left: auto; margin-right: auto; margin-top:15%; text-align:center;">
-<a href="" id="0-link"><div class="game" id="0"><div class="game-percentage" id="0-percentage"></div><div class="game-time" id="0-time"></div><div class="game-genres" id="0-genres"></div><div class="game-tags" id="0-tags"></div></div></a>
-<a href="" id="1-link"><div class="game" id="1"><div class="game-percentage" id="1-percentage"></div><div class="game-time" id="1-time"></div><div class="game-genres" id="1-genres"></div><div class="game-tags" id="1-tags"></div></div></a>
-<a href="" id="2-link"><div class="game" id="2"><div class="game-percentage" id="2-percentage"></div><div class="game-time" id="2-time"></div><div class="game-genres" id="2-genres"></div><div class="game-tags" id="2-tags"></div></div></a>
+<div id="preload" style="display:none"></div>
+<div id="main" style="width:468px; margin-left: auto; margin-right: auto; margin-top:15%; text-align:center;">
 </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <center>

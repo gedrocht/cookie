@@ -1,0 +1,134 @@
+<html>
+<head>
+<style>
+body {
+    margin: 0px;
+    background-color: #ccc;
+}
+div.logo {
+    float: left;
+    width: 100%;
+    height: 120px;
+    text-align: center;
+    margin-top: 10px;
+}
+div.sidebar {
+    background-color: #aaa;
+    float: left;
+    width: 27%;
+    height: 100%;
+}
+div.sidebar-menu {
+    float:left;
+    width: 100%;
+    padding-top:30px;
+    text-align: center;
+}
+div.sidebar-menu-item {
+    margin-top: 15px;
+    font-family: Arial;
+}
+
+div.main {
+    background-color: #ccc;
+    width: 73%;
+    height: 100%;
+    float:left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+img.thumbnail {
+    width: 200px;
+    height: 200px;
+    margin: 2px;
+}
+
+#images {
+    padding: 3px;
+}
+
+#title {
+    height: 120px;
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 25px;
+    font-family: Arial;
+    font-size: 72pt;
+    
+    background-image: url(http://upload.wikimedia.org/wikipedia/commons/2/24/Male_mallard_duck_2.jpg);
+    background-size: 1500px 100px;
+    
+    text-shadow: 2px 2px #ff00ff;
+}
+</style>
+<script>
+images = [
+"http://lorempixel.com/200/200/",
+"http://lorempixel.com/201/201/",
+"http://lorempixel.com/202/202/",
+"http://lorempixel.com/203/203/",
+"http://lorempixel.com/204/204/",
+"http://lorempixel.com/205/205/",
+"http://lorempixel.com/206/206/",
+"http://lorempixel.com/207/207/",
+"http://lorempixel.com/208/208/",
+"http://lorempixel.com/209/209/",
+"http://lorempixel.com/210/210/",
+"http://lorempixel.com/211/211/",
+"http://lorempixel.com/212/212/",
+"http://lorempixel.com/213/213/",
+"http://lorempixel.com/214/214/",
+"http://lorempixel.com/215/215/",
+"http://lorempixel.com/216/216/",
+"http://lorempixel.com/217/217/",
+"http://lorempixel.com/218/218/",
+"http://lorempixel.com/219/219/",
+"http://lorempixel.com/220/220/",
+"http://lorempixel.com/221/221/",
+"http://lorempixel.com/222/222/",
+"http://lorempixel.com/223/223/",
+"http://lorempixel.com/224/224/",
+"http://lorempixel.com/225/225/",
+"http://lorempixel.com/226/226/",
+"http://lorempixel.com/227/227/",
+"http://lorempixel.com/228/228/",
+"http://lorempixel.com/229/229/"
+];
+
+function init(){
+    images.forEach(outputImage);
+    setTitle("Test Title");
+}
+
+function outputImage(img){
+    document.getElementById("images").innerHTML += '<img class="thumbnail" src="' + img + '"></img>';
+}
+
+function setTitle(title){
+    document.getElementById("title").innerHTML = title;
+    document.title = title;
+}
+
+function setLogo(logo){
+    document.getElementById("logo").innerHTML = logo;
+}
+</script>
+</head>
+<body onLoad="init();">
+<div class="sidebar">
+    <div id="logo" class="logo"><img src="http://lorempixel.com/240/120/"></img></div>
+    <div class="sidebar-menu">
+        <div class="sidebar-menu-item">Menu Option 1</div>
+        <div class="sidebar-menu-item">Menu Option 2</div>
+        <div class="sidebar-menu-item">Menu Option 3</div>
+        <div class="sidebar-menu-item">Menu Option 4</div>
+        <div class="sidebar-menu-item">Menu Option 5</div>
+    </div>
+</div>
+<div class="main">
+    <div id="title">TITLE</div>
+    <div id="images"></div>
+</div>
+</body>
+</html>

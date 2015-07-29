@@ -1,0 +1,60 @@
+<html>
+<head>
+<style>
+.fart {
+    width: 300px;
+    height: 100px;
+    background-color: magenta;
+}
+</style>
+<script>
+function init(){
+    
+}
+
+function ask(){
+    alert( "who farted? " );
+}
+
+function doTheThing(){
+    var all_divs = document.getElementsByTagName("div");
+    var x;
+    var color;
+    for( var i = 0 ; i < all_divs.length ; i++ ) {
+        x = Math.random();
+        if( x < 0.1 )
+            color = "red"
+        else if( x < 0.2 )
+            color = "orange"
+        else if( x < 0.3 )
+            color = "yellow"
+        else if( x < 0.4 )
+            color = "lime"
+        else if( x < 0.5 )
+            color = "blue"
+        else if( x < 0.6 )
+            color = "purple"
+        else if( x < 0.7 )
+            color = "brown"
+        else if( x < 0.8 )
+            color = "pink"
+        else if( x < 0.9 )
+            color = "gray"
+        else
+            color = "cyan"
+        all_divs[i].style.backgroundColor = color;
+    }
+}
+</script>
+</head>
+<body onLoad="init();">
+<font color=red size="30">lup</font>
+<div class="fart">HELLO</div>
+<button onclick="ask()">ASK THE QUESTION</button>
+<div class="fart">HOW ARE YOU</div><br>
+<button onclick="doTheThing()">DO THE THING</button>
+<div class="fart">HOW ARE YOU</div><br>
+<div class="fart">HOW ARE YOU</div><br>
+<div class="fart">HOW ARE YOU</div><br>
+<div class="fart">HOW ARE YOU</div><br>
+</body>

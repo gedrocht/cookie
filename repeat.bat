@@ -1,0 +1,1 @@
+FOR /L %%G IN (1,1,20) DO python steam_ratings_getter.py shaymus22

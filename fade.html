@@ -1,0 +1,40 @@
+<html>
+<head>
+<style>
+#box {
+    width:  30px;
+    height: 30px;
+    /*background-color: rgb( 125, 0, 255 );*/
+    background: linear-gradient(to right, red, blue); /* Standard syntax */
+}
+</style>
+<script>
+function init(){
+    w = 100;
+    x = document.getElementById("box");
+    
+    interval = setInterval( function(){
+        w += 10;
+        x.style.width = w;
+        if( w > 1000 )
+            clearInterval(interval);
+    }, 16 );
+    
+    
+    
+    angle = 0;
+    setInterval( function(){ 
+        angle += 1;
+        x.style.transform = "rotate(" + angle + "deg)"
+        if( angle > 360 )
+            angle -= 360;
+    }, 16 );
+}
+</script>
+</head>
+<body onLoad="init();">
+
+<div id="box">lup</div>
+
+</body>
+</html>
