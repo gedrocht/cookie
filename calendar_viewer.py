@@ -153,6 +153,9 @@ js = "";
 js = "schedule = ["
 debug_js = "";
 for day in schedule:
+    if not day.has_key('date_evening'):
+        continue;
+	
     debug_js = "";
     debug_js += '{date_morning:"' + day["date_morning"] + '",events_morning:[ ';
 

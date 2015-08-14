@@ -3,18 +3,18 @@ import math
 import random
 
 #############################
-morningStart =  "6:15";
-morningEnd   =  "6:45";
-eveningStart = "16:00";
-eveningEnd   = "18:30";
+morningStart =  "7:30";
+morningEnd   =  "7:30";
+eveningStart = "17:30";
+eveningEnd   = "20:00";
 #############################
-newMorningEndTime =  "8:00"
-newEveningEndTime = "21:00"
+newMorningEndTime =  "7:30"
+newEveningEndTime = "20:00"
 #############################
-morningGapLength  =  "0:25"
-morningGapTime    =  "6:50"
+morningGapLength  =  "0:50"
+morningGapTime    =  "7:30"
 eveningGapLength  =  "1:25"
-eveningGapTime    = "16:15"
+eveningGapTime    = "17:00"
 #############################
 numDaysToGenerate = 200;
 #############################
@@ -750,7 +750,7 @@ def consolodateEvents( event_a, event_b ):
     
 moviesToSchedule = []
 
-scheduleableDays = generateDays("Tuesday 10/21",numDaysToGenerate);
+scheduleableDays = generateDays("Friday 8/14",numDaysToGenerate);
 
 morningMinutes_start_str = morningStart.split(":")[1];
 morningMinutes_end_str   = morningEnd.split(":")[1];
@@ -788,20 +788,12 @@ for i in range(startDayIndex,len(scheduleableDays)):
     
 removeBlackoutDates();
     
-moviesToSchedule.append(["Watch Aliens",137]);
-moviesToSchedule.append(["Watch Saw",103]);
-moviesToSchedule.append(["Watch The Exorcist",122]);
 moviesToSchedule.append(["Watch 28 Days Later",113]);
-moviesToSchedule.append(["Watch The Blair Witch Project",81]);
-moviesToSchedule.append(["Watch Event Horizon",96]);
-moviesToSchedule.append(["Watch The Texas Chainsaw Massacre",98]);
 
 #moviesToSchedule.append(["Watch 28 Weeks Later",100]);
 moviesToSchedule.append(["Watch The Grudge",92]);
 moviesToSchedule.append(["Watch Silent Hill",125]);
 moviesToSchedule.append(["Watch The Hills Have Eyes",107]);
-moviesToSchedule.append(["Watch Pandorum",108]);
-moviesToSchedule.append(["Watch Final Destination",98]);
 moviesToSchedule.append(["Watch The Purge: Anarchy",103]);
 moviesToSchedule.append(["Watch Children of the Corn",92]);
 
@@ -831,7 +823,6 @@ moviesToSchedule.append(["Watch Rashomon",88,8.4]);
 moviesToSchedule.append(["Watch The Treasure of the Sierra Madre",126,8.4]);
 moviesToSchedule.append(["Watch The Apartment",125,8.4]);
 moviesToSchedule.append(["Watch The Third Man",93,8.4]);
-moviesToSchedule.append(["Watch Die Hard",131,8.3]);
 moviesToSchedule.append(["Watch Snatch.",102,8.3]);
 moviesToSchedule.append(["Watch L.A. Confidential",138,8.3]);
 moviesToSchedule.append(["Watch Some Like It Hot",120,8.3]);
@@ -842,11 +833,8 @@ moviesToSchedule.append(["Watch Citizenfour",114,8.1]);
 moviesToSchedule.append(["Watch Moon",97,8]);
 moviesToSchedule.append(["Watch Jurassic Park",127,8]);
 moviesToSchedule.append(["Watch Outpost 37",100,8]);
-moviesToSchedule.append(["Watch Dawn of the Planet of the Apes",130,8]);
 moviesToSchedule.append(["Watch Night of the Living Dead",96,8]);
 moviesToSchedule.append(["Watch The Caine Mutiny",124,7.9]);
-moviesToSchedule.append(["Watch Predator",107,7.9]);
-moviesToSchedule.append(["Watch Hot Fuzz",121,7.9]);
 moviesToSchedule.append(["Watch Dark City",100,7.8]);
 moviesToSchedule.append(["Watch 3:10 to Yuma",122,7.8]);
 moviesToSchedule.append(["Watch The Machinist",101,7.8]);
@@ -855,7 +843,6 @@ moviesToSchedule.append(["Watch The Birds",119,7.8]);
 moviesToSchedule.append(["Watch Enemy at the Gates",131,7.6]);
 moviesToSchedule.append(["Watch Army of Darkness",81,7.6]);
 moviesToSchedule.append(["Watch American Psycho",102,7.6]);
-moviesToSchedule.append(["Watch The Maze Runner",113,7.4]);
 moviesToSchedule.append(["Watch The Secret Life of Walter Mitty",114,7.4]);
 moviesToSchedule.append(["Watch Limitless",105,7.4]);
 moviesToSchedule.append(["Watch The Animatrix",102,7.4]);
@@ -865,7 +852,6 @@ moviesToSchedule.append(["Watch The Rock",136,7.4]);
 moviesToSchedule.append(["Watch Cube",91,7.3]);
 moviesToSchedule.append(["Watch Face/Off",138,7.3]);
 moviesToSchedule.append(["Watch Videodrome",87,7.3]);
-moviesToSchedule.append(["Watch GoldenEye",130,7.2]);
 moviesToSchedule.append(["Watch Timecrimes",92,7.2]);
 moviesToSchedule.append(["Watch The Andromeda Strain",131,7.2]);
 moviesToSchedule.append(["Watch Escape from New York",99,7.2]);
@@ -878,18 +864,12 @@ moviesToSchedule.append(["Watch The Adjustment Bureau",106,7.1]);
 moviesToSchedule.append(["Watch 9",79,7.1]);
 moviesToSchedule.append(["Watch The Spy Who Loved Me",125,7.1]);
 moviesToSchedule.append(["Watch Pitch Black",109,7.1]);
-moviesToSchedule.append(["Watch Phone Booth",81,7.1]);
 moviesToSchedule.append(["Watch Primer",77,7]);
 moviesToSchedule.append(["Watch Oblivion",124,7]);
 moviesToSchedule.append(["Watch World War Z",116,7]);
 moviesToSchedule.append(["Watch The Thirteenth Floor",100,7]);
-moviesToSchedule.append(["Watch Thunderball",130,7]);
-moviesToSchedule.append(["Watch The Island",136,6.9]);
-moviesToSchedule.append(["Watch Pandorum",108,6.8]);
-moviesToSchedule.append(["Watch The Transporter",92,6.8]);
 moviesToSchedule.append(["Watch The Thieves",135,6.8]);
 moviesToSchedule.append(["Watch Top Gun",110,6.8]);
-moviesToSchedule.append(["Watch Pandorum",108,6.8]);
 moviesToSchedule.append(["Watch NGE: The End of Evangelion",107,6.8]);
 moviesToSchedule.append(["Watch Who Am I?",108,6.8]);
 moviesToSchedule.append(["Watch In Time",109,6.7]);
@@ -898,7 +878,6 @@ moviesToSchedule.append(["Watch Silent Hill",125,6.6]);
 moviesToSchedule.append(["Watch The Fast and the Furious",106,6.6]);
 moviesToSchedule.append(["Watch John Carter",132,6.6]);
 moviesToSchedule.append(["Watch The Crazies",101,6.6]);
-moviesToSchedule.append(["Watch The Purge: Anarchy",103,6.5]);
 moviesToSchedule.append(["Watch The Rover",103,6.5]);
 moviesToSchedule.append(["Watch John Dies at the End",99,6.5]);
 moviesToSchedule.append(["Watch Europa Report",90,6.5]);
@@ -908,13 +887,11 @@ moviesToSchedule.append(["Watch Alien 3",114,6.4]);
 moviesToSchedule.append(["Watch Gardens of Stone",111,6.4]);
 moviesToSchedule.append(["Watch Predators",107,6.4]);
 moviesToSchedule.append(["Watch The Signal",97,6.2]);
-moviesToSchedule.append(["Watch Reign of Fire",101,6.2]);
 moviesToSchedule.append(["A Million Ways to Die in the West",116,6.2]);
 moviesToSchedule.append(["Watch Cargo",112,6.2]);
 moviesToSchedule.append(["Watch Moonraker",126,6.2]);
 moviesToSchedule.append(["Watch Untraceable",101,6.2]);
 moviesToSchedule.append(["Watch V/H/S/2",96,6.1]);
-moviesToSchedule.append(["Watch Push",111,6.1]);
 moviesToSchedule.append(["Watch The Amityville Horror",90,6]);
 moviesToSchedule.append(["Watch The Grudge",92,5.9]);
 moviesToSchedule.append(["Watch M",120,5.9]);
@@ -957,7 +934,7 @@ moviesToSchedule.append(["Watch The Amityville Horror",90]);
 moviesToSchedule.append(["Watch V/H/S",116]);
 
 sawSequels = ["Watch Saw", "Watch Saw II", "Watch Saw III", "Watch Saw IV", "Watch Saw V", "Watch Saw VI", "Watch Saw VII"];
-moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
+#moviesToSchedule.append( [LABEL_SEQUEL, [sawSequels[0]], sawSequels[1], 93] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:2], sawSequels[2], 108] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:3], sawSequels[3], 93] );
 moviesToSchedule.append( [LABEL_SEQUEL, sawSequels[0:4], sawSequels[4], 92] );
@@ -989,7 +966,7 @@ randomEventsPool.append([LABEL_GAP,15,True]);
 randomEventsPool.append(["Watch Breaking Bad",47,False]);
 randomEventsPool.append(["Watch The Walking Dead",44,False]);
 randomEventsPool.append(["Watch The Office",22,False]);
-randomEventsPool.append(["Watch Tim and Eric Awesome Show, Great Job!",11,False]);
+#randomEventsPool.append(["Watch Tim and Eric Awesome Show, Great Job!",11,False]);
 randomEventsPool.append(["Watch Mad Men",45,False]);
 randomEventsPool.append(["Watch Parks and Recreation",22,False]);
 randomEventsPool.append(["Watch It's Always Sunny in Philadelphia",22,False]);
@@ -1000,7 +977,7 @@ randomEventsPool.append(["Watch House of Cards",55,False]);
 randomEventsPool.append(["Watch Boardwalk Empire",55,False]);
 randomEventsPool.append(["Watch Stargate: SG-1",44,False]);
 randomEventsPool.append(["Watch Babylon 5",45,False]);
-randomEventsPool.append(["Watch South Park",22,False]);
+#randomEventsPool.append(["Watch South Park",22,False]);
 randomEventsPool.append(["Watch Stargate: Atlantis",45,False]);
 randomEventsPool.append(["Watch Star Trek",50,False]);
 randomEventsPool.append(["Watch Star Trek: The Next Generation",44,False]);
