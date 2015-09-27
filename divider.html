@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>
+Ingredients Divider
+</title>
+<script>
+var NUM_ROWS = 30;
+
+function getRow(x){
+    return '<input type="textbox" id="amount-' + x + '" style="width:40px; float:left; margin-right:3px;"></input> <input type="textbox" id="ingredient-' + x + '" style="width:300px; float:left;"></input>' +
+           '<div id="result-amount-' + x + '" style="width:40px; float:left; text-align:right; margin-right: 3px;"></div> <div id="result-ingredient-' + x + '" style="width:300px; float:left;"></div>';
+}
+
+function getRows(){
+    var s = "";
+    for( var i = 0 ; i < NUM_ROWS ; i++ ){
+        s += getRow(i) + "<br><font style='font-size:4pt;'>&nbsp;</font><br>";
+    }
+    return s;
+}
+
+function calculate(){
+    var multiplier = Number(document.getElementById("multiplier").value);
+    var result_amount;
+    
+    for( var i = 0 ; i < NUM_ROWS ; i++ ){
+        result_amount = Number(document.getElementById("amount-" + i).value) * multiplier;
+        if( result_amount == 0 )
+            continue;
+        document.getElementById("result-amount-" + i).innerHTML = result_amount;
+        document.getElementById("result-ingredient-" + i).innerHTML = document.getElementById("ingredient-" + i).value;
+    }
+}
+
+function center(s){
+    return '<div style="width:700px; height: 100%; position:aboslute; margin-left:auto; margin-right:auto;">' + s + '</div>';
+}
+
+function init(){
+    document.body.innerHTML = center(getRows() + '<br><input id="multiplier" type="textbox" style="margin-left:100px; width:40px;"></input> <input type="button" value="Calculate" onclick="calculate();"></input>');
+}
+</script>
+</head>
+<body onLoad="init();">
+</body>
+</html>
