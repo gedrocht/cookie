@@ -169,7 +169,7 @@ function getTimerDiv( id, title, dateTimeDifference, img ){
 }
 
 function getDateTimeDifferenceString( dateTimeDifference ){
-	return dateTimeDifference[0] + (dateTimeDifference[0]==1?' day ':' days ') + dateTimeDifference[1] + ':' + dateTimeDifference[2] + ':' + dateTimeDifference[3];
+	return dateTimeDifference[0] + (dateTimeDifference[0]==1?' day ':' days ') + dateTimeDifference[1] + ':' + dateTimeDifference[2] + ':' + (dateTimeDifference[3]=='60'?'00':dateTimeDifference[3]);
 }
 
 function getTimerHTML(){
