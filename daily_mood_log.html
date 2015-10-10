@@ -1,0 +1,321 @@
+<html>
+<head>
+<title>
+Daily Mood Log
+</title>
+<style>
+table {
+    width: 80%;
+    margin-left: 10%;
+    border-collapse: collapse;
+}
+</style>
+<script>
+function checkbox_clicked(checkbox){
+}
+</script>
+</head>
+<body style="font-family:Arial; margin-top:22px;">
+<center>
+    <h1>Daily Mood Log</h1>
+</center>
+
+<table border="1">
+    <tr style="text-align:center; font-weight:bold; line-height: 2;">
+        <td width="40%">
+            Emotions
+        </td>
+        <td width="5%">
+            % Before
+        </td>
+        <td width="5%">
+            % &nbsp;After&nbsp;
+        </td>
+        <td width="40%">
+            Emotions
+        </td>
+        <td width="5%">
+            % Before
+        </td>
+        <td width="5%">
+            % &nbsp;After&nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" id="sad" onchange="checkbox_clicked(this);">Sad</input><br>
+            <input type="checkbox" id="blue" onchange="checkbox_clicked(this);">Blue</input><br> 
+            <input type="checkbox" id="depressed" onchange="checkbox_clicked(this);">Depressed</input><br>
+            <input type="checkbox" id="down" onchange="checkbox_clicked(this);">Down</input><br>
+            <input type="checkbox" id="unhappy" onchange="checkbox_clicked(this);">Unhappy</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="checkbox" id="embarrassed" onchange="checkbox_clicked(this);">Embarrassed</input><br>
+            <input type="checkbox" id="foolish" onchange="checkbox_clicked(this);">Foolish</input><br>
+            <input type="checkbox" id="humiliated" onchange="checkbox_clicked(this);">Humiliated</input><br>
+            <input type="checkbox" id="self-conscious" onchange="checkbox_clicked(this);">Self-conscious</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_1" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_1" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" id="anxious" onchange="checkbox_clicked(this);">Anxious</input><br>
+            <input type="checkbox" id="worried" onchange="checkbox_clicked(this);">Worried</input><br> 
+            <input type="checkbox" id="panicky" onchange="checkbox_clicked(this);">Panicky</input><br>
+            <input type="checkbox" id="nervous" onchange="checkbox_clicked(this);">Nervous</input><br>
+            <input type="checkbox" id="frightened" onchange="checkbox_clicked(this);">Frightened</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="checkbox" id="hopeless" onchange="checkbox_clicked(this);">Hopeless</input><br>
+            <input type="checkbox" id="discouraged" onchange="checkbox_clicked(this);">Discouraged</input><br>
+            <input type="checkbox" id="pessimistic" onchange="checkbox_clicked(this);">Pessimistic</input><br>
+            <input type="checkbox" id="despairing" onchange="checkbox_clicked(this);">Despairing</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_3" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_3" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" id="guilty" onchange="checkbox_clicked(this);">Guilty</input><br>
+            <input type="checkbox" id="remorseful" onchange="checkbox_clicked(this);">Remorseful</input><br> 
+            <input type="checkbox" id="bad" onchange="checkbox_clicked(this);">Bad</input><br>
+            <input type="checkbox" id="ashamed" onchange="checkbox_clicked(this);">Ashamed</input><br>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_4" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_4" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="checkbox" id="frustrated" onchange="checkbox_clicked(this);">Frustrated</input><br>
+            <input type="checkbox" id="stuck" onchange="checkbox_clicked(this);">Stuck</input><br>
+            <input type="checkbox" id="thwarted" onchange="checkbox_clicked(this);">Thwarted</input><br>
+            <input type="checkbox" id="defeated" onchange="checkbox_clicked(this);">Defeated</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_5" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_5" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" id="inferior" onchange="checkbox_clicked(this);">Inferior</input><br>
+            <input type="checkbox" id="worthless" onchange="checkbox_clicked(this);">Worthless</input><br> 
+            <input type="checkbox" id="inadequate" onchange="checkbox_clicked(this);">Inadequate</input><br>
+            <input type="checkbox" id="defective" onchange="checkbox_clicked(this);">Defective</input><br>
+            <input type="checkbox" id="incompetent" onchange="checkbox_clicked(this);">Incompetent</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_6" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_6" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="checkbox" id="angry" onchange="checkbox_clicked(this);">Angry</input><br>
+            <input type="checkbox" id="mad" onchange="checkbox_clicked(this);">Mad</input><br>
+            <input type="checkbox" id="resentful" onchange="checkbox_clicked(this);">Resentful</input><br>
+            <input type="checkbox" id="annoyed" onchange="checkbox_clicked(this);">Annoyed</input><br>
+            <input type="checkbox" id="irritated" onchange="checkbox_clicked(this);">Irritated</input><br>
+            <input type="checkbox" id="upset" onchange="checkbox_clicked(this);">Upset</input><br>
+            <input type="checkbox" id="furious" onchange="checkbox_clicked(this);">Furious</input><br>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_7" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_7" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" id="lonely" onchange="checkbox_clicked(this);">Lonely</input><br>
+            <input type="checkbox" id="unloved" onchange="checkbox_clicked(this);">Unloved</input><br> 
+            <input type="checkbox" id="unwanted" onchange="checkbox_clicked(this);">Unwanted</input><br>
+            <input type="checkbox" id="rejected" onchange="checkbox_clicked(this);">Rejected</input><br>
+            <input type="checkbox" id="alone" onchange="checkbox_clicked(this);">Alone</input><br>
+            <input type="checkbox" id="abandoned" onchange="checkbox_clicked(this);">Abandoned</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_8" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_8" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="checkbox" id="other" onchange="checkbox_clicked(this);">Other (describe)</input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_9" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_9" style="width:100%"></input>
+        </td>
+    </tr>
+</table>
+
+<br>
+<table border="1">
+    <tr style="text-align:center; font-weight:bold; line-height: 2;">
+        <td style="width:42%;">
+            Negative Thoughts
+        </td>
+        <td style="width:5%;">
+            % Before
+        </td>
+        <td style="width:5%;">
+            % &nbsp;After&nbsp;
+        </td>
+        <td style="width:20%;">
+            Distortions<br><font size="-3">(FROM CHART, BELOW)</font>
+        </td>
+        <td style="width:42%">
+            Positive Thoughts
+        </td>
+        <td style="width:5%;">
+            % Belief
+        </td>
+    </tr>
+    <tr>
+        <td>
+            1. <input type="textbox" id="negative_thoughts_0" style="width:90%;"></input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_table2_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_table2_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="distortions_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="positive_thoughts_0" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="belief_0" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            2. <input type="textbox" id="negative_thoughts_1" style="width:90%;"></input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_table2_1" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_table2_1" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="distortions_1" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="positive_thoughts_1" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="belief_1" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            3. <input type="textbox" id="negative_thoughts_2" style="width:90%;"></input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_table2_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_table2_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="distortions_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="positive_thoughts_2" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="belief_2" style="width:100%"></input>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            4. <input type="textbox" id="negative_thoughts_3" style="width:90%;"></input>
+        </td>
+        <td>
+            <input type="textbox" id="before_percent_table2_3" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="after_percent_table2_3" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="distortions_3" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="positive_thoughts_3" style="width:100%"></input>
+        </td>
+        <td>
+            <input type="textbox" id="belief_3" style="width:100%"></input>
+        </td>
+    </tr>
+</table>
+
+
+<center>
+    <h1>Checklist of Cognitive Distortions</h1>
+</center>
+<table id="cognitive-distortions-table" border="1">
+    <tr>
+        <td width="50%"><b>1. All of Nothing Thinking.</b> You view things in absolute, black-and-white categories.</td>
+        <td width="50%"><b>6. Magnification and Minimization.</b> You blow things out of proportion or shrink them.</td>
+    </tr>
+    <tr>
+        <td><b>2. Overgeneralization.</b> You view a negative event as a never-ending pattern of defeat: "This <b>always</b> happens!"</td>
+        <td><b>7. Emotional Reasoning.</b> You reason from your feelings: "I feel like an idiot, so I must really be one."</td>
+    </tr>
+    <tr>
+        <td><b>3. Mental Filter.</b> You dwell on the negatives and ignore the positives</td>
+        <td><b>8. Should Statements.</b> You use shoulds, shouldn'ts, musts, oughts, and have tos.</td>
+    </tr>
+    <tr>
+        <td><b>4. Discounting the positive</b> You insist that your positive qualities don't count.</td>
+        <td><b>9. Labeling.</b> Instead of saying, "I made a mistake," you say, "I'm a jerk" or "I'm a loser."</tr>
+    </tr>
+    <tr>
+        <td><b>5. Jumping to conclusions.</b> You jump to conclusions not warranted by the facts.<br />
+            <b>a. Mind-Reading.</b> You assume that people are reacting negatively to you.<br />
+            <b>b. Fortune-Telling.</b> You predict that things will turn out badly</td>
+        <td><b>10. Blame.</b> You find fault instead of solving the problem.<br />
+            <b>a. Self-Blame.</b> You blame yourself for something you weren't entirely responsible for.<br />
+            <b>b. Other-Blame.</b> You blame others and overlook ways you contributed to the problem.</td>
+    </tr>
+</table>
+
+<br>
+<center>
+<textarea onclick="this.select();" cols="80" rows="12" id="html"></textarea>
+
+</body>
+</html>
