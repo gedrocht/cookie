@@ -1,0 +1,101 @@
+<html>
+<head>
+<script>
+elements = [
+	"breakable block",
+	"question block",
+	"unbreakable block",
+	"stone block",
+	"pipe",
+	"mushroom",
+	"coin",
+	"spring",
+	"goomba",
+	"koopa",
+	"pirhana plant",
+	"wing",
+	"super leaf",
+	"lakitu",
+	"spiny",
+	"moving platform",
+	"fire flower",
+	"super star",
+	"1-up mushroom",
+	"bullet bill blaster",
+	"blooper",
+	"cheep cheep",
+	"spikes",
+	"semi-flat platform",
+	"hammer bros",
+	"buzzy beetle",
+	"thwomp",
+	"lava bubble",
+	"bowser",
+	"note block",
+	"skull platform",
+	"fire bar",
+	"rocky wrench",
+	"bob-omb",
+	"donut block",
+	"POW block",
+	"cloud block",
+	"fire jet",
+	"cannon",
+	"bridge",
+	"spike top",
+	"boo",
+	"dry bones",
+	"magikoopa",
+	"hidden block",
+	"vine",
+	"p switch",
+	"door",
+	"muncher",
+	"wiggler",
+	"yoshi",
+	"clown car",
+	"mushroom platform",
+	"arrow sign",
+	"track",
+	"conveyor belt",
+	"buzzsaw",
+	"chain chomp",
+	"ice block",
+	"one-way tile"];
+function generate(){
+	var a = Math.floor(Math.random()*elements.length);
+	var b = a;
+	while( b == a ){
+		b = Math.floor(Math.random()*elements.length);
+	}
+	document.getElementById(0).innerHTML = '<img src="' + elements[a] + '.jpg"></img>';
+	document.getElementById(1).innerHTML = '<img src="' + elements[b] + '.jpg"></img>';
+    
+    if( Math.random() < 0.2 ){
+        var c;
+        while( true ){
+            c = Math.floor(Math.random()*elements.length);
+            if( c != a && c != b )
+                break;
+        }
+        
+        document.getElementById(2).innerHTML = '&nbsp;&nbsp;&amp;&nbsp;&nbsp;<img src="' + elements[c] + '.jpg"></img>';
+    }
+}
+</script>
+</head>
+<body onLoad="generate();">
+<br><br><br><br><br><br><br>
+<center>
+<font face="Arial" size="+3">
+<span id="0"></span>
+&nbsp;&nbsp;&amp;&nbsp;&nbsp;
+<span id="1"></span>
+<span id="2"></span>
+<br>
+<br>
+<button style="font-size:20px;" onclick="generate()">Generate</button>
+</font>
+</center>
+</body>
+</html>
