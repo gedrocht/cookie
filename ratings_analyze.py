@@ -107,10 +107,10 @@ def populateOrderedLists( sortedRatings, uniqueGenres ):
     return ratedGenres;
     
 def tojs( str ):
-    return str.replace("True","true").replace("False","false");
+    return str.replace("True","true").replace("False","false").replace("100%","100Percent");
 
 def tojsvar( str ):
-    return str.replace(" ","_").replace("-","_").replace("&","")
+    return str.replace(" ","_").replace("-","_").replace("&","").replace("100%","100Percent");
     
 print "Done.";
 print "Generating ratings_"+str(id)+".js...";

@@ -5,7 +5,7 @@ from steam_time_shaymus22 import data
 remainingTime = {};
 
 def conv(s):
-    return s.replace('True','true').replace('False','false')
+    return s.replace('True','true').replace('False','false').replace("100%","100Percent")
 
 game = None
 for g in data:
@@ -25,7 +25,7 @@ sorted_keys.sort();
 output = "data=[";
 for k in sorted_keys:
     for g in remainingTime[str(k)]:
-        output += conv("new Object({appid:" + str(g["appid"]) + ",name:'" + g["name"].replace("'","") + "',time:new Object(" + str(g["time_information"]) + ")}),");
+        output += conv("new Object({appid:" + str(g["appid"]) + ",name:'" + g["name"].replace("'","").replace("100%","100Percent") + "',time:new Object(" + str(g["time_information"]) + ")}),");
         
 output = output[:-1] + "];";
 

@@ -373,7 +373,7 @@ for datum in orderedList:
 gameDB_js = open("gameDB_"+id+".js","w");
 gameDB_js.write('game_db = \n')
 
-gameDB_js.write( str(orderedList).replace("True","true").replace("False","false") );
+gameDB_js.write( str(orderedList).replace("True","true").replace("False","false").replace("100%","100Percent") );
 gameDB_js.close();
 
 

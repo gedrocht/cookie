@@ -108,7 +108,7 @@ data_file.close();
 
 gameDB_js = open("ratingDB_"+id+".js","w");
 gameDB_js.write('rating_db = \n')
-gameDB_js.write( str(data).replace("True","true").replace("False","false") );
+gameDB_js.write( str(data).replace("True","true").replace("False","false").replace("100%","100Percent") );
 gameDB_js.close();
 
 print "Done."

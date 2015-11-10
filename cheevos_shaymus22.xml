@@ -225,7 +225,186 @@
 </game>
 <game>
 	<name>
+		Back to the Future: Ep 1 - It's About Time
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		BIT.TRIP RUNNER
+	</name>
+		<achievements>
+			<achievement>
+				<name>
+					IMPETUS.COMPLETE
+				</name>
+				<description>
+					Complete Impetus
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					TENACITY.COMPLETE
+				</name>
+				<description>
+					Complete Tenacity
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					TRIUMPH.COMPLETE
+				</name>
+				<description>
+					Complete Triumph
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					FLAWLESS.IMPETUS
+				</name>
+				<description>
+					Get a PERFECT score in all Impetus Challenges
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					FLAWLESS.TENACITY
+				</name>
+				<description>
+					Get a PERFECT score in all Tenacity Challenges
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					FLAWLESS.TRIUMPH
+				</name>
+				<description>
+					Get a PERFECT score in all Triumph Challenges
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					ENDURE
+				</name>
+				<description>
+					Complete a level in one sitting
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					MISSTEP
+				</name>
+				<description>
+					Get the Game Over
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					MASTER.RUNNER
+				</name>
+				<description>
+					Get a PERFECT in all challenges
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					DEJA.VU
+				</name>
+				<description>
+					Repel 100 Beats
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					LONGEST.JOURNEY
+				</name>
+				<description>
+					Complete Odyssey
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					THROW.DOWN
+				</name>
+				<description>
+					Complete The Gauntlet
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					TIMBLETAUNT
+				</name>
+				<description>
+					Watch the hidden cutscene
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					PERFECT.PIECE
+				</name>
+				<description>
+					Get a PERFECT on one challenge
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					BURGER.MOUTH
+				</name>
+				<description>
+					BURGER MOUTH
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					RUNNING.HARD
+				</name>
+				<description>
+					Beat all challenges on Perfect difficulty
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					PLAYING.TRINE WILL BLOW YOUR MIND
+				</name>
+				<description>
+					Find 3 friends and beat the challenges they are in
+				</description>
+			</achievement>
+			<achievement>
+				<name>
+					AMNESIA.MAKES YOU AFRAID
+				</name>
+				<description>
+					Get Bonked by a monster
+				</description>
+			</achievement>
+		</achievements>
+</game>
+<game>
+	<name>
+		Dead Space
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Dungeons of Dredmor
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
 		Max Payne 3 Season Pass
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Wallace &amp; Gromit Ep 2: The Last Resort
 	</name>
 		<achievements>
 		</achievements>
@@ -327,1584 +506,21 @@
 </game>
 <game>
 	<name>
-		Dungeon Defenders
-	</name>
-		<achievements>
-			<achievement>
-				<name>
-					Daredevil
-				</name>
-				<description>
-					Earned Skin of Your Teeth Award on 6 Missions
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Smithy
-				</name>
-				<description>
-					You upgraded your first equipment. Keep it up!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					And This Is My Weapon
-				</name>
-				<description>
-					You upgraded an Equipment to its maximum potential!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Obedience Training
-				</name>
-				<description>
-					You raised a Pet to its maximum potential!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Pupil
-				</name>
-				<description>
-					Reached Hero Level 10
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Veteran
-				</name>
-				<description>
-					Reached Hero Level 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Defender of Etheria
-				</name>
-				<description>
-					Reached Hero Level 70
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					To The Limit
-				</name>
-				<description>
-					Wore a complete set of maximum level Equipments
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					From The Depths
-				</name>
-				<description>
-					Completed all Area 1 levels on any difficulty setting
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					To The Rooftops
-				</name>
-				<description>
-					Completed all Area 2 levels on any difficulty setting
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Taste of Victory
-				</name>
-				<description>
-					Completed all Area 3 levels on any difficulty setting
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Dungeon Crawler
-				</name>
-				<description>
-					Completed all levels on any difficulty setting
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Belly of the Beast
-				</name>
-				<description>
-					Completed all Area 1 levels on Hard
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Body of the Beast
-				</name>
-				<description>
-					Completed all Area 2 levels on Hard
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Crown of the Beast
-				</name>
-				<description>
-					Completed all Area 3 levels on Hard
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Dungeon Raider
-				</name>
-				<description>
-					Completed all levels on Hard
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					From Fire with Brimstone
-				</name>
-				<description>
-					Completed all Area 1 levels on Insane
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Through The Crowded Keep
-				</name>
-				<description>
-					Completed all Area 2 levels on Insane
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					To The Lofty Summit
-				</name>
-				<description>
-					Completed all Area 3 levels on Insane
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Dungeon Defender
-				</name>
-				<description>
-					Completed all levels on Insane! Congratulations Brave Dungeon Defender!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Where's the Blueprints?
-				</name>
-				<description>
-					Completed No Towers Allowed on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Friends Forever
-				</name>
-				<description>
-					Completed Unlikely Allies on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					88 Core
-				</name>
-				<description>
-					Completed Warping Core on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Ella, Ella
-				</name>
-				<description>
-					Completed Raining Goblins on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Wizard Hunter
-				</name>
-				<description>
-					Completed Wizardry on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					You No Take Mushroom
-				</name>
-				<description>
-					Completed Ogre Crush on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Speed Freak
-				</name>
-				<description>
-					Completed Zippy Terror on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					In A Fowl Mood
-				</name>
-				<description>
-					Completed Chicken on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Core Cardio
-				</name>
-				<description>
-					Completed Moving Core on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Monster Mania
-				</name>
-				<description>
-					Completed Death From Above on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Core Destroyer
-				</name>
-				<description>
-					Completed Assault on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Gold Rush
-				</name>
-				<description>
-					Completed Treasure Hunt on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Challenger Approaches
-				</name>
-				<description>
-					Completed All Challenges on INSANE Difficulty!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Weapon Master
-				</name>
-				<description>
-					Completed No Towers Allowed on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Kobold Exterminator
-				</name>
-				<description>
-					Completed Zippy Terror on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Monster Madness
-				</name>
-				<description>
-					Completed Death From Above on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Dancing in the Rain
-				</name>
-				<description>
-					Completed Raining Goblins on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Gold Blitz
-				</name>
-				<description>
-					Completed Treasure Hunt on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Ogre Block Party
-				</name>
-				<description>
-					Completed Ogre Crush on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Survivalist
-				</name>
-				<description>
-					Reached Survival Wave 15 on Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Thick Skin
-				</name>
-				<description>
-					Reached Survival Wave 20 on Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Tough Guy
-				</name>
-				<description>
-					Reached Survival Wave 15 on Hard Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Iron Man
-				</name>
-				<description>
-					Reached Survival Wave 10 on Insane Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Defense Is the Best Offense
-				</name>
-				<description>
-					Reached Wave 10 on all levels in Pure Strategy on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					True Nobility
-				</name>
-				<description>
-					Earned the Lord Award on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					O Mighty Smiter!
-				</name>
-				<description>
-					Wore a full set of Godly Items
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Divine Intention
-				</name>
-				<description>
-					Picked up a Godly Weapon
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Perfectionist
-				</name>
-				<description>
-					Earned the Flawless Victory Award on all Missions on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Mastermind
-				</name>
-				<description>
-					Earned the Master Strategist Award on all Missions
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Brute Force
-				</name>
-				<description>
-					Earned the Gunslinger Award on all Missions
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Team Effort
-				</name>
-				<description>
-					Completed all levels with 4 active players on at least Medium Difficulty
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Matter of Perspective
-				</name>
-				<description>
-					Saw all four Hero endings
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Group Hug
-				</name>
-				<description>
-					Raised a Hero of each type to Level 70
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Catch 'em All
-				</name>
-				<description>
-					Stored all Pet types in your Item Box or on your Heroes
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Master Banker
-				</name>
-				<description>
-					Stored 15,000,000 Mana in your Mana Bank
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Good Student
-				</name>
-				<description>
-					Completed the Tutorial. You deserve a cookie!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Legendary Defender
-				</name>
-				<description>
-					You have earned every Dungeon Defenders Accomplishment! Trendy salutes you!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Jingled All the Way
-				</name>
-				<description>
-					Delivered all the presents, and saved Santa Tavernkeep from the vile clutches of Mega-Snowman in the 'Etherian Holiday Extravaganza Challenge Mission'!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Eternia Shard Recovered: Purple
-				</name>
-				<description>
-					You retrieved the Purple Lost Eternia Shard from the depths of Mistymire Forest!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Eternia Shard Recovered: Purple
-				</name>
-				<description>
-					You retrieved the Purple Lost Eternia Shard from the depths of Mistymire Forest... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Portal Protector
-				</name>
-				<description>
-					You defended the portal against the rampaging Spider horde!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Portal Protector
-				</name>
-				<description>
-					You defended the portal against the rampaging Spider horde... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Mythical Defender
-				</name>
-				<description>
-					You completed every mission in the original Campaign on Nightmare difficulty! Are you a god?
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Hardcore Mythical Defender
-				</name>
-				<description>
-					You completed every mission in the original campaign on Nightmare difficulty without dying. You are a god.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Dungeon Raider
-				</name>
-				<description>
-					You completed every mission in the Assault Mission Pack!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Mythical Dungeon Raider
-				</name>
-				<description>
-					You completed every mission in the Assault Mission Pack on Nightmare Difficulty!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Playin' Cupid
-				</name>
-				<description>
-					You played matchmaker for the gender mobs on the Sky O' Love challenge, and defeated Mega Cupid!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Playin' Mythical Cupid
-				</name>
-				<description>
-					You played matchmaker for the gender mobs on the Sky O' Love challenge, and defeated Mega Cupid... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Transcendent Challenge Champion
-				</name>
-				<description>
-					You completed every original Challenge on Nightmare Hardcore difficulty. The gods weep before your awesome might!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Eternia Shard Recovered: Blue
-				</name>
-				<description>
-					You retrieved the Blue Lost Eternia Shard from the scorching sands of Moraggo!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Djinn Recruiter
-				</name>
-				<description>
-					You assembled an army to win the 'War of the Djinn' Challenge!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Eternia Shard Recovered: Blue
-				</name>
-				<description>
-					You retrieved the Blue Lost Eternia Shard from the scorching sands of Moraggo... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Djinn Recruiter
-				</name>
-				<description>
-					You assembled an army to win the 'War of the Djinn' Challenge... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Transcendent Survivalist
-				</name>
-				<description>
-					You achieved Nightmare Survival Victory on every Campaign mission, and are thus rewarded!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Eternia Shard Recovered: Yellow
-				</name>
-				<description>
-					You retrieved the Yellow Lost Eternia Shard from the cold waters of Aquanos!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Puzzle Solver
-				</name>
-				<description>
-					You solved the 'Riddle of the Deep' Challenge!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Eternia Shard Recovered: Yellow
-				</name>
-				<description>
-					You retrieved the Yellow Lost Eternia Shard from the cold waters of Aquanos... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Puzzle Solver
-				</name>
-				<description>
-					You solved the 'Riddle of the Deep' Challenge... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Real Time Strategist
-				</name>
-				<description>
-					Completed the Campaign and 3 Eternia Shards Missions using only summoned minions and Overlord mode for your entire team, except for the Final Wave.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Mythical Real Time Strategist
-				</name>
-				<description>
-					Completed the Campaign and 3 Eternia Shards Missions only using summoned minions and Overlord mode for your entire team, except for the Final Wave... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Eternia Shard Recovered: Red
-				</name>
-				<description>
-					You retrieved the Red Lost Eternia Shard from the billowing clouds of Sky City!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Eternia Shard Recovered: Red
-				</name>
-				<description>
-					You retrieved the Red Lost Eternia Shard from the billowing clouds of Sky City... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Boss Crusher
-				</name>
-				<description>
-					You completed the Boss Rush Challenge!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Boss Crusher
-				</name>
-				<description>
-					You completed the Boss Rush Challenge... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Heroes to the Rescue
-				</name>
-				<description>
-					You journeyed to the Crystalline Dimension, rescued the Legendary Heroes, and defeated an ultimate evil!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Heroes to the Rescue
-				</name>
-				<description>
-					You journeyed to the Crystalline Dimension, rescued the Legendary Heroes, and defeated an ultimate evil... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					I've Got Monsters in My Pocket
-				</name>
-				<description>
-					You collected every Pet in all Etheria in your Item Box!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Ultimate Defender
-				</name>
-				<description>
-					You earned every Dungeon Defenders Accomplishment through the Eternia Shards Campaign! Trendy bows before your might!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Anniversary Defender
-				</name>
-				<description>
-					You defended your Tavern against the horde!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Anniversary Defender
-				</name>
-				<description>
-					You defended your Tavern against the horde... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Pumpkin Party
-				</name>
-				<description>
-					You completed the Halloween Spooktacular 2 Challenge!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Pumpkin Party Nightmare
-				</name>
-				<description>
-					You completed the Halloween Spooktacular 2 Challenge... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Greater Turkey Hunter
-				</name>
-				<description>
-					You purged the ruins of Karathiki of all Turkey interlopers!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Greater Turkey Hunter
-				</name>
-				<description>
-					You purged the ruins of Karathiki of all Turkey interlopers... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Not So Silent Night
-				</name>
-				<description>
-					You delivered Santa's goodies... and then took on the big man himself!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Not So Silent Night
-				</name>
-				<description>
-					You delivered Santa's goodies... and then took on the big man himself... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Winter Wonderland
-				</name>
-				<description>
-					You survived the onslaught of the Holiday Guardians!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Winter Wonderland
-				</name>
-				<description>
-					You survived the onslaught of the Holiday Guardians... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Playin' Anticupid
-				</name>
-				<description>
-					You successfully prevented hordes of mob matches in the Temple O' Love!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Playin' Anticupid
-				</name>
-				<description>
-					You successfully prevented hordes of mob matches in the Temple O' Love... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Tinkerer's Defender
-				</name>
-				<description>
-					You Defended the Tinker's Lab and cleared the way for EV's upgrade!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare Tinkerer's Defender
-				</name>
-				<description>
-					You Defended the Tinkerer's Lab and cleared the way for EV's upgrade... on Nightmare!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					EV Reprogrammer
-				</name>
-				<description>
-					You assaulted the Lab and eliminated the squad of corrupted EV's!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nightmare EV Reprogrammer
-				</name>
-				<description>
-					You assaulted the Lab and eliminated the squad of corrupted EV's... on Nightmare!
-				</description>
-			</achievement>
-		</achievements>
-</game>
-<game>
-	<name>
-		Half Minute Hero: Super Mega Neo Climax Ultimate Boy
-	</name>
-		<achievements>
-			<achievement>
-				<name>
-					First Praying
-				</name>
-				<description>
-					Prayed to the Goddess for the first time in single player mode.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Warrior of the Goddess
-				</name>
-				<description>
-					Offered a total of 3000G to the Goddess in a quest in single player mode.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Victory 30
-				</name>
-				<description>
-					Became 30 times the True Hero in multiplayer mode.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Hard Hero
-				</name>
-				<description>
-					Cleared Hero 300 in Hard Mode.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Kind Hero
-				</name>
-				<description>
-					Cleared &amp;quot;Cursed Hero&amp;quot; without defeating Sasha.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Charisma Hero
-				</name>
-				<description>
-					Allied with all available NPCs.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Hero 30
-				</name>
-				<description>
-					Cleared Hero 30.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Hero 300
-				</name>
-				<description>
-					Cleared Hero 300.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Hero 3
-				</name>
-				<description>
-					Cleared Hero 3.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Equipment Collector
-				</name>
-				<description>
-					Got all available equipment in single player mode.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Multi Ending Master
-				</name>
-				<description>
-					Reached every ending in Hero 30.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Title Master
-				</name>
-				<description>
-					Received every title.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Ned Kelly's Revenge
-				</name>
-				<description>
-					Obtain Barrel Armor and Barrel Head
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Forever Alone No Longer
-				</name>
-				<description>
-					Get a companion to join you.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Amateur Evil Slayer
-				</name>
-				<description>
-					Beat the first 9 levels of Hero 30.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					30 Second Moobs
-				</name>
-				<description>
-					Eat 10 types of food.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					McHero's Navy
-				</name>
-				<description>
-					Ride a ship.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Not Just a Series of Tubes
-				</name>
-				<description>
-					Play online multiplayer.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Do You See What Happens, Larrie?
-				</name>
-				<description>
-					Defeat Larrie and beat Level 4 in 27 seconds or less.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Real Hero and a Real Human Being
-				</name>
-				<description>
-					Beat every level under the target time. 
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Poor Carpenter Blames the Tools
-				</name>
-				<description>
-					Beat the final boss of Hero 30 using the Wood Sword as a weapon.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Love the Smell of Evil in the Morning.
-				</name>
-				<description>
-					Beat the first five levels of Classic Evil Lord 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Diablito Supreme
-				</name>
-				<description>
-					Beat Classic Evil Lord 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					A Peach of a Player
-				</name>
-				<description>
-					Beat the first five levels of Classic Princess 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Strong Female Role Model
-				</name>
-				<description>
-					Beat Classic Princess 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Squire? I Hardly Know Her!
-				</name>
-				<description>
-					Beat the first five levels of Classic Knight 30 
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Alignment: Lawful Good +30
-				</name>
-				<description>
-					Beat Classic Knight 30
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					BFFN: Best Friends For Now
-				</name>
-				<description>
-					Play a multiplayer match with a friend
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Synchronized Slaying
-				</name>
-				<description>
-					Play a multiplayer match with 3 other friends.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Body is the Ultimate Weapon
-				</name>
-				<description>
-					Defeat any three Evil Lords wearing no equipment.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Oy, to ne vecher
-				</name>
-				<description>
-					Defeat any five Evil Lords with one hit. 
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Legalize it Already
-				</name>
-				<description>
-					Beat Hero 30 without using herbs to heal.
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					That Took More Than 30 Seconds
-				</name>
-				<description>
-					Get all achievements in the game. 
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Second Place is the First Loser
-				</name>
-				<description>
-					Win a multiplayer match. 
-				</description>
-			</achievement>
-		</achievements>
-</game>
-<game>
-	<name>
-		Hector: Ep 2
+		Warhammer 40,000: Dawn of War - Game of the Year Edition
 	</name>
 		<achievements>
 		</achievements>
 </game>
 <game>
 	<name>
-		Lego Star Wars Saga
+		Roundabout
 	</name>
 		<achievements>
 		</achievements>
 </game>
 <game>
 	<name>
-		Guacamelee! Gold Edition
-	</name>
-		<achievements>
-			<achievement>
-				<name>
-					That's one big Gato Frito
-				</name>
-				<description>
-					Kill the Alebrije
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Cock of the Walk
-				</name>
-				<description>
-					Defeat an enemy as a chicken
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					X'tabay-Bye
-				</name>
-				<description>
-					Redeem X'tabay
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Snuffed Out
-				</name>
-				<description>
-					Defeat Flame Face
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Licking his Wounds
-				</name>
-				<description>
-					Defeat Jaguar Javier
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Wheeee
-				</name>
-				<description>
-					Teleport through an Olmec head
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Combo Nerd
-				</name>
-				<description>
-					Achieve a 150 Hit Combo
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nap Time's Over
-				</name>
-				<description>
-					Wake up an Alebrije
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Shopaholic
-				</name>
-				<description>
-					Spend $10000 in the store
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Catch the Rainbow!
-				</name>
-				<description>
-					Connect with all six special attacks without touching the ground
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Got to catch them all
-				</name>
-				<description>
-					Find an orb
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					I swat you
-				</name>
-				<description>
-					Defeat a Chupacabra using only Slam
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Thick headed
-				</name>
-				<description>
-					Destroy a Block using Headbutt
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Belly Flop
-				</name>
-				<description>
-					Destroy a Block using Slam
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Pow
-				</name>
-				<description>
-					Destroy a Block using Dash Punch
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Stop squirming
-				</name>
-				<description>
-					Defeat an Alux using only Headbutt
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Giant Killer
-				</name>
-				<description>
-					Defeat 3 giant skeletons
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Reunited
-				</name>
-				<description>
-					Complete the Missing Doll quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Music to my ears
-				</name>
-				<description>
-					Complete the Mariachi Band quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Delicious
-				</name>
-				<description>
-					Complete the World's Greatest Enchilada quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					All Cooped Up
-				</name>
-				<description>
-					Complete the Chicken Herding quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Gumshoe
-				</name>
-				<description>
-					Complete the Chicken Thief quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					I AM ERROR
-				</name>
-				<description>
-					Complete the I AM ERROR quest
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Poncho'd Out
-				</name>
-				<description>
-					Complete the Combo Chicken quest (Defeat Poncho forever)
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Flawless
-				</name>
-				<description>
-					Defeat an arena without taking any damage
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					That's using your head
-				</name>
-				<description>
-					Headbutt an enemy off a cliff
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Rocketman
-				</name>
-				<description>
-					Soar through the air for 12 seconds using &amp;quot;Goat Fly&amp;quot;
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Nooks and Crannies
-				</name>
-				<description>
-					Find 100% of the hidden items in a single area
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Big Hearted
-				</name>
-				<description>
-					Complete a full heart upgrade
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Endurance
-				</name>
-				<description>
-					Complete a full stamina upgrade
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					They hit really hard
-				</name>
-				<description>
-					Defeat 5 arenas in Hard mode
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Green Thumb
-				</name>
-				<description>
-					Uproot 20 plant enemies
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Boomerang
-				</name>
-				<description>
-					Defeat an enemy with its own projectile
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Boom-Shack-Calaca
-				</name>
-				<description>
-					Defeat Calaca
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Lore Master
-				</name>
-				<description>
-					Complete All Side Quests
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Cleaned Out
-				</name>
-				<description>
-					Buy all the items in the shop
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Never Ending Combo
-				</name>
-				<description>
-					Achieve a 300 Hit Combo
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Up Close and Personal
-				</name>
-				<description>
-					Defeat Calaca using only melee attacks
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					That was Hard Mode?
-				</name>
-				<description>
-					Defeat the game on Hard mode
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Who put these here???
-				</name>
-				<description>
-					Collect every chest in the game
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Which came first?
-				</name>
-				<description>
-					Enter egg mode while playing as the Pollo Luchador
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					I feel empty inside
-				</name>
-				<description>
-					Collect a health orb as the Skeleton Luchador
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Bag o' bricks
-				</name>
-				<description>
-					Throw an enemy while playing as Juanita or Tostado
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					GREETINGS, FELLOW CHICKEN
-				</name>
-				<description>
-					As the Pollo Luchador, find and talk to each of the four giant chickens with the green sombreros
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Heroine-ism
-				</name>
-				<description>
-					Defeat Calaca with Player 1 playing as Juanita
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Bone on bone
-				</name>
-				<description>
-					Conquer the final column of arenas in La Caverna del Pollo as the Skeleton Luchador
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					World Champion
-				</name>
-				<description>
-					Earn a Gold Medal in all Infierno challenges
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Title Contender
-				</name>
-				<description>
-					Earn a Silver Medal in all Infierno challenges
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Heavyweight
-				</name>
-				<description>
-					Earn a Bronze Medal in all Infierno challenges
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					GOOOOOOOAL!
-				</name>
-				<description>
-					Complete Infierno challenge 10 and challenge 15 as El Brody
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					Beastly
-				</name>
-				<description>
-					Complete Infierno challenge 17 as the Alebrije
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Devil wears Revenge!
-				</name>
-				<description>
-					Defeat Calaca with full health in Diablo's Suit
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					The Old-Fashioned Way
-				</name>
-				<description>
-					Complete Infierno challenge 14 using Goat Fly no more than four times
-				</description>
-			</achievement>
-		</achievements>
-</game>
-<game>
-	<name>
-		Star Wars - Battlefront II
-	</name>
-		<achievements>
-		</achievements>
-</game>
-<game>
-	<name>
-		Trials Evolution Gold Edition
-	</name>
-		<achievements>
-		</achievements>
-</game>
-<game>
-	<name>
-		Besiege
+		King's Bounty: Armored Princess
 	</name>
 		<achievements>
 		</achievements>

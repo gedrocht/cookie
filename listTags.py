@@ -43,7 +43,7 @@ for tag in uniqueTags:
     
 
 def convertTag( tag ):
-    return tag.replace(" ","_").replace("-","").replace("&","").replace(".","").replace("'","").replace("#","").replace(";","").replace(":","").replace("!","").replace(",","").replace("(","").replace(")","").replace("+","").replace("?","");
+    return tag.replace(" ","_").replace("-","").replace("&","").replace(".","").replace("'","").replace("#","").replace(";","").replace(":","").replace("!","").replace(",","").replace("(","").replace(")","").replace("+","").replace("?","").replace("100%","100Percent");
     
 js = open("tagdb_"+str(id)+".js","w");
 js.write("tags = {};\n");
@@ -117,7 +117,7 @@ game = None;
 for key in data:
     game = data[key];
     jsName = convertTag(str(game["name"]));
-    gameName = str(game["name"]).replace("'","\\'").replace("\"","\\\"");
+    gameName = str(game["name"]).replace("'","\\'").replace("\"","\\\"").replace("100%","100Percent");
     js.write("games_realNames['" + jsName + "'] = '" + gameName + "';\n");
     js.flush();
 
@@ -126,7 +126,7 @@ js.flush();
 
 for i in range(0,len(uniqueTags)):
     jsName = convertTag(uniqueTags[i]);
-    realName = str(uniqueTags[i]).replace("'","\\'").replace("\"","\\\"");
+    realName = str(uniqueTags[i]).replace("'","\\'").replace("\"","\\\"").replace("100%","100Percent");
     js.write("tags_realNames['" + jsName + "'] = '" + realName + "';\n");
     js.flush();
     
