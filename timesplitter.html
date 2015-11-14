@@ -19,6 +19,7 @@ div {
 <script>
 timers = new Array();
 alarms = []
+haveSoundedFinishAlarm = true;
 
 function init(){
     window.onbeforeunload = function() {
@@ -41,10 +42,16 @@ function init(){
     alarm_alt.volume = 1.0;
     alarms.push(alarm_alt);
     
+    //finished_sound = new Audio("a_little_drunk.mp3");
+    finished_sound = new Audio("very important.mp3");
+    
     autoSetStartTime();
     //setInterval(autoSetStartTime,1000);
     
     setInterval(handleTimers,1000);
+    
+    
+    
     setInterval(setTitle,1000);
 }
 
@@ -96,6 +103,8 @@ function autoSetStartTime(){
 }
 
 function go(){
+    haveSoundedFinishAlarm = false;
+
     var startSet = startTime.value.length != 0;
     var stopSet  = stopTime.value.length  != 0;
     var intSet   = intervals.value.length != 0;
@@ -260,6 +269,13 @@ function handleTimers(){
                 timer[3] = false;
             }
         str += getTimeString(timer,false) + '</font><img src="x.jpeg" height="25px" width="25px" onclick="removeTimer('+i+')"></img></div>\n';
+    }
+    
+    if( !haveSoundedFinishAlarm ) {
+        if( allTimersAreDone() ){
+            haveSoundedFinishAlarm = true;
+            setTimeout(function(){finished_sound.play();},2500);
+        }
     }
     
     main.innerHTML = str;
