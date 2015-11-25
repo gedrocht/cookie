@@ -1,0 +1,240 @@
+<html>
+<head>
+<style>
+p {
+    font-family: Arial;
+    font-size: 12pt;
+}
+</style>
+<script>
+gams = ["Portal 2",
+"One Finger Death Punch",
+"Keep Talking and Nobody Explodes",
+"Undertale",
+"Portal",
+"BattleBlock Theater",
+"Mark of the Ninja",
+"Kerbal Space Program",
+"Hotline Miami",
+"Bastion",
+"South Park™: The Stick of Truth™",
+"Don't Starve",
+"The Wolf Among Us",
+"Orcs Must Die!",
+"Plants vs. Zombies: Game of the Year",
+"The Swapper",
+"Left 4 Dead 2",
+"Half-Life 2",
+"FTL: Faster Than Light",
+"Super House of Dead Ninjas",
+"Gunpoint",
+"The Walking Dead",
+"Trine 2",
+"Dishonored",
+"To the Moon",
+"Terraria",
+"Borderlands 2",
+"Besiege",
+"Duke Nukem 3D: Megaton Edition",
+"Sid Meier's Civilization V",
+"Life Is Strange™",
+"Mount & Blade: Warband",
+"Super Hexagon",
+"Batman: Arkham Asylum GOTY Edition",
+"Castle Crashers",
+"The Binding of Isaac",
+"Saints Row: The Third",
+"Escape Goat",
+"Don't Starve Together Beta",
+"Shower With Your Dad Simulator 2015: Do You Still Shower With Your Dad",
+"Downwell",
+"Dust: An Elysian Tail",
+"Batman: Arkham City GOTY",
+"Papers, Please",
+"Garry's Mod",
+"Ori and the Blind Forest",
+"Botanicula",
+"Game Dev Tycoon",
+"Half-Life 2: Episode Two",
+"Team Fortress 2",
+"Fallout: New Vegas",
+"VVVVVV",
+"Mass Effect 2",
+"The Walking Dead: Season Two",
+"Counter-Strike: Source",
+"Cave Story+",
+"Mount Your Friends",
+"Tomb Raider",
+"Audiosurf",
+"Brothers - A Tale of Two Sons",
+"XCOM: Enemy Unknown",
+"Duck Game",
+"Timberman",
+"Antichamber",
+"Transistor",
+"Bejeweled 3",
+"Beat Hazard",
+"Thomas Was Alone",
+"BioShock Infinite",
+"Machinarium",
+"Company of Heroes",
+"Amnesia: The Dark Descent",
+"Jamestown",
+"Super Meat Boy",
+"Psychonauts",
+"Medieval II: Total War",
+"LIMBO",
+"Risk of Rain",
+"Free to Play",
+"Shadow Warrior",
+"Left 4 Dead",
+"Legend of Grimrock",
+"POSTAL 2",
+"SanctuaryRPG: Black Edition",
+"Counter-Strike: Global Offensive",
+"Rogue Legacy",
+"Guns of Icarus Online",
+"Half-Life 2: Episode One",
+"Hitman: Blood Money",
+"Tales from the Borderlands",
+"Braid",
+"Prison Architect",
+"BioShock",
+"One Way Heroics",
+"LISA",
+"Five Nights at Freddy's 2",
+"SpeedRunners",
+"Rome: Total War",
+"PAYDAY: The Heist",
+"Dungeons of Dredmor",
+"Magicka",
+"Tales of Maj'Eyal",
+"System Shock 2",
+"Just Cause 2",
+"Unepic",
+"Mass Effect",
+"Dragon Age: Origins - Ultimate Edition",
+"Synergy",
+"Turbo Dismount",
+"KAMI",
+"Ys: The Oath in Felghana",
+"Shatter",
+"Worms Armageddon",
+"Savant - Ascent",
+"F.E.A.R.",
+"Guacamelee! Gold Edition",
+"Company of Heroes: Tales of Valor",
+"Just Cause 2: Multiplayer Mod",
+"Age of Empires II: HD Edition",
+"Total War: SHOGUN 2",
+"Grow Home",
+"Middle-earth: Shadow of Mordor",
+"Torchlight",
+"Hatoful Boyfriend",
+"Child of Light",
+"Serious Sam HD: The First Encounter",
+"Unturned",
+"World of Goo",
+"Dungeon Defenders",
+"Shadow Warrior Classic Redux",
+"Crusader Kings II",
+"Brütal Legend",
+"Metro 2033",
+"Little Inferno",
+"Peggle Nights",
+"Arma 2: Operation Arrowhead",
+"Waves",
+"You Have to Win the Game",
+"Out There Somewhere",
+"Source Filmmaker",
+"Saints Row IV",
+"Cthulhu Saves the World",
+"Scribblenauts Unlimited",
+"Insurgency",
+"Alan Wake",
+"Shadowrun: Dragonfall - Director's Cut",
+"Tiny and Big: Grandpa's Leftovers",
+"Gemini Rue",
+"Peggle Deluxe",
+"100% Orange Juice",
+"Max Payne 2: The Fall of Max Payne",
+"The Stanley Parable",
+"The Plan",
+"Grand Theft Auto: Vice City",
+"The Elder Scrolls V: Skyrim",
+"Edna & Harvey: Harvey's New Eyes",
+"X3: Albion Prelude",
+"Indie Game: The Movie",
+"Space Pirates and Zombies",
+"Rock of Ages",
+"EDGE",
+"Overlord",
+"Five Nights at Freddy's",
+"Uplink",
+"Legend of Grimrock 2",
+"PARTICLE MACE",
+"Warhammer 40,000: Dawn of War - Game of the Year Edition",
+"Memoria",
+"Monaco",
+"King's Bounty: The Legend",
+"Spelunky",
+"FEZ",
+"Chaos on Deponia",
+"Electronic Super Joy",
+"Company of Heroes: Opposing Fronts",
+"Hitman: Absolution",
+"Clicker Heroes",
+"Sam & Max 301: The Penal Zone",
+"LUFTRAUSERS",
+"Mirror's Edge",
+"Moonbase Alpha",
+"Call of Duty: Modern Warfare 2",
+"Roundabout",
+"Star Wars - Battlefront II",
+"Ticket to Ride",
+"Zuma's Revenge",
+"Awesomenauts"];
+
+timeout = 10;
+timeout_start = 5;
+timeout_max = 700;
+timeout_rate = 1.3;
+
+function begin_randomize(){
+    disable_button();
+    timeout = timeout_start;
+    randomize();
+}
+
+function randomize(){
+    set_random_game();
+    if( timeout < timeout_max ){
+        setTimeout( randomize, timeout );
+        timeout *= timeout_rate;
+    } else {
+        document.getElementById("0").innerHTML = "<b>" + document.getElementById("0").innerHTML + "</b>"
+        enable_button();
+    }
+}
+
+function set_random_game(){
+    document.getElementById("0").innerHTML = gams[Math.floor(Math.random()*gams.length)];
+}
+
+function disable_button(){
+    document.getElementsByTagName("input")[0].disabled = true;
+}
+
+function enable_button(){
+    document.getElementsByTagName("input")[0].disabled = false;
+}
+</script>
+</head>
+<body onLoad="begin_randomize();">
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<center>
+<p id="0"></p><br>
+<input type="button" onclick="begin_randomize();" value="Randomize"></input>
+</center>
+</body>
+</html>
