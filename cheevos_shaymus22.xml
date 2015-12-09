@@ -383,6 +383,20 @@
 </game>
 <game>
 	<name>
+		Danmaku Unlimited 2
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
+		Cubot
+	</name>
+		<achievements>
+		</achievements>
+</game>
+<game>
+	<name>
 		Dead Space
 	</name>
 		<achievements>
@@ -411,116 +425,14 @@
 </game>
 <game>
 	<name>
-		FLOCK!
+		Hook
 	</name>
 		<achievements>
-			<achievement>
-				<name>
-					LUMBERJACK THE RIPPER
-				</name>
-				<description>
-					RIP UP 50 TREES (AGGREGATE TOTAL)
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					THE CONTINUOUS CARTOGRAPHER
-				</name>
-				<description>
-					PLAY THROUGH ONE USER-CREATED SINGLEPLAYER LEVEL AND ONE USER-CREATED MULTIPLAYER LEVEL
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					LOVE BUNNY
-				</name>
-				<description>
-					USE 3 LOVE PATCHES IN 3 MINUTES
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					MASTER FLOCKER
-				</name>
-				<description>
-					GET A PERFECT ABDUCTION ON ALL LEVELS, SINGLEPLAYER AND MULTIPLAYER
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					GOOD SHEPHERD
-				</name>
-				<description>
-					FLOCK 25 ANIMALS AT ONCE
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					DON'T FENCE ME IN
-				</name>
-				<description>
-					KNOCK OVER 50 FENCES WITH A COW (AGGREGATE TOTAL)
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					KING OF THE SKIES
-				</name>
-				<description>
-					FLY AND LAND 75 CHICKENS (AGGREGATE TOTAL)
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					MAKE YOUR MARK
-				</name>
-				<description>
-					COMPLETE 10 CROP CIRCLES (AGGREGATE TOTAL)
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					DEFENDER OF THE FLOCK
-				</name>
-				<description>
-					COMPLETE A LEVEL FEATURING THE NIGHTTIME PREDATOR WITHOUT LETTING IT EAT ANY ANIMALS
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					BOWLED OVER
-				</name>
-				<description>
-					KILL 10 CHICKENS WITH ONE THROW OF A BOULDER - STRIKE!
-				</description>
-			</achievement>
-			<achievement>
-				<name>
-					FERTILISER
-				</name>
-				<description>
-					USE COWS TO MAKE 50 PILES OF POO (AGGREGATE TOTAL)
-				</description>
-			</achievement>
 		</achievements>
 </game>
 <game>
 	<name>
 		Warhammer 40,000: Dawn of War - Game of the Year Edition
-	</name>
-		<achievements>
-		</achievements>
-</game>
-<game>
-	<name>
-		Roundabout
-	</name>
-		<achievements>
-		</achievements>
-</game>
-<game>
-	<name>
-		King's Bounty: Armored Princess
 	</name>
 		<achievements>
 		</achievements>
