@@ -74,27 +74,31 @@ var timers = [
         //getNewTimer( "First Day of Winter",      12, 22, 2015, 0, 0, 0, "countdowns_winter.jpg" ),
         //getNewTimer( "Christmas",                12, 25, 2015, 0, 0, 0, "countdowns_christmas.jpg" ),
         //getNewTimer( "Steam Holiday Sale",       12, 22, 2015, 13, 0, 0, "countdowns_steam_sale.png" ),
+        //getNewTimer( "2x Drone Batteries",       12, 29, 2015, 20, 0, 0, "countdowns_drone.jpg" ),
         
         getNewTimer( "New Dragon Ball Super",    12, 20, 2015, 12, 0, 0, "countdowns_dbs.jpg" ),
         getNewTimer( "New Doctor Who",           12, 25, 2015, 21, 0, 0, "countdowns_doctor_who.jpg" ),
-        getNewTimer( "2x Drone Batteries",       12, 30, 2015, 20, 0, 0, "countdowns_drone.jpg" ),
         getNewTimer( "Weekend",                  12, 31, 2015, 17, 0, 0, "countdowns_weekend.jpg" ),
+        getNewTimer( "32GB microSD card",        12, 31, 2015, 20, 0, 0, "countdowns_drone.jpg" ),
+        getNewTimer( "6-port USB charger",       12, 31, 2015, 20, 0, 0, "countdowns_drone.jpg" ),
+        getNewTimer( "4x Drone Batteries",       12, 31, 2015, 20, 0, 0, "countdowns_drone.jpg" ),
 		getNewTimer( "New Year's",               1, 1, 2016, 0, 0, 0, "countdowns_new_years.jpg" ),
         getNewTimer( "Mafia Movie",              1, 1, 2016, 0, 0, 0, "countdowns_mafia_movie.jpg" ),
-        getNewTimer( "4x Drone Batteries",       1, 4, 2016, 20, 0, 0, "countdowns_drone.jpg" ),
         getNewTimer( "Next Paycheck",            1, 7, 2016, 6, 0, 0, "countdowns_paycheck.jpg" ),
+        getNewTimer( "5x Drone Battery Cables",  1, 8, 2016, 20, 0, 0, "countdowns_drone.jpg" ),
         getNewTimer( "New Bob's Burgers",        1, 10, 2016, 15, 0, 0, "countdowns_bobs_burgers.jpg" ),
         getNewTimer( "New Adventure Time?",      1, 18, 2016, 9, 0, 0, "countdowns_adventure_time.jpg" ),
+        getNewTimer( "Onion Book of Knowledge",  1, 14, 2016, 20, 0, 0, "countdown_codblops.jpg" ),
         getNewTimer( "New X-Files",              1, 24, 2016, 20, 0, 0, "countdowns_new_x_files.jpg" ),
         getNewTimer( "New Archer",               1, 31, 2016, 0, 0, 0, "countdowns_archer.jpg" ),
-        getNewTimer( "Keycaps Arrive",           2, 1, 2016, 20, 0, 0, "countdowns_keyboard.jpg" ),
-        getNewTimer( "Diet Over",                2, 3, 2016, 0, 0, 0, "countdowns_scale.jpg" ),
+        getNewTimer( "Keycaps Arrive",           1, 31, 2016, 20, 0, 0, "countdowns_keyboard.jpg" ),
         getNewTimer( "XCOM 2",                   2, 5, 2016, 0, 0, 0, "countdowns_xcom_2.jpg" ),
         getNewTimer( "Deadpool Movie",           2, 12, 2016, 0, 0, 0, "countdowns_deadpool.jpg" ),
 		getNewTimer( "Valentine's Day",          2, 14, 2016, 0, 0, 0, "countdowns_valentines_day.jpeg" ),
         getNewTimer( "PAX East 2016 Schedule",   2, 15, 2016, 10, 45, 0, "countdowns_pax_east.jpg" ),
         getNewTimer( "Deus Ex:Mankind Divided",  2, 23, 2016, 0, 0, 0, "countdowns_deus_ex_mankind_divided.jpg" ),
         getNewTimer( "Gods of Egypt",            2, 26, 2016, 0, 0, 0, "countdowns_gods_of_egypt.jpg" ),
+        getNewTimer( "Diet Over",                3, 3, 2016, 0, 0, 0, "countdowns_scale.jpg" ),
         getNewTimer( "Spectre Blu-ray?",         3, 6, 2016, 0, 0, 0, "countdowns_spectre.jpg" ),
         getNewTimer( "Next Hitman Game",         3, 11, 2016, 0, 0, 0, "countdowns_hitman.jpg" ),
         getNewTimer( "New Steven Universe",      3, 15, 2016, 19, 0, 0, "countdowns_steven_universe.jpg" ),
@@ -146,42 +150,54 @@ function processTimers(){
 
 function getNewDate( month, day, year ){
 	var d = new Date();
-	d.setMonth(month-1);
-	d.setDate(day);
-	d.setFullYear(year);
+    
+    for( var i = 0 ; i < 6 ; i++ ){
+        d.setMonth(month-1);
+        d.setDate(day);
+        d.setFullYear(year);
+    }
 	return d;
 }
 
 function getNewTime( hours, minutes, seconds ){
 	var d = new Date();
-	d.setHours(hours);
-	d.setMinutes(minutes);
-	d.setSeconds(seconds);
+    
+    for( var i = 0 ; i < 3 ; i++ ){
+        d.setHours(hours);
+        d.setMinutes(minutes);
+        d.setSeconds(seconds);
+    }
 	return d;
 }
 
 function getNewDateTime( month, day, year, hours, minutes, seconds ){
 	var d = new Date();
-	d.setMonth(month-1);
-	d.setDate(day);
-	d.setFullYear(year);
-	d.setHours(hours);
-	d.setMinutes(minutes);
-	d.setSeconds(seconds);
+    for( var i = 0 ; i < 6 ; i++ ){
+        d.setMonth(month-1);
+        d.setDate(day);
+        d.setFullYear(year);
+        d.setHours(hours);
+        d.setMinutes(minutes);
+        d.setSeconds(seconds);
+    }
 	return d;
 }
 
 function setDate( dateObj, month, day, year ){
-	dateObj.setMonth(month-1);
-	dateObj.setDate(day);
-	dateObj.setFullYear(year);
+    for( var i = 0 ; i < 3 ; i++ ){
+        dateObj.setMonth(month-1);
+        dateObj.setDate(day);
+        dateObj.setFullYear(year);
+    }
 	return dateObj;
 }
 
 function setTime( dateObj, hours, minutes, seconds ){
-	dateObj.setHours(hours);
-	dateObj.setMinutes(minutes);
-	dateObj.setSeconds(seconds);
+    for( var i = 0 ; i < 3 ; i++ ){
+        dateObj.setHours(hours);
+        dateObj.setMinutes(minutes);
+        dateObj.setSeconds(seconds);
+    }
 	return dateObj;
 }
 
