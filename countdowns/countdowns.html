@@ -22,8 +22,7 @@ body {
 	margin: 7px;
 	padding: 9px;
 	position: relative;
-	/*background-position: -150px -33px;*/
-	text-shadow: 0px 1px 1px rgba(255,255,255,0.3);
+	background-position: -150px -33px;
 }
 .timer::after {
 	content: "";
@@ -107,10 +106,10 @@ var timers = [
         getNewTimer( "New Adventure Time",       2, 22, 2016, 21, 0, 0, "countdowns_adventure_time.jpg" ),
         getNewTimer( "Spectre Blu-ray",          3, 6, 2016, 0, 0, 0, "countdowns_spectre.jpg" ),
         getNewTimer( "New Archer",               3, 31, 2016, 0, 0, 0, "countdowns_archer.jpg" ),
+		getNewTimer( "New Game of Thrones",      5, 1, 2016, 21, 0, 0, "countdowns_game_of_thrones.jpg" ),
         getNewTimer( "Cinco De Mayo",            5, 5, 2016, 0, 0, 0, "countdowns_cinco_de_mayo.jpg" ),
 		getNewTimer( "Captain America",          5, 6, 2016, 0, 0, 0, "countdowns_captain_america.jpg" ),
 		getNewTimer( "New Dragon Ball Super?",   5, 8, 2016, 12, 0, 0, "countdowns_dbs.jpg" ),
-		getNewTimer( "New Game of Thrones",      5, 8, 2016, 21, 0, 0, "countdowns_game_of_thrones.jpg" ),
 		getNewTimer( "DOOM",					 5, 13, 2016, 0, 0, 0, "countdowns_doom.jpg" ),
         getNewTimer( "Mirror's Edge Catalyst",   5, 24, 2016, 0, 0, 0, "countdowns_mirrors_edge.jpg" ),
         getNewTimer( "New Doctor Who?",          5, 25, 2016, 21, 0, 0, "countdowns_doctor_who.jpg" ),
@@ -291,7 +290,7 @@ function getNewTimer( title, month, day, year, hours, minutes, seconds, img ){
 	timer.id = _timer_id++;
 	timer.time = getNewDateTime( month, day, year, hours, minutes, seconds );
 	timer.dateTimeDifference = getDateTimeDifference( new Date(), timer.time );
-	timer.img = "countdowns/" + img;
+	timer.img = img;
 	
 	return timer;
 }
