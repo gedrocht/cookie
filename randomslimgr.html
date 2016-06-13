@@ -1,0 +1,33 @@
+<html>
+<head>
+<style>
+img {
+	height: 60px;
+	width:  60px;
+}
+</style>
+<script>
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01234564789abcdefghijklmnopqrstuvwxyz';
+var NUM_IMGS = 600;
+
+function getRandomImage(){
+	var s = 'https://i.sli.mg/';
+	for( var a = 0 ; a < 6 ; a++ ){
+		s += chars.charAt(Math.floor(Math.random()*chars.length));
+	}
+	s += '.jpg'
+	return s;
+}
+
+function init(){
+	var html = "";
+	for( var i = 0 ; i < NUM_IMGS ; i++ ){
+		html += "<img src='" + getRandomImage() + "'></img>";
+	}
+	document.body.innerHTML = html;
+}
+</script>
+</head>
+<body onload="init();">
+</body>
+</html>
