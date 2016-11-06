@@ -388,6 +388,8 @@ $(function() {
 	}
 	
 	function chooseAttackResult(){
+		$(this).prop("disabled",1);
+	
 		var checked = $('div.choicesContainer input:radio:checked');
 		if( checked.length == 0 ){
 			alert( "Please choose an option." );
@@ -400,6 +402,7 @@ $(function() {
 			$('div.incorrect').show();
 			
 		$('#correct-answer').show();
+		$('#reset').show()
 	}
 	
 	function getAttackResultChoices(){
@@ -444,9 +447,11 @@ $(function() {
 		result.append($("<input>")
 				.prop("type","button")
 				.prop("value","Next")
+				.prop("id","reset")
 				.on("click",reset)
-				.css("left","30%")
+				.css("left","33%")
 				.css("margin-top","30px")
+				.hide()
 			);
 		return result;
 	}
