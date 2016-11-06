@@ -1,0 +1,509 @@
+<head>
+<script src="jquery-3.1.1.min.js"></script>
+<style>
+	.normal {
+		background-color: #9a6960;
+	}
+	
+	.fire {
+		background-color: #e6721f;
+	}
+	
+	.water {
+		background-color: #4f7ded;
+	}
+	
+	.electric {
+		background-color: #f4c91d;
+	}
+	
+	.grass {
+		background-color: #69b842;
+	}
+	
+	.ice {
+		background-color: #7fcece;
+	}
+	
+	.fighting {
+		background-color: #ae2b24;
+	}
+	
+	.poison {
+		background-color: #8f398f;
+	}
+	
+	.ground {
+		background-color: #d9b34a;
+	}
+	
+	.flying {
+		background-color: #9c87d9;
+	}
+	
+	.psychic {
+		background-color: #f73b73;
+	}
+	
+	.bug {
+		background-color: #9aa81e;
+	}
+	
+	.rock {
+		background-color: #a48f32;
+	}
+	
+	.ghost {
+		background-color: #634e87;
+	}
+	
+	.dragon {
+		background-color: #5d1ff3;
+	}
+	
+	.dark {
+		background-color: #5f4b3d;
+	}
+	
+	.steel {
+		background-color: #a7a7c4;
+	}
+	
+	.fairy {
+		background-color: #e381e3;
+	}
+
+	label {
+		padding: 1px;
+		margin: 10px;
+	}
+
+	input[type=radio] {
+		padding: 10px;
+		margin: 10px;
+		-webkit-transform: scale(2);
+	}
+
+	div.container {
+		position: relative;
+	}
+	
+	div.subContainer {
+		width: 310px;
+		height: 200px;
+		padding: 20px;
+		
+		position: absolute;
+		top: 200px;
+		left: 45%;
+		font-size: 25pt;
+		font-family: Arial;
+	}
+	
+	div.typeBar {
+		color: #fff;
+		text-align: center;	
+		padding-top: 16px;
+		height: 55px;
+		width: 310px;
+	}
+	
+	div.action {
+		color: #fff;
+		text-align: center;
+		padding-top: 16px;
+		height: 55px;
+		background-color: #444;
+	}
+	
+	div.result.result-choice {
+		border-top: 0px;
+		width: 230px;
+		float: right;
+	}
+	
+	div.choicesContainer label {
+		float: left;
+	}
+	
+	div input[type=button] {
+		position: relative;
+		left: 25%;
+		font-size: 40px;
+	}
+	
+	div.result {
+		color: #fff;
+		text-align: center;
+		padding-top: 16px;
+		height: 55px;
+	}
+	
+	div.correct, div.incorrect {
+		text-align: center;
+		font-face: Arial;
+		font-size: 45pt;
+	}
+	
+	div.correct {
+		color: green;
+	}
+	
+	div.incorrect {
+		color: red;
+		margin-left: -15px;
+	}
+</style>
+<script>
+ATTACK_RESULT_STRONG = "2x";
+ATTACK_RESULT_WEAK   = "1/2x";
+ATTACK_RESULT_NULL   = "0x";
+ATTACK_RESULT_NORMAL = "1x";
+
+ATTACK_RESULTS = [
+	ATTACK_RESULT_STRONG,
+	ATTACK_RESULT_WEAK,
+	ATTACK_RESULT_NULL,
+	ATTACK_RESULT_NORMAL ];
+
+$(function() {
+	function Type(name){
+		this.name = name;
+		this.attackingStrengths = [];
+		this.attackingWeaknesses = [];
+		this.defendingStrengths = [];
+		this.defendingWeaknesses = [];
+		this.attackingNullified = [];
+		this.defendingNullifiesAttack = [];
+		
+		this.setAttackingWeaknesses = function( attackingWeaknesses ){
+			var you;
+			for( var i = 0 ; i < attackingWeaknesses.length ; i++ ){
+				you = attackingWeaknesses[i];
+				
+				this.attackingWeaknesses.push( you );
+				you.defendingStrengths.push( this );
+			}
+		}
+
+		this.setAttackingStrengths = function( attackingStrengths ){
+			var you;
+			for( var i = 0 ; i < attackingStrengths.length ; i++ ){
+				you = attackingStrengths[i];
+				
+				this.attackingStrengths.push( you );
+				you.defendingWeaknesses.push( this );
+			}
+		}
+
+		this.setAttackingNullified = function( attackingNullified ){
+			var you;
+			for( var i = 0 ; i < attackingNullified.length ; i++ ){
+				you = attackingNullified[i];
+				
+				this.attackingNullified.push( you );
+				you.defendingNullifiesAttack.push( this );
+			}
+		}
+		
+		this.report = function(){
+			console.log( "Type: " + this.name );
+			console.log( "\t Attacking Strengths: " + this.attackingStrengths.join(", ") );
+			console.log( "\t Attacking Weaknesses: " + this.attackingWeaknesses.join(", ") );
+			console.log( "\t Defending Strengths: " + this.defendingStrengths.join(", ") );
+			console.log( "\t Defending Weaknesses: " + this.defendingWeaknesses.join(", ") );
+			console.log( "\t Attacking Nullified: " + this.attackingNullified.join(", ") );
+			console.log( "\t Defending Nullifies Attack: " + this.defendingNullifiesAttack.join(", ") );
+		}
+		
+		this.getAttackResult = function( otherType ){
+			for( var i = 0 ; i < this.attackingStrengths.length ; i++ ){
+				if( this.attackingStrengths[i] == otherType )
+					return ATTACK_RESULT_STRONG;
+			}
+			for( var i = 0 ; i < this.attackingWeaknesses.length ; i++ ){
+				if( this.attackingWeaknesses[i] == otherType )
+					return ATTACK_RESULT_WEAK;
+			}
+			for( var i = 0 ; i < this.attackingNullified.length ; i++ ){
+				if( this.attackingNullified[i] == otherType )
+					return ATTACK_RESULT_NULL;
+			}
+			
+			return ATTACK_RESULT_NORMAL;
+		}
+	}
+
+	Type.prototype.toString = function(){
+		return "[Type '"+this.name+"']";
+	}
+
+	types_list = [
+		new Type("Normal"),
+		new Type("Fire"),
+		new Type("Water"),
+		new Type("Electric"),
+		new Type("Grass"),
+		new Type("Ice"),
+		new Type("Fighting"),
+		new Type("Poison"),
+		new Type("Ground"),
+		new Type("Flying"),
+		new Type("Psychic"),
+		new Type("Bug"),
+		new Type("Rock"),
+		new Type("Ghost"),
+		new Type("Dragon"),
+		new Type("Dark"),
+		new Type("Steel"),
+		new Type("Fairy")
+		];
+
+	lookup_table = {};
+	var t;
+	for( var i = 0 ; i < types_list.length ; i++ ){
+		t = types_list[i];
+		lookup_table[t.name.toLowerCase()] = t;
+	}
+
+	function getType(name){
+		var result = lookup_table[name.toLowerCase()];
+		if( result == undefined )
+			throw "type not found";
+		return result;
+	}
+
+	function getTypes( nameArray ){
+		var arr = [];
+		
+		for( var i = 0 ; i < nameArray.length ; i++ ){
+			arr.push(getType(nameArray[i]));
+		}
+		
+		return arr;
+	}
+
+	getType("Normal").setAttackingWeaknesses( getTypes( ["Rock", "Steel"] ) );
+	getType("Normal").setAttackingNullified( getTypes( ["Ghost"] ) );
+
+	getType("Fire").setAttackingStrengths( getTypes( ["Grass", "Ice", "Bug", "Steel"] ) );
+	getType("Fire").setAttackingWeaknesses( getTypes( ["Fire", "Water", "Rock", "Dragon"] ) );
+
+	getType("Water").setAttackingStrengths( getTypes( ["Fire", "Ground", "Rock"] ) );
+	getType("Water").setAttackingWeaknesses( getTypes( ["Water", "Grass", "Dragon"] ) );
+
+	getType("Electric").setAttackingStrengths( getTypes( ["Water", "Flying"] ) );
+	getType("Electric").setAttackingWeaknesses( getTypes( ["Electric", "Grass", "Dragon"] ) );
+	getType("Electric").setAttackingNullified( getTypes( ["Ground"] ) );
+
+	getType("Grass").setAttackingStrengths( getTypes( ["Water", "Ground", "Rock"] ) );
+	getType("Grass").setAttackingWeaknesses( getTypes( ["Fire", "Grass", "Poison", "Flying", "Bug", "Dragon", "Steel"] ) );
+
+	getType("Ice").setAttackingStrengths( getTypes( ["Grass", "Ground", "Flying", "Dragon"] ) );
+	getType("Ice").setAttackingWeaknesses( getTypes( ["Fire", "Water", "Ice", "Steel"] ) );
+
+	getType("Fighting").setAttackingStrengths( getTypes( ["Normal", "Ice", "Rock", "Dark", "Steel"] ) );
+	getType("Fighting").setAttackingWeaknesses( getTypes( ["Poison", "Flying", "Psychic", "Bug", "Fairy"] ) );
+	getType("Fighting").setAttackingNullified( getTypes( ["Ghost"] ) );
+
+	getType("Poison").setAttackingStrengths( getTypes( ["Grass", "Fairy"] ) );
+	getType("Poison").setAttackingWeaknesses( getTypes( ["Poison", "Ground", "Rock", "Ghost"] ) );
+	getType("Poison").setAttackingNullified( getTypes( ["Steel"] ) );
+
+	getType("Ground").setAttackingStrengths( getTypes( ["Fire", "Electric", "Poison", "Rock", "Steel"] ) );
+	getType("Ground").setAttackingWeaknesses( getTypes( ["Grass", "Bug"] ) );
+	getType("Ground").setAttackingNullified( getTypes( ["Flying"] ) );
+
+	getType("Flying").setAttackingStrengths( getTypes( ["Grass", "Fighting", "Bug"] ) );
+	getType("Flying").setAttackingWeaknesses( getTypes( ["Electric", "Rock"] ) );
+
+	getType("Psychic").setAttackingStrengths( getTypes( ["Fighting", "Poison"] ) );
+	getType("Psychic").setAttackingWeaknesses( getTypes( ["Psychic", "Steel"] ) );
+	getType("Psychic").setAttackingNullified( getTypes( ["Dark"] ) );
+
+	getType("Bug").setAttackingStrengths( getTypes( ["Grass", "Psychic", "Dark"] ) );
+	getType("Bug").setAttackingWeaknesses( getTypes( ["Fire", "Fighting", "Poison", "Flying", "Ghost", "Steel", "Fairy"] ) );
+
+	getType("Rock").setAttackingStrengths( getTypes( ["Fire", "Ice", "Flying", "Bug"] ) );
+	getType("Rock").setAttackingWeaknesses( getTypes( ["Fighting", "Ground", "Steel"] ) );
+
+	getType("Ghost").setAttackingStrengths( getTypes( ["Psychic", "Ghost"] ) );
+	getType("Ghost").setAttackingWeaknesses( getTypes( ["Dark"] ) );
+	getType("Ghost").setAttackingNullified( getTypes( ["Normal"] ) );
+
+	getType("Dragon").setAttackingStrengths( getTypes( ["Dragon"] ) );
+	getType("Dragon").setAttackingWeaknesses( getTypes( ["Steel"] ) );
+	getType("Dragon").setAttackingNullified( getTypes( ["Fairy"] ) );
+
+	getType("Dark").setAttackingStrengths( getTypes( ["Psychic", "Ghost"] ) );
+	getType("Dark").setAttackingWeaknesses( getTypes( ["Fighting", "Dark", "Fairy"] ) );
+
+	getType("Steel").setAttackingStrengths( getTypes( ["Ice", "Rock", "Fairy"] ) );
+	getType("Steel").setAttackingWeaknesses( getTypes( ["Fire", "Water", "Electric", "Steel"] ) );
+
+	getType("Fairy").setAttackingStrengths( getTypes( ["Fighting", "Dragon", "Dark"] ) );
+	getType("Fairy").setAttackingWeaknesses( getTypes( ["Fire", "Poison", "Steel"] ) );
+
+	/*
+	for( var i = 0 ; i < types_list.length ; i++ ){
+		types_list[i].report();
+		console.log("================================");
+	}
+	*/
+	
+	function newTypeBar( typeName ){
+		var bar = $('<div>')
+			.addClass(typeName.toLowerCase())
+			.addClass( "typeBar" )
+			.text(typeName);
+		return bar
+	}
+	
+	function getRandomTypeBar(type){
+		return newTypeBar(type.name)
+	}
+	
+	function getRandomType(){
+		return types_list[Math.floor(Math.random()*types_list.length)];
+	}
+	
+	function getActionBar( text ){
+		return $('<div>').addClass('action').text(text);
+	}
+	
+	function getResultBar( result ){
+		var color = "black";
+		
+		if( result == ATTACK_RESULT_STRONG )
+			color = "green";
+		else if( result == ATTACK_RESULT_WEAK )
+			color = "red";
+		else if( result == ATTACK_RESULT_NORMAL )
+			color = "gray";
+	
+		return $('<div>')
+			.addClass('result')
+			.text(result)
+			.css("background-color",color);
+	}
+	
+	function chooseAttackResult(){
+		var checked = $('div.choicesContainer input:radio:checked');
+		if( checked.length == 0 ){
+			alert( "Please choose an option." );
+			return;
+		}
+		
+		if( checked.prop("value") == $("#correct-answer").text() )
+			$('div.correct').show();
+		else
+			$('div.incorrect').show();
+			
+		$('#correct-answer').show();
+	}
+	
+	function getAttackResultChoices(){
+		var result = $("<div>")
+			.addClass( "choicesContainer" )
+		
+		for( var i = 0 ; i < ATTACK_RESULTS.length ; i++ ){
+			result.append($("<label>")
+					.append($("<input>")
+						.prop("type","radio")
+						.attr("name","attack-result")
+						.prop("value",ATTACK_RESULTS[i]))
+					.append(getResultBar(ATTACK_RESULTS[i])
+						.addClass("result-choice")
+					)
+				);
+		}
+		
+		result.append($("<input>")
+				.prop("type","button")
+				.prop("value","Choose")
+				.on("click",chooseAttackResult)
+			);
+		
+		return result;
+	}
+	
+	function getCorrectBar(){
+		return $("<div>")
+			.addClass("correct")
+			.text("CORRECT");
+	}
+	
+	function getIncorrectBar(){
+		return $("<div>")
+			.addClass("incorrect")
+			.text("INCORRECT");
+	}
+	
+	function getResetButton(){
+		var result = $("<div>");
+		result.append($("<input>")
+				.prop("type","button")
+				.prop("value","Next")
+				.on("click",reset)
+				.css("left","30%")
+				.css("margin-top","30px")
+			);
+		return result;
+	}
+	
+	function reset(){
+		$("#content").empty();
+		init();
+	}
+	
+	function init(){
+		var type_a = getRandomType();
+		var type_b = getRandomType();
+		
+			
+		$("#content").append(getRandomTypeBar(type_a));
+		$("#content").append(getActionBar("attacking"))
+		$("#content").append(getRandomTypeBar(type_b));
+		$("#content").append(getAttackResultChoices());
+		$("#content").append(getCorrectBar().hide());
+		$("#content").append(getIncorrectBar().hide());
+		$("#content").append(getResultBar(type_a.getAttackResult(type_b)).prop( "id", "correct-answer" ).hide());
+		$("#content").append(getResetButton());
+	}
+	init();
+})
+</script>
+</head>
+<body>
+<div class="container"><div class="subContainer" id="content"></div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
