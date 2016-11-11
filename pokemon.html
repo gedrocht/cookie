@@ -134,6 +134,10 @@
 		font-size: 40px;
 	}
 	
+	div input[type=button].chooseButton {
+		margin-top: 15px;
+	}
+	
 	div.result {
 		color: #fff;
 		text-align: center;
@@ -174,12 +178,11 @@
 	}
 	
 	div.pokemon-portrait-container {
-		height: 180px;
-		margin-left: 115px;
+		display: inline;
 	}
 	
 	img.pokemon-portrait {
-	   transform: scale(2);
+		min-height: 100px;
 	}
 	
 	div.pokemon-choice {
@@ -199,16 +202,25 @@
 		margin-top: 5px;
 		margin-left: -45px;
 		font-size: 60px;
+		font-weight: bold;
 	}
 	
 	div.pokemon-correct-answer div.typeBar {
 		font-size: 45px;
 		margin-left: 45px;
+		padding-bottom: 15px;
+	}
+	
+	div.pokemon-evolution-info {
+		margin-top: 20px;
+		font-size: 20pt;
 	}
 </style>
 <script>
 successes = 0;
 attempts = 0;
+
+num_pokemon_portraits = 0;
 
 ATTACK_RESULT_STRONG = "2x";
 ATTACK_RESULT_WEAK   = "1/2x";
@@ -222,6 +234,7 @@ ATTACK_RESULTS = [
 	ATTACK_RESULT_NORMAL ];
 
 all_pokemon = undefined;
+pokemon_by_name = undefined;
 	
 $(function() {
 	function Type(name){
@@ -438,13 +451,13 @@ $(function() {
 	}
 	
 	function chooseResult(){
-		$(this).prop("disabled",1);
-	
 		var checked = $('div.choicesContainer input:radio:checked');
 		if( checked.length == 0 ){
 			alert( "Please choose an option." );
 			return;
 		}
+		
+		$(this).prop("disabled",1);
 		
 		if( checked.prop("value") == $("#correct-answer-text").text() ){
 			$('div.correct').show();
@@ -515,7 +528,8 @@ $(function() {
 		return $("<input>")
 			.prop("type","button")
 			.prop("value","Choose")
-			.on("click",chooseResult);
+			.on("click",chooseResult)
+			.addClass("chooseButton");
 	}
 	
 	function getCorrectBar(){
@@ -575,13 +589,38 @@ $(function() {
 	
 	function processPokemon(){
 		all_pokemon = dexSettings.injectRpcs[1][1].pokemon;
+		pokemon_by_name = new Object();
+		
+		var pokemon;
 		
 		for( var i = 0 ; i < all_pokemon.length ; i++ ){
 			var types = [];
-			for( var a = 0 ; a < all_pokemon[i].alts[0].types.length ; a++ ){
-				types.push( getType(all_pokemon[i].alts[0].types[a]) );
+			mon = all_pokemon[i];
+			
+			for( var a = 0 ; a < mon.alts[0].types.length ; a++ ){
+				types.push( getType(mon.alts[0].types[a]) );
 			}
-			all_pokemon[i].types = types;
+			mon.types = types;
+			mon.prevolution = null;
+			mon.evolution = null;
+			
+			pokemon_by_name[mon.name] = mon;
+		}
+		
+		processPokemonEvolutions();
+	}
+	
+	function processPokemonEvolutions(){
+		var mon;
+		var evo;
+		for( var i = 0 ; i < all_pokemon.length ; i++ ){
+			mon = all_pokemon[i];
+			
+			for( var a = 0 ; a < mon.evos.length ; a++ ){
+				evo = pokemon_by_name[mon.evos[a]];
+				evo.prevolution = mon;
+				mon.evolution = evo;
+			}
 		}
 	}
 	
@@ -589,7 +628,7 @@ $(function() {
 		return all_pokemon[ Math.floor(Math.random() * pokemon.length) ];
 	}
 	
-	function getDifferentRandomPokemon( numPokemon ){
+	function getDifferentRandomPokemon( numPokemon, exclude ){
 		if( numPokemon < 1 ){
 			throw "Invalid number of pokemon specified: " + numPokemon;
 		}
@@ -601,6 +640,19 @@ $(function() {
 			var newIndex = Math.floor(Math.random()*all_pokemon.length) 
 			if( indexes.indexOf(newIndex) != -1 ){
 				continue;
+			}
+			if( exclude != undefined ){
+				console.log(1)
+				var found = false;
+				for( i = 0 ; i < exclude.length ; i++ ){
+					if( all_pokemon[newIndex].name.indexOf(exclude[i]) != -1 ){
+						found = true;
+						break;
+					}
+				}
+				if( found ){
+					continue;
+				}
 			}
 			
 			indexes.push(newIndex);
@@ -617,17 +669,91 @@ $(function() {
 	}
 	
 	function getPokemonImageURL(pokemon){
-		return "http://www.smogon.com/dex/media/sprites/xy/" + pokemon.name.toLowerCase().replace(". ","_") + ".gif";
+		return "http://www.smogon.com/dex/media/sprites/xy/" + pokemon.name.toLowerCase().replace(". ","_").replace(".","_").replace(" ","_") + ".gif";
 	}
 	
 	function getPokemonImage(pokemon){
+		num_pokemon_portraits++;
 		return $("<div>")
 			.addClass("pokemon-portrait-container")
 			.append(
 				$("<img>")
 					.prop("src",getPokemonImageURL(pokemon))
 					.addClass("pokemon-portrait")
+					.on("load",resizePokemonPortrait)
 				);
+	}
+	
+	function resizePokemonPortrait(){
+		var height = $(this).height();
+		var width = $(this).width();
+		
+		if( height == 0 || width == 0 ){
+			num_pokemon_portraits--;
+			return;
+		}
+		
+		height *= 2;
+		width *= 2;
+		$(this).height(height);
+		$(this).width(width);
+		num_pokemon_portraits--;
+		if( num_pokemon_portraits ){
+			$("#correct-answer").css("margin-top",0).hide();
+		}
+	}
+	
+	function getPokemonEvolutionInfo(pokemon){
+		var result = $("<div>").addClass("pokemon-evolution-info");
+		
+		var prevolution = $("<div>").append("Evolves from: ");
+		var evolution = $("<div>").append("Evolves into: ");
+		
+		var prevolutionConnector = function(){return $("<div>").append(" which evolves from ");};
+		var evolutionConnector = function(){return $("<div>").append(" which evolves into ");};
+		
+		var is_prevolution = pokemon.prevolution != null;
+		var is_evolution = pokemon.evolution != null;
+		
+		var mon;
+		
+		if( is_prevolution ){
+			mon = pokemon.prevolution;
+			while( true ){
+				prevolution
+					.append(mon.name)
+					.append("<br>")
+					.append(getPokemonImage(mon));
+				
+				mon = mon.prevolution;
+				if( mon == null ){
+					break;
+				}
+				prevolution.append(prevolutionConnector());
+			}
+			
+			result.append(prevolution);
+		}
+		
+		if( is_evolution ){
+			mon = pokemon.evolution;
+			while( true ){
+				evolution
+					.append(mon.name)
+					.append("<br>")
+					.append(getPokemonImage(mon));
+				
+				mon = mon.evolution;
+				if( mon == null ){
+					break;
+				}
+				evolution.append(prevolutionConnector());
+			}
+			
+			result.append(evolution);
+		}
+		
+		return result;
 	}
 	
 	function init(){
@@ -660,9 +786,9 @@ $(function() {
 	}
 	
 	function init_pokemonNameTest(){
-		var num_pokemon = 4;
+		var num_pokemon = 6;
 	
-		var random_pokemon = getDifferentRandomPokemon(num_pokemon);
+		var random_pokemon = getDifferentRandomPokemon(num_pokemon, ["-"]);
 		
 		var correct_pokemon_index = Math.floor(Math.random()*num_pokemon);
 		
@@ -672,11 +798,14 @@ $(function() {
 			.append(correct_pokemon.name)
 			.prop("id","correct-answer")
 			.addClass("pokemon-correct-answer")
-			.hide();
+			.css("margin-top","-9999px");
+			//.hide();
 		
 		for( var i = 0 ; i < correct_pokemon.types.length ; i++ ){
 			correct_answer.append(newTypeBar(correct_pokemon.types[i].name));
 		}
+		
+		correct_answer.append(getPokemonEvolutionInfo(correct_pokemon));
 		
 		$("#content").append(getPokemonImage(correct_pokemon));
 		$("#content").append(getPokemonChoices(random_pokemon));
