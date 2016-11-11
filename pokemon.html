@@ -1,5 +1,7 @@
 <head>
+<title>Pokémon Quiz</title>
 <script src="jquery-3.1.1.min.js"></script>
+<script src="dex.js"></script>
 <style>
 	.normal {
 		background-color: #9a6960;
@@ -143,6 +145,7 @@
 		text-align: center;
 		font-face: Arial;
 		font-size: 45pt;
+		margin-top: 10px;
 	}
 	
 	div.correct {
@@ -169,6 +172,39 @@
 		left: 10px;
 		right: 10px;
 	}
+	
+	div.pokemon-portrait-container {
+		height: 180px;
+		margin-left: 115px;
+	}
+	
+	img.pokemon-portrait {
+	   transform: scale(2);
+	}
+	
+	div.pokemon-choice {
+		border-top: 0px;
+		width: 230px;
+		float: right;
+	}
+	
+	label.pokemon-choice {
+		margin-left: 20px;
+		width: 300px;
+	}
+	
+	div.pokemon-correct-answer {
+		width: 400px;
+		text-align: center;
+		margin-top: 5px;
+		margin-left: -45px;
+		font-size: 60px;
+	}
+	
+	div.pokemon-correct-answer div.typeBar {
+		font-size: 45px;
+		margin-left: 45px;
+	}
 </style>
 <script>
 successes = 0;
@@ -185,6 +221,8 @@ ATTACK_RESULTS = [
 	ATTACK_RESULT_NULL,
 	ATTACK_RESULT_NORMAL ];
 
+all_pokemon = undefined;
+	
 $(function() {
 	function Type(name){
 		this.name = name;
@@ -362,13 +400,6 @@ $(function() {
 
 	getType("Fairy").setAttackingStrengths( getTypes( ["Fighting", "Dragon", "Dark"] ) );
 	getType("Fairy").setAttackingWeaknesses( getTypes( ["Fire", "Poison", "Steel"] ) );
-
-	/*
-	for( var i = 0 ; i < types_list.length ; i++ ){
-		types_list[i].report();
-		console.log("================================");
-	}
-	*/
 	
 	function newTypeBar( typeName ){
 		var bar = $('<div>')
@@ -406,7 +437,7 @@ $(function() {
 			.css("background-color",color);
 	}
 	
-	function chooseAttackResult(){
+	function chooseResult(){
 		$(this).prop("disabled",1);
 	
 		var checked = $('div.choicesContainer input:radio:checked');
@@ -415,7 +446,7 @@ $(function() {
 			return;
 		}
 		
-		if( checked.prop("value") == $("#correct-answer").text() ){
+		if( checked.prop("value") == $("#correct-answer-text").text() ){
 			$('div.correct').show();
 			successes++;
 		}else{
@@ -452,13 +483,39 @@ $(function() {
 				);
 		}
 		
-		result.append($("<input>")
-				.prop("type","button")
-				.prop("value","Choose")
-				.on("click",chooseAttackResult)
-			);
+		result.append(getChooseButton());
 		
 		return result;
+	}
+	
+	function getPokemonChoices(pokemon_choices){
+		var result = $("<div>")
+			.addClass( "choicesContainer" )
+
+		for( var i = 0 ; i < pokemon_choices.length ; i++ ){
+			result.append( $("<label>")
+				.addClass("pokemon-choice")
+				.append($("<input>")
+					.prop("type","radio")
+					.attr("name","pokemon")
+					.prop("value",pokemon_choices[i].name))
+				.append($("<div>")
+					.addClass("pokemon-choice")
+					.append(pokemon_choices[i].name)
+				)
+			);
+		}
+		
+		result.append(getChooseButton());
+		
+		return result;
+	}
+	
+	function getChooseButton(){
+		return $("<input>")
+			.prop("type","button")
+			.prop("value","Choose")
+			.on("click",chooseResult);
 	}
 	
 	function getCorrectBar(){
@@ -516,10 +573,82 @@ $(function() {
 		$('.attempts').text( attempts + " question"+plural+" answered" );
 	}
 	
+	function processPokemon(){
+		all_pokemon = dexSettings.injectRpcs[1][1].pokemon;
+		
+		for( var i = 0 ; i < all_pokemon.length ; i++ ){
+			var types = [];
+			for( var a = 0 ; a < all_pokemon[i].alts[0].types.length ; a++ ){
+				types.push( getType(all_pokemon[i].alts[0].types[a]) );
+			}
+			all_pokemon[i].types = types;
+		}
+	}
+	
+	function getRandomPokemon(){
+		return all_pokemon[ Math.floor(Math.random() * pokemon.length) ];
+	}
+	
+	function getDifferentRandomPokemon( numPokemon ){
+		if( numPokemon < 1 ){
+			throw "Invalid number of pokemon specified: " + numPokemon;
+		}
+	
+		indexes = [];
+		result = [];
+		
+		while( true ){
+			var newIndex = Math.floor(Math.random()*all_pokemon.length) 
+			if( indexes.indexOf(newIndex) != -1 ){
+				continue;
+			}
+			
+			indexes.push(newIndex);
+			
+			if( indexes.length > numPokemon )
+				break;
+		}
+		
+		for( var i = 0 ; i < numPokemon ; i++ ){
+			result.push( all_pokemon[indexes[i]] );
+		}
+		
+		return result;
+	}
+	
+	function getPokemonImageURL(pokemon){
+		return "http://www.smogon.com/dex/media/sprites/xy/" + pokemon.name.toLowerCase().replace(". ","_") + ".gif";
+	}
+	
+	function getPokemonImage(pokemon){
+		return $("<div>")
+			.addClass("pokemon-portrait-container")
+			.append(
+				$("<img>")
+					.prop("src",getPokemonImageURL(pokemon))
+					.addClass("pokemon-portrait")
+				);
+	}
+	
 	function init(){
+		processPokemon();
+	
+		if( false ){
+			init_typeTest();
+		} else {
+			init_pokemonNameTest();
+		}
+		
+		$("#content").append(getResetButton());
+		if( attempts > 0 ){
+			$("#content").append(getScore());
+		}
+		$("#content").append(getAttempts());
+	}
+	
+	function init_typeTest(){
 		var type_a = getRandomType();
 		var type_b = getRandomType();
-		
 			
 		$("#content").append(getRandomTypeBar(type_a));
 		$("#content").append(getActionBar("attacking"))
@@ -528,12 +657,39 @@ $(function() {
 		$("#content").append(getCorrectBar().hide());
 		$("#content").append(getIncorrectBar().hide());
 		$("#content").append(getResultBar(type_a.getAttackResult(type_b)).prop( "id", "correct-answer" ).hide());
-		$("#content").append(getResetButton());
-		if( attempts > 0 ){
-			$("#content").append(getScore());
-		}
-		$("#content").append(getAttempts());
 	}
+	
+	function init_pokemonNameTest(){
+		var num_pokemon = 4;
+	
+		var random_pokemon = getDifferentRandomPokemon(num_pokemon);
+		
+		var correct_pokemon_index = Math.floor(Math.random()*num_pokemon);
+		
+		var correct_pokemon = random_pokemon[correct_pokemon_index];
+		
+		var correct_answer = $("<div>")
+			.append(correct_pokemon.name)
+			.prop("id","correct-answer")
+			.addClass("pokemon-correct-answer")
+			.hide();
+		
+		for( var i = 0 ; i < correct_pokemon.types.length ; i++ ){
+			correct_answer.append(newTypeBar(correct_pokemon.types[i].name));
+		}
+		
+		$("#content").append(getPokemonImage(correct_pokemon));
+		$("#content").append(getPokemonChoices(random_pokemon));
+		$("#content").append(getCorrectBar().hide());
+		$("#content").append(getIncorrectBar().hide());
+		$("#content").append(correct_answer);
+		$("#content").append(
+			$("<div>")
+				.prop("id","correct-answer-text")
+				.append(correct_pokemon.name)
+				.hide());
+	}
+	
 	init();
 })
 </script>
