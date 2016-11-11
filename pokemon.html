@@ -178,11 +178,13 @@
 	}
 	
 	div.pokemon-portrait-container {
-		display: inline;
+		margin: auto;
+		text-align: center;
 	}
 	
 	img.pokemon-portrait {
 		min-height: 100px;
+		float: none;
 	}
 	
 	div.pokemon-choice {
@@ -197,25 +199,37 @@
 	}
 	
 	div.pokemon-correct-answer {
-		width: 400px;
-		text-align: center;
+		width: 600px;
 		margin-top: 5px;
-		margin-left: -45px;
+		margin-left: -140px;
+		text-align: center;
 		font-size: 60px;
 		font-weight: bold;
 	}
 	
 	div.pokemon-correct-answer div.typeBar {
 		font-size: 45px;
-		margin-left: 45px;
+		margin-left: auto;
+		margin-right: auto;
 		padding-bottom: 15px;
 	}
 	
-	div.pokemon-evolution-info {
+	div.pokemon-evolution-info-container {
 		width: 600px;
 		text-align: center;
 		margin-top: 20px;
 		font-size: 20pt;
+		width: 100%;
+		text-align: center;
+	}
+	
+	div.pokemon-evolution-info-content {
+		display: inline-block;
+	}
+	
+	div.pokemon-evolution-info-content div {
+		margin-left: 10px;
+		margin-right: 10px;
 	}
 </style>
 <script>
@@ -235,6 +249,13 @@ ATTACK_RESULTS = [
 	ATTACK_RESULT_NULL,
 	ATTACK_RESULT_NORMAL ];
 
+POKEMON_MULTI = {
+	name: "[MULTIPLE]",
+	prevolve: null,
+	evolve: null
+};
+	
+	
 all_pokemon = undefined;
 pokemon_by_name = undefined;
 	
@@ -452,14 +473,14 @@ $(function() {
 			.css("background-color",color);
 	}
 	
-	function chooseResult(){
+	function chooseResult(button){
 		var checked = $('div.choicesContainer input:radio:checked');
 		if( checked.length == 0 ){
 			alert( "Please choose an option." );
-			return;
+			return false;
 		}
 		
-		$(this).prop("disabled",1);
+		button.prop("disabled",1);
 		
 		if( checked.prop("value") == $("#correct-answer-text").text() ){
 			$('div.correct').show();
@@ -479,7 +500,9 @@ $(function() {
 		updateAttempts();
 			
 		$('#correct-answer').show();
-		$('#reset').show()
+		$('#reset').show();
+		
+		return true;
 	}
 	
 	function getAttackResultChoices(){
@@ -498,7 +521,7 @@ $(function() {
 				);
 		}
 		
-		result.append(getChooseButton());
+		result.append(getChooseButton().on("click",chooseResult));
 		
 		return result;
 	}
@@ -523,8 +546,10 @@ $(function() {
 		
 		result.append(getChooseButton()
 			.on("click",function(){
-				$("#correct-answer").css("margin-top","0");
-				$("#content").find("input:radio:not(:checked)").parent().hide();
+				if( chooseResult($(this)) ){
+					$("#correct-answer").css("margin-top","0");
+					$("#content").find("input:radio:not(:checked)").parent().hide();
+				}
 			}));
 		
 		return result;
@@ -534,7 +559,6 @@ $(function() {
 		return $("<input>")
 			.prop("type","button")
 			.prop("value","Choose")
-			.on("click",chooseResult)
 			.addClass("chooseButton");
 	}
 	
@@ -613,19 +637,41 @@ $(function() {
 			pokemon_by_name[mon.name] = mon;
 		}
 		
-		processPokemonEvolutions();
+		processPokemonEvolutions(["-"]);
 	}
 	
-	function processPokemonEvolutions(){
+	function processPokemonEvolutions(exclude){
 		var mon;
 		var evo;
 		for( var i = 0 ; i < all_pokemon.length ; i++ ){
+			var found = false;
+			
+			for( var a = 0 ; a < exclude.length ; a++ ){
+				if( all_pokemon[i].name.indexOf(exclude[a]) != -1 ){
+					found = true;
+					break;
+				}
+			}
+			
+			if( found ){
+				continue;
+			}
 			mon = all_pokemon[i];
 			
 			for( var a = 0 ; a < mon.evos.length ; a++ ){
 				evo = pokemon_by_name[mon.evos[a]];
-				evo.prevolution = mon;
-				mon.evolution = evo;
+				
+				if( evo.prevolution != null ){
+					evo.prevolution = POKEMON_MULTI;
+				} else {
+					evo.prevolution = mon;
+				}
+				
+				if( mon.evolution != null ){
+					mon.evolution = POKEMON_MULTI;
+				} else {
+					mon.evolution = evo;
+				}
 			}
 		}
 	}
@@ -648,7 +694,6 @@ $(function() {
 				continue;
 			}
 			if( exclude != undefined ){
-				console.log(1)
 				var found = false;
 				for( i = 0 ; i < exclude.length ; i++ ){
 					if( all_pokemon[newIndex].name.indexOf(exclude[i]) != -1 ){
@@ -680,116 +725,46 @@ $(function() {
 	
 	function getPokemonImage(pokemon){
 		num_pokemon_portraits++;
-		return $("<div>")
-			.addClass("pokemon-portrait-container")
-			.append(
+		var result = $("<div>")
+			.addClass("pokemon-portrait-container");
+		
+		if( pokemon != POKEMON_MULTI ){
+			result.append(
 				$("<img>")
 					.prop("src",getPokemonImageURL(pokemon))
 					.addClass("pokemon-portrait")
-					//.on("load",resizePokemonPortrait)
 				);
-	}
-	
-	function resizePokemonPortrait(){
-		var height = $(this).height();
-		var width = $(this).width();
-		
-		if( height == 0 || width == 0 ){
-			num_pokemon_portraits--;
-			return;
 		}
-		
-		height *= 2;
-		width *= 2;
-		$(this).height(height);
-		$(this).width(width);
-		num_pokemon_portraits--;
-		if( num_pokemon_portraits ){
-			$("#correct-answer").css("margin-top",0).hide();
-		}
+				
+		return result;
 	}
 	
 	function getPokemonEvolutionInfo(pokemon){
-		var result = $("<div>").addClass("pokemon-evolution-info");
+		var result = $("<div>").addClass("pokemon-evolution-info-container");
+		var result_content = $("<div>").addClass("pokemon-evolution-info-content");
+		result.append(result_content);
 		
-		var prevolution = $("<div>").append("Evolves from ");
-		var evolution = $("<div>").append("Evolves into ");
+		var evolution_order = [pokemon];
 		
-		var prevolutionConnector = function(){return $("<div>").append(" which evolves from ");};
-		var evolutionConnector = function(){return $("<div>").append(" which evolves into ");};
-		
-		var is_prevolution = pokemon.prevolution != null;
-		var is_evolution = pokemon.evolution != null;
-		
-		var mon;
-		/*
-		if( is_prevolution ){
-			mon = pokemon.prevolution;
-			while( true ){
-				prevolution
-					.append(mon.name)
-					.append("<br>")
-					.append(getPokemonImage(mon));
-				
-				mon = mon.prevolution;
-				if( mon == null ){
-					break;
-				}
-				prevolution.append(prevolutionConnector());
-			}
-			
-			result.append(prevolution);
-		}
-		
-		if( is_evolution ){
-			mon = pokemon.evolution;
-			while( true ){
-				evolution
-					.append(mon.name)
-					.append("<br>")
-					.append(getPokemonImage(mon));
-				
-				mon = mon.evolution;
-				if( mon == null ){
-					break;
-				}
-				evolution.append(prevolutionConnector());
-			}
-			
-			result.append(evolution);
-		}*/
-		mon = pokemon.prevolution;
+		var mon = pokemon.prevolution;
 		while( mon != null ){
-			result.append(
-				$("<div>")
-					.css("float","left")
-					.append(getPokemonImage(mon))
-					.append("<br>")
-					.append(mon.name)
-			);
+			evolution_order.unshift(mon);
 			mon = mon.prevolution;
 		}
 		
-			result.append(
-				$("<div>")
-					.css("float","left")
-					.append(getPokemonImage(pokemon))
-					.append("<br>")
-					.append(pokemon.name)
-			);
-		
 		mon = pokemon.evolution;
 		while( mon != null ){
-			result.append(
-				$("<div>")
-					.css("float","left")
-					.append(getPokemonImage(mon))
-					.append("<br>")
-					.append(mon.name)
-			);
+			evolution_order.push(mon);
 			mon = mon.evolution;
 		}
-		result.append($("<hr>").css("clear","both").css("border","0px white"));
+		
+		for( var i = 0 ; i < evolution_order.length ; i++ ){
+			result_content.append($("<div>")
+				.css("float","left")
+				.append(getPokemonImage(evolution_order[i]))
+				.append("<br>")
+				.append(evolution_order[i].name));
+		}
 		
 		return result;
 	}
@@ -836,8 +811,7 @@ $(function() {
 			.append(correct_pokemon.name)
 			.prop("id","correct-answer")
 			.addClass("pokemon-correct-answer")
-			.css("margin-top","9999px");
-			//.hide();
+			.hide();
 		
 		for( var i = 0 ; i < correct_pokemon.types.length ; i++ ){
 			correct_answer.append(newTypeBar(correct_pokemon.types[i].name));
@@ -845,7 +819,13 @@ $(function() {
 		
 		correct_answer.append(getPokemonEvolutionInfo(correct_pokemon));
 		
-		$("#content").append(getPokemonImage(correct_pokemon));
+		var correct_pokemon_image = getPokemonImage(correct_pokemon);
+		correct_pokemon_image.find("img")
+			.on("load",function(){
+				$(this).height($(this).height()*2);
+			})
+		
+		$("#content").append(correct_pokemon_image);
 		$("#content").append(getPokemonChoices(random_pokemon));
 		$("#content").append(getCorrectBar().hide());
 		$("#content").append(getIncorrectBar().hide());
