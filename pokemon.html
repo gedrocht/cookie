@@ -212,6 +212,8 @@
 	}
 	
 	div.pokemon-evolution-info {
+		width: 600px;
+		text-align: center;
 		margin-top: 20px;
 		font-size: 20pt;
 	}
@@ -519,7 +521,11 @@ $(function() {
 			);
 		}
 		
-		result.append(getChooseButton());
+		result.append(getChooseButton()
+			.on("click",function(){
+				$("#correct-answer").css("margin-top","0");
+				$("#content").find("input:radio:not(:checked)").parent().hide();
+			}));
 		
 		return result;
 	}
@@ -680,7 +686,7 @@ $(function() {
 				$("<img>")
 					.prop("src",getPokemonImageURL(pokemon))
 					.addClass("pokemon-portrait")
-					.on("load",resizePokemonPortrait)
+					//.on("load",resizePokemonPortrait)
 				);
 	}
 	
@@ -716,7 +722,7 @@ $(function() {
 		var is_evolution = pokemon.evolution != null;
 		
 		var mon;
-		
+		/*
 		if( is_prevolution ){
 			mon = pokemon.prevolution;
 			while( true ){
@@ -751,7 +757,39 @@ $(function() {
 			}
 			
 			result.append(evolution);
+		}*/
+		mon = pokemon.prevolution;
+		while( mon != null ){
+			result.append(
+				$("<div>")
+					.css("float","left")
+					.append(getPokemonImage(mon))
+					.append("<br>")
+					.append(mon.name)
+			);
+			mon = mon.prevolution;
 		}
+		
+			result.append(
+				$("<div>")
+					.css("float","left")
+					.append(getPokemonImage(pokemon))
+					.append("<br>")
+					.append(pokemon.name)
+			);
+		
+		mon = pokemon.evolution;
+		while( mon != null ){
+			result.append(
+				$("<div>")
+					.css("float","left")
+					.append(getPokemonImage(mon))
+					.append("<br>")
+					.append(mon.name)
+			);
+			mon = mon.evolution;
+		}
+		result.append($("<hr>").css("clear","both").css("border","0px white"));
 		
 		return result;
 	}
@@ -798,7 +836,7 @@ $(function() {
 			.append(correct_pokemon.name)
 			.prop("id","correct-answer")
 			.addClass("pokemon-correct-answer")
-			.css("margin-top","-9999px");
+			.css("margin-top","9999px");
 			//.hide();
 		
 		for( var i = 0 ; i < correct_pokemon.types.length ; i++ ){
