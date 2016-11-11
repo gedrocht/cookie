@@ -706,8 +706,8 @@ $(function() {
 	function getPokemonEvolutionInfo(pokemon){
 		var result = $("<div>").addClass("pokemon-evolution-info");
 		
-		var prevolution = $("<div>").append("Evolves from: ");
-		var evolution = $("<div>").append("Evolves into: ");
+		var prevolution = $("<div>").append("Evolves from ");
+		var evolution = $("<div>").append("Evolves into ");
 		
 		var prevolutionConnector = function(){return $("<div>").append(" which evolves from ");};
 		var evolutionConnector = function(){return $("<div>").append(" which evolves into ");};
