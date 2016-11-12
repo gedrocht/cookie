@@ -720,7 +720,7 @@ $(function() {
 	}
 	
 	function getPokemonImageURL(pokemon){
-		return "http://www.smogon.com/dex/media/sprites/xy/" + pokemon.name.toLowerCase().replace(". ","_").replace(".","_").replace(" ","_") + ".gif";
+		return "http://www.smogon.com/dex/media/sprites/xy/" + pokemon.name.toLowerCase().replace(". ","_").replace(".","_").replace(" ","_").replace("'","") + ".gif";
 	}
 	
 	function getPokemonImage(pokemon){
