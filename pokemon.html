@@ -521,7 +521,7 @@ $(function() {
 				);
 		}
 		
-		result.append(getChooseButton().on("click",chooseResult));
+		result.append(getChooseButton().on("click",function(){chooseResult($(this));}));
 		
 		return result;
 	}
@@ -772,7 +772,7 @@ $(function() {
 	function init(){
 		processPokemon();
 	
-		if( false ){
+		if( Math.random() < 0.3 ){
 			init_typeTest();
 		} else {
 			init_pokemonNameTest();
@@ -796,6 +796,11 @@ $(function() {
 		$("#content").append(getCorrectBar().hide());
 		$("#content").append(getIncorrectBar().hide());
 		$("#content").append(getResultBar(type_a.getAttackResult(type_b)).prop( "id", "correct-answer" ).hide());
+		$("#content").append(
+			$("<div>")
+				.prop("id","correct-answer-text")
+				.append($("#correct-answer").text())
+				.hide());
 	}
 	
 	function init_pokemonNameTest(){
