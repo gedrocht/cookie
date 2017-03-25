@@ -36,12 +36,14 @@ function init(){
     intervals = document.getElementById("intervals");
     nowButton = document.getElementById("nowButton");
     
-    alarm = new Audio("TakeOneShot.wav");
+	alarm = new Audio("shots.mp3")
+    //alarm = new Audio("TakeOneShot.wav");
     //alarm = new Audio("chime.mp3");
     alarm.volume = 1.0;
     alarms.push(alarm);
     
-    alarm_alt = new Audio("drink.mp3");
+	alarm_alt = new Audio("shots.mp3")
+    //alarm_alt = new Audio("drink.mp3");
     //alarm_alt = new Audio("chime.mp3");
     alarm_alt.volume = 1.0;
     alarms.push(alarm_alt);

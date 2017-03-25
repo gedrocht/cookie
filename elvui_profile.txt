@@ -1,0 +1,103 @@
+{
+    ["databars"] = {
+        ["reputation"] = {
+            ["textFormat"] = "PERCENT",
+            ["orientation"] = "HORIZONTAL",
+            ["height"] = 22,
+            ["enable"] = true,
+            ["width"] = 1302,
+        },
+        ["experience"] = {
+            ["textFormat"] = "PERCENT",
+            ["height"] = 33,
+            ["orientation"] = "HORIZONTAL",
+            ["textSize"] = 20,
+            ["width"] = 1302,
+        },
+    },
+    ["movers"] = {
+        ["ElvUF_Raid40Mover"] = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,432",
+        ["ShiftAB"] = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,1196",
+        ["PetAB"] = "TOPRIGHT,ElvUIParent,TOPRIGHT,-362,-428",
+        ["ElvUF_RaidMover"] = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,427",
+        ["ElvAB_5"] = "TOPRIGHT,ElvUIParent,TOPRIGHT,-48,-396",
+        ["ElvUF_RaidpetMover"] = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,736",
+        ["ExperienceBarMover"] = "BOTTOM,ElvUIParent,BOTTOM,0,151",
+        ["ElvUF_PlayerMover"] = "BOTTOM,ElvUIParent,BOTTOM,-271,214",
+        ["BagsMover"] = "BOTTOMRIGHT,ElvUIParent,BOTTOMRIGHT,-438,20",
+        ["ElvAB_3"] = "BOTTOM,ElvUIParent,BOTTOM,0,37",
+        ["ReputationBarMover"] = "BOTTOM,ElvUIParent,BOTTOM,0,129",
+        ["ElvUF_PartyMover"] = "BOTTOMLEFT,ElvUIParent,BOTTOMLEFT,4,195",
+        ["ElvUF_TargetMover"] = "BOTTOM,ElvUIParent,BOTTOM,270,214",
+    },
+    ["unitframe"] = {
+        ["fontSize"] = 11,
+        ["fontOutline"] = "OUTLINE",
+        ["units"] = {
+            ["target"] = {
+                ["portrait"] = {
+                    ["enable"] = true,
+                    ["camDistanceScale"] = 1,
+                },
+                ["pvpIcon"] = {
+                    ["enable"] = true,
+                },
+                ["height"] = 45,
+            },
+            ["party"] = {
+                ["portrait"] = {
+                    ["enable"] = true,
+                    ["camDistanceScale"] = 1,
+                },
+                ["roleIcon"] = {
+                    ["xOffset"] = -21,
+                    ["position"] = "RIGHT",
+                },
+                ["customTexts"] = {
+                    ["[level]"] = {
+                        ["attachTextTo"] = "Health",
+                        ["font"] = "Homespun",
+                        ["justifyH"] = "CENTER",
+                        ["fontOutline"] = "MONOCHROMEOUTLINE",
+                        ["xOffset"] = -92,
+                        ["size"] = 10,
+                        ["text_format"] = "[level]",
+                        ["yOffset"] = 14,
+                    },
+                },
+                ["healPrediction"] = true,
+                ["width"] = 250,
+            },
+            ["player"] = {
+                ["portrait"] = {
+                    ["enable"] = true,
+                    ["camDistanceScale"] = 1,
+                },
+                ["customTexts"] = {
+                    ["[level]"] = {
+                        ["attachTextTo"] = "Health",
+                        ["font"] = "Homespun",
+                        ["justifyH"] = "CENTER",
+                        ["fontOutline"] = "OUTLINE",
+                        ["xOffset"] = -103,
+                        ["size"] = 11,
+                        ["text_format"] = "[level]",
+                        ["yOffset"] = 11,
+                    },
+                },
+                ["height"] = 45,
+            },
+        },
+    },
+    ["actionbar"] = {
+        ["bar3"] = {
+            ["buttonsPerRow"] = 12,
+            ["buttons"] = 12,
+        },
+        ["bar5"] = {
+            ["buttonsPerRow"] = 1,
+            ["buttons"] = 12,
+        },
+        ["backdropSpacingConverted"] = true,
+    },
+}::profile::Zorplezapper - Sargeras

@@ -1,0 +1,5 @@
+Price of computer: 545.97
+Price of GTX 1060: 256.99
+
+
+Price of 2 computers and a GTX 1060: $1348.93
