@@ -1,0 +1,40 @@
+<html>
+<head>
+<script>
+ID_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789";
+URL_start = "https://www.youtube.com/watch?v=";
+ID_length = 11;
+
+function getRandIDChar(){
+    return ID_chars[Math.round(Math.random()*ID_chars.length)];
+}
+
+function getRandID(){
+    var output = "";
+    for( var i = 0 ; i < ID_length ; i++ ){
+        output += getRandIDChar();
+    }
+    return output;
+}
+
+function getRandURL(){
+    return URL_start + getRandID();
+}
+
+function getYTEmbedCode(ID){
+    return "<iframe width='200' height='113' src='https://www.youtube.com/embed/"+ID+"?autoplay=1' frameborder='0' allowfullscreen></iframe>"
+}
+
+function init(){
+    output = "";
+    
+    for( var i = 0 ; i < 72 ; i++ ){
+        output += getYTEmbedCode(getRandID());
+    }
+    
+    document.body.innerHTML = output;
+}
+</script>
+</head>
+<body onLoad="init()">
+</body>

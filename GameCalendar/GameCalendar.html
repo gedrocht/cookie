@@ -1,0 +1,324 @@
+<html>
+<head>
+<style>
+body {
+	font-family: Courier;
+	font-size: 25pt;
+}
+
+.background {
+	width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+	width: 36%;
+	min-width: 500px;
+    height: 50%;
+	
+	position:absolute;
+    left:0;
+	right:0;
+    top:0;
+	bottom:0;
+	margin:auto;
+	
+	max-width:100%;
+	max-height:100%;
+}
+
+.content::first-line {
+	font-weight: bold;
+}
+
+a {
+	text-decoration: underline;
+	color: black;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Game Calendar</title>
+<script src="../jquery-3.1.1.min.js"></script>
+<script src="appid_db.js"></script>
+<script>
+installed_games = [
+	"Aeon Command",
+	"Ben and Ed",
+	"Choice of Robots",
+	"Counter-Strike: Global Offensive",
+	"DARK SOULS™ III",
+	"Dishonored",
+	"Dragon Age: Origins - Ultimate Edition",
+	"Dropsy",
+	"Dungeons of Dredmor",
+	"Escape Goat 2",
+	"Far Cry® 3",
+	"GemCraft - Chasing Shadows",
+	"Invisible, Inc.",
+	"Life Is Strange™",
+	"Magicka 2",
+	"Max Payne 3",
+	"METAL GEAR SOLID V: THE PHANTOM PAIN",
+	"Micron",
+	"Nosferatu: The Wrath of Malachi",
+	"One Finger Death Punch",
+	"Orwell",
+	"Owlboy",
+	"Party Hard",
+	"Prismatica",
+	"Recursion Deluxe",
+	"Sparkle 2 Evo",
+	"Subnautica",
+	"Super Amazing Wagon Adventure",
+	"Torchlight",
+	"TRANSFORMERS: Devastation",
+	"TransPlan",
+	"Turbo Dismount",
+	"Viscera Cleanup Detail: Shadow Warrior",
+	"War of the Roses",
+	"X: Beyond the Frontier"
+];
+
+DAY_OF_WEEK_REPLACE_STRING = "%DAY_OF_WEEK%";
+DATE_REPLACE_STRING = "%DATE%";
+TASKS_INTRO = "Games for " + DAY_OF_WEEK_REPLACE_STRING + ", " + DATE_REPLACE_STRING + ":";
+GAME_TIMES = [8, 11, 14, 17];
+NEW_LINE = "<br>";
+
+tests = [test_installed_games_against_db];
+
+rand_seed = 0;
+function rand(){
+	var x = Math.sin(rand_seed++) * 10000;
+	return x - Math.floor(x);
+}
+
+function Task(hour = 0, task_name = "NO_TASK_NAME", length_in_hours = 1){
+	this.hour = hour;
+	this.task_name = task_name;
+	this.length_in_hours = length_in_hours;
+}
+
+function convert_military_time(military_time){
+	var pm = false;
+	
+	if( military_time > 12 ){
+		military_time -= 12;
+		pm = true;
+	}
+	
+	if( military_time == 12 ) //noon
+		pm = true;
+	
+	if( military_time == 0 ) //midnight
+		military_time = 12;
+		
+	return military_time + " " + (pm?"PM":"AM");
+}
+
+function Day(month, day, tasks, year = 2017){
+	this.month = month;
+	this.day = day;
+	this.year = year;
+	this.tasks = tasks;
+}
+
+function run_all_tests(){
+	var failure_message = "";
+	
+	for( var i = 0 ; i < tests.length ; i++ ){
+		failure_message = tests[i]();
+		if( failure_message.length != 0 ){
+			alert(failure_message);
+			break;
+		}
+	}
+}
+
+function test_installed_games_against_db(){
+	for( var i = 0 ; i < installed_games.length ; i++ ){
+		if( appid.get_appid_from_name(installed_games[i]) == -1 )
+			return "Could not find appid for \"" + installed_games[i] + "\"";
+	}
+	return "";
+}
+
+function get_random_game(){
+	return installed_games[Math.floor(rand()*installed_games.length)];
+}
+
+function get_random_games(count){
+	games = [];
+	
+	game = undefined;
+	while( games.length < count ){
+		game = get_random_game();
+		if( games.indexOf(game) != -1 )
+			continue;
+		
+		games.push(game);
+	}
+	
+	return games;
+}
+
+function pad_string( str, len=2, pad="0" ){
+	while(str.length < len){
+		str = pad + str;
+	}
+	return str;
+}
+
+function set_rand_seed( month, day, year ){
+	month_string = pad_string(month.toString());
+	day_string = pad_string(day.toString());
+	year_string = year.toString();
+	
+	rand_seed = Number(month_string + day_string + year_string);
+}
+
+function get_tasks(month, day, year){
+	set_rand_seed(month, day, year);
+	tasks = [];
+	random_games = get_random_games(GAME_TIMES.length);
+	
+	for( x in GAME_TIMES ){
+		tasks.push(new Task(GAME_TIMES[x],random_games[x]));
+	}
+	return tasks;
+}
+
+function get_date_string(month, day){
+	return get_month_name(month) + " " + day;
+}
+
+function get_day_of_week(month, day, year){
+	d = new Date();
+	d.setMonth(month-1);
+	d.setDate(day);
+	d.setFullYear(year);
+	switch( d.getDay() ){
+		case 0: return "Sunday";
+		case 1: return "Monday";
+		case 2: return "Tuesday";
+		case 3: return "Wednesday";
+		case 4: return "Thursday";
+		case 5: return "Friday";
+		case 6: return "Saturday";
+	}
+}
+
+function get_month_name(month){
+	switch(month){
+		case 1: return "January";
+		case 2: return "February";
+		case 3: return "March";
+		case 4: return "April";
+		case 5: return "May";
+		case 6: return "June";
+		case 7: return "July";
+		case 8: return "August";
+		case 9: return "September";
+		case 10: return "October";
+		case 11: return "November";
+		case 12: return "December";
+	}
+}
+
+function get_tasks_jQuery(month, day, year){
+	jq = [];
+	
+	intro_str = TASKS_INTRO;
+	intro_str = intro_str.replace(DATE_REPLACE_STRING, get_date_string(month,day));
+	intro_str = intro_str.replace(DAY_OF_WEEK_REPLACE_STRING, get_day_of_week(month,day,year));
+	
+	jq.push(intro_str);
+	jq.push($(NEW_LINE));
+	
+	tasks = get_tasks(month, day, year);
+	
+	var task;
+	var time_str;
+	var game_href;
+	var game_a;
+	for( x in tasks ){
+		task = tasks[x];
+		
+		time_str = pad_string(convert_military_time(task.hour), 5, "&nbsp;")
+		
+		game_href = "steam://run/" + appid_db.get_appid_from_name(task.task_name);
+		game_a = $('<a>')
+			.prop("href",game_href)
+			.text(task.task_name);
+		
+		jq.push(time_str + " &nbsp;");
+		jq.push(game_a);
+		jq.push($(NEW_LINE));
+	}
+	
+	return jq;
+}
+
+$(function(){
+	d = new Date();
+	month = d.getMonth() + 1;
+	day = d.getDate();
+	year = d.getFullYear();
+
+	tasks_jq = get_tasks_jQuery(month, day, year);
+	content = $("<div>")
+		.addClass("content");
+	
+	for( var i = 0 ; i < tasks_jq.length ; i++ ){
+		content.append(tasks_jq[i]);
+	}
+	
+	$("body")
+		.append($("<div>")
+			.addClass("background")
+			.append(content)
+		);
+})
+</script>
+</head>
+<body>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
