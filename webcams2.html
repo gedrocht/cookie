@@ -1,0 +1,208 @@
+<head>
+<style>
+body {
+    background-color: black;
+    overflow:hidden;
+}
+div {
+    float: left;
+}
+iframe {
+}
+</style>
+
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script async src="https://www.youtube.com/iframe_api"></script>
+<script>
+
+streams = ['r5TpH5bXuOA', //ashland, va
+           'w8pZYIghqaA', //vlieland beach
+           'psfFJR3vZ78', //jackson hole, wy
+           'IT9SuXg_VEk', //lake oroville
+           '_9pavMzUY-c', //shibuya, japan
+           '8IAkm3d0ftc', //teton valley lodge
+           'vPbQcM4k1Ys', //venice, italy
+           'Qhq4vQdfrFw', //oxford, uk
+           'hNaCPzorgZA', //glenwood springs, co
+           '8Uvqa_Z0LHg', //puppies
+           'WUmeGBMsdAk', //kittens
+           'ifmuEH-Lg1c', //la planta, mo
+           'RtU_mdL2vBM', //iss
+           'IhnQzDX-tWo', //dania beach pier
+           '5rTXUdiWrYM', //Geirangerfjord cruise port, Hellesylt
+           'X2bKQY28gvQ', //salty's surf shop
+           'Gvri_PLucMY', //west bay, dorset, uk
+           '2LZVDWQ57Vs', //hvar, croatia
+           '3MSsNNQHcRM', //havenplein
+           'y5Pa5LqQM5A', //clearwater beach
+           'AToMW7-rjog', //flamand beach
+           'CMj2ZmkJJkw', //bryant park
+           'gaSPTYwuaT0', //europe
+           '3eTBHixZN6M', //karditsa
+           '_EAcz2V9FMA', //mallory square, florida
+           'ZMQFsNqGavU', //amsterdam
+           'P9qjE1dm75A', //venice, italy
+           'CRAN9TSj5Kc', //university of tampa
+           '80Y8TF8JbLw', //taiwan
+           'J2ggwyOl-_0', //cuxhaven
+           'AvBkfbwMkCo', //alpine, wy
+           'HYQk-jXy12w', //jackson, wy
+           'BxPBniNWnLY', //bredstedt, germany
+           'nyYEAlIXzUQ', //amsterdam
+           'pqBDFG9aoT4', //elburg, netherlands
+           'iVqNDHxixXc', //jackson hole, wy
+           'joIw1cZBn0M', //grand targhee, wy
+           'FEn6hZf7ZhY', //key west, fl
+           'knXMlXPmEAA', //key west, fl
+           '0PauU4kgmY8', //oleron, france
+           'YMbwlnwU2Q8', //saint-malo, france
+           'sS5C-WsS5z4', //dunedin, new zealand
+           '5rqFG9bEDGQ', //perros-guirec, france
+           'f5bXqMmE7nU', //zarnesti, romania
+           'f5bXqMmE7nU', //st-barth, france
+           'mOFR0xQx_Vg', //port de quebec, canada
+           'mGBQdVUnF0s', //bodø havn, norway
+           'aEeya25Jl1w', //saint-quay-portrieux, france
+           'CP8x2luQSIw', //portsmouth, nh
+           'DrHKkfo5WnA', //davisville, ri
+           'Xk2XLO2DvMA', //fort lee, nj
+           'Zsna8X8hNzM', //long beach island, nj
+           'PmCkBPm7ICk', //altoona, pa
+           'iXmRcFeTLY0', //tetons, wy
+           'iyzGqj_xRfc', //mount fuji, shizuoka, japan
+           'Q-1JkYXDyP0', //mount zion, jerusalem
+           'p5mu_febWXg', //katmai national park, alaska
+           'kDWh0ijwCp0', //northern lights
+           'tXH-YWMZ_1c', //chipmunk log, colorado
+           'dDlmYbWaNm0', //california
+           'DzcVJ6sMPh0', //turtle bay, hawaii
+           'tNMfBs6kKK0', //puppies
+           'k7-mA-IdRgk', //puppies
+           'KzTTF_WNTfM', //cayman reef
+           'CLmvREy5E1c', //north carolina
+           'cIS1WydfEIw', //cattle pasture, new york
+           'OT7edR7M2zs', //cattle pasture, wi
+           'GvC0Z4Qe7Fg', //kenya
+           'WcLiAX5PKFQ', //alaska
+           'z53ZkqL8E1U', //bees
+           't2q89jtvEq8', //eagles
+           'oD8kq6xjNNo', //puffins
+           '89Vo1KHlOBQ', //hummingbirds
+           'O8CIc1X_bfg', //hummingbird nest
+           'cIfKXuDH6mc', //puffins
+           'nL104seTBY4' //alligators, fl
+          ]; 
+          
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+streams = shuffle(streams);
+
+NUM_STREAMS = 4;
+stream_to_add = NUM_STREAMS;
+active_streams = [];
+cam_to_switch = 0;
+
+for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+    active_streams[i] = "";
+}
+
+function switch_cam(){
+    //active_streams[cam_to_switch] = get_random_stream();
+    //console.log( "new random stream: " + active_streams[cam_to_switch] );
+    
+    active_streams[cam_to_switch] = streams[stream_to_add];
+    yt_players[cam_to_switch].loadVideoById(active_streams[cam_to_switch]);
+    
+    if( stream_to_add+1 >= streams.length ){
+        stream_to_add = 0;
+    } else {
+        stream_to_add++;
+    }
+    
+    if( cam_to_switch+1 >= NUM_STREAMS ){
+        cam_to_switch = 0;
+    } else {
+        cam_to_switch++;
+    }
+}
+
+$( document ).ready(function() {
+    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+        $(document.body).append($('<div>').prop("id",i.toString()));
+    }
+    
+    setInterval( switch_cam, 1000*60*2.5 );
+});
+
+yt_players = []
+
+
+ function onYouTubeIframeAPIReady() {
+  var player;
+  height = Math.round($(window).height()/2-6);
+  width = Math.round((16.0/9.0)*height);
+  
+  for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+      player = new YT.Player(i.toString(), {
+        //videoId: get_random_stream(), // YouTube Video ID
+        videoId: streams[i],
+        width: width,               // Player width (in px)
+        height: height,              // Player height (in px)
+        playerVars: {
+          autoplay: 1,        // Auto-play the video on load
+          controls: 1,        // Show pause/play buttons in player
+          showinfo: 0,        // Hide the video title
+          modestbranding: 1,  // Hide the Youtube Logo
+          loop: 1,            // Run the video in a loop
+          fs: 0,              // Hide the full screen button
+          cc_load_policy: 0, // Hide closed captions
+          iv_load_policy: 3,  // Hide the Video Annotations
+          autohide: 0         // Hide video controls when playing
+        },
+        events: {
+          onReady: function(e) {
+            e.target.mute();
+          }
+        }
+      });
+      yt_players.push(player);
+    }
+    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+        switch_cam();
+    }
+ }
+ 
+ function get_random_stream(){
+    while( true ){
+        stream = streams[Math.round(Math.random()*streams.length)]
+        if( active_streams.indexOf(stream) != -1 ){
+            continue;
+        }
+        return stream;
+    }
+ }
+</script>
+<!--
+<div><iframe src="https://www.youtube.com/embed/r5TpH5bXuOA" frameborder="0" allowfullscreen></iframe></div>
+<div><iframe src="https://www.youtube.com/embed/RtU_mdL2vBM" frameborder="0" allowfullscreen></iframe></div>
+-->

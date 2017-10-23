@@ -19,12 +19,22 @@ body {
     overflow:hidden;
 }
 </style>
+<script>
+URLs = ["http://www.ustream.tv/embed/5883040?html5ui&autoplay=true",
+        "http://www.ustream.tv/embed/19698644?html5ui&autoplay=true",
+        "http://www.ustream.tv/embed/19970048?html5ui&autoplay=true",
+        "http://www.ustream.tv/embed/10340257?html5ui&autoplay=true"]
+        
+setInterval(function(){document.getElementById("UstreamIframe").src=URLs[Math.round(Math.random()*URLs.length)];},1000*60*15);
+</script>
 </head>
 <body>
-<div><iframe src="http://www.ustream.tv/embed/5883040?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
+<div><iframe id="UstreamIframe" src="//www.ustream.tv/embed/5883040&autoplay=true" allowfullscreen webkitallowfullscreen></iframe></div>
+<!--
 <div><iframe src="http://www.ustream.tv/embed/19698644?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
 <div><iframe src="http://www.ustream.tv/embed/19970048?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
 <div><iframe src="http://www.ustream.tv/embed/10340257?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
+-->
 <!--
 <div><iframe src="http://www.ustream.tv/embed/16163337?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
 <div><iframe src="http://www.ustream.tv/embed/17677421?html5ui" scrolling="no" allowfullscreen webkitallowfullscreen frameborder="0" style="border: 0 none transparent;"></iframe></div>
