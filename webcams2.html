@@ -12,8 +12,11 @@ div {
 div.container {
 }
 div.title {
+    text-transform: capitalize;
     position: absolute;
     z-index: 99999;
+    font-size: 20pt;
+    padding: 5px;
 }
 iframe {
     z-index: -99999;
@@ -27,82 +30,165 @@ iframe {
 <script async src="https://www.youtube.com/iframe_api"></script>
 <script>
 
-streams = [['r5TpH5bXuOA', 'ashland, va'],
-           ['w8pZYIghqaA', 'vlieland beach'],
-           ['psfFJR3vZ78', 'jackson hole, wy'],
-           ['IT9SuXg_VEk', 'lake oroville'],
+streams = [['r5TpH5bXuOA', 'ashland, virginia'],
+           ['w8pZYIghqaA', 'vlieland beach, netherlands'],
+           ['psfFJR3vZ78', 'jackson hole, wyoming'],
+           ['IT9SuXg_VEk', 'lake oroville, california'],
            ['_9pavMzUY-c', 'shibuya, japan'],
-           ['8IAkm3d0ftc', 'teton valley lodge'],
+           ['8IAkm3d0ftc', 'teton valley lodge, driggs, idaho'],
            ['vPbQcM4k1Ys', 'venice, italy'],
-           ['Qhq4vQdfrFw', 'oxford, uk'],
-           ['hNaCPzorgZA', 'glenwood springs, co'],
-           ['8Uvqa_Z0LHg', 'puppies'],
-           ['WUmeGBMsdAk', 'kittens'],
-           ['ifmuEH-Lg1c', 'la planta, mo'],
-           ['RtU_mdL2vBM', 'iss'],
-           ['IhnQzDX-tWo', 'dania beach pier'],
-           ['5rTXUdiWrYM', 'Geirangerfjord cruise port, Hellesylt'],
-           ['X2bKQY28gvQ', 'salty\'s surf shop'],
-           ['Gvri_PLucMY', 'west bay, dorset, uk'],
+           ['Qhq4vQdfrFw', 'oxford, england'],
+           ['hNaCPzorgZA', 'glenwood springs, colorado'],
+           ['WUmeGBMsdAk', 'kittens, illinois'],
+           ['ifmuEH-Lg1c', 'la planta, montana'],
+           ['RtU_mdL2vBM', 'international space station'],
+           ['IhnQzDX-tWo', 'dania beach, florida'],
+           ['5rTXUdiWrYM', 'geirangerfjord cruise port, hellesylt, norway'],
+           ['X2bKQY28gvQ', 'salty\'s surf shop, north carolina'],
            ['2LZVDWQ57Vs', 'hvar, croatia'],
-           ['3MSsNNQHcRM', 'havenplein'],
-           ['y5Pa5LqQM5A', 'clearwater beach'],
-           ['AToMW7-rjog', 'flamand beach'],
-           ['CMj2ZmkJJkw', 'bryant park'],
-           ['gaSPTYwuaT0', 'europe'],
-           ['3eTBHixZN6M', 'karditsa'],
-           ['_EAcz2V9FMA', 'mallory square, florida'],
-           ['ZMQFsNqGavU', 'amsterdam'],
+           ['3MSsNNQHcRM', 'havenplein, netherlands'],
+           ['y5Pa5LqQM5A', 'clearwater beach, florida'],
+           ['AToMW7-rjog', 'flamand beach, st barthélemy, caribbean'],
+           ['CMj2ZmkJJkw', 'bryant park, new york city'],
+           ['gaSPTYwuaT0', 'amsterdam, netherlands'],
+           ['3eTBHixZN6M', 'karditsa, greece'],
+           ['ZMQFsNqGavU', 'amsterdam, netherlands'],
            ['P9qjE1dm75A', 'venice, italy'],
-           ['CRAN9TSj5Kc', 'university of tampa'],
-           ['80Y8TF8JbLw', 'taiwan'],
-           ['J2ggwyOl-_0', 'cuxhaven'],
-           ['AvBkfbwMkCo', 'alpine, wy'],
-           ['HYQk-jXy12w', 'jackson, wy'],
-           ['BxPBniNWnLY', 'bredstedt, germany'],
-           ['nyYEAlIXzUQ', 'amsterdam'],
+           ['CRAN9TSj5Kc', 'university of tampa, florida'],
+           ['80Y8TF8JbLw', 'new taipei, taiwan'],
+           ['J2ggwyOl-_0', 'cuxhaven, germany'],
+           ['AvBkfbwMkCo', 'alpine, wyoming'],
+           ['HYQk-jXy12w', 'jackson, wyoming'],
+           ['nyYEAlIXzUQ', 'amsterdam, netherlands'],
            ['pqBDFG9aoT4', 'elburg, netherlands'],
-           ['iVqNDHxixXc', 'jackson hole, wy'],
-           ['joIw1cZBn0M', 'grand targhee, wy'],
-           ['FEn6hZf7ZhY', 'key west, fl'],
-           ['knXMlXPmEAA', 'key west, fl'],
+           ['iVqNDHxixXc', 'jackson hole, wyoming'],
+           ['joIw1cZBn0M', 'grand targhee, wyoming'],
+           //['FEn6hZf7ZhY', 'key west, florida'],
+           //['knXMlXPmEAA', 'key west, florida'],
            ['0PauU4kgmY8', 'oleron, france'],
            ['YMbwlnwU2Q8', 'saint-malo, france'],
            ['sS5C-WsS5z4', 'dunedin, new zealand'],
            ['5rqFG9bEDGQ', 'perros-guirec, france'],
            ['f5bXqMmE7nU', 'zarnesti, romania'],
-           ['f5bXqMmE7nU', 'st-barth, france'],
            ['mOFR0xQx_Vg', 'port de quebec, canada'],
            ['mGBQdVUnF0s', 'bodø havn, norway'],
            ['aEeya25Jl1w', 'saint-quay-portrieux, france'],
-           ['CP8x2luQSIw', 'portsmouth, nh'],
-           ['DrHKkfo5WnA', 'davisville, ri'],
-           ['Xk2XLO2DvMA', 'fort lee, nj'],
-           ['Zsna8X8hNzM', 'long beach island, nj'],
-           ['PmCkBPm7ICk', 'altoona, pa'],
-           ['iXmRcFeTLY0', 'tetons, wy'],
+           ['DrHKkfo5WnA', 'davisville, rhode island'],
+           ['Zsna8X8hNzM', 'long beach island, new jersey'],
+           ['PmCkBPm7ICk', 'altoona, pennsylvania'],
+           ['iXmRcFeTLY0', 'tetons, wyoming'],
            ['iyzGqj_xRfc', 'mount fuji, shizuoka, japan'],
            ['Q-1JkYXDyP0', 'mount zion, jerusalem'],
-           ['p5mu_febWXg', 'katmai national park, alaska'],
-           ['kDWh0ijwCp0', 'northern lights'],
            ['tXH-YWMZ_1c', 'chipmunk log, colorado'],
-           ['dDlmYbWaNm0', 'california'],
+           ['dDlmYbWaNm0', 'crescent city, california'],
            ['DzcVJ6sMPh0', 'turtle bay, hawaii'],
-           ['tNMfBs6kKK0', 'puppies'],
-           ['k7-mA-IdRgk', 'puppies'],
-           ['KzTTF_WNTfM', 'cayman reef'],
-           ['CLmvREy5E1c', 'north carolina'],
-           ['cIS1WydfEIw', 'cattle pasture, new york'],
-           ['OT7edR7M2zs', 'cattle pasture, wi'],
-           ['GvC0Z4Qe7Fg', 'kenya'],
-           ['WcLiAX5PKFQ', 'alaska'],
-           ['z53ZkqL8E1U', 'bees'],
-           ['t2q89jtvEq8', 'eagles'],
-           ['oD8kq6xjNNo', 'puffins'],
-           ['89Vo1KHlOBQ', 'hummingbirds'],
-           ['O8CIc1X_bfg', 'hummingbird nest'],
-           ['cIfKXuDH6mc', 'puffins'],
-           ['nL104seTBY4', 'alligators, fl']
+           ['tNMfBs6kKK0', 'rohnert park, california'],
+           ['k7-mA-IdRgk', 'puppies, unknown location'],
+           ['CLmvREy5E1c', 'wilmington, north carolina'],
+           ['cIS1WydfEIw', 'cattle pasture, upstate new york'],
+           ['OT7edR7M2zs', 'cattle pasture, wisconsin'],
+           ['GvC0Z4Qe7Fg', 'unspecified location, kenya'],
+           ['89Vo1KHlOBQ', 'hummingbirds, unknown location'],
+           ['nL104seTBY4', 'st. augustine, florida'],
+           ['LnGJnVohjx0', 'ohio state university, lima, ohio'],
+           ['BPJVF-RCx98', 'wheelersburg, ohio'],
+           ['wcjw031W_Cs', 'western kentucky university'],
+           ['Cqau81u043E', 'east oregon university'],
+           ['ZePRet3wczc', 'east oregon university'],
+           ['8OE1aS91yvQ', 'la grange, kentucky'],
+           ['tVGIXLoQ-Fw', 'deshler, ohio'],
+           ['2OIbtphMS00', 'hopkinsville, kentucky'],
+           ['QLxDY7Wbe_A', 'sturgis, south dakota'],
+           ['S3Bl8AuKPds', 'burlington, vermont'],
+           ['0lkf8u0ae5s', 'carolina beach, north carolina'],
+           ['AoiaA6o4Urw', 'sheridan, california'],
+           ['jV9BKnJgkhs', 'roanoke, virginia'],
+           ['fZtQbsScCr4', 'auburn, alabama'],
+           ['fjT1EcpCBfo', 'savannah, georgia'],
+           ['D4p01i1XUEA', 'savannah, georgia'],
+           ['pTGLeg7IHJ4', 'coral reef, san francisco, california'],
+           ['KXBWXkr4Tzk', 'university of washington, seattle, washington'],
+           ['XnbOcOwUZVQ', 'tiffin, ohio'],
+           ['6sFbmWJYQmI', 'ithica, new york'],
+           ['2f26MIftWdw', 'chautauqua lake, new york'],
+           ['HbvoJXzLLNI', 'wellington, new zealand'],
+           ['3_SulAKo-XQ', 'west texas hummingbird cam'],
+           ['YuAJ_rpXir4', 'gladewater, texas'],
+           ['br37oTMBojs', 'lysefjord, forsand, norway']
+           ['_09U1Ib7Nds', 'little traverse bay, lake michigan'],
+           ['R7SPcZ4tRnA', 'clare, michigan'],
+           ['_TFH2ju5w4k', 'bangor, michigan'],
+           ['rxAIEkYJCCQ', 'fort wayne, indiana'],
+           ['YWeynGlQJDg', 'gaylord, michigan'],
+           ['MkzKlazwBQs', 'sweetwater, tennessee'],
+           ['RjJziEXzzaw', 'central minnesota'],
+           ['YwdU2IeQQWk', 'central minnesota'],
+           ['xhD-cDUZNWQ', 'central minnesota'],
+           ['Xy-vlWY5vAg', 'central minnesota'],
+           ['wEXK7O9Zz74', 'central minnesota'],
+           ['LDwMKgMpFqM', 'warren, vermont'],
+           ['M-zafV0-RJw', 'burnsville, minnesota'],
+           ['wzKQEUKSWHo', 'louisville, texas'],
+           ['VMsUue_I4dY', 'des moines, iowa'],
+           ['qHqIjDoMYAk', 'glenwood springs, colorado'],
+           ['3z_Eso4ICkg', 'gardner, massachusetts'],
+           ['ztZ_v6k30Ew', 'denver, colorado'],
+           ['u18ZPbisYKI', 'hays, kansas'],
+           ['zkyCJ9Q4IHA', 'prairie village, kansas'],
+           ['wckuhNoQkmI', 'st. john\'s harbor, newfoundland, canada'],
+           ['PpAIJ0aYojQ', 'nesodden, norway'],
+           ['XjTwdjkknKk', 'nesodden, norway'],
+           ['kUlCLkO8xIE', 'nesodden, norway'],
+           ['kekIEn4IpJs', 'nesodden, norway'],
+           ['Be3wGeNRyCs', 'smøla, norway'],
+           ['KItdBJMNFqs', 'seismographs, lincoln, nebraska'],
+           ['--Tq34cIA0A', 'watertown, south dakota'],
+           ['lyXxRBdIHxo', 'jackson hole, wyoming'],
+           ['3IxBfMy8vYE', 'breckenridge, colorado'],
+           ['q8Sg0RL5fBU', 'henry\'s fork river, island park, idaho'],
+           ['jv2GgDTrzns', 'jackson, wyoming'],
+           ['DrjJM2ctsjw', 'star valley, wyoming'],
+           ['KdvHzgcElx0', 'jackson hole, wyoming'],
+           ['_uxEBNJuIRg', 'spring creek ranch, jackson, wyoming'],
+           ['Yy2Okgk6yIk', 'toronto, ontario, canada'],
+           ['IKVz-VXrbGc', 'cedar city, utah'],
+           ['alte4wKW7PA', 'cedar city, utah'],
+           ['O13dSVFpAJE', 'phoenix, arizona'],
+           ['ZeSPtQbP3w8', 'casa grande, arizona'],
+           ['CkXLn7iyU-8', 'richland, washington'],
+           ['fgZb4323WI0', 'university of washington, seattle'],
+           ['yMuT-2MTkng', 'eugene, oregon'],
+           ['OD3O6DiqMQE', 'global earthquake feed'],
+           ['3FqKgA1qckk', 'anaheim, california'],
+           ['bNc7rGEBrMA', 'san francisco, california'],
+           ['Bodg9G5oZfE', 'morro bay, california'],
+           ['zzriUVdAwgw', 'buena park, california'],
+           ['bRWI-GSaf5Q', 'shasta, california'],
+           ['1zzHuT7y4AI', 'grass valley, california'],
+           ['DmN6sxTjXdY', 'unknown location'],
+           ['YOc9otxB7oI', 'unknown location'],
+           ['8w9lCzW0DEo', 'unknown location'],
+           ['xLM_GW55F7A', 'unknown location'],
+           ['SLgacoX7ZsQ', 'yorkville, region unknown'],
+           ['fx-gZuARZuE', 'sittard, netherlands'],
+           ['Ine4J22gerg', 'sittard, netherlands'],
+           ['Uh6PHeW8ki4', 'sittard, netherlands'],
+           ['S7wOakkvSMo', 'location unknown'],
+           ['q3-otYhOkHA', 'salina turda, romania'],
+           ['MemLGAbXEgw', 'location unknown'],
+           ['_DvVKsgihfc', 'location unknown'],
+           ['dVNZXWUsqMk', 'location unknown'],
+           ['Is8z1ObFCAs', 'location unknown'],
+           ['INVZOllxJxg', 'pelham road, region unknown'],
+           ['ME0fWHOBmb8', 'cayucos, california'],
+           ['O3ZlU-c__fY', 'monterey bay, california'],
+           ['cKO3rRfeoqM', 'cayucos, california'],
+           ['2AabJFnYNsY', 'san diego, california'],
+           ['imIXr4agMXI', 'hermosa beach, california'],
+           ['hq4zXzo4k1E', 'petržalka, slovakia'],
+           ['teAvmnyW7Ms', 'alanya, turkey'],
+           ['G0qal7jbk2E', 'new taipei, taiwain'],
+           ['UjALrXRNzGE', 'cornell lab, ithica, new york']
           ]; 
           
 function shuffle(array) {
@@ -126,10 +212,13 @@ function shuffle(array) {
 
 streams = shuffle(streams);
 
-NUM_STREAMS = 4;
+var url = new URL(location.href);
+var numStreams = url.searchParams.get("numStreams");
+NUM_STREAMS = Number(numStreams)
 stream_to_add = NUM_STREAMS;
 active_streams = [];
 cam_to_switch = 0;
+yt_players = []
 
 for( var i = 0 ; i < NUM_STREAMS ; i++ ){
     active_streams[i] = "";
@@ -138,7 +227,7 @@ for( var i = 0 ; i < NUM_STREAMS ; i++ ){
 function switch_cam(){
     active_streams[cam_to_switch] = streams[stream_to_add];
     yt_players[cam_to_switch].loadVideoById(active_streams[cam_to_switch][0]);
-    $($('div.title')[stream_to_add]).text(active_streams[cam_to_switch][1]);
+    $($('div.title')[cam_to_switch]).text(active_streams[cam_to_switch][1]);
     
     if( stream_to_add+1 >= streams.length ){
         stream_to_add = 0;
@@ -154,6 +243,7 @@ function switch_cam(){
 }
 
 $( document ).ready(function() {
+    setInterval( switch_cam, 1000*60*2.5 );
     for( var i = 0 ; i < NUM_STREAMS ; i++ ){
         $(document.body).append(
             $('<div>')
@@ -170,12 +260,7 @@ $( document ).ready(function() {
                 )
         );
     }
-    
-    switch_cam();
-    setInterval( switch_cam, 1000*60*2.5 );
 });
-
-yt_players = []
 
 
  function onYouTubeIframeAPIReady() {
@@ -191,14 +276,14 @@ yt_players = []
         height: height,              // Player height (in px)
         playerVars: {
           autoplay: 1,        // Auto-play the video on load
-          controls: 1,        // Show pause/play buttons in player
+          controls: 0,        // Show pause/play buttons in player
           showinfo: 0,        // Hide the video title
           modestbranding: 1,  // Hide the Youtube Logo
           loop: 1,            // Run the video in a loop
-          fs: 0,              // Hide the full screen button
+          fs: 1,              // Hide the full screen button
           cc_load_policy: 0,  // Hide closed captions
           iv_load_policy: 3,  // Hide the Video Annotations
-          autohide: 0,        // Hide video controls when playing
+          autohide: 1,        // Hide video controls when playing
           wmode: "transparent"
         },
         events: {
