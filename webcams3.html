@@ -1,0 +1,368 @@
+<head>
+<style>
+body {
+    background-color: black;
+    overflow:hidden;
+}
+div.webcam {
+    color: white;
+    background-color: black;
+    float: left;
+}
+div.container {
+}
+div.title {
+    text-transform: capitalize;
+    position: absolute;
+    z-index: 99999;
+    font-size: 24pt;
+    padding: 5px;
+}
+div.container iframe {
+    z-index: -99999;
+}
+
+img.weather {
+    position: absolute;
+    z-index: 99999;
+    margin-left: -320px;
+    width: 320px;
+    height: 180px;
+}
+
+iframe.time {
+    position: absolute;
+    z-index: 99999;
+    margin-left: -139px;
+    width: 140px;
+    height: 50px;
+    border: 0px;
+    overflow: hidden;
+    margin-top: 90px;
+}
+</style>
+
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script async src="https://www.youtube.com/iframe_api"></script>
+<script>
+
+ZIP_UNKNOWN = "ZIP code unknown";
+TIME_UNKNOWN = "Time unknown";
+
+streams = [['r5TpH5bXuOA', 'ashland, virginia', "23005", "120"],
+           ['w8pZYIghqaA', 'vlieland beach, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['psfFJR3vZ78', 'jackson hole, wyoming', "83002", "10"],
+           ['IT9SuXg_VEk', 'lake oroville, california', "95965", "234"],
+           ['_9pavMzUY-c', 'shibuya, japan', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['8IAkm3d0ftc', 'teton valley lodge, driggs, idaho', "83422", TIME_UNKNOWN],
+           ['vPbQcM4k1Ys', 'venice, italy', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['Qhq4vQdfrFw', 'oxford, england', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['hNaCPzorgZA', 'glenwood springs, colorado', "81601", "10"],
+           ['WUmeGBMsdAk', 'kittens, illinois', "61701", "3"],
+           ['ifmuEH-Lg1c', 'la planta, montana', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['RtU_mdL2vBM', 'international space station', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['IhnQzDX-tWo', 'dania beach, florida', "33004", "120"],
+           ['5rTXUdiWrYM', 'geirangerfjord cruise port, hellesylt, norway', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['X2bKQY28gvQ', 'salty\'s surf shop, north carolina', "28469", "120"],
+           ['2LZVDWQ57Vs', 'hvar, croatia', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['3MSsNNQHcRM', 'havenplein, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['y5Pa5LqQM5A', 'clearwater beach, florida', "33767", "120"],
+           ['AToMW7-rjog', 'flamand beach, st barthélemy, caribbean', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['gaSPTYwuaT0', 'amsterdam, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['CMj2ZmkJJkw', 'bryant park, new york city', "10001", "120"],
+           ['3eTBHixZN6M', 'karditsa, greece', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['ZMQFsNqGavU', 'amsterdam, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['P9qjE1dm75A', 'venice, italy', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['CRAN9TSj5Kc', 'university of tampa, florida', "33601", "120"],
+           ['80Y8TF8JbLw', 'new taipei, taiwan', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['J2ggwyOl-_0', 'cuxhaven, germany', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['AvBkfbwMkCo', 'alpine, wyoming', "83128", "10"],
+           ['HYQk-jXy12w', 'jackson, wyoming', "83002", "10"],
+           ['nyYEAlIXzUQ', 'amsterdam, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['pqBDFG9aoT4', 'elburg, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['iVqNDHxixXc', 'jackson hole, wyoming', "83002", "10"],
+           ['joIw1cZBn0M', 'grand targhee, wyoming', "83414", "10"],
+           //['FEn6hZf7ZhY', 'key west, florida', , "120"],
+           //['knXMlXPmEAA', 'key west, florida', , "120"],
+           ['0PauU4kgmY8', 'oleron, france', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['YMbwlnwU2Q8', 'saint-malo, france', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['sS5C-WsS5z4', 'dunedin, new zealand', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['5rqFG9bEDGQ', 'perros-guirec, france', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['f5bXqMmE7nU', 'zarnesti, romania', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['mOFR0xQx_Vg', 'port de quebec, canada', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['mGBQdVUnF0s', 'bodø havn, norway', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['aEeya25Jl1w', 'saint-quay-portrieux, france', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['DrHKkfo5WnA', 'davisville, rhode island', "02852", TIME_UNKNOWN],
+           ['Zsna8X8hNzM', 'long beach island, new jersey', "08008", TIME_UNKNOWN],
+           ['PmCkBPm7ICk', 'altoona, pennsylvania', "16601", TIME_UNKNOWN],
+           ['iXmRcFeTLY0', 'tetons, wyoming', "83025", "10"],
+           ['iyzGqj_xRfc', 'mount fuji, shizuoka, japan', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['Q-1JkYXDyP0', 'mount zion, jerusalem', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['tXH-YWMZ_1c', 'chipmunk log, colorado', "80014", "10"],
+           ['dDlmYbWaNm0', 'crescent city, california', "95531", "234"],
+           ['DzcVJ6sMPh0', 'turtle bay, hawaii', "96731", TIME_UNKNOWN],
+           ['tNMfBs6kKK0', 'rohnert park, california', "94927", "234"],
+           ['k7-mA-IdRgk', 'puppies, unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['CLmvREy5E1c', 'wilmington, north carolina', "28401", "120"],
+           ['cIS1WydfEIw', 'cattle pasture, upstate new york', "13305", "120"],
+           ['OT7edR7M2zs', 'cattle pasture, wisconsin', "53001", "3"],
+           ['GvC0Z4Qe7Fg', 'unspecified location, kenya', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['89Vo1KHlOBQ', 'hummingbirds, unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['nL104seTBY4', 'st. augustine, florida', "32080", "120"],
+           ['LnGJnVohjx0', 'ohio state university, lima, ohio', "45801", "120"],
+           ['BPJVF-RCx98', 'wheelersburg, ohio', "45694", "120"],
+           ['wcjw031W_Cs', 'western kentucky university', "40506", "120"],
+           ['Cqau81u043E', 'east oregon university', "97403", TIME_UNKNOWN],
+           ['ZePRet3wczc', 'east oregon university', "97403", TIME_UNKNOWN],
+           ['8OE1aS91yvQ', 'la grange, kentucky', "40031", "120"],
+           ['tVGIXLoQ-Fw', 'deshler, ohio', "43516", "120"],
+           ['2OIbtphMS00', 'hopkinsville, kentucky', "42240", "120"],
+           ['QLxDY7Wbe_A', 'sturgis, south dakota', "57785", TIME_UNKNOWN],
+           ['S3Bl8AuKPds', 'burlington, vermont', "05401", "120"],
+           ['0lkf8u0ae5s', 'carolina beach, north carolina', "28428", "120"],
+           ['AoiaA6o4Urw', 'sheridan, california', "95681", "234"],
+           ['jV9BKnJgkhs', 'roanoke, virginia', "24001", "120"],
+           ['fZtQbsScCr4', 'auburn, alabama', "36801", TIME_UNKNOWN],
+           ['fjT1EcpCBfo', 'savannah, georgia', "31302", "120"],
+           ['D4p01i1XUEA', 'savannah, georgia', "31302", "120"],
+           ['pTGLeg7IHJ4', 'coral reef, san francisco, california', "94016", "234"],
+           ['KXBWXkr4Tzk', 'university of washington, seattle, washington', "98101", "234"],
+           ['XnbOcOwUZVQ', 'tiffin, ohio', "44883", "120"],
+           ['6sFbmWJYQmI', 'ithica, new york', "14850", "120"],
+           ['2f26MIftWdw', 'chautauqua lake, new york', "14722", "120"],
+           ['HbvoJXzLLNI', 'wellington, new zealand', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['3_SulAKo-XQ', 'west texas hummingbird cam', "79701", "3"],
+           ['YuAJ_rpXir4', 'gladewater, texas', "75647", "3"],
+           ['br37oTMBojs', 'lysefjord, forsand, norway', ZIP_UNKNOWN]
+           ['_09U1Ib7Nds', 'little traverse bay, lake michigan', "48632", "120"],
+           ['R7SPcZ4tRnA', 'clare, michigan', "48617", "120"],
+           ['_TFH2ju5w4k', 'bangor, michigan', "49013", "120"],
+           ['rxAIEkYJCCQ', 'fort wayne, indiana', "46774", "120"],
+           ['YWeynGlQJDg', 'gaylord, michigan', "49734", "120"],
+           ['RjJziEXzzaw', 'central minnesota', "56301", "3"],
+           ['YwdU2IeQQWk', 'central minnesota', "56301", "3"],
+           ['xhD-cDUZNWQ', 'central minnesota', "56301", "3"],
+           ['Xy-vlWY5vAg', 'central minnesota', "56301", "3"],
+           ['wEXK7O9Zz74', 'central minnesota', "56301", "3"],
+           ['LDwMKgMpFqM', 'warren, vermont', "05674", "120"],
+           ['M-zafV0-RJw', 'burnsville, minnesota', "55306", "3"],
+           ['wzKQEUKSWHo', 'louisville, texas', "75010", "3"],
+           ['VMsUue_I4dY', 'des moines, iowa', "50047", TIME_UNKNOWN],
+           ['qHqIjDoMYAk', 'glenwood springs, colorado', "81601", "10"],
+           ['3z_Eso4ICkg', 'gardner, massachusetts', "01440", "120"],
+           ['ztZ_v6k30Ew', 'denver, colorado', "80014", "10"],
+           ['u18ZPbisYKI', 'hays, kansas', "67601", "3"],
+           ['zkyCJ9Q4IHA', 'prairie village, kansas', "66206", "3"],
+           ['wckuhNoQkmI', 'st. john\'s harbor, newfoundland, canada', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['PpAIJ0aYojQ', 'nesodden, norway', ZIP_UNKNOWN, "187"],
+           ['XjTwdjkknKk', 'nesodden, norway', ZIP_UNKNOWN, "187"],
+           ['kUlCLkO8xIE', 'nesodden, norway', ZIP_UNKNOWN, "187"],
+           ['kekIEn4IpJs', 'nesodden, norway', ZIP_UNKNOWN, "187"],
+           ['Be3wGeNRyCs', 'smøla, norway', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['KItdBJMNFqs', 'seismographs, lincoln, nebraska', "68501", "3"],
+           ['--Tq34cIA0A', 'watertown, south dakota', "57201", TIME_UNKNOWN],
+           ['lyXxRBdIHxo', 'jackson hole, wyoming', "83002", "10"],
+           ['3IxBfMy8vYE', 'breckenridge, colorado', "80424", "10"],
+           ['q8Sg0RL5fBU', 'henry\'s fork river, island park, idaho', "83429", TIME_UNKNOWN],
+           ['jv2GgDTrzns', 'jackson, wyoming', "83002", "10"],
+           ['DrjJM2ctsjw', 'star valley, wyoming', "83127", "10"],
+           ['KdvHzgcElx0', 'jackson hole, wyoming', "83002", "10"],
+           ['_uxEBNJuIRg', 'spring creek ranch, jackson, wyoming', "83002", "10"],
+           ['Yy2Okgk6yIk', 'toronto, ontario, canada', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['IKVz-VXrbGc', 'cedar city, utah', "84720", "10"],
+           ['alte4wKW7PA', 'cedar city, utah', "84720", "10"],
+           ['O13dSVFpAJE', 'phoenix, arizona', "85001", TIME_UNKNOWN],
+           ['ZeSPtQbP3w8', 'casa grande, arizona', "85122", TIME_UNKNOWN],
+           ['fgZb4323WI0', 'university of washington, seattle', "98101", "234"],
+           ['yMuT-2MTkng', 'eugene, oregon', "97401", TIME_UNKNOWN],
+           ['3FqKgA1qckk', 'anaheim, california', "92801", "234"],
+           ['bNc7rGEBrMA', 'san francisco, california', "94016", "234"],
+           ['Bodg9G5oZfE', 'morro bay, california', "93442", "234"],
+           ['zzriUVdAwgw', 'buena park, california', "90620", "234"],
+           ['1zzHuT7y4AI', 'grass valley, california', "95945", "234"],
+           ['DmN6sxTjXdY', 'unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['YOc9otxB7oI', 'unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['8w9lCzW0DEo', 'unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['xLM_GW55F7A', 'unknown location', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['SLgacoX7ZsQ', 'yorkville, new york', "13495", "120"],
+           ['fx-gZuARZuE', 'sittard, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['Ine4J22gerg', 'sittard, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['Uh6PHeW8ki4', 'sittard, netherlands', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['S7wOakkvSMo', 'location unknown', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['MemLGAbXEgw', 'location unknown', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['_DvVKsgihfc', 'location unknown', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['Is8z1ObFCAs', 'location unknown', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['INVZOllxJxg', 'pelham road, region unknown', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['ME0fWHOBmb8', 'cayucos, california', "93430", "234"],
+           ['O3ZlU-c__fY', 'monterey bay, california', "93940", "234"],
+           ['cKO3rRfeoqM', 'cayucos, california', "93430", "234"],
+           ['2AabJFnYNsY', 'san diego, california', "91911", "234"],
+           ['imIXr4agMXI', 'hermosa beach, california', "90254", "234"],
+           ['hq4zXzo4k1E', 'petržalka, slovakia', ZIP_UNKNOWN, "1300"],
+           ['teAvmnyW7Ms', 'alanya, turkey', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['G0qal7jbk2E', 'new taipei, taiwain', ZIP_UNKNOWN, TIME_UNKNOWN],
+           ['UjALrXRNzGE', 'cornell lab, ithica, new york', "14850", "120"]
+          ]; 
+          
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+streams = shuffle(streams);
+
+var url = new URL(location.href);
+var numStreams = url.searchParams.get("numStreams");
+NUM_STREAMS = Number(numStreams)
+stream_to_add = NUM_STREAMS;
+active_streams = [];
+cam_to_switch = 0;
+yt_players = []
+weatherURL_beginning = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_simplewhite&zip="
+timeURL_beginning = "http://free.timeanddate.com/clock/i5yd0dzb/fs24/tt0/tw0/tm1/ts1/tb4/n"
+
+for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+    active_streams[i] = "";
+}
+
+function switch_cam(){
+    active_streams[cam_to_switch] = streams[stream_to_add];
+    yt_players[cam_to_switch].loadVideoById(active_streams[cam_to_switch][0]);
+    $($('div.title')[cam_to_switch]).text(active_streams[cam_to_switch][1]);
+    
+    if( streams[stream_to_add][2] == ZIP_UNKNOWN ){
+        $($('img.weather')[cam_to_switch]).hide();
+    } else {
+        $($('img.weather')[cam_to_switch]).prop("src",weatherURL_beginning+streams[stream_to_add][2]).show();
+    }
+    
+    if( streams[stream_to_add][3] == TIME_UNKNOWN ){
+        $($('iframe.time')[cam_to_switch]).hide();
+    } else {
+        $($('iframe.time')[cam_to_switch]).prop("src",timeURL_beginning+streams[stream_to_add][3]).show()
+    }
+    
+    if( stream_to_add+1 >= streams.length ){
+        stream_to_add = 0;
+    } else {
+        stream_to_add++;
+    }
+    
+    if( cam_to_switch+1 >= NUM_STREAMS ){
+        cam_to_switch = 0;
+    } else {
+        cam_to_switch++;
+    }
+}
+
+$( document ).ready(function() {
+    setInterval( switch_cam, 1000*60*(2.5/(numStreams/2)+1) );
+    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+        $(document.body).append(
+            $('<div>')
+                .addClass("container")
+                .addClass("webcam")
+                .append(
+                    $("<div>")
+                        .prop("id",i.toString())
+                )
+                .append(
+                    $('<div>')
+                        .addClass("webcam")
+                        .addClass("title")
+                        .text("")
+                )
+                .append(
+                    $("<img>")
+                        .addClass("weather")
+                )
+                .append(
+                    $("<iframe>")
+                        .addClass("time")
+                )
+        );
+    }
+});
+
+
+ function onYouTubeIframeAPIReady() {
+  var player;
+  height = Math.round($(window).height()/Math.sqrt(NUM_STREAMS)-6);
+  width = Math.round((16.0/9.0)*height);
+  
+  for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+      $($('div.title')[i]).text(streams[i][1])
+      if( streams[i][2] == ZIP_UNKNOWN ){
+        $($('img.weather')[i]).hide();
+      } else {
+        $($('img.weather')[i]).show();
+        $($('img.weather')[i]).prop("src",weatherURL_beginning+streams[i][2]);
+      }
+      
+      if( streams[i][3] == TIME_UNKNOWN ){
+        $($('iframe.time')[i]).hide();
+      } else {
+        $($('iframe.time')[i]).show();
+        $($('iframe.time')[i]).prop("src",timeURL_beginning+streams[i][3]);
+      }
+      
+      player = new YT.Player(i.toString(), {
+        videoId: streams[i][0],
+        width: width,               // Player width (in px)
+        height: height,              // Player height (in px)
+        playerVars: {
+          autoplay: 1,        // Auto-play the video on load
+          controls: 0,        // Show pause/play buttons in player
+          showinfo: 0,        // Hide the video title
+          modestbranding: 1,  // Hide the Youtube Logo
+          loop: 1,            // Run the video in a loop
+          fs: 1,              // Hide the full screen button
+          cc_load_policy: 0,  // Hide closed captions
+          iv_load_policy: 3,  // Hide the Video Annotations
+          autohide: 1,        // Hide video controls when playing
+          wmode: "transparent"
+        },
+        events: {
+          onReady: function(e) {
+            e.target.mute();
+          }
+        }
+      });
+      yt_players.push(player);
+    }
+    titles = $('div.title')
+    for( var i = 0 ; i < titles.length ; i++ ){
+        $(titles[i]).css("margin-top",(-1*height+0).toString());
+    }
+    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+        switch_cam();
+    }
+ }
+ 
+ function get_random_stream(){
+    while( true ){
+        stream = streams[Math.round(Math.random()*streams.length)]
+        if( active_streams.indexOf(stream) != -1 ){
+            continue;
+        }
+        return stream;
+    }
+ }
+</script>
