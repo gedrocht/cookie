@@ -47,10 +47,14 @@ iframe.time {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script async src="https://www.youtube.com/iframe_api"></script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA70KObo6BpTUQTKb924F0yS07-QY0TtgI"></script>-->
 <script>
 
 WEATHER_DISABLED = true;
 TIME_DISABLED = true;
+
+weatherURL_beginning = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_simplewhite&zip="
+timeURL_beginning = "http://free.timeanddate.com/clock/i5yd0dzb/fs24/tt0/tw0/tm1/ts1/tb4/n"
 
 ZIP_UNKNOWN = "ZIP code unknown";
 TIME_UNKNOWN = "Time unknown";
@@ -82,214 +86,253 @@ TZ_N_NINE = -9;
 TZ_N_TEN = -10;
 TZ_N_ELEVEN = -11;
 
-streams = [{videoID:'r5TpH5bXuOA', description:'ashland, virginia',                             zip:"23005", timeZone:TZ_N_FOUR, latitude:37.7590318, longitude:-77.4799837},
-           {videoID:'w8pZYIghqaA', description:'vlieland beach, netherlands',                   zip:ZIP_UNKNOWN, timeZone:TZ_ONE, latitude:53.250184, longitude:4.951427,},
-           {videoID:'psfFJR3vZ78', description:'jackson hole, wyoming',                         zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'IT9SuXg_VEk', description:'lake oroville, california',                     zip:"95965", timeZone:TZ_N_SEVEN},
-           {videoID:'_9pavMzUY-c', description:'shibuya, japan',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'8IAkm3d0ftc', description:'teton valley lodge, driggs, idaho',             zip:"83422", timeZone:TZ_N_SIX},
-           {videoID:'vPbQcM4k1Ys', description:'venice, italy',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Qhq4vQdfrFw', description:'oxford, england',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'hNaCPzorgZA', description:'glenwood springs, colorado',                    zip:"81601", timeZone:TZ_N_SIX},
-           {videoID:'WUmeGBMsdAk', description:'kittens, illinois',                             zip:"61701", timeZone:TIME_UNKNOWN},
-           {videoID:'ifmuEH-Lg1c', description:'la planta, montana',                            zip:ZIP_UNKNOWN, timeZone:TZ_N_SIX},
-           {videoID:'RtU_mdL2vBM', description:'international space station',                   zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'IhnQzDX-tWo', description:'dania beach, florida',                          zip:"33004", timeZone:TIME_UNKNOWN},
-           {videoID:'5rTXUdiWrYM', description:'geirangerfjord cruise port, hellesylt, norway', zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'X2bKQY28gvQ', description:'salty\'s surf shop, north carolina',            zip:"28469", timeZone:TIME_UNKNOWN},
-           {videoID:'2LZVDWQ57Vs', description:'hvar, croatia',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'3MSsNNQHcRM', description:'havenplein, netherlands',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'y5Pa5LqQM5A', description:'clearwater beach, florida',                     zip:"33767", timeZone:TIME_UNKNOWN},
-           {videoID:'AToMW7-rjog', description:'flamand beach, st barthélemy, caribbean',       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'gaSPTYwuaT0', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'CMj2ZmkJJkw', description:'bryant park, new york city',                    zip:"10001", timeZone:TIME_UNKNOWN},
-           {videoID:'3eTBHixZN6M', description:'karditsa, greece',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'ZMQFsNqGavU', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'P9qjE1dm75A', description:'venice, italy',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'CRAN9TSj5Kc', description:'university of tampa, florida',                  zip:"33601", timeZone:TIME_UNKNOWN},
-           {videoID:'80Y8TF8JbLw', description:'new taipei, taiwan',                            zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'J2ggwyOl-_0', description:'cuxhaven, germany',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'AvBkfbwMkCo', description:'alpine, wyoming',                               zip:"83128", timeZone:TZ_N_SIX},
-           {videoID:'HYQk-jXy12w', description:'jackson, wyoming',                              zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'nyYEAlIXzUQ', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'pqBDFG9aoT4', description:'elburg, netherlands',                           zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'iVqNDHxixXc', description:'jackson hole, wyoming',                         zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'joIw1cZBn0M', description:'grand targhee, wyoming',                        zip:"83414", timeZone:TZ_N_SIX},
-           {videoID:'0PauU4kgmY8', description:'oleron, france',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'YMbwlnwU2Q8', description:'saint-malo, france',                            zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'sS5C-WsS5z4', description:'dunedin, new zealand',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'5rqFG9bEDGQ', description:'perros-guirec, france',                         zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'f5bXqMmE7nU', description:'zarnesti, romania',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'mOFR0xQx_Vg', description:'port de quebec, canada',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'mGBQdVUnF0s', description:'bodø havn, norway',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'aEeya25Jl1w', description:'saint-quay-portrieux, france',                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'DrHKkfo5WnA', description:'davisville, rhode island',                      zip:"02852", timeZone:TIME_UNKNOWN},
-           {videoID:'Zsna8X8hNzM', description:'long beach island, new jersey',                 zip:"08008", timeZone:TIME_UNKNOWN},
-           {videoID:'PmCkBPm7ICk', description:'altoona, pennsylvania',                         zip:"16601", timeZone:TIME_UNKNOWN},
-           {videoID:'iXmRcFeTLY0', description:'tetons, wyoming',                               zip:"83025", timeZone:TZ_N_SIX},
-           {videoID:'iyzGqj_xRfc', description:'mount fuji, shizuoka, japan',                   zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Q-1JkYXDyP0', description:'mount zion, jerusalem',                         zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'tXH-YWMZ_1c', description:'chipmunk log, colorado',                        zip:"80014", timeZone:TZ_N_SIX},
-           {videoID:'dDlmYbWaNm0', description:'crescent city, california',                     zip:"95531", timeZone:TZ_N_SEVEN},
-           {videoID:'DzcVJ6sMPh0', description:'turtle bay, hawaii',                            zip:"96731", timeZone:TIME_UNKNOWN},
-           {videoID:'tNMfBs6kKK0', description:'rohnert park, california',                      zip:"94927", timeZone:TZ_N_SEVEN},
-           {videoID:'k7-mA-IdRgk', description:'puppies, unknown location',                     zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'CLmvREy5E1c', description:'wilmington, north carolina',                    zip:"28401", timeZone:TIME_UNKNOWN},
-           {videoID:'cIS1WydfEIw', description:'cattle pasture, upstate new york',              zip:"13305", timeZone:TIME_UNKNOWN},
-           {videoID:'OT7edR7M2zs', description:'cattle pasture, wisconsin',                     zip:"53001", timeZone:TIME_UNKNOWN},
-           {videoID:'GvC0Z4Qe7Fg', description:'unspecified location, kenya',                   zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'89Vo1KHlOBQ', description:'hummingbirds, unknown location',                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'nL104seTBY4', description:'st. augustine, florida',                        zip:"32080", timeZone:TIME_UNKNOWN},
-           {videoID:'LnGJnVohjx0', description:'ohio state university, lima, ohio',             zip:"45801", timeZone:TIME_UNKNOWN},
-           {videoID:'BPJVF-RCx98', description:'wheelersburg, ohio',                            zip:"45694", timeZone:TIME_UNKNOWN},
-           {videoID:'wcjw031W_Cs', description:'western kentucky university',                   zip:"40506", timeZone:TIME_UNKNOWN},
-           {videoID:'Cqau81u043E', description:'east oregon university',                        zip:"97403", timeZone:TZ_N_SEVEN},
-           {videoID:'ZePRet3wczc', description:'east oregon university',                        zip:"97403", timeZone:TZ_N_SEVEN},
-           {videoID:'8OE1aS91yvQ', description:'la grange, kentucky',                           zip:"40031", timeZone:TIME_UNKNOWN},
-           {videoID:'tVGIXLoQ-Fw', description:'deshler, ohio',                                 zip:"43516", timeZone:TIME_UNKNOWN},
-           {videoID:'2OIbtphMS00', description:'hopkinsville, kentucky',                        zip:"42240", timeZone:TIME_UNKNOWN},
-           {videoID:'QLxDY7Wbe_A', description:'sturgis, south dakota',                         zip:"57785", timeZone:TIME_UNKNOWN},
-           {videoID:'S3Bl8AuKPds', description:'burlington, vermont',                           zip:"05401", timeZone:TIME_UNKNOWN},
-           {videoID:'0lkf8u0ae5s', description:'carolina beach, north carolina',                zip:"28428", timeZone:TIME_UNKNOWN},
-           {videoID:'AoiaA6o4Urw', description:'sheridan, california',                          zip:"95681", timeZone:TZ_N_SEVEN},
-           {videoID:'jV9BKnJgkhs', description:'roanoke, virginia',                             zip:"24001", timeZone:TZ_N_FOUR},
-           {videoID:'fZtQbsScCr4', description:'auburn, alabama',                               zip:"36801", timeZone:TIME_UNKNOWN},
-           {videoID:'fjT1EcpCBfo', description:'savannah, georgia',                             zip:"31302", timeZone:TIME_UNKNOWN},
-           {videoID:'D4p01i1XUEA', description:'savannah, georgia',                             zip:"31302", timeZone:TIME_UNKNOWN},
-           {videoID:'pTGLeg7IHJ4', description:'coral reef, san francisco, california',         zip:"94016", timeZone:TZ_N_SEVEN},
-           {videoID:'KXBWXkr4Tzk', description:'university of washington, seattle, washington', zip:"98101", timeZone:TZ_N_SEVEN},
-           {videoID:'XnbOcOwUZVQ', description:'tiffin, ohio',                                  zip:"44883", timeZone:TIME_UNKNOWN},
-           {videoID:'2f26MIftWdw', description:'chautauqua lake, new york',                     zip:"14722", timeZone:TIME_UNKNOWN},
-           {videoID:'HbvoJXzLLNI', description:'wellington, new zealand',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'3_SulAKo-XQ', description:'west texas hummingbird cam',                    zip:"79701", timeZone:TIME_UNKNOWN},
-           {videoID:'YuAJ_rpXir4', description:'gladewater, texas',                             zip:"75647", timeZone:TIME_UNKNOWN},
-           {videoID:'br37oTMBojs', description:'lysefjord, forsand, norway',                    zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'_09U1Ib7Nds', description:'little traverse bay, lake michigan',            zip:"48632", timeZone:TIME_UNKNOWN},
-           {videoID:'R7SPcZ4tRnA', description:'clare, michigan',                               zip:"48617", timeZone:TIME_UNKNOWN},
-           {videoID:'_TFH2ju5w4k', description:'bangor, michigan',                              zip:"49013", timeZone:TIME_UNKNOWN},
-           {videoID:'rxAIEkYJCCQ', description:'fort wayne, indiana',                           zip:"46774", timeZone:TIME_UNKNOWN},
-           {videoID:'YWeynGlQJDg', description:'gaylord, michigan',                             zip:"49734", timeZone:TIME_UNKNOWN},
-           {videoID:'RjJziEXzzaw', description:'central minnesota',                             zip:"56301", timeZone:TIME_UNKNOWN},
-           {videoID:'YwdU2IeQQWk', description:'central minnesota',                             zip:"56301", timeZone:TIME_UNKNOWN},
-           {videoID:'xhD-cDUZNWQ', description:'central minnesota',                             zip:"56301", timeZone:TIME_UNKNOWN},
-           {videoID:'Xy-vlWY5vAg', description:'central minnesota',                             zip:"56301", timeZone:TIME_UNKNOWN},
-           {videoID:'wEXK7O9Zz74', description:'central minnesota',                             zip:"56301", timeZone:TIME_UNKNOWN},
-           {videoID:'LDwMKgMpFqM', description:'warren, vermont',                               zip:"05674", timeZone:TIME_UNKNOWN},
-           {videoID:'M-zafV0-RJw', description:'burnsville, minnesota',                         zip:"55306", timeZone:TIME_UNKNOWN},
-           {videoID:'wzKQEUKSWHo', description:'louisville, texas',                             zip:"75010", timeZone:TIME_UNKNOWN},
-           {videoID:'qHqIjDoMYAk', description:'glenwood springs, colorado',                    zip:"81601", timeZone:TZ_N_SIX},
-           {videoID:'3z_Eso4ICkg', description:'gardner, massachusetts',                        zip:"01440", timeZone:TIME_UNKNOWN},
-           {videoID:'ztZ_v6k30Ew', description:'denver, colorado',                              zip:"80014", timeZone:TZ_N_SIX},
-           {videoID:'u18ZPbisYKI', description:'hays, kansas',                                  zip:"67601", timeZone:TIME_UNKNOWN},
-           {videoID:'zkyCJ9Q4IHA', description:'prairie village, kansas',                       zip:"66206", timeZone:TIME_UNKNOWN},
-           {videoID:'wckuhNoQkmI', description:'st. john\'s harbor, newfoundland, canada',      zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'PpAIJ0aYojQ', description:'nesodden, norway',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'XjTwdjkknKk', description:'nesodden, norway',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'kUlCLkO8xIE', description:'nesodden, norway',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'kekIEn4IpJs', description:'nesodden, norway',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Be3wGeNRyCs', description:'smøla, norway',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'KItdBJMNFqs', description:'seismographs, lincoln, nebraska',               zip:"68501", timeZone:TIME_UNKNOWN},
-           {videoID:'--Tq34cIA0A', description:'watertown, south dakota',                       zip:"57201", timeZone:TIME_UNKNOWN},
-           {videoID:'lyXxRBdIHxo', description:'jackson hole, wyoming',                         zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'3IxBfMy8vYE', description:'breckenridge, colorado',                        zip:"80424", timeZone:TZ_N_SIX},
-           {videoID:'q8Sg0RL5fBU', description:'henry\'s fork river, island park, idaho',       zip:"83429", timeZone:TZ_N_SIX},
-           {videoID:'jv2GgDTrzns', description:'jackson, wyoming',                              zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'DrjJM2ctsjw', description:'star valley, wyoming',                          zip:"83127", timeZone:TZ_N_SIX},
-           {videoID:'KdvHzgcElx0', description:'jackson hole, wyoming',                         zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'_uxEBNJuIRg', description:'spring creek ranch, jackson, wyoming',          zip:"83002", timeZone:TZ_N_SIX},
-           {videoID:'Yy2Okgk6yIk', description:'toronto, ontario, canada',                      zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'IKVz-VXrbGc', description:'cedar city, utah',                              zip:"84720", timeZone:TZ_N_SIX},
-           {videoID:'alte4wKW7PA', description:'cedar city, utah',                              zip:"84720", timeZone:TZ_N_SIX},
-           {videoID:'O13dSVFpAJE', description:'phoenix, arizona',                              zip:"85001", timeZone:TZ_N_SIX},
-           {videoID:'ZeSPtQbP3w8', description:'casa grande, arizona',                          zip:"85122", timeZone:TZ_N_SIX},
-           {videoID:'fgZb4323WI0', description:'university of washington, seattle',             zip:"98101", timeZone:TZ_N_SEVEN},
-           {videoID:'yMuT-2MTkng', description:'eugene, oregon',                                zip:"97401", timeZone:TZ_N_SEVEN},
-           {videoID:'3FqKgA1qckk', description:'anaheim, california',                           zip:"92801", timeZone:TZ_N_SEVEN},
-           {videoID:'bNc7rGEBrMA', description:'san francisco, california',                     zip:"94016", timeZone:TZ_N_SEVEN},
-           {videoID:'Bodg9G5oZfE', description:'morro bay, california',                         zip:"93442", timeZone:TZ_N_SEVEN},
-           {videoID:'zzriUVdAwgw', description:'buena park, california',                        zip:"90620", timeZone:TZ_N_SEVEN},
-           {videoID:'1zzHuT7y4AI', description:'grass valley, california',                      zip:"95945", timeZone:TZ_N_SEVEN},
-           {videoID:'DmN6sxTjXdY', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'YOc9otxB7oI', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'8w9lCzW0DEo', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'xLM_GW55F7A', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'SLgacoX7ZsQ', description:'yorkville, new york',                           zip:"13495", timeZone:TIME_UNKNOWN},
-           {videoID:'fx-gZuARZuE', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Ine4J22gerg', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Uh6PHeW8ki4', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'S7wOakkvSMo', description:'location unknown',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'MemLGAbXEgw', description:'location unknown',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'_DvVKsgihfc', description:'location unknown',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Is8z1ObFCAs', description:'location unknown',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'ME0fWHOBmb8', description:'cayucos, california',                           zip:"93430", timeZone:TZ_N_SEVEN},
-           {videoID:'O3ZlU-c__fY', description:'monterey bay, california',                      zip:"93940", timeZone:TZ_N_SEVEN},
-           {videoID:'cKO3rRfeoqM', description:'cayucos, california',                           zip:"93430", timeZone:TZ_N_SEVEN},
-           {videoID:'2AabJFnYNsY', description:'san diego, california',                         zip:"91911", timeZone:TZ_N_SEVEN},
-           {videoID:'imIXr4agMXI', description:'hermosa beach, california',                     zip:"90254", timeZone:TZ_N_SEVEN},
-           {videoID:'hq4zXzo4k1E', description:'petržalka, slovakia',                           zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'teAvmnyW7Ms', description:'alanya, turkey',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'G0qal7jbk2E', description:'new taipei, taiwain',                           zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'UjALrXRNzGE', description:'cornell lab, ithica, new york',                 zip:"14850", timeZone:TIME_UNKNOWN},
-           {videoID:'G9lqE5cj-a0', description:'mexico, unspecified region',                    zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'A7xc01r5AjA', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'NiRIMw4Wg4E', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'bAJuVfD-IJE', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'C7d-j8CEYjY', description:'brazil, region unknown',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'A7YpcCiM50I', description:'mar del plata, argentina',                      zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'21kUDIQFhqM', description:'kittens, unknown location',                     zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'aRWsI8l-n5E', description:'english channel, hastings, UK',                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'vyKN-V-TxOg', description:'varberg, sweden',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'rRWLn17cUus', description:'pori, finland',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'u-3kXpuI2OU', description:'pori, finland',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'rnD8a1bUPpo', description:'sirkka, finland',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'s8G2rAds1EA', description:'tallinn, estonia',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'g1dyA8Lfemc', description:'warsaw, poland',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'wpohGq-FNtc', description:'warsaw, poland',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'4zJlH4f_W2M', description:'pärnu, estonia',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'CMwy67xezSk', description:'estonia, unknown region',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'YQJWHsnBKlg', description:'latvia, unknown region',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'vu7bChYGfiA', description:'latvia, unknown region',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'vu7bChYGfiA', description:'rewal, poland',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'1adgvx3cezE', description:'sarajevo, bosnia',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'1adgvx3cezE', description:'brest, belarus',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'XUUjgoZ4mvY', description:'odesa, ukraine',                                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'iseGR7MwIa0', description:'chisinau, moldova',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Cz7OVX9IvzY', description:'chisinau, moldova',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'2w73-OJ9ktM', description:'bârlad, romania',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'o5pf_n2TZ8E', description:'székesfehérvár, hungary',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'ABQqqkLmuCQ', description:'székesfehérvár, hungary',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'fTfVOa3ipKk', description:'eger, hungary',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'5pgwb5u1rQs', description:'sárvár, hungary',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Zvd5T0u19Bw', description:'stary sącz, poland',                            zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Szyb2H7HeGk', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'fnpz65c63SI', description:'unknown location',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'I7DaC_obzF0', description:'demjén, hungary',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'wlbhih3Vl5U', description:'denmark, unknown region',                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'KiKuzd-ioRw', description:'baden-baden, germany',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'yJ4MMJi2HcY', description:'mierlo-hout, netherlands',                      zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'rcNkQFp7oX4', description:'belgium',                                       zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'uQoPJntiMQY', description:'málaga, spain',                                 zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'TW19E-C8nJ8', description:'africa, unknown region',                        zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'Otf-MWBnxTA', description:'safari, africa, unknown region',                zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'CzwnOkU3fJw', description:'sabi sand wildtuin, south africa',              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'baF5farAZ7A', description:'varberg, sweden',                               zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'5vZ8pWNrye4', description:'kolomiazhsky market, russia',                   zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'BTjMXbpNz50', description:'saint petersburg, russia',                      zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'EeICvIZhggU', description:'sør-varanger, norway',                          zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'oILNfk5Papw', description:'vatican city',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'erfCaD_DihM', description:'mecca, saudi arabia',                           zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'oi4_EAFPjSE', description:'new vatutinki, russia',                         zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'LcUL9bJhLPI', description:'timișoara, romania',                            zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'i4eGPeSe6Mc', description:'campobasso, italy',                             zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'IXr6INJs0TA', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'GNyW9j9MsQI', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'jZgPIRfKYh4', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'rJYSLnCBFXk', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'BkpQnlEiumI', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'qXr2VGyI0wk', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN},
-           {videoID:'ELksHFN__yQ', description:'hokkaido , japan',                              zip:ZIP_UNKNOWN, timeZone:TIME_UNKNOWN}
+var url = new URL(location.href);
+var numStreams = url.searchParams.get("numStreams");
+NUM_STREAMS = Number(numStreams)
+
+active_streams = [];
+for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+    active_streams[i] = "";
+}
+
+time_offsets = [];
+for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+    time_offsets[i] = "";
+}
+
+cam_to_switch = 0;
+yt_players = []
+
+
+streams = [{videoID:'r5TpH5bXuOA', description:'ashland, virginia',                             zip:"23005",        timeZone:TZ_N_FOUR,     latitude:  37.7590318, longitude:  -77.4799837},
+           {videoID:'w8pZYIghqaA', description:'vlieland beach, netherlands',                   zip:ZIP_UNKNOWN,    timeZone:TZ_ONE,        latitude:  53.2501840, longitude:    4.9514270},
+           {videoID:'psfFJR3vZ78', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'IT9SuXg_VEk', description:'lake oroville, california',                     zip:"95965",        timeZone:TZ_N_SEVEN,    latitude:  39.5624753, longitude: -121.4513314},
+           {videoID:'_9pavMzUY-c', description:'shibuya, japan',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.6617770, longitude:  139.7040510},
+           {videoID:'8IAkm3d0ftc', description:'teton valley lodge, driggs, idaho',             zip:"83422",        timeZone:TZ_N_SIX,      latitude:  43.6691670, longitude: -111.1683690},
+           {videoID:'vPbQcM4k1Ys', description:'venice, italy',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.4408474, longitude:   12.3155151},
+           {videoID:'Qhq4vQdfrFw', description:'oxford, england',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.7520209, longitude:   -1.2577263},
+           {videoID:'hNaCPzorgZA', description:'glenwood springs, colorado',                    zip:"81601",        timeZone:TZ_N_SIX,      latitude:  39.5505376, longitude: -107.3247761},
+           {videoID:'WUmeGBMsdAk', description:'kittens, illinois',                             zip:"61701",        timeZone:TIME_UNKNOWN,  latitude:  40.4777790, longitude:   -88.989245},
+           {videoID:'ifmuEH-Lg1c', description:'la planta, montana',                            zip:ZIP_UNKNOWN,    timeZone:TZ_N_SIX,      latitude:  46.8796822, longitude: -110.3625657},
+           {videoID:'RtU_mdL2vBM', description:'international space station',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'IhnQzDX-tWo', description:'dania beach, florida',                          zip:"33004",        timeZone:TIME_UNKNOWN,  latitude:  26.0523110, longitude:  -80.1439300},
+           {videoID:'5rTXUdiWrYM', description:'geirangerfjord cruise port, hellesylt, norway', zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  62.1015060, longitude:    7.0940816},
+           {videoID:'X2bKQY28gvQ', description:'salty\'s surf shop, north carolina',            zip:"28469",        timeZone:TIME_UNKNOWN,  latitude:  33.8875580, longitude:  -78.4353600},
+           {videoID:'2LZVDWQ57Vs', description:'hvar, croatia',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  43.1729480, longitude:   16.4411140},
+           {videoID:'3MSsNNQHcRM', description:'havenplein, netherlands',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.9642380, longitude:    4.7774280},
+           {videoID:'y5Pa5LqQM5A', description:'clearwater beach, florida',                     zip:"33767",        timeZone:TIME_UNKNOWN,  latitude:  27.9775301, longitude:  -82.8270846},
+           {videoID:'AToMW7-rjog', description:'flamand beach, st barthélemy, caribbean',       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  17.9190710, longitude:  -62.8571640},
+           {videoID:'gaSPTYwuaT0', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.3702157, longitude:    4.8951679},
+           {videoID:'CMj2ZmkJJkw', description:'bryant park, new york city',                    zip:"10001",        timeZone:TIME_UNKNOWN,  latitude:  40.7548420, longitude:  -73.9841090},
+           {videoID:'3eTBHixZN6M', description:'karditsa, greece',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  39.3640258, longitude:   21.9214048},
+           {videoID:'ZMQFsNqGavU', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.3702157, longitude:    4.8951679},
+           {videoID:'P9qjE1dm75A', description:'venice, italy',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.4408474, longitude:   12.3155151},
+           {videoID:'CRAN9TSj5Kc', description:'university of tampa, florida',                  zip:"33601",        timeZone:TIME_UNKNOWN,  latitude:  27.9474880, longitude:  -82.4671720},
+           {videoID:'80Y8TF8JbLw', description:'new taipei, taiwan',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  25.0169830, longitude:  121.4627870},
+           {videoID:'J2ggwyOl-_0', description:'cuxhaven, germany',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  53.8593360, longitude:    8.6879060},
+           {videoID:'AvBkfbwMkCo', description:'alpine, wyoming',                               zip:"83128",        timeZone:TZ_N_SIX,      latitude:  43.1610946, longitude: -111.0164821},
+           {videoID:'HYQk-jXy12w', description:'jackson, wyoming',                              zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'nyYEAlIXzUQ', description:'amsterdam, netherlands',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.3702157, longitude:    4.8951679},
+           {videoID:'pqBDFG9aoT4', description:'elburg, netherlands',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.4492630, longitude:    5.8345190},
+           {videoID:'iVqNDHxixXc', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'joIw1cZBn0M', description:'grand targhee, wyoming',                        zip:"83414",        timeZone:TZ_N_SIX,      latitude:  43.7871130, longitude: -110.9592960},
+           {videoID:'0PauU4kgmY8', description:'oleron, france',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.9539730, longitude:   -1.2733651},
+           {videoID:'YMbwlnwU2Q8', description:'saint-malo, france',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  48.6493370, longitude:   -2.0256740},
+           {videoID:'sS5C-WsS5z4', description:'dunedin, new zealand',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -45.8787605, longitude:  170.5027976},
+           {videoID:'5rqFG9bEDGQ', description:'perros-guirec, france',                         zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  48.8154560, longitude:   -3.4449430},
+           {videoID:'f5bXqMmE7nU', description:'zarnesti, romania',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.5606505, longitude:   25.3220190},
+           {videoID:'mOFR0xQx_Vg', description:'port de quebec, canada',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  46.8210730, longitude:  -71.2066110},
+           {videoID:'mGBQdVUnF0s', description:'bodø havn, norway',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  67.2898220, longitude:   14.3982370},
+           {videoID:'aEeya25Jl1w', description:'saint-quay-portrieux, france',                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  48.6480280, longitude:   -2.8289410},
+           {videoID:'DrHKkfo5WnA', description:'davisville, rhode island',                      zip:"02852",        timeZone:TIME_UNKNOWN,  latitude:  41.6127410, longitude:  -71.4740030},
+           {videoID:'Zsna8X8hNzM', description:'long beach island, new jersey',                 zip:"08008",        timeZone:TIME_UNKNOWN,  latitude:  39.6417270, longitude:  -74.1885830},
+           {videoID:'PmCkBPm7ICk', description:'altoona, pennsylvania',                         zip:"16601",        timeZone:TIME_UNKNOWN,  latitude:  40.5186809, longitude:  -78.3947360},
+           {videoID:'iXmRcFeTLY0', description:'tetons, wyoming',                               zip:"83025",        timeZone:TZ_N_SIX,      latitude:  43.7809430, longitude:  110.8097820},
+           {videoID:'iyzGqj_xRfc', description:'mount fuji, shizuoka, japan',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.3605560, longitude:  138.7277780},
+           {videoID:'Q-1JkYXDyP0', description:'mount zion, jerusalem',                         zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  31.7709230, longitude:   35.2284630},
+           {videoID:'tXH-YWMZ_1c', description:'chipmunk log, colorado',                        zip:"80014",        timeZone:TZ_N_SIX,      latitude:  39.5500507, longitude: -105.7820674},
+           {videoID:'dDlmYbWaNm0', description:'crescent city, california',                     zip:"95531",        timeZone:TZ_N_SEVEN,    latitude:  41.7557501, longitude: -124.2025913},
+           {videoID:'DzcVJ6sMPh0', description:'turtle bay, hawaii',                            zip:"96731",        timeZone:TIME_UNKNOWN,  latitude:  21.7022590, longitude: -157.9999640},
+           {videoID:'tNMfBs6kKK0', description:'rohnert park, california',                      zip:"94927",        timeZone:TZ_N_SEVEN,    latitude:  38.3396367, longitude: -122.7010984},
+           {videoID:'k7-mA-IdRgk', description:'puppies, unknown location',                     zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'CLmvREy5E1c', description:'wilmington, north carolina',                    zip:"28401",        timeZone:TIME_UNKNOWN,  latitude:  34.2257255, longitude:  -77.9447102},
+           {videoID:'cIS1WydfEIw', description:'cattle pasture, upstate new york',              zip:"13305",        timeZone:TIME_UNKNOWN,  latitude:  42.6525793, longitude:  -73.7562317},
+           {videoID:'OT7edR7M2zs', description:'cattle pasture, wisconsin',                     zip:"53001",        timeZone:TIME_UNKNOWN,  latitude:  43.7844397, longitude:  -88.7878678},
+           {videoID:'GvC0Z4Qe7Fg', description:'unspecified location, kenya',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  -0.0235590, longitude:  37.90619300},
+           {videoID:'89Vo1KHlOBQ', description:'hummingbirds, unknown location',                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'nL104seTBY4', description:'st. augustine, florida',                        zip:"32080",        timeZone:TIME_UNKNOWN,  latitude:  29.9012437, longitude:  -81.3124341},
+           {videoID:'LnGJnVohjx0', description:'ohio state university, lima, ohio',             zip:"45801",        timeZone:TIME_UNKNOWN,  latitude:  40.7450850, longitude:  -84.1430250},
+           {videoID:'BPJVF-RCx98', description:'wheelersburg, ohio',                            zip:"45694",        timeZone:TIME_UNKNOWN,  latitude:  38.7303549, longitude:  -82.8554477},
+           {videoID:'wcjw031W_Cs', description:'western kentucky university',                   zip:"40506",        timeZone:TIME_UNKNOWN,  latitude:  36.9853540, longitude:  -86.4561380},
+           {videoID:'Cqau81u043E', description:'east oregon university',                        zip:"97403",        timeZone:TZ_N_SEVEN,    latitude:  45.3211450, longitude: -118.0913680},
+           {videoID:'ZePRet3wczc', description:'east oregon university',                        zip:"97403",        timeZone:TZ_N_SEVEN,    latitude:  45.3211450, longitude: -118.0913680},
+           {videoID:'8OE1aS91yvQ', description:'la grange, kentucky',                           zip:"40031",        timeZone:TIME_UNKNOWN,  latitude:  38.4075666, longitude:  -85.3788468},
+           {videoID:'tVGIXLoQ-Fw', description:'deshler, ohio',                                 zip:"43516",        timeZone:TIME_UNKNOWN,  latitude:  41.2075510, longitude:  -83.8991070},
+           {videoID:'2OIbtphMS00', description:'hopkinsville, kentucky',                        zip:"42240",        timeZone:TIME_UNKNOWN,  latitude:  36.8656008, longitude:  -87.4886186},
+           {videoID:'QLxDY7Wbe_A', description:'sturgis, south dakota',                         zip:"57785",        timeZone:TIME_UNKNOWN,  latitude:  44.4097069, longitude: -103.5090786},
+           {videoID:'S3Bl8AuKPds', description:'burlington, vermont',                           zip:"05401",        timeZone:TIME_UNKNOWN,  latitude:  44.4758825, longitude:  -73.2120720},
+           {videoID:'0lkf8u0ae5s', description:'carolina beach, north carolina',                zip:"28428",        timeZone:TIME_UNKNOWN,  latitude:  34.0351730, longitude:  -77.8935970},
+           {videoID:'AoiaA6o4Urw', description:'sheridan, california',                          zip:"95681",        timeZone:TZ_N_SEVEN,    latitude:  38.9796180, longitude: -121.3755110},
+           {videoID:'jV9BKnJgkhs', description:'roanoke, virginia',                             zip:"24001",        timeZone:TZ_N_FOUR,     latitude:  37.2709704, longitude:  -79.9414266},
+           {videoID:'fZtQbsScCr4', description:'auburn, alabama',                               zip:"36801",        timeZone:TIME_UNKNOWN,  latitude:  32.6098566, longitude:  -85.4807825},
+           {videoID:'fjT1EcpCBfo', description:'savannah, georgia',                             zip:"31302",        timeZone:TIME_UNKNOWN,  latitude:  32.0835407, longitude:  -81.0998342},
+           {videoID:'D4p01i1XUEA', description:'savannah, georgia',                             zip:"31302",        timeZone:TIME_UNKNOWN,  latitude:  32.0835407, longitude:  -81.0998342},
+           {videoID:'pTGLeg7IHJ4', description:'coral reef, san francisco, california',         zip:"94016",        timeZone:TZ_N_SEVEN,    latitude:  37.7749295, longitude: -122.4194155},
+           {videoID:'KXBWXkr4Tzk', description:'university of washington, seattle, washington', zip:"98101",        timeZone:TZ_N_SEVEN,    latitude:  47.6498130, longitude: -122.3037820},
+           {videoID:'XnbOcOwUZVQ', description:'tiffin, ohio',                                  zip:"44883",        timeZone:TIME_UNKNOWN,  latitude:  41.1144992, longitude:  -83.1779746},
+           {videoID:'2f26MIftWdw', description:'chautauqua lake, new york',                     zip:"14722",        timeZone:TIME_UNKNOWN,  latitude:  42.1851740, longitude:  -79.4310050},
+           {videoID:'HbvoJXzLLNI', description:'wellington, new zealand',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -41.2864603, longitude:  174.7762360},
+           {videoID:'3_SulAKo-XQ', description:'west texas hummingbird cam',                    zip:"79701",        timeZone:TIME_UNKNOWN,  latitude:  31.8023831, longitude:  -97.0916692},
+           {videoID:'YuAJ_rpXir4', description:'gladewater, texas',                             zip:"75647",        timeZone:TIME_UNKNOWN,  latitude:  32.5365330, longitude:  -94.9427170},
+           {videoID:'br37oTMBojs', description:'lysefjord, forsand, norway',                    zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.0049150, longitude:    6.3168230},
+           {videoID:'_09U1Ib7Nds', description:'little traverse bay, lake michigan',            zip:"48632",        timeZone:TIME_UNKNOWN,  latitude:  45.4007280, longitude:  -85.0829380},
+           {videoID:'R7SPcZ4tRnA', description:'clare, michigan',                               zip:"48617",        timeZone:TIME_UNKNOWN,  latitude:  43.8194700, longitude:  -84.7686280},
+           {videoID:'_TFH2ju5w4k', description:'bangor, michigan',                              zip:"49013",        timeZone:TIME_UNKNOWN,  latitude:  42.3125360, longitude:  -86.1130790},
+           {videoID:'rxAIEkYJCCQ', description:'fort wayne, indiana',                           zip:"46774",        timeZone:TIME_UNKNOWN,  latitude:  41.0792730, longitude:  -85.1393513},
+           {videoID:'YWeynGlQJDg', description:'gaylord, michigan',                             zip:"49734",        timeZone:TIME_UNKNOWN,  latitude:  45.0275130, longitude:  -84.6747520},
+           {videoID:'RjJziEXzzaw', description:'central minnesota',                             zip:"56301",        timeZone:TIME_UNKNOWN,  latitude:  46.7295530, longitude:  -94.6858998},
+           {videoID:'YwdU2IeQQWk', description:'central minnesota',                             zip:"56301",        timeZone:TIME_UNKNOWN,  latitude:  46.7295530, longitude:  -94.6858998},
+           {videoID:'xhD-cDUZNWQ', description:'central minnesota',                             zip:"56301",        timeZone:TIME_UNKNOWN,  latitude:  46.7295530, longitude:  -94.6858998},
+           {videoID:'Xy-vlWY5vAg', description:'central minnesota',                             zip:"56301",        timeZone:TIME_UNKNOWN,  latitude:  46.7295530, longitude:  -94.6858998},
+           {videoID:'wEXK7O9Zz74', description:'central minnesota',                             zip:"56301",        timeZone:TIME_UNKNOWN,  latitude:  46.7295530, longitude:  -94.6858998},
+           {videoID:'LDwMKgMpFqM', description:'warren, vermont',                               zip:"05674",        timeZone:TIME_UNKNOWN,  latitude:  44.1120050, longitude:  -72.8559470},
+           {videoID:'M-zafV0-RJw', description:'burnsville, minnesota',                         zip:"55306",        timeZone:TIME_UNKNOWN,  latitude:  44.7677424, longitude:  -93.2777226},
+           {videoID:'wzKQEUKSWHo', description:'louisville, texas',                             zip:"75010",        timeZone:TIME_UNKNOWN,  latitude:  38.2225640, longitude:  -85.7366950},
+           {videoID:'qHqIjDoMYAk', description:'glenwood springs, colorado',                    zip:"81601",        timeZone:TZ_N_SIX,      latitude:  39.5505376, longitude: -107.3247761},
+           {videoID:'3z_Eso4ICkg', description:'gardner, massachusetts',                        zip:"01440",        timeZone:TIME_UNKNOWN,  latitude:  42.5750880, longitude:  -71.9981330},
+           {videoID:'ztZ_v6k30Ew', description:'denver, colorado',                              zip:"80014",        timeZone:TZ_N_SIX,      latitude:  39.7392358, longitude: -104.9902510},
+           {videoID:'u18ZPbisYKI', description:'hays, kansas',                                  zip:"67601",        timeZone:TIME_UNKNOWN,  latitude:  38.8791783, longitude:  -99.3267700},
+           {videoID:'zkyCJ9Q4IHA', description:'prairie village, kansas',                       zip:"66206",        timeZone:TIME_UNKNOWN,  latitude:  38.9916726, longitude:  -94.6335680},
+           {videoID:'wckuhNoQkmI', description:'st. john\'s harbor, newfoundland, canada',      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.5622610, longitude:  -52.7076340},
+           {videoID:'PpAIJ0aYojQ', description:'nesodden, norway',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.8042820, longitude:   10.6381970},
+           {videoID:'XjTwdjkknKk', description:'nesodden, norway',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.8042820, longitude:   10.6381970},
+           {videoID:'kUlCLkO8xIE', description:'nesodden, norway',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.8042820, longitude:   10.6381970},
+           {videoID:'kekIEn4IpJs', description:'nesodden, norway',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.8042820, longitude:   10.6381970},
+           {videoID:'Be3wGeNRyCs', description:'smøla, norway',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  63.4626260, longitude:    8.0141870},
+           {videoID:'KItdBJMNFqs', description:'seismographs, lincoln, nebraska',               zip:"68501",        timeZone:TIME_UNKNOWN,  latitude:  40.8470198, longitude:  -96.7550863},
+           {videoID:'--Tq34cIA0A', description:'watertown, south dakota',                       zip:"57201",        timeZone:TIME_UNKNOWN,  latitude:  44.8994088, longitude:  -97.1150732},
+           {videoID:'lyXxRBdIHxo', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'3IxBfMy8vYE', description:'breckenridge, colorado',                        zip:"80424",        timeZone:TZ_N_SIX,      latitude:  39.4816537, longitude: -106.0383518},
+           {videoID:'q8Sg0RL5fBU', description:'henry\'s fork river, island park, idaho',       zip:"83429",        timeZone:TZ_N_SIX,      latitude:  44.3611400, longitude: -111.4033640},
+           {videoID:'jv2GgDTrzns', description:'jackson, wyoming',                              zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'DrjJM2ctsjw', description:'star valley, wyoming',                          zip:"83127",        timeZone:TZ_N_SIX,      latitude:  42.9713889, longitude: -110.9555556},
+           {videoID:'KdvHzgcElx0', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'_uxEBNJuIRg', description:'spring creek ranch, jackson, wyoming',          zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'Yy2Okgk6yIk', description:'toronto, ontario, canada',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  43.6532260, longitude:  -79.3831843},
+           {videoID:'IKVz-VXrbGc', description:'cedar city, utah',                              zip:"84720",        timeZone:TZ_N_SIX,      latitude:  37.6774769, longitude: -113.0618931},
+           {videoID:'alte4wKW7PA', description:'cedar city, utah',                              zip:"84720",        timeZone:TZ_N_SIX,      latitude:  37.6774769, longitude: -113.0618931},
+           {videoID:'O13dSVFpAJE', description:'phoenix, arizona',                              zip:"85001",        timeZone:TZ_N_SIX,      latitude:  33.4483771, longitude: -112.0740373},
+           {videoID:'ZeSPtQbP3w8', description:'casa grande, arizona',                          zip:"85122",        timeZone:TZ_N_SIX,      latitude:  32.8795022, longitude: -111.7573521},
+           {videoID:'fgZb4323WI0', description:'university of washington, seattle',             zip:"98101",        timeZone:TZ_N_SEVEN,    latitude:  47.6498130, longitude: -122.3037820},
+           {videoID:'yMuT-2MTkng', description:'eugene, oregon',                                zip:"97401",        timeZone:TZ_N_SEVEN,    latitude:  44.0520691, longitude: -123.0867536},
+           {videoID:'3FqKgA1qckk', description:'anaheim, california',                           zip:"92801",        timeZone:TZ_N_SEVEN,    latitude:  33.8352932, longitude: -117.9145036},
+           {videoID:'bNc7rGEBrMA', description:'san francisco, california',                     zip:"94016",        timeZone:TZ_N_SEVEN,    latitude:  37.7749295, longitude: -122.4194155},
+           {videoID:'Bodg9G5oZfE', description:'morro bay, california',                         zip:"93442",        timeZone:TZ_N_SEVEN,    latitude:  35.3659445, longitude: -120.8499924},
+           {videoID:'zzriUVdAwgw', description:'buena park, california',                        zip:"90620",        timeZone:TZ_N_SEVEN,    latitude:  33.8675143, longitude: -117.9981181},
+           {videoID:'1zzHuT7y4AI', description:'grass valley, california',                      zip:"95945",        timeZone:TZ_N_SEVEN,    latitude:  39.2190608, longitude: -121.0610606},
+           {videoID:'DmN6sxTjXdY', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'YOc9otxB7oI', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'8w9lCzW0DEo', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'xLM_GW55F7A', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'SLgacoX7ZsQ', description:'yorkville, new york',                           zip:"13495",        timeZone:TIME_UNKNOWN,  latitude:  40.7762230, longitude:   -73.949208},
+           {videoID:'fx-gZuARZuE', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.0006238, longitude:    5.8864788},
+           {videoID:'Ine4J22gerg', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.0006238, longitude:    5.8864788},
+           {videoID:'Uh6PHeW8ki4', description:'sittard, netherlands',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.0006238, longitude:    5.8864788},
+           {videoID:'S7wOakkvSMo', description:'location unknown',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'MemLGAbXEgw', description:'location unknown',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'_DvVKsgihfc', description:'location unknown',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'Is8z1ObFCAs', description:'location unknown',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'ME0fWHOBmb8', description:'cayucos, california',                           zip:"93430",        timeZone:TZ_N_SEVEN,    latitude:  35.4427510, longitude: -120.8921250},
+           {videoID:'O3ZlU-c__fY', description:'monterey bay, california',                      zip:"93940",        timeZone:TZ_N_SEVEN,    latitude:  36.8007410, longitude: -121.9473110},
+           {videoID:'cKO3rRfeoqM', description:'cayucos, california',                           zip:"93430",        timeZone:TZ_N_SEVEN,    latitude:  35.4427510, longitude: -120.8921250},
+           {videoID:'2AabJFnYNsY', description:'san diego, california',                         zip:"91911",        timeZone:TZ_N_SEVEN,    latitude:  32.7157380, longitude: -117.1610838},
+           {videoID:'imIXr4agMXI', description:'hermosa beach, california',                     zip:"90254",        timeZone:TZ_N_SEVEN,    latitude:  33.8622366, longitude: -118.3995194},
+           {videoID:'hq4zXzo4k1E', description:'petržalka, slovakia',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  48.1108880, longitude:   17.1115630},
+           {videoID:'teAvmnyW7Ms', description:'alanya, turkey',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  36.5444430, longitude:   31.9954080},
+           {videoID:'G0qal7jbk2E', description:'new taipei, taiwain',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  25.0169830, longitude:  121.4627870},
+           {videoID:'UjALrXRNzGE', description:'cornell lab, ithica, new york',                 zip:"14850",        timeZone:TIME_UNKNOWN,  latitude:  42.4799810, longitude:  -76.4511260},
+           {videoID:'G9lqE5cj-a0', description:'mexico, unspecified region',                    zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  23.6345010, longitude: -102.5527840},
+           {videoID:'A7xc01r5AjA', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  23.6345010, longitude: -102.5527840},
+           {videoID:'NiRIMw4Wg4E', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  23.6345010, longitude: -102.5527840},
+           {videoID:'bAJuVfD-IJE', description:'mexico, region unknown',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  23.6345010, longitude: -102.5527840},
+           {videoID:'C7d-j8CEYjY', description:'brazil, region unknown',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -14.2350040, longitude: -51.92528000},
+           {videoID:'A7YpcCiM50I', description:'mar del plata, argentina',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -38.0054771, longitude: -57.54261060},
+           {videoID:'21kUDIQFhqM', description:'kittens, unknown location',                     zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'aRWsI8l-n5E', description:'english channel, hastings, UK',                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  50.8542590, longitude:    0.5734530},
+           {videoID:'vyKN-V-TxOg', description:'varberg, sweden',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  57.1071180, longitude:   12.2520910},
+           {videoID:'rRWLn17cUus', description:'pori, finland',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  61.4851390, longitude:   21.7974180},
+           {videoID:'u-3kXpuI2OU', description:'pori, finland',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  61.4851390, longitude:   21.7974180},
+           {videoID:'rnD8a1bUPpo', description:'sirkka, finland',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  67.8051410, longitude:   24.8006650},
+           {videoID:'s8G2rAds1EA', description:'tallinn, estonia',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.4369608, longitude:   24.7535746},
+           {videoID:'g1dyA8Lfemc', description:'warsaw, poland',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.2296756, longitude:   21.0122287},
+           {videoID:'wpohGq-FNtc', description:'warsaw, poland',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.2296756, longitude:   21.0122287},
+           {videoID:'4zJlH4f_W2M', description:'pärnu, estonia',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  58.3858080, longitude:   24.4965770},
+           {videoID:'CMwy67xezSk', description:'estonia, unknown region',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  58.5952720, longitude:   25.0136070},
+           {videoID:'YQJWHsnBKlg', description:'latvia, unknown region',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  56.8796350, longitude:   24.6031890},
+           {videoID:'vu7bChYGfiA', description:'latvia, unknown region',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  56.8796350, longitude:   24.6031890},
+           {videoID:'vu7bChYGfiA', description:'rewal, poland',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  54.0813090, longitude:   15.0157940},
+           {videoID:'1adgvx3cezE', description:'sarajevo, bosnia',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  43.8562586, longitude:   18.4130763},
+           {videoID:'1adgvx3cezE', description:'brest, belarus',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.0976214, longitude:   23.7340503},
+           {videoID:'XUUjgoZ4mvY', description:'odesa, ukraine',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  46.4845830, longitude:   30.7326000},
+           {videoID:'iseGR7MwIa0', description:'chisinau, moldova',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.0104529, longitude:   28.8638103},
+           {videoID:'Cz7OVX9IvzY', description:'chisinau, moldova',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.0104529, longitude:   28.8638103},
+           {videoID:'2w73-OJ9ktM', description:'bârlad, romania',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  46.2276610, longitude:   27.6692270},
+           {videoID:'o5pf_n2TZ8E', description:'székesfehérvár, hungary',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.1860260, longitude:   18.4221360},
+           {videoID:'ABQqqkLmuCQ', description:'székesfehérvár, hungary',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.1860260, longitude:   18.4221360},
+           {videoID:'fTfVOa3ipKk', description:'eger, hungary',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.9025350, longitude:   20.3772280},
+           {videoID:'5pgwb5u1rQs', description:'sárvár, hungary',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.2524200, longitude:   16.9294870},
+           {videoID:'Zvd5T0u19Bw', description:'stary sącz, poland',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  49.5644520, longitude:   20.6327690},
+           {videoID:'Szyb2H7HeGk', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'fnpz65c63SI', description:'unknown location',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
+           {videoID:'I7DaC_obzF0', description:'demjén, hungary',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  47.8317290, longitude:   20.3313870},
+           {videoID:'wlbhih3Vl5U', description:'denmark, unknown region',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  56.2639200, longitude:    9.5017850},
+           {videoID:'KiKuzd-ioRw', description:'baden-baden, germany',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  48.7656400, longitude:    8.2285242},
+           {videoID:'yJ4MMJi2HcY', description:'mierlo-hout, netherlands',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.4680960, longitude:    5.6312300},
+           {videoID:'rcNkQFp7oX4', description:'belgium, region unknown',                       zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  50.5038870, longitude:    4.4699360},
+           {videoID:'uQoPJntiMQY', description:'málaga, spain',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  36.7212610, longitude:   -4.4212655},
+           {videoID:'TW19E-C8nJ8', description:'africa, unknown region',                        zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  36.7212610, longitude:   -4.4212655},
+           {videoID:'Otf-MWBnxTA', description:'safari, kenya',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  -0.0235590, longitude:   37.9061930},
+           {videoID:'CzwnOkU3fJw', description:'sabi sand wildtuin, south africa',              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -24.9279390, longitude:   31.5249100},
+           {videoID:'baF5farAZ7A', description:'varberg, sweden',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  57.1071180, longitude:   12.2520910},
+           {videoID:'5vZ8pWNrye4', description:'kolomiazhsky market, russia',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.9992890, longitude:   30.2994170},
+           {videoID:'BTjMXbpNz50', description:'saint petersburg, russia',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  59.9342802, longitude:   30.3350986},
+           {videoID:'EeICvIZhggU', description:'sør-varanger, norway',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  69.7578530, longitude:   29.6859470},
+           {videoID:'oILNfk5Papw', description:'vatican city',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  41.9029160, longitude:   12.4533890},
+           {videoID:'erfCaD_DihM', description:'mecca, saudi arabia',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  21.4166670, longitude:   39.8166670},
+           {videoID:'oi4_EAFPjSE', description:'new vatutinki, russia',                         zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  21.4166670, longitude:   37.3269820},
+           {videoID:'LcUL9bJhLPI', description:'timișoara, romania',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.7597220, longitude:   21.2300000},
+           {videoID:'i4eGPeSe6Mc', description:'campobasso, italy',                             zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  41.5602540, longitude:   14.6627160},
+           {videoID:'IXr6INJs0TA', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.7090259, longitude:  139.7319925},
+           {videoID:'GNyW9j9MsQI', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.7090259, longitude:  139.7319925},
+           {videoID:'jZgPIRfKYh4', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.7090259, longitude:  139.7319925},
+           {videoID:'qXr2VGyI0wk', description:'tokyo, japan',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.7090259, longitude:  139.7319925},
+           {videoID:'ELksHFN__yQ', description:'hokkaido , japan',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  43.2203270, longitude:  142.8634740},
+           {videoID:'-PV9RxRxalA', description:'japan, unknown region',                         zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  36.2048240, longitude:  138.2529240},
+           {videoID:'FZ72I6o6Z9k', description:'melbourne, australia',                          zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude: -37.8141070, longitude:  144.9632800},
+           {videoID:'-otpRa-5KCc', description:'nagan, china',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  30.1443020, longitude:   84.0964790},
+           {videoID:'qeShFRkgUeE', description:'nagan, china',                                  zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  30.1443020, longitude:   84.0964790},
+           {videoID:'dOL8nX6XTH4', description:'beigan, china',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  26.2244820, longitude:  119.9942870},
+           {videoID:'vtrIhNykRDI', description:'dongyin, china',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  37.4347510, longitude:  118.6747670},
+           {videoID:'Br5DXkVZESE', description:'xiju, china',                                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  30.2595430, longitude:  120.1300600},
+           {videoID:'EC0UBHWT9u0', description:'taipei city, taiwan',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  25.0329694, longitude:  121.5654170},
+           {videoID:'xdm15BBPDHA', description:'berlin, germany',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  52.5200066, longitude:   13.4049540},
+           {videoID:'2086be1ElF0', description:'seoul, south korea',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  37.5631770, longitude:  126.9873600},
+           {videoID:'vE58KB1AoiA', description:'yokohama, japan',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.4437080, longitude:  139.6380260},
+           {videoID:'cLIIo3u3mjI', description:'hokkaido, japan',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  43.2203270, longitude:  142.8634740},
+           {videoID:'m6u63P3YLDA', description:'kasamatsu, japan',                              zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.3741180, longitude:  136.7642940},
+           {videoID:'FEy_hKgUbIY', description:'hakucho bridge, muroran, japan',                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  42.3541200, longitude:  140.9506850},
+           {videoID:'BCcqtWsybmY', description:'sadamisaki peninsula, japan',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  33.4280210, longitude:  132.1910460},
+           {videoID:'LiBxyR95PrM', description:'national route 10, japan',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  32.6912410, longitude:  131.6909040},
+           {videoID:'vGw9Xz6zDXE', description:'bhuj, india',                                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  23.2463570, longitude:   69.6643610},
+           {videoID:'b7l6CN6ouqY', description:'colombo, sri lanka',                            zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   6.9192590, longitude:   79.8547700},
+           {videoID:'uYLqO1v8M10', description:'công ty BĐS an gia, vietnam',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  10.7751960, longitude:  106.6879120},
+           {videoID:'fpWsYZlThbU', description:'chiangmai, thailand',                           zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  18.7818600, longitude:   98.9997800},
+           {videoID:'2AGqc0rLI9E', description:'new vatutinki, russia',                         zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  21.4166670, longitude:   37.3269820},
+           {videoID:'2AGqc0rLI9E', description:'mu jiao xi hotel, taiwan',                      zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  24.8296120, longitude:  121.7728100}
           ]; 
-          
+
+/*
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -310,33 +353,30 @@ function shuffle(array) {
 }
 
 streams = shuffle(streams);
+*/
 
-var url = new URL(location.href);
-var numStreams = url.searchParams.get("numStreams");
-NUM_STREAMS = Number(numStreams)
-stream_to_add = NUM_STREAMS;
-active_streams = [];
-cam_to_switch = 0;
-yt_players = []
-weatherURL_beginning = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_simplewhite&zip="
-timeURL_beginning = "http://free.timeanddate.com/clock/i5yd0dzb/fs24/tt0/tw0/tm1/ts1/tb4/n"
+stream_to_add = Math.round(Math.random()*streams.length);
 
-for( var i = 0 ; i < NUM_STREAMS ; i++ ){
-    active_streams[i] = "";
+function update_time(){
+    console.log( "updating time" );
+    var targetDate = new Date(); // Current date/time of user computer
+    var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60;
+
+    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+        var localdate = new Date(timestamp * 1000 + time_offsets[i]); // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
+        $($('div.title')[i]).text( active_streams[i].description + " - " + localdate.toLocaleString() );
+    }
 }
 
 function switch_cam(){
     active_streams[cam_to_switch] = streams[stream_to_add];
-    if( active_streams[cam_to_switch] == undefined ){
-        console.log("ERROR: ")
-        console.log("active_streams: ",active_streams);
-        console.log("cam_to_switch: ",cam_to_switch);
-        console.log("active_streams[cam_to_switch]",active_streams[cam_to_switch]);
-        alert("An Error Has Occurred");
+    
+    if( streams[stream_to_add] == undefined ){
+        console.log("ERROR")
         return;
     }
-    yt_players[cam_to_switch].loadVideoById(active_streams[cam_to_switch].videoID);
-    $($('div.title')[cam_to_switch]).text(active_streams[cam_to_switch].description);
+    yt_players[cam_to_switch].loadVideoById(streams[stream_to_add].videoID);
+    $($('div.title')[cam_to_switch]).text(streams[stream_to_add].description);
     
     if( streams[stream_to_add].zip == ZIP_UNKNOWN || WEATHER_DISABLED ){
         $($('img.weather')[cam_to_switch]).hide();
@@ -350,6 +390,77 @@ function switch_cam(){
         $($('iframe.time')[cam_to_switch]).prop("src",timeURL_beginning+streams[stream_to_add].timeZone).show()
     }
     
+    console.log( "Executing OpenWeatherMap API call" );
+    $.ajax({
+        url: "http://samples.openweathermap.org/data/2.5/weather",
+        appid: "e22140f96fb4416783e41754a2df87ca",
+        lat: streams[stream_to_add].latitude,
+        lon: streams[stream_to_add].longitude,
+        success: function(result){
+            console.log(result);
+        }
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    var loc = streams[stream_to_add].latitude + ",%20" + streams[stream_to_add].longitude;
+    var targetDate = new Date(); // Current date/time of user computer
+    var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60; // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
+    var apikey = 'AIzaSyA70KObo6BpTUQTKb924F0yS07-QY0TtgI';
+    var apicall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + loc + '&timestamp=' + timestamp + '&key=' + apikey;
+     
+    var xhr = new XMLHttpRequest(); // create new XMLHttpRequest2 object
+    xhr.open('GET', apicall); // open GET request
+    xhr.onload = function(){
+        if (xhr.status === 200){ // if Ajax request successful
+            var output = JSON.parse(xhr.responseText); // convert returned JSON string to JSON object
+            if (output.status == 'OK'){ // if API reports everything was returned successfully
+                var offsets = output.dstOffset * 1000 + output.rawOffset * 1000; // get DST and time zone offsets in milliseconds
+                time_offsets[cam_to_switch] = offsets;
+            }
+        }
+        else{
+            console.log('Request failed.  Returned status of ' + xhr.status);
+        }
+    }
+    xhr.send(); // send request
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    var targetDate = new Date(); //Current date/time of user computer
+    var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60;
+    console.log( "Executing Google Time Zone API call" );
+    googleAPI_URL = "https://maps.googleapis.com/maps/api/timezone/json?location=" +
+                    streams[stream_to_add].latitude + "," + streams[stream_to_add].longitude +
+                    "&key=" +
+                    "&timestamp=" + timestamp;
+    console.log( googleAPI_URL );
+    
+    $.ajax({
+        url: googleAPI_URL,
+        success: function(result){
+            console.log(new Date((timestamp + result.dstOffset + result.rawOffset) * 1000));
+        }
+    });
+    */
+        
     if( stream_to_add+1 >= streams.length ){
         stream_to_add = 0;
     } else {
@@ -364,8 +475,17 @@ function switch_cam(){
 }
 
 $( document ).ready(function() {
+    function compare(a,b) {
+      if (a.longitude > b.longitude)
+        return -1;
+      if (a.longitude < b.longitude)
+        return 1;
+      return 0;
+    }
+    streams.sort(compare);
+
     setTimeout(function(){$('iframe.time').css("z-index","999999")},6000);
-    setInterval( switch_cam, 1000*60*(2.5/(numStreams/2)+1) );
+    setInterval( switch_cam, 1000*60*2.5 );
     for( var i = 0 ; i < NUM_STREAMS ; i++ ){
         $(document.body).append(
             $('<div>')
@@ -379,6 +499,7 @@ $( document ).ready(function() {
                     $('<div>')
                         .addClass("webcam")
                         .addClass("title")
+                        .hide()
                         .text("")
                 )
                 .append(
@@ -443,9 +564,14 @@ $( document ).ready(function() {
     for( var i = 0 ; i < titles.length ; i++ ){
         $(titles[i]).css("margin-top",(-1*height+0).toString());
     }
-    for( var i = 0 ; i < NUM_STREAMS ; i++ ){
-        switch_cam();
-    }
+    
+    setTimeout( function(){
+        for( var i = 0 ; i < NUM_STREAMS ; i++ ){
+            $($('div.title')[i]).show();
+            switch_cam();
+        }
+        setInterval( update_time, 1000 );
+    }, 1500 );
  }
  
  function get_random_stream(){
