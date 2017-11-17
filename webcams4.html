@@ -55,7 +55,7 @@ UTC = undefined;
 num_suns_calculated = 0;
 have_finished_init = false;
 
-DAYLIGHT_ONLY = true;
+DAYLIGHT_ONLY = false; //lmao this too buggy
 
 WEATHER_DISABLED = true;
 TIME_DISABLED = true;
@@ -550,6 +550,15 @@ function shuffle(array) {
 streams = shuffle(streams);
 */
 
+function add_coord_noise(digits){
+    var multiple = 1/(Math.pow(10,digits));
+
+    for( var i = 0 ; i < streams.length ; i++ ){
+        streams[i].latitude  += multiple*Math.random()-(multiple/2);
+        streams[i].longitude += multiple*Math.random()-(multiple/2);
+    }
+}
+
 stream_to_add = Math.round(Math.random()*streams.length);
 
 function update_time(){
@@ -616,7 +625,7 @@ function switch_cam(){
                 //console.log( "UTC: ", UTC/60 );
                 
                 if( UTC < streams[stream_to_add].sunrise || UTC > streams[stream_to_add].sunset ){
-                    console.log("This stream is dark.");
+                    console.log("This stream is dark. Skipping to next stream.");
                     should_skip_to_end = true;
                 }
             }
@@ -774,6 +783,8 @@ function sort_streams(){
 }
 
 $( document ).ready(function() {
+    add_coord_noise(4);
+    
     function compare(a,b) {
       if (a.longitude > b.longitude)
         return -1;
