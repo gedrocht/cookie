@@ -1,0 +1,26 @@
+<head>
+<style>
+body {
+    color: white;
+    background-color: black;
+    padding-left: 700px;
+    padding-top: 300px;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+href_begin = "https://hangouts.google.com/?hl=en&ht=0&hcb=0&lm1=1514575448109&hs=84&hmv=1&ssc=WyIiLDAsbnVsbCxudWxsLG51bGwsW10sbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLDg0LG51bGwsbnVsbCxudWxsLFsxNTE0NTc1NDQ4MTA5XSxudWxsLG51bGwsW1tudWxsLG51bGwsW251bGwsIisxNzgxODkxMDYxNSJdXV0sbnVsbCxudWxsLHRydWUsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW10sW10sbnVsbCxudWxsLG51bGwsW10sbnVsbCxudWxsLG51bGwsW10sbnVsbCxudWxsLFtdXQ..&action=chat&pn=%2B"
+function generate(){
+    var number = $('#input').prop("value")
+    console.log(number);
+    $('#output').prop('href',href_begin+number);
+    $('#output').text(number);
+}
+</script>
+</head>
+<body>
+<input id="input" type="text" width="300">
+<input type="button" value="generate" onclick="generate()">
+<a target="_blank" id="output" href="about:blank">
+</div>
+</body>
