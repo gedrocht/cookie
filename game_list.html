@@ -1,0 +1,87 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+div.small_list {
+    width: 250px;
+    font-family: Courier;
+    background-color: #EeEeEe;
+}
+
+table {
+    margin-top: 10px;
+}
+
+tr.titleRow {
+    font-weight: bold;
+    background-color: #CcCcCc;
+}
+
+tr.titleRow td {
+    width: 250px;
+}
+
+td {
+    padding-left: 5px;
+}
+</style>
+<script>
+games_NES = [
+    {name:"Battletoads", onclick:function(){}},
+    {name:"Blaster Master", onclick:function(){}},
+    {name:"Bubble Bobble", onclick:function(){}},
+    {name:"Castlevania", onclick:function(){}},
+];
+
+games_SNES = [
+];
+
+gameLists = [
+    {title:"NES games", list:games_NES, color:"#2222aa"},
+    {title:"SNES games", list:games_SNES, color:"#aa22aa"}
+];
+
+function getGameList(games){
+    console.log(games.color);
+    var output = 
+        $("<table>")
+            .prop("cellspacing", 0)
+            .css("border-left", "4px solid " + games.color)
+            .append(
+                $("<tr>")
+                    .addClass("titleRow")
+                    .append(
+                        $("<td>")
+                            .append(games.title)
+                    )
+            );
+    games.list.forEach(function(game){
+        output.append(
+            $("<tr>")
+                .append(
+                    $("<td>")
+                        .append(
+                            game.name
+                        )
+                )
+        );
+    });
+    
+    return output;
+}
+
+$(document).ready(function() {
+    gameLists.forEach(function(games){
+        $(document.body).append(
+            $("<div>")
+                .addClass("small_list")
+                .prop("id", "NES")
+                .append( getGameList(games) )
+        );
+    });
+});
+</script>
+</head>
+<body>
+</body>
+</html>
