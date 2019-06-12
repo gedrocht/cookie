@@ -20,9 +20,11 @@ body {
 <script>
 function init(){
 	interval = -1;
-	max_time = 180;
-	time = max_time;
-	time_div = document.getElementById("time");
+	max_time = 60*3;
+	time = max_time + 1;
+    time_div = document.getElementById("time");
+    update_time_display();
+    count();
 	a = new Audio("chime.mp3");
 	a.play();
 	reset();
@@ -40,7 +42,11 @@ function count(){
 	time--;
 	if( time == 0 )
 		reset();
-	var time_str = "";
+	update_time_display();
+}
+
+function update_time_display(){
+    var time_str = "";
 	var min_str = "00";
 	var sec_str = "";
 	
@@ -67,7 +73,6 @@ function pad( str, num ){
 </head>
 <body onload="init();">
 	<div id="time">
-	03:00
 	</div>
 </body>
 </html>
