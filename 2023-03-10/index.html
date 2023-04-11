@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #111;
+                color: #e9e9e9;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 22pt;
+                padding: 30px;
+            }
+        </style>
+        <script src="jquery-3.6.4.min.js"></script>
+        <script src="socket.io.min.js"></script>
+        <script>
+            $(document).ready(()=>{
+                const pad_string = (str, len=2, char="0") => {
+                    str = str.toString();
+                    while(str.length < len) {
+                        str = char + str;
+                    }
+                    return str;
+                }
+
+                const moment_fired = new Date("Fri Mar 10 2023 10:07:00 GMT-0500 (Eastern Standard Time)");
+                const get_counter_string = () => {
+                    let ms = new Date() - moment_fired;
+                    let days = ms / (1000*60*60*24);
+                    let rounded_days = Math.floor(days);
+                    let hours = (days - rounded_days)*24;
+                    let rounded_hours = Math.floor(hours);
+                    let minutes = (hours - rounded_hours)*60;
+                    let rounded_minutes = Math.floor(minutes);
+                    let seconds = (minutes - rounded_minutes)*60;
+                    let rounded_seconds = Math.round(seconds);
+                    
+                    let d = rounded_days.toString();
+                    let h = rounded_hours.toString();
+                    let m = rounded_minutes.toString();
+                    let s = rounded_seconds.toString();
+
+                    return `${d} day${d!='1'?'s':''}, ${h} hour${h!='1'?'s':''}, ${m} minute${m!='1'?'s':''}, ${s} second${s!='1'?'s':''}`;
+                }
+
+                const update_info = () => {
+                    document.getElementById("time").innerText = `${get_counter_string()}`;
+                    document.getElementById("application_count").innerText = `0`;
+                }
+
+                setTimeout(update_info,0);
+                setInterval(update_info,1000);
+
+                const socket = io("ws://192.168.0.6:12889", {
+                    cors: {
+                        origin: "192.168.0.6",
+                        methods: ["GET", "POST"]
+                    }
+                });
+                socket.on("job_applications", (msg) => {
+                    console.log(msg);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <span>Time since I was fired out of nowhere:</span>
+        <br />
+        <span id="time"></span>
+        <br />
+        <span>Jobs applied to: <span id="application_count"></span></span>
+    </body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      body {
+        background-color: #111;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20pt;
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 20pt;
+        font-weight: bold;
+        color: #e9e9e9;
+        display: inline-block;
+        margin-bottom: 0px;
+        margin-top: 8px;
+      }
+
+      .small {
+        font-size: 16pt;
+        color: #aeaeae;
+        float: left;
+        margin-bottom: 5px;
+      }
+    </style>
+    <script src="assets/jquery-3.6.4.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+      $(document).ready(()=>{
+          const PHONE_SCREENS = 7;
+          const INTERVIEWS = 6;
+          const JOBS = 0;
+
+          const moment_fired = new Date("Fri Mar 10 2023 10:07:00 GMT-0500 (Eastern Standard Time)");
+          const moment_first_applied = new Date("Mon Mar 13 2023 10:00:55 GMT-0400 (Eastern Daylight Time)");
+
+          const ms_in_one_day = 86400000; // 24 * 60 * 60 * 1000
+
+          let jobs_applied_to = 0;
+
+          const count_business_days = (start, end) => {
+            if (Number(start) >= Number(end)) {
+              throw new Error("Start date must occur before end date");
+            }
+
+            let end_date_string = end.toDateString();
+            let business_days = 0;
+            let current_date = new Date(Number(start));
+
+            while (current_date.toDateString() != end_date_string) {
+              if (current_date.getDay() > 0 && current_date.getDay() < 6) {
+                business_days++;
+              }
+              current_date = new Date(Number(current_date) + ms_in_one_day);
+            }
+
+            return business_days;
+          }
+
+          const pad_string = (str, len=2, char="0") => {
+              str = str.toString();
+              while(str.length < len) {
+                  str = char + str;
+              }
+              return str;
+          }
+
+          const rand = (min, max) => {
+            return Math.random()*(max-min) + min;
+          }
+
+          const pick = (arr) => {
+            return arr[Math.round(Math.random()*(arr.length - 1))];
+          }
+
+          const get_counter_string = (date_to_count_from) => {
+              let ms = new Date() - date_to_count_from;
+              let weeks = ms / (1000*60*60*24*7);
+              let rounded_weeks = Math.floor(weeks);
+              let days = (weeks - rounded_weeks)*7;
+              let rounded_days = Math.floor(days);
+              let hours = (days - rounded_days)*24;
+              let rounded_hours = Math.floor(hours);
+              let minutes = (hours - rounded_hours)*60;
+              let rounded_minutes = Math.floor(minutes);
+              let seconds = (minutes - rounded_minutes)*60;
+              let rounded_seconds = Math.floor(seconds);
+              
+              let w = rounded_weeks.toString();
+              let d = rounded_days.toString();
+              let h = rounded_hours.toString();
+              let m = rounded_minutes.toString();
+              let s = rounded_seconds.toString();
+
+              const add_s = (val) => val!='1'?'s':'';
+
+              const add_value = (val, name) => `${val} ${name}${add_s(val)}`
+
+              return [`${add_value(w, "week")}, ${add_value(d, "day")}, ${add_value(h, "hour")}, ${add_value(m, "minute")}`, 
+                      `[${pad_string(rounded_weeks*7+rounded_days)}:${pad_string(h)}:${pad_string(m)}:${pad_string(s)}]`];
+          }
+
+          const get_application_rate = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+            let ms = new Date() - moment_first_applied;
+            let minutes = ms / (1000*60);
+
+            let minutes_per_application = minutes / jobs_applied_to;
+            let rounded_minutes_per_application = Math.round(minutes_per_application);
+            return `1 application every ${rounded_minutes_per_application} minutes`;
+          }
+
+          const get_phone_rate = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+
+            let applications_per_phone_screen = Math.round(jobs_applied_to / PHONE_SCREENS);
+
+            return `1 phone screen every ${applications_per_phone_screen} applications`;
+          }
+
+          const get_interview_rate = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+
+            let applications_per_interview = Math.round(jobs_applied_to / INTERVIEWS);
+
+            return `1 interview every ${applications_per_interview} applications`;
+          }
+
+          const get_hire_rate = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+
+            let applications_per_hire = "∞";
+            if (JOBS > 0) {
+              applications_per_hire = Math.round(jobs_applied_to / JOBS);
+            }
+            
+            return `1 new job every ${applications_per_hire} applications`;
+          }
+
+          const get_phone_times = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+            let ms = new Date() - moment_first_applied;
+            let minutes = ms / (1000*60);
+
+            let minutes_per_phone_screen = minutes / PHONE_SCREENS;
+            let rounded_days_per_phone_screen = Math.round(minutes_per_phone_screen/(60*24));
+
+            let business_days_since_first_applied = count_business_days(moment_first_applied, new Date());
+            let rounded_business_days_per_phone_screen = Math.floor(business_days_since_first_applied / PHONE_SCREENS);
+
+            return [`1 phone screen every ${rounded_days_per_phone_screen} days`,
+                    `1 phone screen every ${rounded_business_days_per_phone_screen} business days`];
+          }
+
+          const get_interview_times = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+            let ms = new Date() - moment_first_applied;
+            let minutes = ms / (1000*60);
+
+            let minutes_per_interview = minutes / INTERVIEWS;
+            let rounded_days_per_interview = Math.round(minutes_per_interview/(60*24));
+
+            let business_days_since_first_applied = count_business_days(moment_first_applied, new Date());
+            let rounded_business_days_per_interview = Math.floor(business_days_since_first_applied / INTERVIEWS);
+
+            return [`1 interview every ${rounded_days_per_interview} days`,
+                    `1 interview every ${rounded_business_days_per_interview} business days`];
+          }
+
+          const get_hire_times = () => {
+            if (jobs_applied_to == 0) {
+              return "";
+            }
+            let days_per_job = "∞";
+            let business_days_per_job = "∞";
+            if (JOBS > 0) {
+              let ms = new Date() - moment_first_applied;
+              let minutes = ms / (1000*60);
+
+              let minutes_per_job = minutes / JOBS;
+              days_per_job = Math.round(minutes_per_interview/(60*24));
+
+              let business_days_since_first_applied = count_business_days(moment_first_applied, new Date());
+              business_days_per_job = Math.floor(business_days_since_first_applied / JOBS);
+            }
+
+            return [`1 new job every ${days_per_job} days`,
+                    `1 new job every ${business_days_per_job} business days`];
+
+          }
+
+          let job_button_was_pressed = 0;
+          let fart_button_was_pressed = 0;
+          let mario_oof_button_was_pressed = 0;
+          let laugh_track_button_was_pressed = 0;
+          let clapping_button_was_pressed = 0;
+          const update_info = () => {
+              const fired_counters = get_counter_string(moment_fired);
+              const apply_counters = get_counter_string(moment_first_applied);
+              const phone_times = get_phone_times();
+              const interview_times = get_interview_times();
+              const hire_times = get_hire_times();
+
+              document.getElementById("fired_time").innerText = `${fired_counters[0]}`;
+              document.getElementById("fired_time_small").innerText = `${fired_counters[1]}`;
+              document.getElementById("apply_time").innerText = `${apply_counters[0]}`;
+              document.getElementById("apply_time_small").innerText = `${apply_counters[1]}`;
+              document.getElementById("phone_count").innerText = PHONE_SCREENS;
+              document.getElementById("interview_count").innerText = INTERVIEWS;
+              document.getElementById("job_count").innerText = JOBS;
+              document.getElementById("application_rate").innerText = get_application_rate();
+              document.getElementById("phone_rate").innerText = get_phone_rate();
+              document.getElementById("interview_rate").innerText = get_interview_rate();
+              document.getElementById("hire_rate").innerText = get_hire_rate();
+              document.getElementById("phone_time").innerText = `${phone_times[0]}`;
+              document.getElementById("phone_time_business_days").innerText = `${phone_times[1]}`;
+              document.getElementById("interview_time").innerText = `${interview_times[0]}`;
+              document.getElementById("interview_time_business_days").innerText = `${interview_times[1]}`;
+              document.getElementById("hire_time").innerText = `${hire_times[0]}`;
+              document.getElementById("hire_time_business_days").innerText = `${hire_times[1]}`;
+              
+              job_button_was_pressed--;
+              fart_button_was_pressed--;
+              mario_oof_button_was_pressed--;
+              laugh_track_button_was_pressed--;
+              clapping_button_was_pressed--;
+          }
+
+          setTimeout(update_info,0);
+          setInterval(update_info,125);
+
+          var socket = io();
+          
+          socket.on("connect", ()=>{
+            socket.emit("info_request", "info_request");
+          });
+
+          socket.on('job_applications', (msg) => {
+            if (job_button_was_pressed > 0) {
+              console.log("job button cooldown active")
+              return;
+            }
+            job_button_was_pressed = 2;
+
+            let new_value = Number(msg);
+            if (new_value != jobs_applied_to) {
+              if (jobs_applied_to != 0) {
+                let coin_sound = new Audio(`assets/coin_${pick(["insert"])}.mp3`);
+                coin_sound.volume = 0.7;
+                coin_sound.play();
+              }
+              jobs_applied_to = new_value;
+              document.getElementById("count").innerText = msg;
+            }
+          });
+
+          socket.on('fart', (msg) => {
+            if (fart_button_was_pressed > 0) {
+              console.log("fart button cooldown active");
+              return;
+            }
+            fart_button_was_pressed = 2;
+
+            let fart_sound = new Audio(`assets/fart_${pick(["1", "2"])}.mp3`);
+            fart_sound.volume = 0.7;
+            //fart_sound.playbackRate = rand(0.7, 1.2);
+            //Wfart_sound.preservesPitch = true;
+            fart_sound.play();
+          });
+
+          socket.on('mario_oof', (msg) => {
+            console.log("mario_oof");
+            if (mario_oof_button_was_pressed > 0) {
+              console.log("mario oof button cooldown active");
+              return;
+            }
+            mario_oof_button_was_pressed = 2;
+
+            let mario_oof_sound = new Audio(`assets/mario_${pick(["oof","oof","oof","waa"])}.mp3`);
+            mario_oof_sound.volume = 1;
+            //mario_oof_sound.playbackRate = rand(0.7, 1.2);
+            //mario_oof_sound.preservesPitch = true;
+            mario_oof_sound.play();
+          });
+
+          socket.on('laugh_track', (msg) => {
+            console.log("laugh_track");
+            if (laugh_track_button_was_pressed > 0) {
+              console.log("laugh track button cooldown active");
+              return;
+            }
+            laugh_track_button_was_pressed = 2;
+
+            let laugh_track_sound = new Audio(`assets/${pick(["we'll_be_right_back"])}.mp3`);
+            laugh_track_sound.volume = 1;
+            laugh_track_sound.play();
+          });
+
+          socket.on('clapping', (msg) => {
+            console.log("clapping");
+            if (clapping_button_was_pressed > 0) {
+              console.log("clapping button cooldown active");
+              return;
+            }
+            clapping_button_was_pressed = 2;
+
+            let clapping_sound = new Audio(`assets/${pick(["clapping"])}.mp3`);
+            clapping_sound.volume = 1;
+            clapping_sound.play();
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <div style="width:600px; float: left">
+      <span>
+        <span class="title">Time since I was fired out of nowhere:</span>
+      </span>
+      <br />
+      <span id="fired_time"></span>
+      <br />
+      <span id="fired_time_small" class="small"></span>
+      <br />
+      <span>
+        <span class="title">Time since first job application:</span>
+      </span>
+      <br />
+      <span id="apply_time"></span>
+      <br />
+      <span id="apply_time_small" class="small"></span>
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+      <br />
+      <br />
+      <span>&nbsp;</span>
+    </div>
+    <div>
+      <span>
+        <p class="title">Job applications:</p> <span id="count"></span>
+        <br />
+        <span id="application_rate" class="small"></span>
+      </span>
+      <br />
+      <span>
+        <span class="title">Phone screens:</span> <span id="phone_count"></span>
+        <br />
+        <span id="phone_rate" class="small"></span>
+        <br>
+        <p id="phone_time" class="small" style="margin-top: -5px"></p>
+        <br>
+        <p id="phone_time_business_days" class="small" style="margin-top: -10px"></p>
+      </span>
+      <br />
+      <span>
+        <span class="title">Interviews:</span> <span id="interview_count"></span>
+        <br />
+        <span id="interview_rate" class="small"></span>
+        <br />
+        <p id="interview_time" class="small" style="margin-top: -5px"></p>
+        <br>
+        <p id="interview_time_business_days" class="small" style="margin-top: -10px"></p>
+      </span>
+      <br />
+      <span>
+        <span class="title">Jobs:</span> <span id="job_count"></span>
+        <br />
+        <span id="hire_rate" class="small"></span>
+        <br />
+        <p id="hire_time" class="small" style="margin-top: -5px"></p>
+        <br>
+        <p id="hire_time_business_days" class="small" style="margin-top: -10px"></p>
+      </span>
+    </span>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,18 @@
+[
+    {"address":"CE:39:7E:53:36:C5","IDs":["LHB-C35987C5"],"RSSI":"-55"},
+    {"address":"EF:EC:F8:33:41:D2","IDs":["LHB-E86B7490"],"RSSI":"-51"},
+    {"address":"BE:FF:F0:02:36:93","IDs":["ELK-BLEDOM"],"RSSI":"-69"},
+    {"address":"4F:1C:F7:78:E6:7C","IDs":["4F-1C-F7-78-E6-7C"],"RSSI":"-63","ManufacturerData Key":"0x004c","ManufacturerData Value":"10 07 7b 1b d6 27 fb 51 28                       ..{..'.Q("},
+    {"address":"40:16:3B:4B:CC:13","IDs":["[TV] Living-Room-TV"],"TxPower":"4","Class":"0x0008043c","Icon":"audio-card","Modalias":"bluetooth:v04E8p8080d0000","UUIDs":"00001200-0000-1000-8000-00805f9b34fb","ManufacturerData Key":"0x000f","ManufacturerData Value":"00 01 4c                                         ..L","RSSI":"-80"},
+    {"address":"F0:70:4F:71:40:F5","IDs":["[TV] Samsung TU690T 50 TV"]},
+    {"address":"51:01:E2:B6:99:53","IDs":["51-01-E2-B6-99-53"],"RSSI":"-68","ManufacturerData Key":"0x004c","ManufacturerData Value":"10 06 3d 1a 91 58 37 1a                          ..=..X7.","TxPower":"7"},
+    {"address":"D0:2E:AB:C1:AD:1B","IDs":["PAWSCOUT-TAG"],"RSSI":"-62"},
+    {"address":"F5:66:67:D1:8E:1B","IDs":["N020M"]},
+    {"address":"E3:B0:AF:D4:C8:CA","IDs":["Sense"]},
+    {"address":"75:F6:D9:91:7E:9F","IDs":["75-F6-D9-91-7E-9F"]},
+    {"address":"74:64:CF:5E:46:39","IDs":["74-64-CF-5E-46-39"]},
+    {"address":"65:C1:F3:57:80:66","IDs":["65-C1-F3-57-80-66"]},
+    {"address":"55:D3:AE:A1:6F:C0","IDs":["55-D3-AE-A1-6F-C0"]},
+    {"address":"54:BD:79:CD:A3:FB","IDs":["54-BD-79-CD-A3-FB"]},
+    {"address":"51:7D:4B:3F:F3:9E","IDs":["51-7D-4B-3F-F3-9E"]},
+]
