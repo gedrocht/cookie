@@ -267,7 +267,13 @@
                 coin_sound.play();
               }
               jobs_applied_to = new_value;
-              document.getElementById("count").innerText = msg;
+              let count_string = msg.toString();
+              if (Number(count_string) > 999) {
+                count_string = count_string.substr(0, count_string.length-3) + "," + 
+                               count_string.slice(count_string.length-3, count_string.length)
+              }
+
+              document.getElementById("count").innerText = count_string;
             }
           });
 
