@@ -1,6 +1,0 @@
-<html>
-<head>
-<script>
-var chars = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ01234564789abcdefghijklmnopqrstuvwxyz']
-function getRandomImage(){
-https://i.sli.mg/CIPbKL.jpg

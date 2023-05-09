@@ -1,1 +1,0 @@
-python random_snes.py
