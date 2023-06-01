@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      body {
+        background-color: #111;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20pt;
+        padding: 20px;
+      }
+      
+      @font-face {
+        font-family: 'StargateAddress';
+        src:  url('assets/2673Stargate.woff2') format('woff2'),
+            url('assets/2673Stargate.woff') format('woff');
+      }
+
+      div {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+
+      div#address {
+        font-family: StargateAddress;
+        font-size: 72pt;
+        margin-top: 250px;
+        margin-bottom: 120px;
+      }
+    </style>
+    <script src="assets/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(()=>{
+            const refresh_address = () => { $('#address').text(generate_gate_address()); };
+
+            $(document.body).append(
+                $("<div>")
+                    .append(
+                        $("<div>")
+                            .prop("id", "address")
+                    )
+                    .append($("<div>")
+                        .append(
+                            $("<button>")
+                            .on("click", refresh_address)
+                            .append("New Address")
+                        )
+                    )
+            )
+
+            const possibilities = ["B","C","D","E","F","G","H","I","J","K","L","M","N",
+                                   "O","P","Q","R","S","T","U","V","W","X","Y","Z","a",
+                                   "b","c","d","e","f","g","h","i","j","k","l","m","n"];
+
+            const pick = (pool) => {
+                return pool[Math.floor(Math.random()*pool.length)];
+            }
+
+            const pick_unique = (picks, pool) => {
+                let choice = pick(pool);
+                while (picks.indexOf(choice) != -1) {
+                    choice = pick(pool);
+                }
+                return choice;
+            }
+
+            const generate_gate_address = () => {
+                let address = [];
+                    for( let i = 0 ; i < 6 ; i++ ) {
+                        address.push(pick_unique(address, possibilities));
+                    }
+                return address.join("") + "A";
+            }
+
+            refresh_address();
+        });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
