@@ -26,6 +26,9 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/stargate', (req, res) => {
+  res.sendFile(__dirname + '/stargate.html');
+});
 app.get('/buttons', (req, res) => {
   res.sendFile(__dirname + '/buttons.html');
 });
