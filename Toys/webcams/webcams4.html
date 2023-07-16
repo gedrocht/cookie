@@ -63,6 +63,8 @@ TIME_DISABLED = true;
 weatherURL_beginning = "http://weathersticker.wunderground.com/weathersticker/cgi-bin/banner/ban/wxBanner?bannertype=wu_simplewhite&zip="
 timeURL_beginning = "http://free.timeanddate.com/clock/i5yd0dzb/fs24/tt0/tw0/tm1/ts1/tb4/n"
 
+get_timezone_API_URL = (lat, lon) => `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&format=json&apiKey=4aa673ac2f0d4bbabb0d024115eb6bc5`
+
 ZIP_UNKNOWN = "ZIP code unknown";
 TIME_UNKNOWN = "Time unknown";
 
@@ -99,28 +101,30 @@ NUM_STREAMS = Number(numStreams)
 
 active_streams = [];
 for( var i = 0 ; i < NUM_STREAMS ; i++ ){
-    active_streams[i] = "";
+    active_streams.push("")
 }
 
 time_offsets = [];
 for( var i = 0 ; i < NUM_STREAMS ; i++ ){
-    time_offsets[i] = "";
+    time_offsets.push("");
 }
 
 cam_to_switch = 0;
 yt_players = []
 
 
-streams = [{videoID:'r5TpH5bXuOA', description:'ashland, virginia',                             zip:"23005",        timeZone:TZ_N_FOUR,     latitude:  37.7590318, longitude:  -77.4799837},
-           {videoID:'w8pZYIghqaA', description:'vlieland beach, netherlands',                   zip:ZIP_UNKNOWN,    timeZone:TZ_ONE,        latitude:  53.2501840, longitude:    4.9514270},
-           {videoID:'a7jwCYuQarU', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
-           {videoID:'IT9SuXg_VEk', description:'lake oroville, california',                     zip:"95965",        timeZone:TZ_N_SEVEN,    latitude:  39.5624753, longitude: -121.4513314},
-           {videoID:'_9pavMzUY-c', description:'shibuya, japan',                                zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  35.6617770, longitude:  139.7040510},
-           {videoID:'8IAkm3d0ftc', description:'teton valley lodge, driggs, idaho',             zip:"83422",        timeZone:TZ_N_SIX,      latitude:  43.6691670, longitude: -111.1683690},
-           {videoID:'vPbQcM4k1Ys', description:'venice, italy',                                 zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  45.4408474, longitude:   12.3155151},
-           {videoID:'Qhq4vQdfrFw', description:'oxford, england',                               zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:  51.7520209, longitude:   -1.2577263},
-           {videoID:'hNaCPzorgZA', description:'glenwood springs, colorado',                    zip:"81601",        timeZone:TZ_N_SIX,      latitude:  39.5505376, longitude: -107.3247761},
-           {videoID:'WUmeGBMsdAk', description:'kittens, illinois',                             zip:"61701",        timeZone:TIME_UNKNOWN,  latitude:  40.4777790, longitude:   -88.989245},
+streams = [
+           {videoID:'1EiC9bvVGnk', description:'jackson hole, wyoming',                         zip:"83002",        timeZone:TZ_N_SIX,      latitude:  43.4799291, longitude: -110.7624282},
+           {videoID:'Q9_jZVECcjY', description:'ashland, virginia',                             zip:"23005",        timeZone:TZ_N_FOUR,     latitude:  37.7590318, longitude:  -77.4799837},
+           {videoID:'34tOlrk7z4M', description:'vlieland beach, netherlands',                   zip:ZIP_UNKNOWN,    timeZone:TZ_TWO,        latitude:  53.2501840, longitude:    4.9514270},
+           {videoID:'IBFCV4zhMGc', description:'shibuya, japan',                                zip:ZIP_UNKNOWN,    timeZone:TZ_NINE,       latitude:  35.6617770, longitude:  139.7040510},
+           {videoID:'8DdnDOGWAOQ', description:'teton valley lodge, driggs, idaho',             zip:"83422",        timeZone:TZ_N_SIX,      latitude:  43.6691670, longitude: -111.1683690},
+           {videoID:'HpZAez2oYsA', description:'venice, italy',                                 zip:ZIP_UNKNOWN,    timeZone:TZ_TWO,        latitude:  45.4408474, longitude:   12.3155151},
+           {videoID:'St7aTfoIdYQ', description:'oxford, england',                               zip:ZIP_UNKNOWN,    timeZone:TZ_ONE,        latitude:  51.7520209, longitude:   -1.2577263},
+           {videoID:'B0YjuKbVZ5w', description:'glenwood springs, colorado',                    zip:"81601",        timeZone:TZ_N_SIX,      latitude:  39.5505376, longitude: -107.3247761},
+           {videoID:'R7vrbiDi0Tc', description:'kittens, connecticut',                          zip:ZIP_UNKNOWN,    timeZone:TZ_N_FOUR,     latitude:  41.6032000, longitude:   -73.087700},
+           
+/*
            {videoID:'ifmuEH-Lg1c', description:'la planta, montana',                            zip:ZIP_UNKNOWN,    timeZone:TZ_N_SIX,      latitude:  46.8796822, longitude: -110.3625657},
            {videoID:'RtU_mdL2vBM', description:'international space station',                   zip:ZIP_UNKNOWN,    timeZone:TIME_UNKNOWN,  latitude:   0.0000000, longitude:    0.0000000},
            {videoID:'IhnQzDX-tWo', description:'dania beach, florida',                          zip:"33004",        timeZone:TIME_UNKNOWN,  latitude:  26.0523110, longitude:  -80.1439300},
@@ -660,6 +664,7 @@ streams = [{videoID:'r5TpH5bXuOA', description:'ashland, virginia',             
            {videoID: 'PBllv5ZidVk', description: 'ライブカメ枕 matsaki sightseeing ホテル rock 戸',  zip: ZIP_UNKNOWN, timeZone: TIME_UNKNOWN, latitude: 35.7090259, longitude: 139.7319925},
            {videoID: 'jhvQ5EmuNUU', description: "ASAKUSA NAKAYA map of the house",             zip: ZIP_UNKNOWN, timeZone: TIME_UNKNOWN, latitude: 35.7090259, longitude: 139.7319925},
            {videoID: '0ZqR22cjfIc', description: 'Tokushima Prefecture Mountain',              zip: ZIP_UNKNOWN, timeZone: TIME_UNKNOWN, latitude: 35.7090259, longitude: 139.7319925}
+*/
           ]; 
           
 /*
@@ -702,7 +707,7 @@ function update_time(){
     var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60;
 
     for( var i = 0 ; i < NUM_STREAMS ; i++ ){
-        var localdate = new Date(timestamp * 1000 + time_offsets[i]); // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
+        var localdate = new Date(timestamp * 1000 + (active_streams[i].timeZone * (60*60*1000))); // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
         $($('div.title')[i]).text( active_streams[i].description + " - " + localdate.toLocaleString() );
     }
 }
@@ -770,16 +775,16 @@ function switch_cam(){
         yt_players[cam_to_switch].loadVideoById(streams[stream_to_add].videoID);
         $($('div.title')[cam_to_switch]).text(streams[stream_to_add].description);
         
-        if( streams[stream_to_add].zip == ZIP_UNKNOWN || WEATHER_DISABLED ){
+        if( streams[stream_to_add].zip == (ZIP_UNKNOWN || WEATHER_DISABLED) ){
             $($('img.weather')[cam_to_switch]).hide();
         } else {
             $($('img.weather')[cam_to_switch]).prop("src",weatherURL_beginning+streams[stream_to_add].zip).show();
         }
         
-        if( streams[stream_to_add].timeZone == TIME_UNKNOWN || TIME_DISABLED ){
+        if( streams[stream_to_add].timeZone == (TIME_UNKNOWN || TIME_DISABLED) ){
             $($('iframe.time')[cam_to_switch]).hide();
         } else {
-            $($('iframe.time')[cam_to_switch]).prop("src",timeURL_beginning+streams[stream_to_add].timeZone).show()
+            //$($('iframe.time')[cam_to_switch]).prop("src",timeURL_beginning+streams[stream_to_add].timeZone).show()
         }
         
         /*
@@ -798,6 +803,8 @@ function switch_cam(){
         var loc = streams[stream_to_add].latitude + ",%20" + streams[stream_to_add].longitude;
         var targetDate = new Date(); // Current date/time of user computer
         var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60; // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
+
+        /*
         var apikey = 'AIzaSyA70KObo6BpTUQTKb924F0yS07-QY0TtgI';
         var apicall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + loc + '&timestamp=' + timestamp + '&key=' + apikey;
          
@@ -810,12 +817,14 @@ function switch_cam(){
                     var offsets = output.dstOffset * 1000 + output.rawOffset * 1000; // get DST and time zone offsets in milliseconds
                     time_offsets[cam_to_switch] = offsets;
                 }
+                console.log("Request succeeded: ", output);
             }
             else{
                 console.log('Request failed.  Returned status of ' + xhr.status);
             }
         }
         xhr.send(); // send request
+        */
         
         /*
         var targetDate = new Date(); //Current date/time of user computer
@@ -931,8 +940,10 @@ $( document ).ready(function() {
     }
     streams.sort(compare);
     
+    /*
     get_utc();
     setInterval( get_utc, 1000*60*15 ); //retrieve UTC every 15 minutes, which is kind of hacky //HACKHACK
+    */
     
     load_sun_data();
     finish_init();
@@ -955,7 +966,7 @@ function finish_init(){
     };
     have_finished_init = true;
 
-    setTimeout(function(){$('iframe.time').css("z-index","999999")},6000);
+    //setTimeout(function(){$('iframe.time').css("z-index","999999")},6000);
     setInterval( switch_cam, 1000*60*2 );
     for( var i = 0 ; i < NUM_STREAMS ; i++ ){
         $(document.body).append(
@@ -973,6 +984,7 @@ function finish_init(){
                         .hide()
                         .text("")
                 )
+                /*
                 .append(
                     $("<img>")
                         .addClass("weather")
@@ -981,6 +993,7 @@ function finish_init(){
                     $("<iframe>")
                         .addClass("time")
                 )
+                */
         );
     }
 };
@@ -1000,12 +1013,14 @@ function finish_init(){
         $($('img.weather')[i]).prop("src",weatherURL_beginning+streams[i].zip);
       }
       
+      /*
       if( streams[i].timeZone == TIME_UNKNOWN || TIME_DISABLED ){
         $($('iframe.time')[i]).hide();
       } else {
         $($('iframe.time')[i]).show();
         $($('iframe.time')[i]).prop("src",timeURL_beginning+streams[i].timeZone);
       }
+      */
       
       player = new YT.Player(i.toString(), {
         videoId: streams[i].videoID,
@@ -1027,7 +1042,7 @@ function finish_init(){
           onReady: function(e) {
             e.target.mute();
           },
-          onError: switch_cam
+          onError: (e)=>{console.log("YouTube API error: ", e);},
         }
       });
       yt_players.push(player);
@@ -1043,7 +1058,7 @@ function finish_init(){
             switch_cam();
         }
         setInterval( update_time, 1000 );
-    }, 1500 );
+    }, 5000 );
  }
  
  function get_random_stream(){
