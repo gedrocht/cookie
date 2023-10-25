@@ -1,0 +1,114 @@
+<html>
+<head>
+<script src="jquery-3.6.4.min.js"></script>
+<script>
+        const pad_string = (str) => {
+            str = str.toString();
+            while(str.length < 2) {
+                str = "0" + str;
+            }
+            return str;
+        }
+
+        const play_sound = ( filename ) => {
+            console.log((new Date()).toString(), "Playing " + filename);
+            (new Audio(filename)).play()
+        }
+        
+        const announce_time = (hour, minute) => {
+            let audio_queue = [];
+            console.log("announcing time for " + pad_string(hour) + ":" + pad_string(minute))
+            /*
+            if ((hour == 24 || hour == 0) && minute == 0) {
+                return;
+            }
+            */
+            
+            if (minute == 0) {
+                audio_queue.push( "bell.mp3" );
+            }
+            else if (minute == 30 || minute == 15 || minute == 45) {
+                audio_queue.push( "chime.mp3" );
+            }
+            
+            if (minute % 15 == 0) {
+                // play_sound((str(now.hour%12),"12")[now.hour==12 or now.hour==0 or now.hour==24] + ".mp3")
+                
+                /*
+                audio_queue.push(
+                    (   (hour%12).toString()
+                        ,
+                        "12"
+                    ) [(hour==12 || hour==0 || hour==24)?1:0]
+                    +
+                    ".mp3"
+                )
+                */
+                audio_queue.push((hour%12).toString() + ".mp3");
+
+                if (minute == 0) {
+                    audio_queue.push("o-clock.mp3");
+                } else {
+                    audio_queue.push( minute.toString() + ".mp3" );
+                }
+
+                if (hour < 12) {
+                audio_queue.push( "am.mp3" );
+                } else {
+                    audio_queue.push( "pm.mp3" );
+                }
+            }
+
+            let delay = 0;
+            for(let i = 0 ; i < audio_queue.length; i++) {
+                console.log((new Date()).toString(), "Queueing " + audio_queue[i] + " with a delay of " + (delay * 1000) + " ms");
+                setTimeout(
+                    ((filename) => {
+                        return ()=>{
+                            console.log(new Date() + " Playing " + filename);
+                            let audio = new Audio(filename);
+                            audio.play();
+                        }
+                    })(audio_queue[i]),
+                delay*1000)
+                delay += 1;
+            }
+        }
+
+        let time_of_last_update = "";
+        const update = () => {
+            let now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+
+            let time_string = `${pad_string(hours)}:${pad_string(minutes)}`;
+            if (time_of_last_update == time_string) {
+                return;
+            }
+            time_of_last_update = time_string;
+            announce_time(hours, minutes);
+        }
+
+    $(document).ready(()=>{
+
+        setInterval(update, 1000);
+    });
+</script>
+</head>
+<body>
+    <button>bababooey</button>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
