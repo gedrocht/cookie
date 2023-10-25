@@ -5,6 +5,13 @@ from playsound import playsound
 import pyaudio
 import wave
 import sys
+from Talker import text_to_speech
+
+global _WARNING_DELAY
+_WARNING_DELAY = 5
+
+global _NUM_WARNINGS
+_NUM_WARNINGS = 1
 
 global _FOLLOWUP_DELAY
 _FOLLOWUP_DELAY = 10
@@ -20,6 +27,9 @@ _HOUR = "hour"
 
 global _MINUTE
 _MINUTE = "minute"
+
+global _WARNING
+_WARNING = "warning"
 
 global _REMINDER
 _REMINDER = "reminder"
@@ -39,36 +49,56 @@ AM = "AM"
 global PM
 PM = "PM"
 
-def play_audio_files( soundfiles ):
-    global _CHUNK_SIZE
+global _SUNDAY
+global _MONDAY
+global _TUESDAY
+global _WEDNESDAY
+global _THURSDAY
+global _FRIDAY
+global _SATURDAY
+global _DAY_ID
+global _DAY_NAME
+global _DAYS
+_DAY_ID = "DAY_ID"
+_DAY_NAME = "DAY_NAME"
+_MONDAY = {_DAY_ID:0, _DAY_NAME:"Monday"}
+_TUESDAY = {_DAY_ID:1, _DAY_NAME:"Tuesday"}
+_WEDNESDAY = {_DAY_ID:2, _DAY_NAME:"Wednesday"}
+_THURSDAY = {_DAY_ID:3, _DAY_NAME:"Thursday"}
+_FRIDAY = {_DAY_ID:4, _DAY_NAME:"Friday"}
+_SATURDAY = {_DAY_ID:5, _DAY_NAME:"Saturday"}
+_SUNDAY = {_DAY_ID:6, _DAY_NAME:"Sunday"}
+_DAYS = [_MONDAY, _TUESDAY,
+         _WEDNESDAY, _THURSDAY,
+         _FRIDAY, _SATURDAY,
+         _SUNDAY]
 
+global _BING_BONG
+_BING_BONG = "bing_bong.wav"
+
+def play_audio_files( soundfiles ):
     log_output = ""
 
-    if False:
-        audio_handler = pyaudio.PyAudio()
-
-        audio_stream = audio_handler.open(
-                    format = audio_handler.get_format_from_width(2),
-                    channels = 1,
-                    rate = 48000,
-                    output = True)
-
-        data_bytes = bytes(0)
-
-        for path in soundfiles:
-            log_output += path + " "
-            with wave.open(path, "rb") as wave_file:
-                while len(audio_data := wave_file.readframes(_CHUNK_SIZE)):
-                    data_bytes += audio_data
-        
-        audio_stream.write(data_bytes)
-
-        audio_stream.close()
-        audio_handler.terminate()
-    else:
-        for file in soundfiles:
+    for file in soundfiles:
+        try:
             playsound( file )
             log_output += "[" + file + "] "
+        except Exception as error:
+            phrase = ""
+            if file.find("_") == -1:
+                phrase = file.split(".")[0]
+            else:
+                phrase = file.split(".")[0]
+                segments = phrase.split("_")
+                is_followup = (segments[0] == "followup")
+                phrase = phrase[len(segments[0])+1:]
+                phrase = phrase.replace("_"," ")
+                if is_followup:
+                    phrase = "Have you " + phrase + " yet?"
+                else:
+                    phrase = "It's time to " + phrase + "."
+            text_to_speech(phrase)
+            log_output += "[" + phrase + "] "
     return log_output
 
 def pad( string ):
@@ -80,312 +110,125 @@ def pad( string ):
 
 def get_timestamp():
     now = datetime.datetime.now()
-    return "[" + str(now.year) + "." + pad(str(now.month)) + "." + pad(str(now.day)) + "." + pad(str(now.hour)) + ":" + pad(str(now.minute)) + ":" + pad(str(now.second)) + "] "
+    return "[" + str(now.year) + "." + \
+             pad(str(now.month)) + "." + \
+             pad(str(now.day)) + "." + \
+             pad(str(now.hour)) + ":" + \
+             pad(str(now.minute)) + ":" + \
+             pad(str(now.second)) + "] "
 
-def new_reminder(hour, minute, reminder, followup_only=False):
-    global _HOUR
-    global _MINUTE
-    global _REMINDER
-    global _FOLLOWUP_ONLY
-    return {_HOUR: hour, _MINUTE:minute, _REMINDER:reminder}
+def new_reminder(hour, minute, am_pm, reminder, followup_only=False):
+    offset = 0
+    if am_pm == PM and hour < 12:
+        offset = 12
+    
+    return {_HOUR: hour + offset, _MINUTE:minute, _REMINDER:reminder}
+
+def create_reminders():
+    global reminders
+    reminders = [
+        new_reminder( 9, 30, AM, "out_kiwi"),
+        new_reminder(10, 15, AM, "brush_teeth"),
+        new_reminder(12, 45, PM, "lunch"),
+        new_reminder( 1, 45, PM, "brush_teeth"),
+        new_reminder( 2, 15, PM, "out_ridley"),
+        new_reminder( 5,  0, PM, "out_kiwi"),
+        new_reminder( 6,  0, PM, "dinner"),
+        new_reminder( 7,  0, PM, "shower"),
+        new_reminder(10, 30, PM, "melatonin"),
+    ]
 
 def announce_time():
-    global _HOUR
-    global _MINUTE
-    global _REMINDER
-    global _TASK
-    global _FOLLOWUP
-    global _FOLLOWUP_DELAY
-    global _NUM_FOLLOWUPS
-    global _FOLLOWUP_ONLY
+    global audio_queue
+    audio_queue = []
     
     now = datetime.datetime.now()
     log = ""
 
-    schedule = [
-                ###################################################
-                ## 12:00 AM  ######################################
-                ###################################################
+    did_bing_bong = (now.minute % 15 == 0)
 
-
-                ###################################################
-                ##  1:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  2:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  3:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  4:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  5:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  6:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  7:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ##  8:00 AM  ######################################
-                ###################################################
-                
-                #   8:30 AM
-                #new_reminder( 8, 30, "out_kiwi"),
-
-                ###################################################
-                ##  9:00 AM  ######################################
-                ###################################################
-
-                #   9:30 AM
-                new_reminder( 9, 30, "out_kiwi"),
-
-                ###################################################
-                ## 10:00 AM  ######################################
-                ###################################################
-                
-                #  10:15 AM
-                #new_reminder(10, 15, "out_ridley"),
-
-                #  10:15 AM
-                new_reminder(10, 15, "brush_teeth"),
-
-                ###################################################
-                ## 11:00 AM  ######################################
-                ###################################################
-
-
-                ###################################################
-                ## 12:00 PM  ######################################
-                ###################################################
-
-                # 12:45 PM
-                new_reminder(12, 45, "lunch"),
-
-                ###################################################
-                ##  1:00 PM  ######################################
-                ###################################################
-
-                #   1:45 PM
-                new_reminder(13, 45, "brush_teeth"),
-
-                ###################################################
-                ##  2:00 PM  ######################################
-                ###################################################
-
-                #   2:15 PM
-                new_reminder(14, 15, "out_ridley"),
-
-                ###################################################
-                ##  3:00 PM  ######################################
-                ###################################################
-                
-                #   3:00 PM
-                #new_reminder(15,  0, "out_kiwi"),
-
-                ###################################################
-                ##  4:00 PM  ######################################
-                ###################################################
-                
-                #   4:00 PM
-                #new_reminder(16,  0, "out_ridley"),
-
-                ###################################################
-                ##  5:00 PM  ######################################
-                ###################################################
-                
-                #   5:00 PM
-                new_reminder(17,  0, "out_kiwi"),
-
-                ###################################################
-                ##  6:00 PM  ######################################
-                ###################################################
-                
-                #   6:00 PM
-                #new_reminder(18,  0, "out_ridley"),
-
-                #   6:00 PM
-                new_reminder(18,  0, "dinner"),
-
-                ###################################################
-                ##  7:00 PM  ######################################
-                ###################################################
-                
-                #   7:00 PM
-                new_reminder(19,  0, "shower"),
-
-                #   7:40 PM
-                #new_reminder(19, 40, "dinner"),
-
-                ###################################################
-                ##  8:00 PM  ######################################
-                ###################################################
-
-                #   8:40 PM
-                #new_reminder(20, 40, "melatonin"),
-
-                ###################################################
-                ##  9:00 PM  ######################################
-                ###################################################
-
-                #   9:00 PM
-                #new_reminder(21,  0, "brush_teeth"),
-
-                ###################################################
-                ## 10:00 PM  ######################################
-                ###################################################
-                
-                #  10:30 PM
-                new_reminder(22, 30, "melatonin"),
-
-                ###################################################
-                ## 11:00 PM  ######################################
-                ###################################################
-                
-    ]
-    
-    '''
-    if (now.hour == 24 or now.hour == 0) and now.minute == 0:
-        return
-    '''
-
-    global audio_queue
-    audio_queue = []
-
-    should_bing_bong = (now.minute % 15 == 0)
-
-    #if now.minute == 0:
-    #    audio_queue.append( "bing_bong.wav" )
-    #elif now.minute == 30 or now.minute == 15 or now.minute == 45:
-    #    audio_queue.append( "bing_bong.wav" )
-    if should_bing_bong:
-        audio_queue.append( "bing_bong.wav" )
+    if did_bing_bong:
+        audio_queue.append(_BING_BONG)
         audio_queue.append((str(now.hour%12),"12")[now.hour==12 or now.hour==0 or now.hour==24] + ".wav")
 
         if now.minute == 0:
             audio_queue.append("o-clock.wav")
         else:
-            # if now.minute == 30:
             audio_queue.append( str(now.minute) + ".wav" )
-
-        '''
-        if now.hour < 12:
-            audio_queue.append( "am.wav" )
-        else:
-            audio_queue.append( "pm.wav" )
-        '''
     
-    if now.minute == 0: # or now.minute == 30:
-        if now.weekday() == 0:
-            audio_queue.append( "monday.wav" )
-        elif now.weekday() == 1:
-            audio_queue.append( "tuesday.wav" )
-        elif now.weekday() == 2:
-            audio_queue.append( "wednesday.wav" )
-        elif now.weekday() == 3:
-            audio_queue.append( "thursday.wav" )
-        elif now.weekday() == 4:
-            audio_queue.append( "friday.wav" )
-        elif now.weekday() == 5:
-            audio_queue.append( "saturday.wav" )
-        else:
-            audio_queue.append( "sunday.wav" )
-        
-        '''
-        if now.minute == 0 and True:
-            if now.month == 1:
-                audio_queue.append( "january.wav" )
-            elif now.month == 2:
-                audio_queue.append( "february.wav" )
-            elif now.month == 3:
-                audio_queue.append( "march.wav" )
-            elif now.month == 4:
-                audio_queue.append( "april.wav" )
-            elif now.month == 5:
-                audio_queue.append( "may.wav" )
-            elif now.month == 6:
-                audio_queue.append( "june.wav" )
-            elif now.month == 7:
-                audio_queue.append( "july.wav" )
-            elif now.month == 8:
-                audio_queue.append( "august.wav" )
-            elif now.month == 9:
-                audio_queue.append( "september.wav" )
-            elif now.month == 10:
-                audio_queue.append( "october.wav" )
-            elif now.month == 11:
-                audio_queue.append( "november.wav" )
-            else:
-                audio_queue.append( "december.wav" )
-            
-            if now.day < 21:
-                audio_queue.append( "date_" + str(now.day) + ".wav" )
-            elif now.day < 30:
-                audio_queue.append( "date_20_part.wav" )
-                audio_queue.append( "date_" + str(now.day-20) + ".wav" )
-            elif now.day == 30:
-                audio_queue.append( "date_30.wav" )
-            else:
-                audio_queue.append( "date_30_part.wav" )
-                audio_queue.append( "date_1.wav" )
-        '''
+    if now.minute == 0:
+        audio_queue.append(_DAYS[now.weekday()][_DAY_NAME].lower() + ".wav")
 
-    for reminder in schedule:
+    for reminder in reminders:
         if now.hour == reminder[_HOUR] and now.minute == reminder[_MINUTE]:
-            if not should_bing_bong:
-                audio_queue.append( "bing_bong.wav" )
+            if not did_bing_bong:
+                did_bing_bong = True
+                audio_queue.append(_BING_BONG)
             audio_queue.append(_TASK + "_" + reminder[_REMINDER] + ".wav")
         
+        for i in range(0, _NUM_WARNINGS):
+            warning_time_hours = reminder[_HOUR]
+            warning_time_minutes = reminder[_MINUTE] - ((i+1)*_WARNING_DELAY)
+            while warning_time_minutes < 0:
+                warning_time_minutes += 60
+                warning_time_hours -= 1
+                while warning_time_hours < 0:
+                    warning_time_hours += 24
+            
+            if now.hour == warning_time_hours and now.minute == warning_time_minutes:
+                if not did_bing_bong:
+                    did_bing_bong = True
+                    audio_queue.append(_BING_BONG)
+                warning_phrase = "It will be time to " + reminder[_REMINDER].replace("_"," ") + " at " + \
+                                 (str(now.hour%12),"12")[now.hour==12 or now.hour==0 or now.hour==24] + " "
+
+                if now.minute == 0:
+                    warning_phrase += "o-clock"
+                else:
+                    warning_phrase += str(now.minute)
+
+                audio_queue.append(warning_phrase)
+                
+
         for i in range(0, _NUM_FOLLOWUPS):
             followup_time_hours = reminder[_HOUR]
             followup_time_minutes = reminder[_MINUTE] + ((i+1)*_FOLLOWUP_DELAY)
-            if followup_time_minutes >= 60:
+            while followup_time_minutes >= 60:
                 followup_time_minutes -= 60
                 followup_time_hours += 1
-                if followup_time_hours >= 24:
+                while followup_time_hours >= 24:
                     followup_time_hours -= 24
         
             if now.hour == followup_time_hours and now.minute == followup_time_minutes:
-                if not should_bing_bong:
-                    audio_queue.append( "bing_bong.wav" )
+                if not did_bing_bong:
+                    did_bing_bong = True
+                    audio_queue.append(_BING_BONG)
                 audio_queue.append(_FOLLOWUP + "_" + reminder[_REMINDER] + ".wav")
 
     log += play_audio_files(audio_queue)
-
     if len(log) > 0:
         print(get_timestamp() + log)
 
-print(get_timestamp() + "Running. " + play_audio_files(["bing_bong.wav", "bing_bong.wav"]))
+if __name__ == "__main__":
+    create_reminders()
+    
+    print(get_timestamp() + "Running. " + play_audio_files([_BING_BONG]))
+    text_to_speech("Initialization complete.")
 
-announce_time()
-schedule.every(1).minutes.do(announce_time)
+    announce_time()
+    schedule.every(1).minutes.do(announce_time)
 
-while True:
-    try:
-        schedule.run_pending()
-        time.sleep(1)
-    except KeyboardInterrupt:
-        exit()
-    except Exception as error:
-        print( get_timestamp() + "An error has occurred. Reinitializing.")
-        print(error)
-        play_audio_files(["error.wav"])
-        time.sleep(5)
-        pass
+    while True:
+        try:
+            schedule.run_pending()
+            time.sleep(1)
+        except KeyboardInterrupt:
+            text_to_speech("Shutting down.")
+            time.sleep(0.4)
+            exit()
+        except Exception as error:
+            print( get_timestamp() + "An error has occurred. Reinitializing.")
+            print(error)
+            play_audio_files(["error.wav"])
+            time.sleep(5)
+            pass
