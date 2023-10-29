@@ -12,9 +12,9 @@ audio_queue = []
 _DATA_SAVER = False
 
 _WARNING_DELAY = 10
-_NUM_WARNINGS = 1
+_NUM_WARNINGS = 2
 _FOLLOWUP_DELAY = 10
-_NUM_FOLLOWUPS = 1
+_NUM_FOLLOWUPS = 2
 _HOUR = "hour"
 _MINUTE = "minute"
 _WARNING = "warning"
@@ -266,7 +266,7 @@ def announce_time(hour, minute, weekday):
 
 def announce_current_time():
     now = datetime.datetime.now()
-    announce_time(now.hour, now.minute, now.weekday)
+    announce_time(now.hour, now.minute, now.weekday())
 
 if __name__ == "__main__":
     create_reminders()
