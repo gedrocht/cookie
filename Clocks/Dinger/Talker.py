@@ -1,7 +1,7 @@
 from gtts import gTTS
 from playsound import playsound
 import os
-import tempfile
+# import tempfile
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -17,21 +17,27 @@ def text_to_speech(text, lang='en'):
     None
     """
     
-    # Create a temporary file to store the generated audio
-    with tempfile.NamedTemporaryFile(delete=False) as temp_audio_file:
+    # with tempfile.NamedTemporaryFile(delete=False) as temp_audio_file:
+
+    new_file = ""
+
+    if not str.isalnum(text[-1]):
+        text = text[:-1]
+
+    audio_filename = text + ".mp3"
+    audio_filename = audio_filename.replace(" ", "_").replace("?", "").replace("!", "").replace(":", "")
+
+    if not os.path.exists(audio_filename):
+        new_file = audio_filename
         tts = gTTS(text=text, lang=lang, slow=False, tld="co.uk")
-        temp_filename = temp_audio_file.name + ".mp3"
-
-        tts.save(temp_filename)
+        tts.save(audio_filename)
         
-        audio_segment = AudioSegment.from_mp3(temp_filename)
-        louder_audio = audio_segment + 7
-        louder_audio.export(temp_filename, format="mp3")
+        audio_segment = AudioSegment.from_mp3(audio_filename)
+        louder_audio = audio_segment + 5
+        louder_audio.export(audio_filename, format="mp3")
 
-        # Play the generated audio
-        playsound(temp_filename)
-        temp_audio_file.close()
-        os.unlink(temp_filename)
+    playsound(audio_filename)
+    return new_file
 
 if __name__ == "__main__":
     # Test the function
