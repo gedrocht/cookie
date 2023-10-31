@@ -5,16 +5,17 @@ from playsound import playsound
 from Talker import text_to_speech
 from pattern.en import conjugate, PARTICIPLE, PAST, PRESENT, FUTURE
 import nltk
+import math
 
 global audio_queue
 audio_queue = []
 
 _DATA_SAVER = False
 
-_WARNING_DELAY = 10
-_NUM_WARNINGS = 2
-_FOLLOWUP_DELAY = 10
-_NUM_FOLLOWUPS = 2
+_WARNING_DELAY = 5
+_NUM_WARNINGS = 1
+_FOLLOWUP_DELAY = 3
+_NUM_FOLLOWUPS = 3
 _HOUR = "hour"
 _MINUTE = "minute"
 _WARNING = "warning"
@@ -57,6 +58,7 @@ def play_text_to_speech(input):
 
 def play_audio_files( soundfiles ):
     log_output = ""
+    text_to_speech_phrase = ""
     if len(soundfiles) > 0:
         print_log("Playing audio files: " + str(soundfiles))
     for file in soundfiles:
@@ -82,8 +84,13 @@ def play_audio_files( soundfiles ):
                     phrase = "Have you " + phrase + " yet?"
                 else: 
                     phrase = "It's time to " + phrase + "."
-            play_text_to_speech(phrase)
+
+            if len(text_to_speech_phrase) > 0:
+                text_to_speech_phrase += ", "
+            text_to_speech_phrase += phrase
             log_output += "[" + phrase + "] "
+    if len(text_to_speech_phrase) > 0:
+        play_text_to_speech(text_to_speech_phrase)
     return log_output
 
 
@@ -160,22 +167,46 @@ def create_reminders():
         new_reminder( 9, 30, _AM, _DAYS, "take out Kiwi"),
         new_reminder(10, 35, _AM, _DAYS, "brush your teeth"),
         new_reminder(12, 30, _PM, _DAYS, "put away Kiwi"),
-        new_reminder( 1, 20, _PM, _DAYS, "eat lunch"),
-        new_reminder( 1, 45, _PM, _DAYS, "brush your teeth"),
+        new_reminder( 1, 20, _PM, _WEEKDAYS, "eat lunch"),
+        new_reminder( 1, 45, _PM, _WEEKDAYS, "brush your teeth"),
         new_reminder( 2, 15, _PM, _DAYS, "take out Ridley"),
         new_reminder( 5, 50, _PM, _DAYS, "take out Kiwi"),
+        new_reminder( 6,  0, _PM, _WEEKDAYS, "take a shower"),
         new_reminder( 7,  0, _PM, _DAYS, "eat dinner"),
         new_reminder(10, 30, _PM, _DAYS, "take your melatonin"),
 
-        new_reminder( 6,  0, _PM, _WEEKDAYS, "take a shower"),
+        new_reminder( 2,  0, _PM, _WEEKEND, "eat lunch"),
+        new_reminder( 2, 45, _PM, _WEEKEND, "brush your teeth"),
+        
         new_reminder(12, 30, _PM, _WEEKEND, "take a shower"),
 
         new_reminder(11, 30, _AM, _WEEKDAYS, "attend daily stand-up", _NO_FOLLOWUP),
         new_reminder( 2,  0, _PM, _WEEKDAYS, "attend developer huddle", _NO_FOLLOWUP),
+        new_reminder(11,  0, _AM, [_TUESDAY], "attend sprint retrospective", _NO_FOLLOWUP, [_ODD_WEEKS_ONLY]),
         new_reminder( 4,  0, _PM, [_THURSDAY], "attend backlog refinement", _NO_FOLLOWUP)
     ]
 
-def announce_time(hour, minute, weekday):
+def phrase_minutes_for_humans(minutes):
+    if minutes > 60:
+        remaining_minutes = minutes % 60
+        hours = math.floor(minutes / 60)
+        plural_hours = hours != 1
+        plural_minutes = remaining_minutes != 1
+        phrase = str(hours) + " hour"
+        if plural_hours:
+            phrase += "s"
+        if remaining_minutes > 0:
+            phrase += " and " + str(remaining_minutes)
+            if plural_minutes:
+                phrase += "s"
+        return phrase
+    plural_minutes = minutes != 1
+    phrase = str(minutes) + " minute"
+    if plural_minutes:
+        phrase += "s"
+    return phrase
+
+def announce_time(hour, minute, weekday, week_number):
     global audio_queue
     audio_queue = []
     log = ""
@@ -196,6 +227,12 @@ def announce_time(hour, minute, weekday):
         audio_queue.append(_DAYS[weekday][_DAY_NAME].lower()) # + ".wav")
 
     for reminder in reminders:
+        week_number_is_even = (week_number % 2) == 0
+        for flag in reminder[_FLAGS]:
+            if (flag == _EVEN_WEEKS_ONLY and not week_number_is_even) or \
+               (flag == _ODD_WEEKS_ONLY and week_number_is_even):
+                continue
+
         valid_day_of_week = False
         for day_object in reminder[_WHICH_DAYS]:
             if day_object[_DAY_ID] == weekday:
@@ -234,13 +271,16 @@ def announce_time(hour, minute, weekday):
                     if not tensed_verb is None:
                         phrase = phrase.replace(identified_verb, tensed_verb)
                 
-                warning_phrase = "It will be time to " + phrase + " at " + \
-                                 (str(reminder[_HOUR]%12),"12")[reminder[_HOUR]==12 or reminder[_HOUR]==0 or reminder[_HOUR]==24] + ":"
+                warning_phrase = "It will be time to " + phrase + " in " + \
+                                 phrase_minutes_for_humans((i+1)*_WARNING_DELAY)
+                                 #(str(reminder[_HOUR]%12),"12")[reminder[_HOUR]==12 or reminder[_HOUR]==0 or reminder[_HOUR]==24]
 
+                '''
                 if reminder[_MINUTE] == 0:
-                    warning_phrase += "o-clock"
+                    warning_phrase += " o-clock"
                 else:
-                    warning_phrase += pad(reminder[_MINUTE])
+                    warning_phrase +=  ":" + pad(reminder[_MINUTE])
+                '''
 
                 audio_queue.append(warning_phrase)
 
@@ -266,7 +306,7 @@ def announce_time(hour, minute, weekday):
 
 def announce_current_time():
     now = datetime.datetime.now()
-    announce_time(now.hour, now.minute, now.weekday())
+    announce_time(now.hour, now.minute, now.weekday(), now.isocalendar().week)
 
 if __name__ == "__main__":
     create_reminders()
