@@ -24,7 +24,7 @@ def text_to_speech(text, lang='en'):
     if not str.isalnum(text[-1]):
         text = text[:-1]
 
-    audio_filename = text + ".mp3"
+    audio_filename = "audio/" + text + ".mp3"
     audio_filename = audio_filename.replace(" ", "_").replace("?", "").replace("!", "").replace(":", "")
 
     if not os.path.exists(audio_filename):
