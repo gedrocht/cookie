@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      body {
+        background-color: #111;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20pt;
+        padding: 20px;
+      }
+
+      span {
+        margin: 10px;
+        padding: 10px;
+      }
+
+      button {
+        margin: 10px;
+        padding: 10px;
+      }
+
+      span.diceNumber {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: larger;
+        color: #fff;
+        font-weight: bolder;
+      }
+
+      span.disabled {
+        color: #555;
+      }
+    </style>
+    <script src="./jquery-3.6.4.min.js"></script>
+    <script>
+      let timeTookLastShot = new Date();
+      let numDeathsSinceLastShot = 0;
+      let shotsTaken = 0;
+
+      function secondsBetweenDates(date1, date2) {
+        // Get the timestamp of each date (in milliseconds)
+        const timestamp1 = date1.getTime();
+        const timestamp2 = date2.getTime();
+
+        // Calculate the difference in milliseconds
+        const differenceInMilliseconds = Math.abs(timestamp1 - timestamp2);
+
+        // Convert milliseconds to seconds
+        const differenceInSeconds = differenceInMilliseconds / 1000;
+
+        return Math.floor(differenceInSeconds);
+      }
+
+      function takeShot() {
+        timeTookLastShot = new Date();
+        numDeathsSinceLastShot = 0;
+        shotsTaken++;
+      }
+
+      function registerDeath() {
+        numDeathsSinceLastShot++;
+      }
+
+      const _diceNumbers_always_on = []
+      const _diceNumbers_second_tier = [7, 11, 1, 17, 3, 4, 12, 13, 2, 5, 6, 8, 9, 10, 14, 15, 16, 18, 19, 20]
+      function updateDiceNumbers() {
+        let extraIndex = 0;
+
+        if (numDeathsSinceLastShot > 1) {
+          let increase = Math.floor(Math.sqrt(numDeathsSinceLastShot));
+          if (increase > _diceNumbers_second_tier.length / 2) {
+            increase = Math.floor(_diceNumbers_second_tier.length / 2);
+          }
+          extraIndex += increase;
+        }
+
+        let minutesSinceLastShot = Math.floor(secondsBetweenDates(new Date(), timeTookLastShot) / 60);
+        if (minutesSinceLastShot > 5) {
+          let increase = Math.floor((minutesSinceLastShot-3) / 2);
+          if (increase > _diceNumbers_second_tier.length/2) {
+            increase = Math.floor(_diceNumbers_second_tier.length/2);
+          }
+          extraIndex += increase;
+        }
+
+        let timeModifier = (2*shotsTaken) - minutesSinceLastShot;
+        if (timeModifier > 1) {
+          extraIndex = Math.floor(extraIndex / timeModifier);
+        }
+
+        for(let i = 0 ; i < _diceNumbers_second_tier.length ; i++ ) {
+          let elem = $("#diceNumber-" + _diceNumbers_second_tier[i]);
+          if (i < extraIndex) {
+            elem.removeClass("disabled");
+          } else if (!elem.hasClass("disabled")) {
+            elem.addClass("disabled");
+          }
+        }
+      }
+      
+      $(document).ready(()=>{
+        $("#container")
+            .append(
+              $("<button>")
+                .on("click", takeShot)
+                .text("Took Shot")
+                .css("font-size", "25pt")
+            )
+            .append(
+              $("<button>")
+                .on("click", registerDeath)
+                .text("Died")
+                .css("font-size", "25pt")
+            )
+        
+        let diceNumbers = $("#diceNumbers");
+        for(let i = 1 ; i <= 20 ; i++) {
+          diceNumbers.append(
+            $("<span>")
+              .prop("id","diceNumber-" + i)
+              .addClass("disabled")
+              .addClass("diceNumber")
+              .text(i)
+          )
+        }
+
+        for(let i = 0 ; i < _diceNumbers_always_on.length ; i++) {
+          let elem = $("#diceNumber-" + _diceNumbers_always_on[i]).removeClass("disabled");
+        }
+
+        setInterval(() => {
+          updateDiceNumbers();
+          $("#timeSince").text(
+            "Time: " + Math.floor(secondsBetweenDates(new Date(), timeTookLastShot)/60) + " min"
+          );
+
+          $("#deathCount").text( "Deaths: " + numDeathsSinceLastShot);
+
+          $("#shotCount").text( "Shots: " + shotsTaken);
+        }, 16);
+      });
+    </script>
+  </head>
+  <body>
+    <span id="container">
+    </span>
+    <span id="timeSince"></span>
+    <span id="deathCount"></span>
+    <span id="shotCount"></span>
+    <br>
+    <br>
+    <span id="diceNumbers">
+    </span>
+  </body>
+</html>
