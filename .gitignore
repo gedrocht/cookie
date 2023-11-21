@@ -4,3 +4,5 @@ Clocks/Dinger/audio/*.wav
 Clocks/Dinger/node_modules
 Clocks/Dinger/reminders*.csv
 Clocks/Dinger/__pycache__/*.pyc
+*.exe
+*.pyc
