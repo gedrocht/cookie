@@ -26,6 +26,10 @@
         float: left;
         margin-bottom: 5px;
       }
+
+      #job_count {
+        color: gold
+      }
     </style>
     <script src="assets/jquery-3.6.4.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -34,8 +38,8 @@
     <script>
 
       $(document).ready(()=>{
-          const PHONE_SCREENS = 24;
-          const INTERVIEWS = 14;
+          const PHONE_SCREENS = 25;
+          const INTERVIEWS = 15;
           const JOBS = 1;
 
           const moment_fired = new Date("Fri Mar 10 2023 10:07:00 GMT-0500 (Eastern Standard Time)");
