@@ -1,3 +1,6 @@
 AI/.env
 Clocks/Dinger/audio/*.mp3
 Clocks/Dinger/audio/*.wav
+Clocks/Dinger/node_modules
+Clocks/Dinger/reminders*.csv
+Clocks/Dinger/__pycache__/*.pyc
