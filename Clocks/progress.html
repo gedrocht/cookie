@@ -14,8 +14,8 @@ div.container {
 }
 </style>
 <script>
-var start_time = timeToSec( 8, 15, 0, 0 );
-var end_time = timeToSec( 17, 30, 0, 0 );
+var start_time = timeToSec( 14, 00, 0, 0 );
+var end_time = timeToSec( 16, 00, 0, 0 );
 
 var containersX = 60;
 var containersY = 60;
@@ -45,6 +45,7 @@ function addContainers( numX, numY ){
 
 function updateContainers(){ 
 	var percentage = getPercentage();
+	document.title = `${((p)=>{s=p.toString();if(s.length < 3){return s + ".00";};while(s.length<5){s+="0";};return s;})(Math.round(percentage*10000)/100)} %`;
 	var container;
 	for( var i = 0 ; i < numContainers ; i++ ){
 		container = document.getElementById(i);
