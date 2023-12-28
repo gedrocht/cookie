@@ -6,3 +6,6 @@ Clocks/Dinger/reminders*.csv
 Clocks/Dinger/__pycache__/*.pyc
 *.exe
 *.pyc
+Clocks/Dinger/shots_*.txt
+/Video/frames
+Video/output.mp4
