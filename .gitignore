@@ -16,3 +16,6 @@ Genten/backend/include/asio/src/tests/*
 node_modules
 .vscode
 *.mp4
+Genten/backend/include/Crow/docs
+Genten/backend/include/Crow/examples
+Genten/backend/include/Crow/tests
