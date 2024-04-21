@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebRTC Receiver</title>
+</head>
+<body>
+    <h2>WebRTC Audio Receiver</h2>
+    <audio id="audio" autoplay></audio>
+    <script>
+        var pc = new RTCPeerConnection({
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+        var log = msg => console.log(msg);
+        var audio = document.querySelector('#audio');
+
+        pc.ontrack = function(event) {
+            audio.srcObject = event.streams[0];
+            log('Audio track added.');
+        };
+
+        pc.onicecandidate = event => {
+            if (event.candidate) {
+                sendMessage({'ice_candidate': event.candidate});
+            }
+        };
+
+        var ws = new WebSocket('ws://192.168.0.7:3412');
+        ws.onmessage = function(message) {
+            var msg = JSON.parse(message.data);
+            if (msg.sdp_offer) {
+                pc.setRemoteDescription(new RTCSessionDescription(msg.sdp_offer))
+                  .then(() => pc.createAnswer())
+                  .then(answer => pc.setLocalDescription(answer))
+                  .then(() => sendMessage({'sdp_answer': pc.localDescription}));
+            } else if (msg.ice_candidate) {
+                pc.addIceCandidate(new RTCIceCandidate(msg.ice_candidate));
+            }
+        };
+
+        function sendMessage(message) {
+            ws.send(JSON.stringify(message));
+        }
+    </script>
+</body>
+</html>
