@@ -1,0 +1,426 @@
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,COMPLETED
+63920,9,30,127,take out Kiwi,34824,False
+37720,10,35,127,brush your teeth,1040,False
+56916,11,0,21,empty the roomba,520,False
+15432,11,0,2,attend sprint retrospective,36902,False
+39439,11,30,31,attend daily stand-up,36900,False
+7689,12,30,127,put away Kiwi and deal with the birds' food and water,33800,False
+26840,12,35,127,record your mood,1032,False
+1381,12,40,96,have a shower,18496,False
+21255,12,50,8,take out the trash,1040,False
+34756,12,50,1,clean the bathroom sink,1041,False
+19484,12,50,1,clip your nails,1034,False
+61410,12,50,2,change the birds' cage paper,2065,False
+8567,12,50,2,clean the toilet,2066,False
+39883,12,50,4,empty the dishwasher,2064,False
+47137,13,20,31,have lunch,2112,False
+60045,13,50,32,load and run the dishwasher,2080,False
+53109,14,15,96,have lunch,2112,False
+2109,14,0,31,attend developer huddle,45124,False
+53596,14,20,31,brush your teeth,1040,False
+13983,14,35,127,take out Ridley,34824,False
+58119,15,15,31,update your timesheet,4104,False
+36898,16,0,5,apply to some jobs,4128,False
+923,16,0,18,check job emails,4128,False
+40590,16,0,8,attend backlog refinement,36932,False
+52877,18,10,127,take out Kiwi,34824,False
+41107,18,15,31,have a shower,18496,False
+53631,19,30,127,have dinner,2112,False
+10087,22,40,127,finish eating and drinking,1040,False
+44285,22,55,127,take your melatonin,36872,False
+50837,23,5,127,clean up,1040,False
+27253,23,20,127,brush your teeth,4112,False
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,COMPLETED,SKIPPED,DELAY
+239021824,9,30,127,take out Kiwi,34824,True,False,0
+472204699,10,35,127,brush your teeth,1040,False,True,0
+2370995809,11,0,21,empty the roomba,520,False,True,0
+2891138152,11,30,31,attend daily stand-up,36900,True,False,0
+3846108826,12,30,127,put away Kiwi and deal with the birds' food and water,33800,True,False,0
+697365675,12,35,127,record your mood,1032,True,False,0
+3983483905,13,20,31,have lunch,2112,True,False,2
+1865832407,14,0,31,attend developer huddle,45124,True,False,0
+2103968119,14,20,31,brush your teeth,1040,False,True,2
+2848326303,14,35,127,take out Ridley,34824,True,False,0
+1930854106,15,15,31,update your timesheet,4104,True,False,0
+2018882212,16,0,18,check job emails,4128,False,True,0
+795930070,18,10,127,take out Kiwi,34824,True,False,0
+980760795,18,15,31,have a shower,18496,False,True,0
+2168674952,19,30,127,have dinner,2112,True,False,0
+2765473839,22,40,127,finish eating and drinking,1040,False,True,0
+1501948869,22,55,127,take your melatonin,36872,True,False,0
+2853051152,23,5,127,clean up,1040,False,True,0
+726382303,23,20,127,brush your teeth,4112,False,False,0
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,COMPLETED,SKIPPED,DELAY
+1413918968,9,30,127,take out Kiwi,34824,True,False,0
+479410047,10,35,127,brush your teeth,1040,False,True,0
+2019506295,12,30,127,put away Kiwi and deal with the birds' food and water,33800,True,False,0
+2272757945,12,35,127,record your mood,1032,True,False,0
+515154030,12,40,96,have a shower,18496,False,True,0
+150206401,13,50,32,load and run the dishwasher,2080,False,True,0
+4288709314,14,15,96,have lunch,2112,True,False,1
+3613514761,14,35,127,take out Ridley,34824,True,False,0
+3484903794,18,10,127,take out Kiwi,34824,True,False,0
+502684285,19,30,127,have dinner,2112,True,False,4
+2189160866,22,40,127,finish eating and drinking,1040,False,True,1
+1052959391,22,55,127,take your melatonin,36872,True,False,0
+1328824961,23,5,127,clean up,1040,False,True,0
+4114252144,23,20,127,brush your teeth,4112,False,True,0
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,COMPLETED,SKIPPED,DELAY
+475080433,9,30,127,take out Kiwi,34824,True,False,0
+2351350834,10,35,127,brush your teeth,1040,False,True,0
+3883844775,12,30,127,put away Kiwi and deal with the birds' food and water,33800,True,False,0
+283377157,12,35,127,record your mood,1032,True,False,0
+4120234090,12,40,96,have a shower,18496,False,False,9
+3125285480,14,15,96,have lunch,2112,False,True,0
+3116331467,14,35,127,take out Ridley,34824,True,False,0
+2734281088,18,10,127,take out Kiwi,34824,True,False,0
+2857123406,19,30,127,have dinner,2112,True,False,0
+1381008611,22,40,127,finish eating and drinking,1040,False,False,0
+2677559262,22,55,127,take your melatonin,36872,False,False,0
+2716160769,23,5,127,clean up,1040,False,False,0
+897123832,23,20,127,brush your teeth,4112,False,False,0
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,COMPLETED,SKIPPED,DELAY
+3259940687,9,30,127,take out Kiwi and refill the birds' food,2056,True,False,0
+1779754369,10,55,127,brush your teeth,1040,False,True,0
+2687300822,11,0,21,empty the roomba,520,False,True,0
+293078088,11,25,31,attend daily stand-up,36900,True,False,0
+1800796968,12,30,127,put away Kiwi and record your mood,1032,True,False,0
+127144707,12,50,1,clip your nails,1034,True,False,4
+1855001617,13,20,31,have lunch,2112,True,False,0
+1618136999,13,55,31,attend developer huddle,45124,True,False,0
+2028873062,14,35,127,take out Ridley and replace the birds' water,34824,True,False,0
+4067442996,14,55,29,have a shower,18496,True,False,0
+2866492649,15,40,31,brush your teeth,1040,False,True,1
+3764720471,16,0,5,apply to some jobs,4128,False,True,0
+674926053,16,15,31,update your timesheet,4104,True,False,0
+3783620300,17,10,127,log your weight,520,True,False,0
+3594502993,18,10,127,take out Kiwi,2056,True,False,0
+286175145,19,30,127,finish drinking and have dinner,2112,True,False,1
+4294257979,22,40,127,finish eating and clean up,1040,False,True,0
+1582220300,22,55,127,take your melatonin and put on your fitbit,36872,True,False,0
+3783623969,23,15,127,brush your teeth,4112,False,True,0
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+896378918,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-21 14:18:41.171884
+1108602365,9,45,127,refill the birds' food,2056,0,True,False,0,2023-11-21 14:18:42.017738
+3682865542,10,0,2,have a shower,51266,0,False,True,0,2023-11-21 14:18:42.910732
+2716521442,10,45,127,brush your teeth,1040,0,False,True,3,2023-11-21 14:18:45.634025
+2061160873,10,55,2,attend sprint retrospective,36902,1,True,False,0,2023-11-21 14:18:47.264602
+3075048248,11,25,2,attend sprint planning,36902,1,True,False,0,2023-11-21 14:18:48.523482
+4272985808,12,0,127,record your mood,1032,0,True,False,0,2023-11-21 14:18:49.682901
+60032121,12,30,127,put away Kiwi,1032,0,True,False,2,2023-11-21 14:55:50.691248
+4183243105,12,50,2,clean the toilet,2066,0,True,False,2,2023-11-21 15:41:41.359742
+1325932455,13,20,31,have lunch,2112,0,True,False,0,2023-11-21 14:18:56.557943
+3063948037,13,55,31,attend developer huddle,45124,0,True,False,0,2023-11-21 14:18:58.054873
+2305952927,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-21 14:55:52.913400
+3042022788,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-21 18:12:18.918266
+1433025740,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-21 15:42:05.589598
+578006205,16,0,2,attend sprint review,36898,1,True,False,0,2023-11-21 16:11:11.901250
+2273865572,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-21 14:19:05.328804
+2498375892,17,10,127,log your weight,520,0,True,False,0,2023-11-21 15:45:06.067987
+3171376460,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-21 18:12:20.186863
+337958034,19,30,127,finish drinking and have dinner,2112,0,True,False,0,2023-11-21 22:11:58.555471
+2874997938,22,40,127,finish eating and clean up,1040,0,True,False,0,2023-11-21 22:12:02.004193
+2266703492,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+3703555418,23,15,127,brush your teeth,4112,0,False,False,0,
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+1436532180,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-22 10:37:04.201308
+3088540054,9,45,127,refill the birds' food,2056,0,False,True,2,2023-11-22 12:51:27.942153
+645427061,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-22 11:05:37.715384
+1077363473,11,0,21,empty the roomba,520,0,False,True,1,2023-11-22 12:51:11.940281
+3447850092,11,25,29,attend daily stand-up,36902,1,True,False,0,2023-11-22 11:49:42.342494
+3141676672,12,0,127,record your mood,1032,0,True,False,1,2023-11-22 12:51:21.939537
+4042201698,12,30,127,put away Kiwi,1032,0,True,False,2,2023-11-22 14:51:02.849868
+1801417162,12,50,4,empty the dishwasher,2064,0,False,True,0,2023-11-22 12:51:24.393107
+2017663305,13,20,31,have lunch,2112,0,False,True,2,2023-11-22 16:20:44.447475
+3787239818,13,55,31,attend developer huddle,45124,1,True,False,0,2023-11-22 14:34:37.292810
+3591254858,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-22 14:51:10.346088
+3479812656,14,55,29,have a shower,18496,0,False,True,5,2023-11-22 19:19:42.178979
+3594142987,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-22 15:06:05.826165
+2696995883,15,40,31,brush your teeth,1040,0,False,True,2,2023-11-22 16:20:56.795381
+590760155,16,0,5,apply to some jobs,4128,0,False,True,0,2023-11-22 11:36:45.332765
+1165300862,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-22 11:37:27.461435
+4004156867,16,50,4,clean the toilet,2066,0,False,True,0,2023-11-22 11:37:03.805259
+1287304650,17,10,127,log your weight,520,0,True,False,0,2023-11-22 14:51:22.277785
+1804031040,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-22 18:31:21.888085
+1091860428,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-11-22 22:07:33.463813
+1060661670,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-22 22:07:34.411312
+1979326262,22,55,127,take your melatonin and put on your fitbit,36872,0,True,False,0,2023-11-22 23:00:29.063779
+2599202321,23,15,127,brush your teeth,4112,0,False,False,0,
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+4174903707,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-23 11:25:29.230239
+277974846,9,45,127,refill the birds' food,2056,0,False,True,0,2023-11-23 11:25:30.547468
+3908442209,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-23 11:25:31.322313
+2895125838,11,25,29,attend daily stand-up,36902,1,False,True,0,2023-11-23 11:25:32.174077
+627195504,12,0,127,record your mood,1032,0,True,False,1,2023-11-23 13:05:47.638988
+97779223,12,30,127,put away Kiwi,1032,0,False,True,1,2023-11-23 15:08:50.022694
+2901281635,12,50,8,take out the trash,1040,0,False,True,0,2023-11-23 11:25:38.426380
+3435002687,13,20,31,have lunch,2112,0,False,True,1,2023-11-23 16:00:08.280420
+1365261883,13,55,31,attend developer huddle,45124,1,False,True,0,2023-11-23 11:25:41.725956
+1249752701,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-23 15:08:55.870684
+4221995823,14,55,29,have a shower,18496,0,False,True,0,2023-11-23 15:08:56.943269
+1467711453,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-23 11:25:47.135281
+341824056,15,40,31,brush your teeth,1040,0,False,True,2,2023-11-23 20:50:49.146461
+2350545263,15,55,8,attend backlog refinement,36932,1,False,True,0,2023-11-23 11:25:50.250426
+399919617,16,15,31,update your timesheet,4104,0,False,True,0,2023-11-23 11:25:53.613357
+2585920779,16,50,8,empty the dishwasher,2064,0,False,True,0,2023-11-23 11:25:54.869483
+2699764562,17,10,127,log your weight,520,0,False,True,0,2023-11-23 16:00:14.675018
+3899227804,18,10,127,take out Kiwi,2056,0,False,True,0,2023-11-23 16:00:16.827548
+503886840,19,30,127,finish drinking and have dinner,2112,0,True,False,2,2023-11-23 21:51:25.025818
+3364773601,22,40,127,finish eating and clean up,1040,0,False,False,0,
+3538464503,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+3024406593,23,15,127,brush your teeth,4112,0,False,False,0,
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+2218404927,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-24 11:23:06.235308
+3992221921,9,45,127,refill the birds' food,2056,0,False,True,0,2023-11-24 11:23:10.220804
+3251506847,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-24 11:23:11.137248
+3631731182,11,0,21,empty the roomba,520,0,False,True,0,2023-11-24 11:23:12.004820
+1370046414,11,25,29,attend daily stand-up,36902,1,False,True,0,2023-11-24 11:23:13.642715
+2040277433,12,0,127,record your mood,1032,0,True,False,0,2023-11-24 11:29:14.498516
+2409931812,12,30,127,put away Kiwi,1032,0,False,True,0,2023-11-24 12:40:45.996926
+1717556692,13,20,31,have lunch,2112,0,False,True,0,2023-11-24 15:01:11.511393
+1532010878,13,55,31,attend developer huddle,45124,1,False,True,0,2023-11-24 11:23:19.838734
+2015354740,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-24 15:01:12.407448
+2685106728,14,55,29,have a shower,18496,0,False,True,0,2023-11-24 15:01:13.588781
+926884469,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-24 15:01:14.566643
+563526568,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-24 16:21:13.300705
+1755268796,16,0,16,check job emails,4128,0,False,True,0,2023-11-24 11:23:28.970963
+1798339698,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-24 16:21:02.242910
+2362369021,16,50,16,take out the trash,1040,0,False,True,0,2023-11-24 11:23:41.576442
+646803890,17,10,127,log your weight,520,0,True,False,0,2023-11-24 15:01:20.560026
+623743797,18,10,127,take out Kiwi,2056,0,False,False,0,
+1845391192,19,30,127,finish drinking and have dinner,2112,0,False,True,1,2023-11-24 15:01:24.945141
+1508087053,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-24 16:21:12.634515
+637022040,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+116163180,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-24 16:21:14.554936
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+343617986,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-25 11:17:19.804235
+1059668106,9,45,127,refill the birds' food,2056,0,False,True,0,2023-11-25 11:17:21.600733
+356266185,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-25 11:17:23.266231
+2812537592,12,0,127,record your mood,1032,0,True,False,2,2023-11-25 14:00:58.350424
+4073459897,12,30,127,put away Kiwi,1032,0,False,True,0,2023-11-25 12:36:15.089807
+2830210272,12,40,96,have a shower,18496,0,True,False,0,2023-11-25 12:36:18.926303
+3213470632,13,50,32,load and run the dishwasher,2080,0,False,True,0,2023-11-25 11:17:40.751711
+441719930,14,15,96,have lunch,2112,0,False,True,0,2023-11-25 17:06:31.129068
+2769549622,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-25 14:46:07.528287
+4013883939,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-25 11:17:43.701207
+3835123085,17,10,127,log your weight,520,0,True,False,0,2023-11-25 17:06:32.502067
+3524756259,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-25 19:33:47.756332
+3189692328,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-11-25 19:33:48.738831
+2500113143,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-25 19:33:49.592330
+4014651411,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+346239848,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-25 19:33:50.295830
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+497151402,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-26 12:35:46.527649
+54764537,9,45,127,refill the birds' food,2056,0,False,True,0,2023-11-26 12:35:47.928648
+1070815517,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-26 12:35:48.464147
+4234745336,12,0,127,record your mood,1032,0,True,False,0,2023-11-26 12:36:13.698618
+3252253807,12,30,127,put away Kiwi,1032,0,True,False,0,2023-11-26 12:50:25.558631
+1849361368,12,40,96,have a shower,18496,0,False,True,0,2023-11-26 12:36:15.671116
+1754660651,14,15,96,have lunch,2112,0,False,True,0,2023-11-26 12:36:17.410613
+534480870,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-26 14:46:28.783421
+3218000406,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-26 12:36:19.122612
+1263685793,17,10,127,log your weight,520,0,True,False,0,2023-11-26 17:23:09.595031
+4135840857,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-26 18:21:12.417496
+810846510,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-11-26 12:36:21.527109
+3144314104,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-26 12:36:22.647607
+1389163168,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+694171318,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-26 12:36:24.510605
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+3867859778,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-27 10:14:11.694770
+1463858542,9,45,127,refill the birds' food,2056,0,False,True,0,2023-11-27 10:14:21.571758
+821268018,10,45,127,brush your teeth,1040,0,True,False,0,2023-11-27 10:14:14.019267
+3496763893,11,0,21,empty the roomba,520,0,True,False,2,2023-11-27 15:57:26.264531
+739932260,11,25,31,attend daily stand-up,36901,1,True,False,0,2023-11-27 11:31:12.947917
+220922966,12,0,127,record your mood,1032,0,True,False,0,2023-11-27 11:40:03.608802
+2511245614,12,30,127,put away Kiwi,1032,0,True,False,0,2023-11-27 15:57:28.135029
+2614329540,12,50,1,clean the bathroom sink,1041,0,False,True,0,2023-11-27 15:57:30.542026
+3709966084,13,20,31,have lunch,2112,0,True,False,0,2023-11-27 15:57:31.621525
+1049181983,13,55,31,attend developer huddle,45124,1,True,False,0,2023-11-27 15:57:32.670024
+3852957276,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-27 15:57:33.784022
+2592199323,14,55,29,have a shower,18496,0,False,True,0,2023-11-27 15:57:34.899521
+1754945272,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-27 15:57:36.100020
+3539283101,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-27 16:26:02.819042
+1824775196,16,0,5,apply to some jobs,4128,0,False,True,0,2023-11-27 15:57:37.721517
+2601825580,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-27 16:26:01.821544
+3497183198,17,10,127,log your weight,520,0,False,False,0,
+68592728,18,10,127,take out Kiwi,2056,0,False,False,0,
+2470720229,19,30,127,finish drinking and have dinner,2112,0,False,False,0,
+3772791324,22,40,127,finish eating and clean up,1040,0,False,False,0,
+4005409318,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+1301245688,23,15,127,brush your teeth,4112,0,False,False,0,
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+3664571926,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-28 10:36:04.343879
+535395540,9,45,127,refill the birds' food,2056,0,True,False,3,2023-11-28 13:06:09.154996
+309743895,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-28 10:36:07.522375
+1663822249,11,25,31,attend daily stand-up,36901,1,True,False,0,2023-11-28 11:31:09.734098
+2840198407,12,0,127,record your mood,1032,0,True,False,0,2023-11-28 12:11:37.899285
+1043420737,12,30,127,put away Kiwi,1032,0,True,False,1,2023-11-28 13:59:22.043002
+1711799184,12,50,2,change the birds' cage paper,2065,0,False,True,0,2023-11-28 12:53:35.931368
+1818603550,13,20,31,have lunch,2112,0,True,False,0,2023-11-28 13:16:22.939831
+42594114,13,55,31,attend developer huddle,45124,1,True,False,0,2023-11-28 14:00:53.465897
+726413769,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-28 15:08:10.858720
+3189570343,14,55,30,have a shower,18497,0,False,True,1,2023-11-28 19:26:13.595289
+1469093087,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-28 15:08:15.733214
+333150671,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-28 19:26:11.945791
+2102007138,16,0,2,check job emails,4129,0,False,True,0,2023-11-28 11:31:36.475067
+1767966770,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-28 12:37:06.045015
+2298246476,16,50,2,clean the bathroom sink,1041,0,False,True,0,2023-11-28 19:26:12.742790
+58259349,17,10,127,log your weight,520,0,True,False,0,2023-11-28 12:37:08.768512
+480040417,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-28 19:26:09.955293
+629278556,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-11-28 19:26:08.313295
+3979203362,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-28 22:22:56.831506
+3141079942,22,55,127,take your melatonin and put on your fitbit,36872,0,True,False,0,2023-11-28 22:59:17.207481
+386072068,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-28 22:22:58.810504
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+2998284644,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-29 10:50:47.458050
+2080688072,9,45,127,refill the birds' food,2056,0,False,True,4,2023-11-29 16:21:34.692559
+292677640,10,45,127,brush your teeth,1040,0,False,True,0,2023-11-29 10:50:52.644544
+1580133088,11,0,21,empty the roomba,520,0,False,True,0,2023-11-29 12:02:18.811579
+102373638,11,25,31,attend daily stand-up,36901,1,True,False,0,2023-11-29 12:02:19.507078
+1807096402,12,0,127,record your mood,1032,0,True,False,0,2023-11-29 12:02:20.688076
+149046158,12,30,127,put away Kiwi,1032,0,True,False,1,2023-11-29 16:21:36.285557
+2441388921,12,50,4,empty the dishwasher,2064,0,False,True,4,2023-11-29 17:23:03.703786
+1335659858,13,20,31,have lunch,2112,0,True,False,0,2023-11-29 16:21:49.361042
+4205583559,13,55,31,attend developer huddle,45124,1,True,False,0,2023-11-29 16:21:50.971040
+435151905,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-29 16:21:54.542036
+1952050657,14,55,29,have a shower,18496,0,False,True,0,2023-11-29 16:21:58.342032
+3324307773,14,55,30,have a shower,18497,0,False,True,3,2023-11-29 17:23:04.587285
+3486233124,15,0,127,replace the birds' water,34824,0,False,True,0,2023-11-29 16:22:02.825526
+558549765,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-29 16:22:03.542025
+4294802871,16,0,5,apply to some jobs,4128,0,False,True,0,2023-11-29 16:22:07.311521
+2985178209,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-29 16:22:39.689483
+3718579588,16,50,4,change the birds' cage paper,2065,0,False,True,0,2023-11-29 16:22:41.439982
+69866035,17,10,127,log your weight,520,0,True,False,0,2023-11-29 16:22:31.348993
+1315205468,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-29 22:58:03.048363
+2294285679,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-11-29 22:58:04.014362
+2230904627,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-29 22:58:04.638861
+3591260707,22,55,127,take your melatonin and put on your fitbit,36872,0,True,False,0,2023-11-29 22:58:06.861359
+2112431676,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-29 22:58:07.472360
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+1700378957,9,30,127,take out Kiwi,2056,0,True,False,0,2023-11-30 11:31:08.972671
+988418072,9,45,127,refill the birds' food,2056,0,True,False,3,2023-11-30 14:06:05.993704
+3833285009,10,45,127,brush your teeth,1040,0,False,True,2,2023-11-30 15:02:33.485780
+3341332926,11,25,31,attend daily stand-up,36901,1,True,False,0,2023-11-30 11:31:16.933162
+3597276499,12,0,127,record your mood,1032,0,True,False,0,2023-11-30 11:55:53.647952
+1980140691,12,30,127,put away Kiwi,1032,0,True,False,2,2023-11-30 14:06:03.279207
+4007310307,12,50,8,take out the trash,1040,0,False,True,7,2023-11-30 21:40:39.858585
+3891672102,13,20,31,have lunch,2112,0,True,False,0,2023-11-30 13:57:54.447273
+2568151067,13,55,31,attend developer huddle,45124,1,True,False,0,2023-11-30 14:16:33.942976
+3702176855,14,35,127,take out Ridley,34824,0,True,False,0,2023-11-30 17:46:21.606497
+839539264,14,55,29,have a shower,18496,0,False,True,6,2023-11-30 21:40:40.524603
+2231928077,14,55,30,have a shower,18497,0,False,True,0,2023-11-30 12:15:29.900589
+2986772125,15,0,127,replace the birds' water,34824,0,True,False,0,2023-11-30 17:46:25.959004
+3509734628,15,40,31,brush your teeth,1040,0,False,True,0,2023-11-30 17:46:27.293505
+302454451,15,55,8,attend backlog refinement,36932,1,True,False,0,2023-11-30 16:00:29.915252
+166315326,16,15,31,update your timesheet,4104,0,True,False,0,2023-11-30 18:46:11.714796
+4251987915,16,50,8,empty the dishwasher,2064,0,False,True,5,2023-11-30 21:40:41.242152
+2355094050,17,10,127,log your weight,520,0,False,False,5,
+3443197000,18,10,127,take out Kiwi,2056,0,True,False,0,2023-11-30 18:46:26.389069
+1969526348,19,30,127,finish drinking and have dinner,2112,0,False,True,4,2023-11-30 21:40:50.645096
+2419114093,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-11-30 21:40:52.004126
+1665415987,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+409054359,23,15,127,brush your teeth,4112,0,False,True,0,2023-11-30 21:40:53.635336
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+868098691,9,30,127,take out Kiwi,2056,0,True,False,0,2023-12-01 10:27:49.054491
+3972915562,9,45,127,refill the birds' food,2056,0,True,False,0,2023-12-01 11:25:39.038197
+4124742988,10,45,127,brush your teeth,1040,0,True,False,0,2023-12-01 10:27:52.941482
+4011962181,11,0,21,empty the roomba,520,0,True,False,0,2023-12-01 11:25:39.892198
+4249127502,11,25,31,attend daily stand-up,36901,1,True,False,0,2023-12-01 11:27:51.889984
+990277870,12,0,127,record your mood,1032,0,True,False,0,2023-12-01 11:57:57.497153
+1600792530,12,30,127,put away Kiwi,1032,0,True,False,1,2023-12-01 15:42:07.048685
+3712281422,13,20,31,have lunch,2112,0,False,True,2,2023-12-01 15:42:12.228157
+1673933579,13,55,31,attend developer huddle,45124,1,True,False,0,2023-12-01 15:42:13.348029
+3604179242,14,35,127,take out Ridley,34824,0,True,False,0,2023-12-01 15:42:14.183066
+1195361078,14,55,29,have a shower,18496,0,False,True,1,2023-12-01 18:15:01.260495
+1409261667,14,55,30,have a shower,18497,0,False,True,0,2023-12-01 11:27:57.319489
+1206013193,15,0,127,replace the birds' water,34824,0,False,True,0,2023-12-01 18:14:58.618792
+413661600,15,40,31,brush your teeth,1040,0,False,True,1,2023-12-01 18:14:59.170823
+1390916788,16,0,16,check job emails,4128,0,False,True,0,2023-12-01 11:28:02.217985
+3957498592,16,15,31,update your timesheet,4104,0,True,False,0,2023-12-01 11:35:13.051920
+2945354234,16,50,16,take out the trash,1040,0,False,True,0,2023-12-01 11:28:04.688341
+1377754756,17,10,127,log your weight,520,0,True,False,0,2023-12-01 18:15:00.389918
+1229435259,18,10,127,take out Kiwi,2056,0,True,False,0,2023-12-01 18:15:02.154496
+1053749131,19,30,127,finish drinking and have dinner,2112,0,False,True,2,2023-12-01 21:21:00.033135
+1152125881,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-12-01 18:15:08.438500
+3626908043,22,55,127,take your melatonin and put on your fitbit,36872,0,True,False,0,2023-12-01 23:01:17.598158
+1178354387,23,15,127,brush your teeth,4112,0,False,True,0,2023-12-01 21:21:01.843137
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+2676681263,9,30,127,take out Kiwi,2056,0,True,False,0,2023-12-02 12:10:58.998889
+2566322945,9,45,127,refill the birds' food,2056,0,False,True,0,2023-12-02 12:11:00.115390
+2606501196,10,45,127,brush your teeth,1040,0,False,True,0,2023-12-02 12:11:00.941391
+3592979057,12,0,127,record your mood,1032,0,True,False,0,2023-12-02 12:21:23.112045
+2965216911,12,30,127,put away Kiwi,1032,0,True,False,1,2023-12-02 13:54:19.964705
+659452448,12,40,96,have a shower,18496,0,False,True,0,2023-12-02 13:54:22.768026
+4047286083,13,50,32,load and run the dishwasher,2080,0,False,True,0,2023-12-02 13:54:25.209410
+3986100872,14,15,96,have lunch,2112,0,True,False,0,2023-12-02 14:10:49.145613
+3751727942,14,35,127,take out Ridley,34824,0,True,False,0,2023-12-02 15:19:52.220143
+2708032936,15,0,127,replace the birds' water,34824,0,False,True,0,2023-12-02 15:19:55.677687
+1690881232,17,10,127,log your weight,520,0,True,False,0,2023-12-02 15:19:56.692706
+2874082771,18,10,127,take out Kiwi,2056,0,True,False,0,2023-12-02 18:18:22.277170
+2348887186,19,30,127,finish drinking and have dinner,2112,0,False,True,1,2023-12-02 15:20:01.512459
+145058174,22,40,127,finish eating and clean up,1040,0,False,False,0,
+1086116927,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+3299006728,23,15,127,brush your teeth,4112,0,False,False,0,
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+3448369249,9,30,127,take out Kiwi,2056,0,True,False,0,2023-12-03 14:22:13.606549
+2382107424,9,45,127,refill the birds' food,2056,0,False,True,0,2023-12-03 14:22:14.658549
+3521069579,10,45,127,brush your teeth,1040,0,True,False,0,2023-12-03 14:22:15.583550
+3882698025,12,0,127,record your mood,1032,0,True,False,0,2023-12-03 14:22:16.746551
+2610390026,12,30,127,put away Kiwi,1032,0,True,False,0,2023-12-03 14:22:18.038053
+1735665254,12,40,96,have a shower,18496,0,False,True,0,2023-12-03 14:22:20.590054
+156279724,14,15,96,have lunch,2112,0,False,True,0,2023-12-03 14:22:21.823556
+2965782419,14,35,127,take out Ridley,34824,0,True,False,0,2023-12-03 22:50:17.721896
+410849434,15,0,127,replace the birds' water,34824,0,False,True,0,2023-12-03 22:50:19.541898
+4253533744,17,10,127,log your weight,520,0,True,False,0,2023-12-03 22:50:21.259899
+4079774611,18,10,127,take out Kiwi,2056,0,False,True,0,2023-12-03 22:50:22.270900
+1181419825,19,30,127,finish drinking and have dinner,2112,0,False,True,0,2023-12-03 22:50:23.040401
+467707545,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-12-03 22:50:24.431902
+677910811,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+3468405909,23,15,127,brush your teeth,4112,0,False,True,0,2023-12-03 22:50:28.625406
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+2855890746,9,30,127,take out Kiwi,2056,0,True,False,0,2023-12-04 10:41:36.382017
+1358776465,9,45,127,refill the birds' food,2056,0,False,True,0,2023-12-04 10:41:40.019020
+160444126,10,45,127,brush your teeth,1040,0,False,True,0,2023-12-04 10:41:41.054022
+3272299964,11,0,21,empty the roomba,520,0,False,True,0,2023-12-04 10:41:42.136024
+1378100160,11,25,29,attend daily stand-up,36902,1,True,False,0,2023-12-04 11:30:41.306554
+4116979167,12,0,127,record your mood,1032,0,True,False,0,2023-12-04 11:31:51.543615
+3804716478,12,30,127,put away Kiwi,1032,0,True,False,1,2023-12-04 15:07:09.056740
+2656571131,12,50,1,clip your nails,1034,0,False,True,0,2023-12-04 14:04:33.273005
+3773066888,13,20,31,have lunch,2112,0,True,False,0,2023-12-04 14:04:31.019003
+2355201279,13,55,31,attend developer huddle,45124,1,True,False,0,2023-12-04 14:04:15.066490
+228070472,14,35,127,take out Ridley,34824,0,True,False,0,2023-12-04 15:07:09.929741
+145157262,14,55,29,have a shower,18496,0,False,True,0,2023-12-04 14:04:28.782001
+79160021,15,0,127,replace the birds' water,34824,0,False,True,0,2023-12-04 15:07:19.663249
+1042520241,15,40,31,brush your teeth,1040,0,False,True,0,2023-12-04 15:07:22.119251
+2733252685,16,0,5,apply to some jobs,4128,0,False,True,0,2023-12-04 14:04:22.534996
+3115536876,16,15,31,update your timesheet,4104,0,True,False,0,2023-12-04 16:46:07.961355
+3044707152,17,10,127,log your weight,520,0,True,False,0,2023-12-04 14:04:24.456997
+2945989388,18,10,127,take out Kiwi,2056,0,True,False,0,2023-12-04 18:30:33.436749
+3379831850,19,30,127,finish drinking and have dinner,2112,0,True,False,0,2023-12-04 18:30:36.499252
+321014120,22,40,127,finish eating and clean up,1040,0,False,True,0,2023-12-04 22:12:33.641222
+3417392334,22,55,127,take your melatonin and put on your fitbit,36872,0,True,False,0,2023-12-04 22:12:39.511726
+873416120,23,15,127,brush your teeth,4112,0,False,True,0,2023-12-04 22:12:30.994719
+ID,hour,minute,WHICH_DAYS,reminder,FLAGS,T2FLAGS,COMPLETED,SKIPPED,DELAY,RESOLUTION_TIME
+3689487346,9,30,127,take out Kiwi,2056,0,True,False,0,2023-12-05 10:26:05.504957
+651111701,9,45,127,refill the birds' food,2056,0,False,True,0,2023-12-05 11:00:03.031078
+3763672380,10,0,2,have a shower,51266,0,False,True,0,2023-12-05 11:00:02.174077
+3135984216,10,45,127,brush your teeth,1040,0,False,True,0,2023-12-05 11:00:06.047580
+2913884001,10,55,2,attend sprint retrospective,36902,1,True,False,0,2023-12-05 11:00:07.878082
+3125553740,11,25,2,attend sprint planning,36902,1,True,False,0,2023-12-05 12:05:47.261475
+774206545,12,0,127,record your mood,1032,0,True,False,0,2023-12-05 12:05:49.209476
+2985146527,12,30,127,put away Kiwi,1032,0,False,False,0,
+3088729901,12,50,2,clean the toilet,2066,0,False,False,0,
+3334931719,13,20,31,have lunch,2112,0,False,False,0,
+2920494401,13,55,31,attend developer huddle,45124,1,False,False,0,
+2608644356,14,35,127,take out Ridley,34824,0,False,False,0,
+1470504463,15,0,127,replace the birds' water,34824,0,False,False,0,
+3479559374,15,40,31,brush your teeth,1040,0,False,False,0,
+3580486168,16,0,2,attend sprint review,36902,1,False,False,0,
+3471104353,16,15,31,update your timesheet,4104,0,False,False,0,
+4090526070,17,10,127,log your weight,520,0,False,False,0,
+498790629,18,10,127,take out Kiwi,2056,0,False,False,0,
+1075302675,19,30,127,finish drinking and have dinner,2112,0,False,False,0,
+474047305,22,40,127,finish eating and clean up,1040,0,False,False,0,
+449408969,22,55,127,take your melatonin and put on your fitbit,36872,0,False,False,0,
+786385005,23,15,127,brush your teeth,4112,0,False,False,0,
+

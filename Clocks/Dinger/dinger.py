@@ -17,6 +17,9 @@ import uuid
 # Flask app definition
 app = Flask(__name__)
 CORS(app)
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 global audio_queue
 audio_queue = []
@@ -25,10 +28,10 @@ _HOURS_OFFSET = 0
 
 _DATA_SAVER = False
 
-_WARNING_DELAY = 5
-_NUM_WARNINGS = 3
-_FOLLOWUP_DELAY = 5
-_NUM_FOLLOWUPS = 20
+_WARNING_DELAY = 10
+_NUM_WARNINGS = 1
+_FOLLOWUP_DELAY = 10
+_NUM_FOLLOWUPS = 1
 _HOUR = "hour"
 _MINUTE = "minute"
 _WARNING = "warning"
@@ -60,25 +63,29 @@ _DAYS =     _MONDAY[_DAY_FLAG]   | _TUESDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG] |
 _WEEKDAYS = _MONDAY[_DAY_FLAG]   | _TUESDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG] | _THURSDAY[_DAY_FLAG] | _FRIDAY[_DAY_FLAG]
 _WEEKEND =  _SATURDAY[_DAY_FLAG] | _SUNDAY[_DAY_FLAG]
 _FLAGS = "FLAGS"
+_T2FLAGS = "T2FLAGS"
 
-_EVEN_WEEKS_ONLY = 	    0b0000000000000001
-_ODD_WEEKS_ONLY = 	    0b0000000000000010
-_NO_FOLLOWUP = 		    0b0000000000000100
-_LENGTH_FIVE_MINUTES = 	0b0000000000001000
-_LENGTH_QUARTER_HOUR = 	0b0000000000010000
-_LENGTH_HALF_HOUR =	    0b0000000000100000
-_LENGTH_HOUR = 		    0b0000000001000000
-_LENGTH_HOUR_AND_A_HALF=0b0000000010000000
-_LENGTH_MULTIPLE_HOURS= 0b0000000100000000
-_PRIORITY_LOW = 	    0b0000001000000000
-_PRIORITY_MEDIUM = 	    0b0000010000000000
-_PRIORITY_HIGH = 	    0b0000100000000000
-_PRIORITY_EXTREME = 	0b0001000000000000
-_MULTITASKABLE = 	    0b0010000000000000
-_EXCLUSIVE = 		    0b0100000000000000
-_DO_NOT_RESCHEDULE = 	0b1000000000000000
+_FLAG_EVEN_WEEKS_ONLY = 	    0b0000000000000001
+_FLAG_ODD_WEEKS_ONLY = 	        0b0000000000000010
+_FLAG_NO_FOLLOWUP = 		    0b0000000000000100
+_FLAG_LENGTH_FIVE_MINUTES = 	0b0000000000001000
+_FLAG_LENGTH_QUARTER_HOUR = 	0b0000000000010000
+_FLAG_LENGTH_HALF_HOUR =	    0b0000000000100000
+_FLAG_LENGTH_HOUR = 		    0b0000000001000000
+_FLAG_LENGTH_HOUR_AND_A_HALF=   0b0000000010000000
+_FLAG_LENGTH_MULTIPLE_HOURS=    0b0000000100000000
+_FLAG_PRIORITY_LOW = 	        0b0000001000000000
+_FLAG_PRIORITY_MEDIUM = 	    0b0000010000000000
+_FLAG_PRIORITY_HIGH = 	        0b0000100000000000
+_FLAG_PRIORITY_EXTREME = 	    0b0001000000000000
+_FLAG_MULTITASKABLE = 	        0b0010000000000000
+_FLAG_EXCLUSIVE = 		        0b0100000000000000
+_FLAG_DO_NOT_RESCHEDULE = 	    0b1000000000000000
 
-_TASK_LENGTHS = _LENGTH_FIVE_MINUTES | _LENGTH_QUARTER_HOUR | _LENGTH_HALF_HOUR | _LENGTH_HOUR | _LENGTH_HOUR_AND_A_HALF | _LENGTH_MULTIPLE_HOURS
+_T2_FLAG_MEETING =              0b0000000000000001
+_T2_FLAG_SILENT =               0b0000000000000010
+
+_TASK_LENGTHS = _FLAG_LENGTH_FIVE_MINUTES | _FLAG_LENGTH_QUARTER_HOUR | _FLAG_LENGTH_HALF_HOUR | _FLAG_LENGTH_HOUR | _FLAG_LENGTH_HOUR_AND_A_HALF | _FLAG_LENGTH_MULTIPLE_HOURS
 
 _BING_BONG = "audio/bing_bong.wav"
 
@@ -169,71 +176,198 @@ def get_timestamp():
 def print_log(log_message):
     print(get_timestamp() + str(log_message))
 
-def new_reminder(hour, minute, am_pm, days_of_week, reminder, flags=0b00000000):
+def new_reminder(hour, minute, am_pm, days_of_week, reminder, flags=0b00000000, t2flags=0b00000000):
     offset = 0
     if am_pm == _PM and hour < 12:
         offset = 12
 
     return {_ID: uuid.uuid4().time_low, _HOUR: hour + offset, _MINUTE:minute, _WHICH_DAYS:days_of_week,
-            _REMINDER:reminder, _FLAGS:flags, _COMPLETED:False, _SKIPPED:False, _DELAY:0, _RESOLUTION_TIME:""}
+            _REMINDER:reminder, _FLAGS:flags, _T2FLAGS:t2flags, _COMPLETED:False, _SKIPPED:False, _DELAY:0, _RESOLUTION_TIME:""}
 
 def create_reminders():
     global reminders
     reminders = [
-        new_reminder( 9, 30, _AM, _DAYS, "take out Kiwi", _PRIORITY_HIGH | _LENGTH_FIVE_MINUTES),
-        new_reminder( 9, 45, _AM, _DAYS, "refill the birds' food", _PRIORITY_HIGH | _LENGTH_FIVE_MINUTES),
+        new_reminder( 9, 30, _AM, _DAYS, "take out Kiwi", 
+                     _FLAG_PRIORITY_HIGH |
+                     _FLAG_LENGTH_FIVE_MINUTES),
+
+        new_reminder( 9, 45, _AM, _DAYS, "refill the birds' food", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_FIVE_MINUTES,
+                     _T2_FLAG_SILENT),
         
-        new_reminder(10, 45, _AM, _DAYS, "brush your teeth", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR),
-        new_reminder(10, 55, _AM, _TUESDAY[_DAY_FLAG], "attend sprint retrospective", _NO_FOLLOWUP | _PRIORITY_EXTREME | _LENGTH_HALF_HOUR | _ODD_WEEKS_ONLY | _DO_NOT_RESCHEDULE),
+        new_reminder(10, 45, _AM, _DAYS, "brush your teeth", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
 
-        new_reminder(11,  0, _AM, _MONDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG] | _FRIDAY[_DAY_FLAG], "empty the roomba", _PRIORITY_LOW | _LENGTH_FIVE_MINUTES),
-        new_reminder(11, 25, _AM, _WEEKDAYS, "attend daily stand-up", _NO_FOLLOWUP | _PRIORITY_EXTREME | _LENGTH_HALF_HOUR | _DO_NOT_RESCHEDULE),
+        new_reminder(11,  0, _AM, 
+                     _MONDAY[_DAY_FLAG] | 
+                     _WEDNESDAY[_DAY_FLAG] | 
+                     _FRIDAY[_DAY_FLAG], 
+                     "empty the roomba", 
+                     _FLAG_PRIORITY_LOW | 
+                     _FLAG_LENGTH_FIVE_MINUTES,
+                     _T2_FLAG_SILENT),
 
-        new_reminder(12,  0, _PM, _DAYS, "record your mood", _PRIORITY_MEDIUM | _LENGTH_FIVE_MINUTES),
-        new_reminder(12, 30, _PM, _DAYS, "put away Kiwi", _PRIORITY_MEDIUM | _LENGTH_FIVE_MINUTES),
+        new_reminder(12,  0, _PM, _DAYS, "record your mood", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_FIVE_MINUTES,
+                     _T2_FLAG_SILENT),
 
-        new_reminder(12, 50, _PM, _THURSDAY[_DAY_FLAG], "take out the trash", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR),
-        new_reminder(12, 50, _PM, _MONDAY[_DAY_FLAG], "clean the bathroom sink", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR | _EVEN_WEEKS_ONLY),
-        new_reminder(12, 50, _PM, _MONDAY[_DAY_FLAG], "clip your nails", _PRIORITY_MEDIUM | _LENGTH_FIVE_MINUTES | _ODD_WEEKS_ONLY),
-        new_reminder(12, 50, _PM, _TUESDAY[_DAY_FLAG], "change the birds' cage paper", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR | _EVEN_WEEKS_ONLY),
-        new_reminder(12, 50, _PM, _TUESDAY[_DAY_FLAG], "clean the toilet", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR | _ODD_WEEKS_ONLY),
-        new_reminder(12, 50, _PM, _WEDNESDAY[_DAY_FLAG], "empty the dishwasher", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR),
+        new_reminder(12, 30, _PM, _DAYS, "put away Kiwi", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_FIVE_MINUTES),
 
-        new_reminder( 1, 20, _PM, _WEEKDAYS, "have lunch", _PRIORITY_HIGH | _LENGTH_HOUR),
-        new_reminder( 2, 15, _PM, _WEEKEND, "have lunch", _PRIORITY_HIGH | _LENGTH_HOUR),
+        new_reminder(12, 50, _PM, _THURSDAY[_DAY_FLAG], "take out the trash", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 1, 50, _PM, _SATURDAY[_DAY_FLAG], "load and run the dishwasher", _PRIORITY_HIGH | _LENGTH_HALF_HOUR),
-        new_reminder( 1, 55, _PM, _WEEKDAYS, "attend developer huddle", _NO_FOLLOWUP | _PRIORITY_EXTREME | _LENGTH_HOUR | _MULTITASKABLE | _DO_NOT_RESCHEDULE),
+        new_reminder(12, 50, _PM, _MONDAY[_DAY_FLAG], "clean the bathroom sink", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR | 
+                     _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 2, 35, _PM, _DAYS, "take out Ridley", _PRIORITY_HIGH | _LENGTH_FIVE_MINUTES | _DO_NOT_RESCHEDULE),
-        new_reminder( 3,  0, _PM, _DAYS, "replace the birds' water", _PRIORITY_HIGH | _LENGTH_FIVE_MINUTES | _DO_NOT_RESCHEDULE),
+        new_reminder(12, 50, _PM, _MONDAY[_DAY_FLAG], "clip your nails", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_FIVE_MINUTES | 
+                     _FLAG_ODD_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 3, 40, _PM, _WEEKDAYS, "brush your teeth", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR),
-        new_reminder( 3, 55, _PM, _THURSDAY[_DAY_FLAG], "attend backlog refinement", _NO_FOLLOWUP | _PRIORITY_EXTREME | _LENGTH_HOUR | _DO_NOT_RESCHEDULE),
+        new_reminder(12, 50, _PM, _TUESDAY[_DAY_FLAG], "change the birds' cage paper", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR 
+                     | _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 4,  0, _PM, _MONDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG], "apply to some jobs", _PRIORITY_EXTREME | _LENGTH_HALF_HOUR),
-        new_reminder( 4,  0, _PM, _TUESDAY[_DAY_FLAG] | _FRIDAY[_DAY_FLAG], "check job emails", _PRIORITY_EXTREME | _LENGTH_HALF_HOUR),
-        new_reminder( 4, 15, _PM, _WEEKDAYS, "update your timesheet", _PRIORITY_EXTREME | _LENGTH_FIVE_MINUTES),
+        new_reminder(12, 50, _PM, _TUESDAY[_DAY_FLAG], "clean the toilet", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR | 
+                     _FLAG_ODD_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 4, 50, _PM, _FRIDAY[_DAY_FLAG], "take out the trash", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR),
-        new_reminder( 4, 50, _PM, _TUESDAY[_DAY_FLAG], "clean the bathroom sink", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR | _EVEN_WEEKS_ONLY),
-        new_reminder( 4, 50, _PM, _WEDNESDAY[_DAY_FLAG], "change the birds' cage paper", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR | _EVEN_WEEKS_ONLY),
-        new_reminder( 4, 50, _PM, _WEDNESDAY[_DAY_FLAG], "clean the toilet", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR | _ODD_WEEKS_ONLY),
-        new_reminder( 4, 50, _PM, _THURSDAY[_DAY_FLAG], "empty the dishwasher", _PRIORITY_HIGH | _LENGTH_QUARTER_HOUR),
+        new_reminder(12, 50, _PM, _WEDNESDAY[_DAY_FLAG], "empty the dishwasher",
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 5, 10, _PM, _DAYS, "log your weight", _PRIORITY_LOW | _LENGTH_FIVE_MINUTES),
-        new_reminder( 6, 10, _PM, _DAYS, "take out Kiwi", _PRIORITY_HIGH | _LENGTH_FIVE_MINUTES),
+        new_reminder( 1, 20, _PM, _WEEKDAYS, "have lunch", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 2, 15, _PM, _WEEKEND, "have lunch", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 1, 50, _PM, _SATURDAY[_DAY_FLAG], "load and run the dishwasher", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_HALF_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 2, 35, _PM, _DAYS, "take out Ridley", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_FIVE_MINUTES | 
+                     _FLAG_DO_NOT_RESCHEDULE),
+
+        new_reminder( 3,  0, _PM, _DAYS, "replace the birds' water", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_FIVE_MINUTES | 
+                     _FLAG_DO_NOT_RESCHEDULE,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 3, 40, _PM, _WEEKDAYS, "brush your teeth", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4,  0, _PM, 
+                     _MONDAY[_DAY_FLAG] | 
+                     _WEDNESDAY[_DAY_FLAG], 
+                     "apply to some jobs", 
+                     _FLAG_PRIORITY_EXTREME | 
+                     _FLAG_LENGTH_HALF_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4,  0, _PM, _FRIDAY[_DAY_FLAG], "check job emails", 
+                     _FLAG_PRIORITY_EXTREME | 
+                     _FLAG_LENGTH_HALF_HOUR,
+                     _T2_FLAG_SILENT),
+                     
+        new_reminder( 4,  0, _PM, _TUESDAY[_DAY_FLAG], "check job emails", 
+                     _FLAG_PRIORITY_EXTREME | 
+                     _FLAG_LENGTH_HALF_HOUR | 
+                     _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4, 50, _PM, _FRIDAY[_DAY_FLAG], "take out the trash", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4, 50, _PM, _TUESDAY[_DAY_FLAG], "clean the bathroom sink", 
+                     _FLAG_PRIORITY_MEDIUM | 
+                     _FLAG_LENGTH_QUARTER_HOUR | 
+                     _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4, 50, _PM, _WEDNESDAY[_DAY_FLAG], "change the birds' cage paper", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR | 
+                     _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4, 50, _PM, _WEDNESDAY[_DAY_FLAG], "clean the toilet", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR | 
+                     _FLAG_ODD_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 4, 50, _PM, _THURSDAY[_DAY_FLAG], "empty the dishwasher", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 5, 10, _PM, _DAYS, "log your weight", 
+                     _FLAG_PRIORITY_LOW | 
+                     _FLAG_LENGTH_FIVE_MINUTES,
+                     _T2_FLAG_SILENT),
+
+        new_reminder( 6, 10, _PM, _DAYS, "take out Kiwi", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_FIVE_MINUTES),
         
-        new_reminder(12, 40, _PM, _WEEKEND, "have a shower", _PRIORITY_HIGH | _LENGTH_HOUR | _EXCLUSIVE),
-        new_reminder( 2, 55, _PM, _MONDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG] | _THURSDAY[_DAY_FLAG] | _FRIDAY[_DAY_FLAG], "have a shower", _PRIORITY_HIGH | _LENGTH_HOUR | _EXCLUSIVE),
-        new_reminder( 2, 55, _PM, _TUESDAY[_DAY_FLAG] | _WEDNESDAY[_DAY_FLAG] | _THURSDAY[_DAY_FLAG] | _FRIDAY[_DAY_FLAG], "have a shower", _PRIORITY_HIGH | _LENGTH_HOUR | _EXCLUSIVE | _EVEN_WEEKS_ONLY),
-        new_reminder(10,  0, _AM, _TUESDAY[_DAY_FLAG], "have a shower", _PRIORITY_HIGH | _LENGTH_HOUR | _EXCLUSIVE | _DO_NOT_RESCHEDULE | _ODD_WEEKS_ONLY),
+        new_reminder(12, 40, _PM, _WEEKEND, "have a shower", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_HOUR | 
+                     _FLAG_EXCLUSIVE,
+                     _T2_FLAG_SILENT),
 
-        new_reminder( 7, 30, _PM, _DAYS, "finish drinking and have dinner", _PRIORITY_HIGH | _LENGTH_HOUR),
+        new_reminder( 2, 55, _PM, 
+                     _MONDAY[_DAY_FLAG] |
+                     _TUESDAY[_DAY_FLAG] | 
+                     _WEDNESDAY[_DAY_FLAG] | 
+                     _THURSDAY[_DAY_FLAG] | 
+                     _FRIDAY[_DAY_FLAG], 
+                     "have a shower", 
+                     _FLAG_PRIORITY_HIGH | 
+                     _FLAG_LENGTH_HOUR | 
+                     _FLAG_EXCLUSIVE | 
+                     _FLAG_EVEN_WEEKS_ONLY,
+                     _T2_FLAG_SILENT),
+        
+        new_reminder( 9, 55, _PM, _DAYS, "take your melatonin and put on your fitbit", 
+                     _FLAG_PRIORITY_EXTREME | 
+                     _FLAG_LENGTH_FIVE_MINUTES | 
+                     _FLAG_DO_NOT_RESCHEDULE),
 
-        new_reminder(10, 40, _PM, _DAYS, "finish eating and clean up", _PRIORITY_MEDIUM | _LENGTH_QUARTER_HOUR),
-        new_reminder(10, 55, _PM, _DAYS, "take your melatonin and put on your fitbit", _PRIORITY_EXTREME | _LENGTH_FIVE_MINUTES | _DO_NOT_RESCHEDULE),
-        new_reminder(11, 15, _PM, _DAYS, "brush your teeth", _PRIORITY_EXTREME | _LENGTH_QUARTER_HOUR)
+        new_reminder(10, 15, _PM, _DAYS, "brush your teeth", 
+                     _FLAG_PRIORITY_EXTREME | 
+                     _FLAG_LENGTH_QUARTER_HOUR,
+                     _T2_FLAG_SILENT)
     ]
     reminders = sorted(reminders, key=lambda x: (x[_HOUR], x[_MINUTE]))
 
@@ -242,8 +376,8 @@ def is_reminder_valid(weekday, week_number, reminder):
         return False
 
     week_number_is_even = (week_number % 2) == 0
-    if (reminder[_FLAGS] & _EVEN_WEEKS_ONLY and not week_number_is_even) or \
-       (reminder[_FLAGS] & _ODD_WEEKS_ONLY and week_number_is_even):
+    if (reminder[_FLAGS] & _FLAG_EVEN_WEEKS_ONLY and not week_number_is_even) or \
+       (reminder[_FLAGS] & _FLAG_ODD_WEEKS_ONLY and week_number_is_even):
         return False
 
     valid_day_of_week = False
@@ -269,12 +403,12 @@ def minutes_since_midnight_to_time(minutes_since_midnight):
     return (math.floor(minutes_since_midnight/60), minutes_since_midnight % 60)
 
 def reminder_length_to_number(reminder_length):
-    if reminder_length & _LENGTH_FIVE_MINUTES: return 5
-    if reminder_length & _LENGTH_QUARTER_HOUR: return 15
-    if reminder_length & _LENGTH_HALF_HOUR: return 30
-    if reminder_length & _LENGTH_HOUR: return 60
-    if reminder_length & _LENGTH_HOUR_AND_A_HALF: return 90
-    if reminder_length & _LENGTH_MULTIPLE_HOURS: return 200
+    if reminder_length & _FLAG_LENGTH_FIVE_MINUTES: return 5
+    if reminder_length & _FLAG_LENGTH_QUARTER_HOUR: return 15
+    if reminder_length & _FLAG_LENGTH_HALF_HOUR: return 30
+    if reminder_length & _FLAG_LENGTH_HOUR: return 60
+    if reminder_length & _FLAG_LENGTH_HOUR_AND_A_HALF: return 90
+    if reminder_length & _FLAG_LENGTH_MULTIPLE_HOURS: return 200
 
 def get_task_finish_time(reminder):
     length_in_minutes = -1
@@ -306,8 +440,8 @@ def get_compressed_reminders(hour, minute, weekday, week_number):
         if compression_start_dayminutes > get_minutes_since_midnight(reminder[_HOUR], reminder[_MINUTE]):
             compressed_reminders.append(reminder)
             continue
-        if reminder[_FLAGS] & _MULTITASKABLE or \
-           reminder[_FLAGS] & _DO_NOT_RESCHEDULE:
+        if reminder[_FLAGS] & _FLAG_MULTITASKABLE or \
+           reminder[_FLAGS] & _FLAG_DO_NOT_RESCHEDULE:
             compressed_reminders.append(reminder)
             continue
         if following_task is None:
@@ -361,8 +495,8 @@ def phrase_minutes_for_humans(minutes):
     return phrase
 
 def get_delay(n):
-  if n < 6: return [0,5,10,20,40,60][n]
-  return 30*(n-2)
+  if n < 6: return [0,10,20,40][n]
+  return 40#*(n-2)
   '''
   if n == 0:
     return 0
@@ -402,6 +536,9 @@ def announce_time(hour, minute, weekday, week_number):
 
     for reminder in reminders:
         if not is_reminder_valid(weekday, week_number, reminder):
+            continue
+
+        if reminder[_T2FLAGS] & _T2_FLAG_SILENT:
             continue
         
         delayed_hour = reminder[_HOUR] + reminder[_DELAY]
@@ -443,11 +580,11 @@ def announce_time(hour, minute, weekday, week_number):
 
                 audio_queue.append(warning_phrase)
 
-        if not reminder[_FLAGS] & _NO_FOLLOWUP:
+        if not reminder[_FLAGS] & _FLAG_NO_FOLLOWUP:
             for i in range(1, _NUM_FOLLOWUPS):
                 followup_time_hours = delayed_hour
-                # followup_time_minutes = reminder[_MINUTE] + (int(math.pow(2,i))*_FOLLOWUP_DELAY)
-                followup_time_minutes = reminder[_MINUTE] + get_delay(i)
+                followup_time_minutes = reminder[_MINUTE] + (int(math.pow(2,i))*_FOLLOWUP_DELAY)
+                # followup_time_minutes = reminder[_MINUTE] + get_delay(i)
                 while followup_time_minutes >= 60:
                     followup_time_minutes -= 60
                     followup_time_hours += 1
@@ -500,6 +637,7 @@ def load_reminders():
              _WHICH_DAYS: int(row[_WHICH_DAYS]),\
              _REMINDER: row[_REMINDER],\
              _FLAGS: int(row[_FLAGS]),\
+             _T2FLAGS: int(row[_T2FLAGS]),\
              _COMPLETED: row[_COMPLETED] == "True",\
              _SKIPPED: row[_SKIPPED] == "True",\
              _DELAY: int(row[_DELAY]),\
@@ -605,7 +743,7 @@ def add_delay_reminder():
     reminder_id = int(request.json[_ID])
     for reminder in reminders:
         if reminder[_ID] == reminder_id:
-            if reminder[_FLAGS] & _DO_NOT_RESCHEDULE:
+            if reminder[_FLAGS] & _FLAG_DO_NOT_RESCHEDULE:
                 return jsonify({'status': 'error', 'message': 'Reminder cannot be rescheduled'})
             if reminder[_HOUR] + reminder[_DELAY] < 23:
                 reminder[_DELAY] += 1
@@ -664,6 +802,15 @@ def get_shots():
             # Count the total number of lines
             num_shots = len(file.readlines())
     return jsonify(num_shots)
+
+@app.route("/api/shots/last", methods=["GET"])
+def get_last_shot():
+    last_shot = ""
+    if os.path.exists(current_shots_path):
+        with open(current_shots_path, "r") as file:
+            lines = file.readlines()
+            last_shot = lines[-1]
+    return jsonify(last_shot)
 
 @app.route("/api/shots/reset", methods=["POST"])
 def reset_shots():
