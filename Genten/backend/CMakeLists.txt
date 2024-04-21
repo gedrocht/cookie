@@ -4,10 +4,30 @@ project(Genten)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include directories for Crow and Asio
+# Include directories for Crow, Asio, JSON, CURL
 include_directories(include/Crow/include)
 include_directories(include/asio/include)
 include_directories(include/json/include)
+include_directories(include/curl/include)
+
+# Find the CURL package
+find_package(CURL REQUIRED)
+include_directories(${CURL_INCLUDE_DIRS})
+
+# Include pkg-config to help find packages
+find_package(PkgConfig REQUIRED)
+
+# Find the GLFW3 package using CMake's FindGLFW
+find_package(glfw3 3.3 REQUIRED)
+
+# Find the OpenGL package
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+
+# GLAD: Optional, include if you need a modern OpenGL function loader
+# Ensure you have glad.c and glad.h in your project or install it via CMake
+# add_library(glad include/GLFW/glad/src/glad.c)
+# include_directories(include/GLFW/glad/include)
 
 # Add the GoogleTest subdirectory
 include(FetchContent)
@@ -19,15 +39,17 @@ FetchContent_MakeAvailable(googletest)
 
 # Server library
 add_library(server_lib server.cpp)
+target_link_libraries(server_lib ${CURL_LIBRARIES})
+target_include_directories(server_lib PRIVATE ${CURL_INCLUDE_DIRS})
 
 # Main executable
-add_executable(api_server api_server.cpp)
-target_link_libraries(api_server server_lib pthread)
+add_executable(main main.cpp)
+target_link_libraries(main server_lib pthread ${CURL_LIBRARIES} glfw ${OPENGL_LIBRARIES}) # glad
 
 # Testing executable
 enable_testing()
-add_executable(api_server_test test.cpp)
-target_link_libraries(api_server_test gtest_main server_lib pthread)
+add_executable(main_test test.cpp)
+target_link_libraries(main_test gtest_main server_lib pthread ${CURL_LIBRARIES})
 
 include(GoogleTest)
-gtest_discover_tests(api_server_test)
+gtest_discover_tests(main_test)

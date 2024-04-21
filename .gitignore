@@ -19,3 +19,5 @@ node_modules
 Genten/backend/include/Crow/docs
 Genten/backend/include/Crow/examples
 Genten/backend/include/Crow/tests
+*.swp
+Genten/glfw-3.4

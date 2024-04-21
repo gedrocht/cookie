@@ -1,21 +1,21 @@
 version: '3.8'
-
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./backend:/app
-    command: ./build/api_server
-
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     command: npm start
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    command: ./build/main
 
   swagger-ui:
     image: swaggerapi/swagger-ui
@@ -25,3 +25,41 @@ services:
       SWAGGER_JSON: /swagger.yaml
     volumes:
       - ./backend/swagger.yaml:/swagger.yaml
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Delasticsearch.logger.level=warn"
+    ports:
+      - "3003:9200"
+      - "3006:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.9.2
+    ports:
+      - "3004:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - "logging.root.level=warn"
+    
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.9.2
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/logs:/usr/share/logstash/logs
+      - ./logstash/logstash-data:/usr/share/logstash/data
+    ports:
+      - "3005:8080"
+    environment:
+      - "LOG_LEVEL=warn"
+    depends_on:
+      - elasticsearch
+
+volumes:
+  logstash-data:
+  elasticsearch-data:

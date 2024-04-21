@@ -1,4 +1,3 @@
-// File: src/App.js
 import React, { useState } from 'react';
 import { Button, CssBaseline, Container, TextField, ThemeProvider, createTheme } from '@mui/material';
 import axios from 'axios';
@@ -11,42 +10,58 @@ const theme = createTheme({
 });
 
 function App() {
-  const [file, setFile] = useState(null);
+  const [modelName, setModelName] = useState('');
+  const [currentModel, setCurrentModel] = useState('');
 
-  const handleFileChange = event => {
-    setFile(event.target.files[0]);
+  const handleModelNameChange = event => {
+    setModelName(event.target.value);
   };
 
-  const uploadModel = () => {
-    const formData = new FormData();
-    formData.append('file', file);
-    axios.post('http://localhost:8080/api/model', formData, {
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL; // Use environment variable
+
+  const setModel = () => {
+    axios.post(`${apiBaseUrl}/api/model`, { model: modelName }, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/json'
       }
     }).then(response => console.log(response))
       .catch(error => console.error('Error:', error));
   };
 
+  const fetchModel = () => {
+    axios.get(`${apiBaseUrl}/api/model`)
+      .then(response => {
+        setCurrentModel(response.data);
+        console.log(response);
+      })
+      .catch(error => console.error('Error:', error));
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Ensures that the background color is correct for dark mode */}
+      <CssBaseline />
       <Container component="main" maxWidth="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }}>
-        <input
-          accept="model/*" // Ensure it accepts model files
-          style={{ display: 'none' }}
-          id="raised-button-file"
-          multiple
-          type="file"
-          onChange={handleFileChange}
+        <TextField
+          label="Model Name"
+          variant="outlined"
+          value={modelName}
+          onChange={handleModelNameChange}
+          style={{ marginBottom: 20 }}
         />
-        <label htmlFor="raised-button-file">
-          <Button variant="contained" color="primary" component="span">
-            Choose File
-          </Button>
-        </label>
-        <Button variant="contained" color="primary" onClick={uploadModel} style={{ marginTop: 20 }}>
-          Upload Model
+        <Button variant="contained" color="primary" onClick={setModel}>
+          Set Model
+        </Button>
+        <TextField
+          label="Current Model"
+          variant="outlined"
+          value={currentModel}
+          InputProps={{
+            readOnly: true,
+          }}
+          style={{ marginTop: 20, marginBottom: 20 }}
+        />
+        <Button variant="contained" color="primary" onClick={fetchModel}>
+          Fetch Current Model
         </Button>
       </Container>
     </ThemeProvider>
@@ -54,4 +69,3 @@ function App() {
 }
 
 export default App;
-
