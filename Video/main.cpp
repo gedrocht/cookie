@@ -5,13 +5,13 @@
 #include <string>
 #include <math.h>
 #include <chrono>
-using namespace std;
+#include <cstdio>
+#include "json.hpp"
 
-const int height = 1080;
-const int width = 1920;
-const int numFrames = 600;
+using namespace std;
+using json = nlohmann::json;
+
 const int progressBarWidth = 70;
-const double frequency = 2 * 3.14159265 / width;
 
 struct Pixel {
     uint8_t r, g, b;
@@ -39,14 +39,33 @@ void writeFrame(const vector<vector<Pixel>>& frame, const string& filename) {
     }
 }
 
-void createVideoFromFrames(int numFrames, const string& outputFilename) {
-    cout << "Creating video, please wait..." << endl;
-    string ffmpegCmd = "ffmpeg -y -framerate 60 -i frames/frame%d.ppm -c:v libx264 -pix_fmt yuv420p " + outputFilename;
-    system(ffmpegCmd.c_str());
+void createVideoFromFrames(int framerate, const string& outputFilename) {
+  cout << "\nEncoding video..." << endl;
+  string ffmpegCmd = "ffmpeg -y -loglevel info -framerate " + to_string(framerate) + " -i frames/frame%d.ppm -c:v libx264 -pix_fmt yuv420p " + outputFilename + " 2>&1";
+  
+  FILE* pipe = _popen(ffmpegCmd.c_str(), "r");
+  if (!pipe) {
+      cerr << "Error: Could not open pipe for FFmpeg." << endl;
+      return;
+  }
+
+  char buffer[128];
+  while (!feof(pipe)) {
+      if (fgets(buffer, 128, pipe) != nullptr) {
+          string line(buffer);
+          if (line.find("frame=") != string::npos || line.find("fps=") != string::npos) {
+              cout << line; // Display only progress-related lines
+          }
+      }
+  }
+
+  _pclose(pipe);
+
+  cout << endl << outputFilename << " encoded successfully." << endl;
 }
 
 void displayProgress(int current, int total, TimePoint startTime) {
-    int barWidth = 70;
+    int barWidth = 50;
     float progress = (float)current / total;
 
     TimePoint currentTime = Clock::now();
@@ -54,18 +73,57 @@ void displayProgress(int current, int total, TimePoint startTime) {
     auto estimatedTotalTime = static_cast<int>(elapsedTime / progress);
     auto remainingTime = estimatedTotalTime - elapsedTime;
 
-    cout << "[";
+    cout << "Rendering video... [";
     int pos = barWidth * progress;
     for (int i = 0; i < barWidth; ++i) {
         if (i < pos) cout << "=";
         else if (i == pos) cout << ">";
         else cout << " ";
     }
-    cout << "] " << int(progress * 100.0) << " % - Elapsed: " << elapsedTime << "s, Remaining: " << remainingTime << "s\r";
+    cout << "] " << int(progress * 100.0) << " % - Elapsed: " << elapsedTime << "s, Remaining: " << remainingTime << "s \r";
     cout.flush();
 }
 
 int main() {
+  // Reading the configuration from the JSON file
+  ifstream configFile("config.json");
+  if (!configFile.is_open()) {
+      cerr << "Error opening config file" << endl;
+      return 1;
+  }
+
+  json config;
+  configFile >> config;
+
+  int width = config["frame_width"];
+  int height = config["frame_height"];
+  int videoLength = config["videoLength"]; // Video length in seconds
+  int framerate = config["framerate"];
+  double amplitude = double(config["amplitude"]) / 100.0; // Convert percentage to a fraction
+  double frequency = config["frequency"]; // Number of peaks per frame
+  int numFrames = videoLength * framerate; // Calculating number of frames
+
+  // Extracting RGB color values
+  Pixel aboveSineWave = {
+    config["colors"]["aboveSineWave"][0],
+    config["colors"]["aboveSineWave"][1],
+    config["colors"]["aboveSineWave"][2]
+  };
+
+  Pixel borderLine = {
+    config["colors"]["borderLine"][0],
+    config["colors"]["borderLine"][1],
+    config["colors"]["borderLine"][2]
+  };
+
+  Pixel belowSineWave = {
+    config["colors"]["belowSineWave"][0],
+    config["colors"]["belowSineWave"][1],
+    config["colors"]["belowSineWave"][2]
+  };
+  
+  const double sineFrequency = frequency * 2 * 3.14159265 / width; // Adjust frequency based on frame width
+
   vector<vector<Pixel>> frame(height, vector<Pixel>(width));
 
   TimePoint startTime = Clock::now();
@@ -73,26 +131,31 @@ int main() {
   for (int i = 0; i < numFrames; ++i) {
       double phaseShift = i * 0.1; // Phase shift changes in each frame
 
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                double sineValue = std::sin(frequency * x + phaseShift) * (height / 4) + (height / 2);
-                Pixel& pixel = frame[y][x];
+      for (int y = 0; y < height; ++y) {
+          for (int x = 0; x < width; ++x) {
+              double sineValue = sin(sineFrequency * x + phaseShift) * amplitude * (height / 2) + (height / 2);
+              Pixel& pixel = frame[y][x];
 
-                if (std::abs(y - sineValue) < 10) { // Pixel is on the sine wave
-                    pixel.r = 255; pixel.g = 0; pixel.b = 0;
-                } else if (y > sineValue) { // Pixel is below the sine wave
-                    pixel.r = 0; pixel.g = 255; pixel.b = 0;
-                } else { // Pixel is above the sine wave
-                    pixel.r = 0; pixel.g = 0; pixel.b = 255;
-                }
-            }
-        }
+              if (abs(y - sineValue) < 10) { // Pixel is on the sine wave
+                pixel = borderLine;
+              } else if (y > sineValue) { // Pixel is below the sine wave
+                pixel = belowSineWave;
+              } else { // Pixel is above the sine wave
+                pixel = aboveSineWave;
+              }
+          }
+      }
 
-      writeFrame(frame, "frames/frame" + std::to_string(i) + ".ppm");
+      writeFrame(frame, "frames/frame" + to_string(i) + ".ppm");
       displayProgress(i + 1, numFrames, startTime);
   }
+
+  cout << "\n" << numFrames << " frames rendered successfully." << endl;
   
-  createVideoFromFrames(numFrames, "output.mp4");
+  createVideoFromFrames(framerate, "output.mp4");
+
+  cout << endl;
+  system("pause");
 
   return 0;
 }

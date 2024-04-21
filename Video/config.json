@@ -1,0 +1,13 @@
+{
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "videoLength": 2,
+  "framerate": 60,
+  "amplitude": 50.0,
+  "frequency": 3,
+  "colors": {
+    "aboveSineWave": [100, 200, 80],
+    "borderLine": [10, 50, 200],
+    "belowSineWave": [200, 20, 180]
+  }
+}
