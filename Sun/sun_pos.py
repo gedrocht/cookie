@@ -6,7 +6,7 @@ LATITUDE = 43.008472
 LONGITUDE = -71.436389
 COMPASS_HEADING_deg = 302.5
 
-HUMAN_READABLE = False
+HUMAN_READABLE = True
 
 def print_position(when=datetime.now(), longitude=LONGITUDE, latitude=LATITUDE):
   sun_position_rad = get_position(when, longitude, latitude)
