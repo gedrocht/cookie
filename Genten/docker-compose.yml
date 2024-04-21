@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    command: ./build/api_server
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    command: npm start
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "3002:8080"
+    environment:
+      SWAGGER_JSON: /swagger.yaml
+    volumes:
+      - ./backend/swagger.yaml:/swagger.yaml

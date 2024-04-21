@@ -9,3 +9,10 @@ Clocks/Dinger/__pycache__/*.pyc
 Clocks/Dinger/shots_*.txt
 /Video/frames
 Video/output.mp4
+Genten/backend/node_modules/*
+Genten/frontend/node_modules/*
+Genten/backend/build/*
+Genten/backend/include/CMakeFiles/*
+Genten/backend/include/asio/src/examples/*
+Genten/backend/include/asio/src/doc/*
+Genten/backend/include/asio/src/tests/*
