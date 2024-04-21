@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: #111;
+      color: #cccccc;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 20pt;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 0px;
+    }
+
+    .stream {
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+
+    .stream iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      overflow: hidden;
+      margin: 0px;
+    }
+    .twitch1 { grid-area: 1 / 1 / 3 / 3; }
+    .twitch2 { grid-area: 1 / 3 / 3 / 5; }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      const container = $("#container");
+
+      const addRoom = (username) => {
+        const iframe = $("<iframe>").prop("src", `&room=${username}&bgcolor=black`);
+        const div = $("<div>").addClass("stream").append(iframe);
+        container.append(div);
+      };
+
+      const addTwitch = (channelName) => {
+        const iframe = $("<iframe>").prop("src", `https://player.twitch.tv/?channel=${channelName}`); // Replace 'yourwebsite.com' with your actual domain
+        const div = $("<div>").addClass("stream").append(iframe);
+        container.append(div);
+      };
+      [ ].forEach(addRoom);
+
+      // Add Twitch streams (replace with actual channel names)
+      // ['', ''].forEach(addTwitch);
+    });
+  </script>
+</head>
+<body>
+  <div id="container" class="grid-container"></div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #111;
+        color: #cccccc;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 0pt;
+        margin: 0px;
+        padding: 0px;
+        /*overflow: hidden;*/
+      }
+
+      span {
+        margin: 0px;
+      }
+
+      iframe {
+        margin: 0px;
+      }
+  
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 0px;
+      }
+  
+      .stream {
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+      }
+  
+      iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: none;
+        overflow: hidden;
+        margin: 0px;
+      }
+      /*
+      .twitch1 { grid-area: 1 / 1 / 3 / 3; }
+      .twitch2 { grid-area: 1 / 3 / 3 / 5; }
+      */
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      const addRoom = (username) => {
+        const iframe = $("<iframe>").prop("src", `test.php?username=${username}`);
+        iframe.on("load", (event) => {
+          let interval = setInterval(()=>{
+            let iframeContent = null;
+            let video = null;
+
+              // $('iframe').each((index,elem)=>{if($(elem).contents().find(".BaseRoomContents").text() == "Room is currently offline"){$(elem).css("display","none");}});
+
+            try {
+              iframeContent = $(event.target).contents();
+              video = $(event.target).contents().find("video");
+              if (video.length > 0) {
+                if ($(video).prop("src").length > 0) {
+                  console.log({video})
+                  $(event.target).css("display", "inline-block");
+                  iframeContent.find("body").html(video);
+                  clearInterval(interval);
+                } else {
+                  $(event.target).css("display", "none");
+                }
+              } else {
+                if (iframeContent.find(".BaseRoomContents").text() == "Room is currently offline") {
+                  console.log("room offline", {target: event.target, iframeContent});
+                  $(event.target).parent().remove()
+                  clearInterval(interval);
+                } else if (iframeContent.text() == "Error: Unable to fetch content after multiple retries.") {
+                    console.log("unable to load room", {target: event.target, iframeContent});
+                    //$(event.target).remove()
+                    clearInterval(interval);
+                }
+              };
+            } catch (e) {
+              iframeContent = $(event.target).contents();
+              console.log(e);
+              console.log({iframeContent, video});
+            }
+          }, 10);
+        });
+        const span = $("<span>").addClass("stream").append(iframe);
+        $('#container').append(span);
+      };
+
+      $(document).ready(function(){
+          [ ]
+          .forEach((username, index) => {
+            setTimeout(()=>{addRoom(username)}, index * 20000);
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <span id="container" class="grid-container"></span>
+    <!--<iframe class="stream" id="frametest" src="test.php" ></iframe>-->
+  </body>
+</html>
