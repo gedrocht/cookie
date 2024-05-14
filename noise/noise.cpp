@@ -18,9 +18,9 @@
 
 using namespace std;
 
-#define FRAME_DELAY 100
-#define PIXEL_WIDTH 160
-#define PIXEL_HEIGHT 90
+#define FRAME_DELAY 15
+#define PIXEL_WIDTH 320
+#define PIXEL_HEIGHT 180
 #define PIXEL_COUNT (PIXEL_WIDTH * PIXEL_HEIGHT)
 
 vector<uint32_t> pixels(PIXEL_COUNT, 0);  // Example for a 16x9 pixel screen
@@ -29,41 +29,61 @@ bool running = true;
 double d_cur = 0.0;
 double d_prev = 0.0;
 
+void receiveUint32(SOCKET clientSocket, uint32_t& value) {
+    char buffer[sizeof(uint32_t)];
+    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0); // Receive the serialized data
+
+    if (bytesReceived == sizeof(uint32_t)) {
+        memcpy(&value, buffer, sizeof(uint32_t)); // Deserialize the data into a uint32_t
+    }
+    else {
+        std::cerr << "Failed to receive uint32_t\n";
+    }
+}
+
 void handleClient(SOCKET clientSocket) {
     std::cout << "Handling new client" << std::endl;
-    uint32_t color;
     static size_t currentIndex = 0;  // Static index to keep track of the current pixel to update
 
     while (running) {
-        int bytesReceived = recv(clientSocket, (char*)&color, sizeof(color), 0);
-        if (bytesReceived == 0 || bytesReceived == -1) {
-            break;
-        }
+        uint32_t color;
+        receiveUint32(clientSocket, color);
+        std::cout << std::bitset<32>(color).to_string() << std::endl;
+
+        //uint8_t colorByte = (uint8_t)((color >> 24) & 0x000000FF);
+        uint8_t colorByte = (uint8_t)color;
+        std::cout << std::bitset<8>(colorByte).to_string() << std::endl;
+        colorByte &= 224;
+        colorByte |= colorByte >> 3;
+        std::cout << std::bitset<8>(colorByte).to_string() << std::endl;
+        color = 0xFF000000 + (((uint32_t)colorByte) << 16) + (((uint32_t)colorByte) << 8) + ((uint32_t)colorByte);
+        std::cout << std::bitset<32>(color).to_string() << std::endl;
+        cout << "--------" << endl;
+
+        //char* converted = (char*)"";
+        //sscanf_s(converted, "%hhu", &)
+        //cout << bitset<32>(color).to_string() << endl;
 
         std::lock_guard<std::mutex> guard(pixelsMutex);
         // Update only one pixel at a time
         
         // Xbox headset mic:
-        double volume = ((double)color - 1103250000.0) / 22420000.0;
-
-        //double colorValue = ((double)color);
-        
-        if (volume < 0) {
-            volume = 0;
-        }
-        if (volume > 1) {
-            volume = 1;
-        }
+        // double volume = ((double)color - 1103250000.0) / 22420000.0;
         
         /*
-        UINT32 argb = (int)(colorValue * (double)0xFFFFFFFF);
-        UINT8 a = 255 - ((argb & 0xFF000000) >> 24);
-        UINT8 r = 255 - ((argb & 0x00FF0000) >> 16);
-        UINT8 g = 255 - ((argb & 0x0000FF00) >> 8);
-        UINT8 b = 255 - ((argb & 0x000000FF));
+        double volume = ((double)color) / 100.0;
+        cout << "[" << volume << "]" << endl;
+        cout << "[" << bitset<32>((UINT32)volume).to_string() << "]" << endl;
+        //double colorValue = ((double)color);
+        
+        
+        // UINT32 argb = (int)(colorValue * (double)0xFFFFFFFF);
+        // UINT8 a = 255 - ((argb & 0xFF000000) >> 24);
+        // UINT8 r = 255 - ((argb & 0x00FF0000) >> 16);
+        // UINT8 g = 255 - ((argb & 0x0000FF00) >> 8);
+        /// UINT8 b = 255 - ((argb & 0x000000FF));
+        // UINT8 selectedValue = ((UINT32)r + (UINT32)g + (UINT32)b) / 3; //average
 
-        UINT8 selectedValue = ((UINT32)r + (UINT32)g + (UINT32)b) / 3; //average
-        */
         cout << "volume: " << volume << endl;
         double brightness = (volume * (double)0xFFFFFFFF);
         cout << "brightness: " << bitset<32>((UINT32)brightness).to_string() << endl;
@@ -71,52 +91,12 @@ void handleClient(SOCKET clientSocket) {
         // cout << "brightness uint8: " << bitset<8>(selectedValue).to_string() << endl;
 
         d_cur = brightness;
-        
-        /*
-        int reduction = 0;
-        if (selectedValue < 128) {
-            reduction++;
-        }
-        if (selectedValue < 64) {
-            reduction++;
-        }
-        if (selectedValue < 32) {
-            reduction++;
-        }
-        if (selectedValue < 16) {
-            reduction++;
-        }
-        if (selectedValue < 8) {
-            reduction++;
-        }
-        for (int i = 0; i < reduction; i++) {
-            selectedValue = (UINT8)(((double)selectedValue) / 2.0);
-        }
-        */
-
-        /*
-        if (d_cur < d_prev) {
-            d_cur = (d_cur + 3.0 * d_prev) / 4.0;
-        }
-        else if (d_cur > d_prev) {
-            d_cur = (3.0 * d_cur + d_prev) / 4.0;
-        }
-        */
-        if (d_cur < d_prev) {
-            d_cur = (d_cur + 7.0 * d_prev) / 8.0;
-        }
 
         cout << "d_prev: " << bitset<32>((UINT32)d_cur).to_string() << endl;
         cout << "d_cur: " << bitset<32>((UINT32)d_prev).to_string() << endl;
         
         d_prev = d_cur;
-
-        UINT8 colorByte = (UINT8)(((UINT32)d_cur >> 24) & 0x000000FF);
         
-        
-        colorByte &= 224;
-        colorByte |= colorByte >> 3;
-
         UINT32 color = 0xFF000000 + (((UINT32)colorByte) << 16) + (((UINT32)colorByte) << 8) + ((UINT32)colorByte);
 
         //auto res = (std::stringstream{} << std::hex << (int)(colorValue * (double)0xFFFFFFFF)).str();
@@ -128,12 +108,11 @@ void handleClient(SOCKET clientSocket) {
         cout << "color uint8:  " << bitset<8>(colorByte).to_string() << endl;
         cout << "color uint32: " << bitset<32>(color).to_string() << endl;
         std::cout << "============" << endl;
+        */
 
 
         pixels[currentIndex] = color;
-        // cout << colorValue << " (" << pixels[currentIndex] << ") " << endl;
-        // cout << colorValue << endl;
-
+        
         // Increment the index and wrap around if necessary
         currentIndex = (currentIndex + 1) % pixels.size();
     }
@@ -148,7 +127,7 @@ void handleClient(SOCKET clientSocket) {
 int graphicsThread(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindow("Pixels",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 360, 0);  // Adjusted size for better visibility
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, PIXEL_WIDTH, PIXEL_HEIGHT, 0);  // Adjusted size for better visibility
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_Texture* texture = SDL_CreateTexture(renderer,
         SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, PIXEL_WIDTH, PIXEL_HEIGHT);

@@ -1,189 +1,306 @@
-#include <iostream>    // Standard I/O operations
-#include <iomanip>     // Input/output manipulations
-#include <string>      // String operations
-#include <cstring>     // String manipulation functions
-#include <cstdlib>     // General-purpose functions including memory management, program control, etc.
-#include <chrono>      // Handling time, useful for timing operations
-#include <thread>      // For managing threading
-#include <cmath>       // For mathematical operations such as std::abs and std::sqrt
+#include <iostream>
+#include <iomanip>
+#include <bitset>
+#include <string>
+#include <cstring>
+#include <cstdlib>
+#include <chrono>
+#include <vector>
+#include <thread>
+#include <cmath>
+#include <numeric>
 
-// Windows specific headers for audio and network
 #ifdef _WIN32
-#define _WINSOCKAPI_   // Prevent inclusion of winsock.h in windows.h
-#include <winsock2.h>  // Winsock2 for network communications
-#include <ws2tcpip.h>  // Definitions for network protocols
-#include <windows.h>   // Windows API is required for many Windows functions
-#include <Audioclient.h> // WASAPI audio client interfaces
-#include <Mmdeviceapi.h>  // Multimedia Device API for audio endpoint devices
-#pragma comment(lib, "ws2_32.lib")  // Link with Winsock library
-#pragma comment(lib, "ole32.lib")   // Link with Object Linking and Embedding
-#pragma comment(lib, "winmm.lib")   // Windows multimedia library
+#define _WINSOCKAPI_
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
+#include <audioclient.h>
+#include <mmdeviceapi.h>
+#include <endpointvolume.h>
+#include <functiondiscoverykeys_devpkey.h>
+
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "ole32.lib")
 #endif
 
 using namespace std;
 
-#define FRAME_DELAY 100
+#define FRAME_DELAY 15
+#define BUFFER_SIZE 48000
 
-// Function to initialize audio capture from the default microphone
-bool initializeAudioCapture(IAudioCaptureClient** pCaptureClient, IAudioClient** pAudioClient) {
-    // Initialize COM library for use by the calling thread, set to multi-threaded environment
-    CoInitialize(nullptr);
+bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** captureClient, IMMDevice* device) {
+    HRESULT hr;
 
-    // Declare device enumerator for capturing multimedia device interfaces
-    IMMDeviceEnumerator* deviceEnumerator = nullptr;
-    HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
-        __uuidof(IMMDeviceEnumerator), (void**)&deviceEnumerator);
+    // Activate audio client
+    hr = device->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, (void**)audioClient);
     if (FAILED(hr)) {
-        cerr << "Failed to create device enumerator, HRESULT: " << hr << endl;
+        cerr << "Failed to activate audio client." << endl;
         return false;
     }
 
-    // Declare the audio device interface
-    IMMDevice* device = nullptr;
-    // Get the default audio capture endpoint
-    hr = deviceEnumerator->GetDefaultAudioEndpoint(eCapture, eConsole, &device);
+    // Get audio format
+    WAVEFORMATEX* waveFormat;
+    hr = (*audioClient)->GetMixFormat(&waveFormat);
     if (FAILED(hr)) {
-        cerr << "Failed to get default audio endpoint, HRESULT: " << hr << endl;
+        cerr << "Failed to get audio format." << endl;
+        (*audioClient)->Release();
         return false;
     }
 
-    // Activate the audio client interface on the device
-    hr = device->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, (void**)pAudioClient);
+    // Initialize audio client in loopback mode
+    hr = (*audioClient)->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK, 10000000, 0, waveFormat, nullptr);
     if (FAILED(hr)) {
-        cerr << "Failed to activate audio client, HRESULT: " << hr << endl;
+        cerr << "Failed to initialize audio client." << endl;
+        CoTaskMemFree(waveFormat);
+        (*audioClient)->Release();
         return false;
     }
 
-    // Declare the format as a pointer to WAVEFORMATEX structure
-    WAVEFORMATEX* waveFormat = nullptr;
-    // Get the format that the audio engine uses internally to process digital audio data
-    hr = (*pAudioClient)->GetMixFormat(&waveFormat);
+    // Get audio capture client
+    hr = (*audioClient)->GetService(__uuidof(IAudioCaptureClient), (void**)captureClient);
     if (FAILED(hr)) {
-        cerr << "Failed to get mix format, HRESULT: " << hr << endl;
+        cerr << "Failed to get audio capture client." << endl;
+        CoTaskMemFree(waveFormat);
+        (*audioClient)->Release();
         return false;
     }
 
-    // Initialize the audio stream between the client and the audio engine
-    hr = (*pAudioClient)->Initialize(AUDCLNT_SHAREMODE_SHARED, 0, 0, 0, waveFormat, nullptr);
+    // Start audio client
+    hr = (*audioClient)->Start();
     if (FAILED(hr)) {
-        cerr << "Failed to initialize audio client, HRESULT: " << hr << endl;
+        cerr << "Failed to start audio client." << endl;
+        (*captureClient)->Release();
+        CoTaskMemFree(waveFormat);
+        (*audioClient)->Release();
         return false;
     }
 
-    // Obtain the interface for audio capture client
-    hr = (*pAudioClient)->GetService(__uuidof(IAudioCaptureClient), (void**)pCaptureClient);
-    if (FAILED(hr)) {
-        cerr << "Failed to get audio capture client, HRESULT: " << hr << endl;
-        return false;
-    }
-
-    // Free the memory allocated for the mix format structure
     CoTaskMemFree(waveFormat);
-    // Start the audio stream
-    (*pAudioClient)->Start();
     return true;
 }
 
-// Function to calculate the volume from audio data
-double calculateVolume(const BYTE* data, size_t numFrames, WORD numChannels, WORD bitsPerSample) {
-    double rms = 0.0;  // Initialize Root Mean Square value
-    // Check bits per sample to handle different audio formats
-    if (bitsPerSample == 32) {
-        // Cast byte pointer to 32-bit integer pointer
-        const int32_t* sampleData = reinterpret_cast<const int32_t*>(data);
-        // Iterate over all samples to compute the volume
-        for (size_t i = 0; i < numFrames * numChannels; i++) {
-            // Normalize sample value to [-1,1] range for 32-bit data
-            double normalizedSample = sampleData[i] / static_cast<double>(INT32_MAX);
-            rms += normalizedSample * normalizedSample;  // Sum squares of normalized samples
+void listAudioDevices(IMMDeviceEnumerator* deviceEnumerator, vector<IMMDevice*>& devices) {
+    IMMDeviceCollection* deviceCollection = nullptr;
+    HRESULT hr = deviceEnumerator->EnumAudioEndpoints(eRender, DEVICE_STATE_ACTIVE, &deviceCollection);
+    if (FAILED(hr)) {
+        cerr << "Failed to enumerate audio endpoints." << endl;
+        return;
+    }
+
+    UINT deviceCount;
+    hr = deviceCollection->GetCount(&deviceCount);
+    if (FAILED(hr)) {
+        cerr << "Failed to get device count." << endl;
+        deviceCollection->Release();
+        return;
+    }
+
+    for (UINT i = 0; i < deviceCount; ++i) {
+        IMMDevice* device = nullptr;
+        hr = deviceCollection->Item(i, &device);
+        if (SUCCEEDED(hr)) {
+            LPWSTR deviceId = nullptr;
+            hr = device->GetId(&deviceId);
+            if (SUCCEEDED(hr)) {
+                IPropertyStore* propertyStore = nullptr;
+                hr = device->OpenPropertyStore(STGM_READ, &propertyStore);
+                if (SUCCEEDED(hr)) {
+                    PROPVARIANT friendlyName;
+                    PropVariantInit(&friendlyName);
+                    hr = propertyStore->GetValue(PKEY_Device_FriendlyName, &friendlyName);
+                    if (SUCCEEDED(hr)) {
+                        wcout << L"[" << i << L"] " << friendlyName.pwszVal << endl;
+                        PropVariantClear(&friendlyName);
+                    }
+                    propertyStore->Release();
+                }
+                CoTaskMemFree(deviceId);
+            }
+            devices.push_back(device);
         }
     }
-    else if (bitsPerSample == 16) {
-        // Cast byte pointer to 16-bit integer pointer for 16-bit data
-        const int16_t* sampleData = reinterpret_cast<const int16_t*>(data);
-        for (size_t i = 0; i < numFrames * numChannels; i++) {
-            // Normalize sample value to [-1,1] range for 16-bit data
-            double normalizedSample = sampleData[i] / static_cast<double>(INT16_MAX);
-            rms += normalizedSample * normalizedSample;  // Sum squares of normalized samples
-        }
-    }
-    // Calculate the root mean square of the sum of squares, convert to percentage
-    rms = (sqrt(rms / (numFrames * numChannels)) - 0.44)/0.07;
-    return rms * 100.0;
+    deviceCollection->Release();
 }
 
-// Main function to run the capture and processing loop
+double calculateVolume(const BYTE* data, size_t numFrames, int numChannels, int bytesPerSample) {
+    double rms = 0.0;
+    size_t count = numFrames * numChannels;
+
+    // Ensure that the data buffer is not empty to avoid division by zero
+    if (data == nullptr || count == 0) {
+        cerr << "Empty or null data buffer." << endl;
+        return -1.0;  // Return -1 to indicate an error
+    }
+
+    for (size_t i = 0; i < count; ++i) {
+        float sample = 0.0f;
+        memcpy(&sample, data + i * bytesPerSample, bytesPerSample);
+        rms += sample * sample;
+    }
+
+    rms = sqrt(rms / count);
+    return rms;
+}
+
+void sendUint32(SOCKET sock, uint32_t value) {
+    int sendRes = send(sock, reinterpret_cast<const char*>(&value), sizeof(value), 0);
+    if (sendRes == SOCKET_ERROR) {
+        std::cerr << "Send failed: " << WSAGetLastError() << std::endl;
+    }
+}
+
 int main() {
-    // Initialize Winsock
+    // Initialize COM library
+    CoInitialize(nullptr);
+
+    // Initialize Winsock for network communication
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    // Create socket for sending data over TCP
+    // Create a TCP socket
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == INVALID_SOCKET) {
         cerr << "Can't create socket, Err #" << WSAGetLastError() << endl;
+        CoUninitialize();
         return 1;
     }
 
-    // Server address configuration
-    string ipAddress = "127.0.0.1";  // Localhost
-    int port = 1989;  // Port number
+    // Configure server address
+    string ipAddress = "127.0.0.1"; // Localhost
+    int port = 1989; // Port number
     sockaddr_in hint;
-    hint.sin_family = AF_INET;  // IPv4
-    hint.sin_port = htons(port);  // Host to network short for port
-    inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);  // Convert IP string to byte array
+    hint.sin_family = AF_INET;
+    hint.sin_port = htons(port);
+    inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
 
-    // Connect to server
+    // Connect to the server
     if (connect(sock, (sockaddr*)&hint, sizeof(hint)) == SOCKET_ERROR) {
         cerr << "Can't connect, Err #" << WSAGetLastError() << endl;
         closesocket(sock);
-        WSACleanup();
+        CoUninitialize();
         return 1;
     }
 
-    // Initialize audio capture and streaming
-    IAudioCaptureClient* captureClient = nullptr;
+    // Create device enumerator
+    IMMDeviceEnumerator* deviceEnumerator = nullptr;
+    HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_INPROC_SERVER, __uuidof(IMMDeviceEnumerator), (void**)&deviceEnumerator);
+    if (FAILED(hr)) {
+        cerr << "Failed to create device enumerator." << endl;
+        closesocket(sock);
+        CoUninitialize();
+        return 1;
+    }
+
+    // List available playback devices
+    vector<IMMDevice*> devices;
+    listAudioDevices(deviceEnumerator, devices);
+    if (devices.empty()) {
+        cerr << "No playback devices found." << endl;
+        deviceEnumerator->Release();
+        closesocket(sock);
+        CoUninitialize();
+        return 1;
+    }
+
+    // Select the desired playback device
+    int selectedDeviceIndex;
+    cout << "Select playback device index: ";
+    cin >> selectedDeviceIndex;
+    if (selectedDeviceIndex < 0 || selectedDeviceIndex >= static_cast<int>(devices.size())) {
+        cerr << "Invalid device index." << endl;
+        deviceEnumerator->Release();
+        closesocket(sock);
+        CoUninitialize();
+        return 1;
+    }
+    IMMDevice* selectedDevice = devices[selectedDeviceIndex];
+
+    // Initialize audio capture
     IAudioClient* audioClient = nullptr;
-    if (!initializeAudioCapture(&captureClient, &audioClient)) {
-        cerr << "Initialization failed." << endl;
+    IAudioCaptureClient* captureClient = nullptr;
+    if (!initializeAudioCapture(&audioClient, &captureClient, selectedDevice)) {
+        cerr << "Audio capture initialization failed." << endl;
+        deviceEnumerator->Release();
+        closesocket(sock);
+        CoUninitialize();
         return 1;
     }
 
-    // Get and print audio format details
-    WAVEFORMATEX* format = nullptr;
-    audioClient->GetMixFormat(&format);
-    cout << "Audio format details:" << endl;
-    cout << "Channels: " << format->nChannels << endl;
-    cout << "Sample Rate: " << format->nSamplesPerSec << endl;
-    cout << "Bits Per Sample: " << format->wBitsPerSample << endl;
+    // Buffer for audio data
+    BYTE buffer[BUFFER_SIZE];
+    UINT32 packetLength = 0;
+    DWORD flags;
+
+    vector<double> volumeValues;
+    auto lastSendTime = chrono::steady_clock::now();
 
     // Main loop to capture audio and send volume data
     while (true) {
-        BYTE* pData = nullptr;
-        UINT32 numFramesAvailable = 0;
-        DWORD flags = 0;
-        HRESULT hr = captureClient->GetBuffer(&pData, &numFramesAvailable, &flags, nullptr, nullptr);
-        if (SUCCEEDED(hr) && numFramesAvailable > 0) {
-            float volume = (float)calculateVolume(pData, numFramesAvailable, format->nChannels, format->wBitsPerSample);
-            cout << "Volume: " << volume << "%" << endl;  // Output the volume as a percentage
-            // Send volume data to the server
-            int sendRes = send(sock, reinterpret_cast<char*>(&volume), sizeof(volume), 0);
-            if (sendRes == SOCKET_ERROR) {
-                cerr << "Could not send volume to server! Err #" << WSAGetLastError() << endl;
+        // Get the next packet size
+        hr = captureClient->GetNextPacketSize(&packetLength);
+        if (FAILED(hr)) {
+            cerr << "Failed to get next packet size." << endl;
+            break;
+        }
+
+        while (packetLength != 0) {
+            BYTE* data;
+            UINT32 numFrames;
+            hr = captureClient->GetBuffer(&data, &numFrames, &flags, nullptr, nullptr);
+            if (FAILED(hr)) {
+                cerr << "Failed to get buffer." << endl;
+                break;
+            }
+
+            // Calculate volume
+            double volume = calculateVolume(data, numFrames, 2, 4); // Using float (4 bytes) samples
+            if (volume >= 0) {
+                volumeValues.push_back(volume);
+            }
+
+            hr = captureClient->ReleaseBuffer(numFrames);
+            if (FAILED(hr)) {
+                cerr << "Failed to release buffer." << endl;
+                break;
+            }
+
+            hr = captureClient->GetNextPacketSize(&packetLength);
+            if (FAILED(hr)) {
+                cerr << "Failed to get next packet size." << endl;
                 break;
             }
         }
-        else if (FAILED(hr)) {
-            cerr << "Failed to get buffer, HRESULT: " << hr << endl;
+
+        auto now = chrono::steady_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(now - lastSendTime).count();
+        if (duration >= FRAME_DELAY) {
+            if (!volumeValues.empty()) {
+                float averageVolume = static_cast<float>(accumulate(volumeValues.begin(), volumeValues.end(), 0.0) / volumeValues.size());
+                averageVolume /= 0.00006f;
+                if (averageVolume > 255) {
+                    averageVolume = 255;
+                }
+
+                UINT32 ui_volume = static_cast<UINT32>(averageVolume);
+                cout << bitset<32>(ui_volume).to_string() << endl;
+                sendUint32(sock, ui_volume);
+                
+                volumeValues.clear();
+            }
+            lastSendTime = now;
         }
-        // Release the buffer to prepare for next capture
-        captureClient->ReleaseBuffer(numFramesAvailable);
-        this_thread::sleep_for(chrono::milliseconds(FRAME_DELAY)); // Sleep to reduce CPU usage
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_DELAY));
     }
 
-    // Cleanup resources
-    CoTaskMemFree(format);  // Free the memory for the format
-    closesocket(sock);  // Close the socket
-    WSACleanup();  // Cleanup Winsock
+    // Clean up resources
+    audioClient->Stop();
+    captureClient->Release();
+    audioClient->Release();
+    deviceEnumerator->Release();
+    closesocket(sock);
+    WSACleanup();
+    CoUninitialize();
     return 0;
 }
