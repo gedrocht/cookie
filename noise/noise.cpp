@@ -18,9 +18,9 @@
 
 using namespace std;
 
-#define FRAME_DELAY 15
-#define PIXEL_WIDTH 320
-#define PIXEL_HEIGHT 180
+#define FRAME_DELAY 60
+#define PIXEL_WIDTH 160
+#define PIXEL_HEIGHT 90
 #define PIXEL_COUNT (PIXEL_WIDTH * PIXEL_HEIGHT)
 
 vector<uint32_t> pixels(PIXEL_COUNT, 0);  // Example for a 16x9 pixel screen
@@ -41,22 +41,80 @@ void receiveUint32(SOCKET clientSocket, uint32_t& value) {
     }
 }
 
+// Function to convert HSL to RGB
+unsigned int HSLtoRGB(float hue, float saturation, float lightness) {
+    float r, g, b;
+
+    if (saturation == 0) {
+        r = g = b = lightness; // achromatic
+    }
+    else {
+        auto hue2rgb = [](float p, float q, float t) {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1.0f / 6) return p + (q - p) * 6 * t;
+            if (t < 1.0f / 2) return q;
+            if (t < 2.0f / 3) return p + (q - p) * (2.0f / 3 - t) * 6;
+            return p;
+            };
+
+        float q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+        float p = 2 * lightness - q;
+
+        r = hue2rgb(p, q, hue + 1.0 / 3);
+        g = hue2rgb(p, q, hue);
+        b = hue2rgb(p, q, hue - 1.0 / 3);
+    }
+
+    unsigned int R = static_cast<unsigned int>(r * 255);
+    unsigned int G = static_cast<unsigned int>(g * 255);
+    unsigned int B = static_cast<unsigned int>(b * 255);
+
+    return 0xFF000000 | (R << 16) | (G << 8) | B;
+}
+
+// 16 hues representing a full rainbow
+float hues[16] = {
+    0.0f / 16, 1.0f / 16, 2.0f / 16, 3.0f / 16,
+    4.0f / 16, 5.0f / 16, 6.0f / 16, 7.0f / 16,
+    8.0f / 16, 9.0f / 16, 10.0f / 16, 11.0f / 16,
+    12.0f / 16, 13.0f / 16, 14.0f / 16, 15.0f / 16
+};
+
 void handleClient(SOCKET clientSocket) {
     std::cout << "Handling new client" << std::endl;
     static size_t currentIndex = 0;  // Static index to keep track of the current pixel to update
 
     while (running) {
-        uint32_t color;
-        receiveUint32(clientSocket, color);
-        std::cout << std::bitset<32>(color).to_string() << std::endl;
+        uint32_t audioData;
+        receiveUint32(clientSocket, audioData);
+        std::cout << std::bitset<32>(audioData).to_string() << std::endl;
+
+        uint8_t frequencyByte = (uint8_t)(audioData >> 8);
+        std::cout << "freq: " << std::bitset<8>(frequencyByte).to_string() << std::endl;
+
+        // Determine the hue index
+        int hueIndex = frequencyByte / 16;
+
+        // Convert the hue to RGB with constant saturation and lightness
+        float saturation = 1.0f;  // Full saturation
+        float lightness = 0.5f;   // Medium lightness
+
+        uint32_t frequencyColor = HSLtoRGB(hues[hueIndex], saturation, lightness);
+
+        cout << "frequencyColor: " << std::bitset<32>(frequencyColor).to_string() << std::endl;
 
         //uint8_t colorByte = (uint8_t)((color >> 24) & 0x000000FF);
-        uint8_t colorByte = (uint8_t)color;
-        std::cout << std::bitset<8>(colorByte).to_string() << std::endl;
-        colorByte &= 224;
-        colorByte |= colorByte >> 3;
-        std::cout << std::bitset<8>(colorByte).to_string() << std::endl;
-        color = 0xFF000000 + (((uint32_t)colorByte) << 16) + (((uint32_t)colorByte) << 8) + ((uint32_t)colorByte);
+        uint8_t volumeByte = (uint8_t)audioData;
+        std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
+        volumeByte &= 224;
+        volumeByte |= volumeByte >> 3;
+        std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
+
+        uint32_t color = 0xFF000000 + (((uint32_t)volumeByte) << 16) + (((uint32_t)volumeByte) << 8) + ((uint32_t)volumeByte);
+        std::cout << std::bitset<32>(color).to_string() << std::endl;
+        std::cout << std::bitset<32>(frequencyColor).to_string() << std::endl;
+        color &= frequencyColor;
         std::cout << std::bitset<32>(color).to_string() << std::endl;
         cout << "--------" << endl;
 

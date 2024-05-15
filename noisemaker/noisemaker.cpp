@@ -9,6 +9,7 @@
 #include <thread>
 #include <cmath>
 #include <numeric>
+#include <fftw3.h>
 
 #ifdef _WIN32
 #define _WINSOCKAPI_
@@ -26,7 +27,7 @@
 
 using namespace std;
 
-#define FRAME_DELAY 15
+#define FRAME_DELAY 60
 #define BUFFER_SIZE 48000
 
 bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** captureClient, IMMDevice* device) {
@@ -143,6 +144,56 @@ double calculateVolume(const BYTE* data, size_t numFrames, int numChannels, int 
     return rms;
 }
 
+// Function to calculate dominant frequency using FFT and map it to a logarithmic scale
+int calculateLogarithmicFrequency(const BYTE* data, UINT32 numFrames, WAVEFORMATEX* waveFormat) {
+    int N = numFrames;
+    double* in = (double*)fftw_malloc(sizeof(double) * N);
+    fftw_complex* out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * N);
+    fftw_plan plan = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
+
+    // Fill the input array with audio data
+    for (UINT32 i = 0; i < numFrames; ++i) {
+        if (waveFormat->wBitsPerSample == 16) {
+            in[i] = ((short*)data)[i];
+        }
+        else if (waveFormat->wBitsPerSample == 32) {
+            in[i] = ((float*)data)[i];
+        }
+    }
+
+    fftw_execute(plan); // Perform FFT
+
+    // Find the peak frequency bin
+    double maxMagnitude = 0.0;
+    int peakIndex = 0;
+    for (int i = 0; i < N / 2; ++i) {
+        double magnitude = sqrt(out[i][0] * out[i][0] + out[i][1] * out[i][1]);
+        if (magnitude > maxMagnitude) {
+            maxMagnitude = magnitude;
+            peakIndex = i;
+        }
+    }
+
+    // Convert bin index to frequency
+    double frequency = (double)peakIndex * waveFormat->nSamplesPerSec / N;
+
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+
+    // Map the frequency to a logarithmic scale between 0 and 255
+    const double minFreq = 20.0;
+    const double maxFreq = 10000.0;
+    double logMinFreq = log10(minFreq);
+    double logMaxFreq = log10(maxFreq);
+    double logFrequency = log10(frequency);
+
+    int logFrequencyValue = (int)((logFrequency - logMinFreq) / (logMaxFreq - logMinFreq) * 255);
+    logFrequencyValue = max(0, min(255, logFrequencyValue)); // Clamp to [0, 255]
+
+    return logFrequencyValue;
+}
+
 void sendUint32(SOCKET sock, uint32_t value) {
     int sendRes = send(sock, reinterpret_cast<const char*>(&value), sizeof(value), 0);
     if (sendRes == SOCKET_ERROR) {
@@ -233,6 +284,7 @@ int main() {
     DWORD flags;
 
     vector<double> volumeValues;
+    vector<double> frequencyValues;
     auto lastSendTime = chrono::steady_clock::now();
 
     // Main loop to capture audio and send volume data
@@ -255,9 +307,13 @@ int main() {
 
             // Calculate volume
             double volume = calculateVolume(data, numFrames, 2, 4); // Using float (4 bytes) samples
-            if (volume >= 0) {
-                volumeValues.push_back(volume);
-            }
+            volumeValues.push_back(volume);
+
+            WAVEFORMATEX* waveFormat;
+            audioClient->GetMixFormat(&waveFormat);
+            double frequency = calculateLogarithmicFrequency(data, numFrames, waveFormat);
+            frequencyValues.push_back(frequency);
+
 
             hr = captureClient->ReleaseBuffer(numFrames);
             if (FAILED(hr)) {
@@ -277,16 +333,21 @@ int main() {
         if (duration >= FRAME_DELAY) {
             if (!volumeValues.empty()) {
                 float averageVolume = static_cast<float>(accumulate(volumeValues.begin(), volumeValues.end(), 0.0) / volumeValues.size());
-                averageVolume /= 0.00006f;
+                averageVolume /= 0.00012f;
                 if (averageVolume > 255) {
                     averageVolume = 255;
                 }
+                float averageFrequency = static_cast<float>(accumulate(frequencyValues.begin(), frequencyValues.end(), 0.0) / frequencyValues.size());
 
                 UINT32 ui_volume = static_cast<UINT32>(averageVolume);
                 cout << bitset<32>(ui_volume).to_string() << endl;
-                sendUint32(sock, ui_volume);
+                UINT32 ui_frequency = static_cast<UINT32>(averageFrequency);
+                ui_frequency <<= 8;
+                cout << bitset<32>(ui_frequency).to_string() << endl;
+                sendUint32(sock, ui_volume | ui_frequency);
                 
                 volumeValues.clear();
+                frequencyValues.clear();
             }
             lastSendTime = now;
         }
