@@ -27,7 +27,7 @@
 
 using namespace std;
 
-#define FRAME_DELAY 60
+#define FRAME_DELAY 15
 #define BUFFER_SIZE 48000
 
 bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** captureClient, IMMDevice* device) {

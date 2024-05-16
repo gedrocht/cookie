@@ -21,16 +21,25 @@
 
 using namespace std;
 
-#define FRAME_DELAY 60
-#define PIXEL_WIDTH 144
-#define PIXEL_HEIGHT 81
-#define PIXEL_COUNT (PIXEL_WIDTH * PIXEL_HEIGHT)
+#define FRAME_DELAY 16
+#define PIXEL_WIDTH 1184
+#define PIXEL_HEIGHT 666
+#define PIXEL_COUNT ((PIXEL_WIDTH/10) * (PIXEL_HEIGHT/10))
 
 vector<uint32_t> pixels(PIXEL_COUNT, 0);  // Example for a 16x9 pixel screen
 mutex pixelsMutex;
 bool running = true;
 double d_cur = 0.0;
 double d_prev = 0.0;
+
+// Camera position and direction
+float camX = -0.0f,
+      camY = 66.0f,
+      camZ = -50.0f;
+float camYaw = -3.14159265358979323846264338f,
+      camPitch = 3.14159265358979323846264338f;
+const float speed = 0.05f; // Movement speed
+const float sensitivity = 0.0005f; // Mouse sensitivity
 
 void receiveUint32(SOCKET clientSocket, uint32_t& value) {
     char buffer[sizeof(uint32_t)];
@@ -91,10 +100,10 @@ void handleClient(SOCKET clientSocket) {
     while (running) {
         uint32_t audioData;
         receiveUint32(clientSocket, audioData);
-        std::cout << std::bitset<32>(audioData).to_string() << std::endl;
+        //std::cout << std::bitset<32>(audioData).to_string() << std::endl;
 
         uint8_t frequencyByte = (uint8_t)(audioData >> 8);
-        std::cout << "freq: " << std::bitset<8>(frequencyByte).to_string() << std::endl;
+        //std::cout << "freq: " << std::bitset<8>(frequencyByte).to_string() << std::endl;
 
         // Determine the hue index
         int hueIndex = frequencyByte / 16;
@@ -105,22 +114,22 @@ void handleClient(SOCKET clientSocket) {
 
         uint32_t frequencyColor = HSLtoRGB(hues[hueIndex], saturation, lightness);
 
-        cout << "frequencyColor: " << std::bitset<32>(frequencyColor).to_string() << std::endl;
+        //cout << "frequencyColor: " << std::bitset<32>(frequencyColor).to_string() << std::endl;
 
         //uint8_t colorByte = (uint8_t)((color >> 24) & 0x000000FF);
         uint8_t volumeByte = (uint8_t)audioData;
-        std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
+        //std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
         volumeByte &= 224;
         volumeByte |= volumeByte >> 3;
-        std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
+        //std::cout << std::bitset<8>(volumeByte).to_string() << std::endl;
 
         uint32_t color = 0xFF000000 + (((uint32_t)volumeByte) << 16) + (((uint32_t)volumeByte) << 8) + ((uint32_t)volumeByte);
-        std::cout << std::bitset<32>(color).to_string() << std::endl;
-        std::cout << std::bitset<32>(frequencyColor).to_string() << std::endl;
+        //std::cout << std::bitset<32>(color).to_string() << std::endl;
+        //std::cout << std::bitset<32>(frequencyColor).to_string() << std::endl;
         color &= frequencyColor;
-        std::cout << std::bitset<32>(color).to_string() << std::endl;
+        //std::cout << std::bitset<32>(color).to_string() << std::endl;
         color &= 4293980400; //11111111 11110000 11110000 11110000
-        cout << "--------" << endl;
+        //cout << "--------" << endl;
 
         std::lock_guard<std::mutex> guard(pixelsMutex);
         // Update only one pixel at a time
@@ -144,6 +153,176 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+void setPerspective(float fov, float aspect, float f_near, float f_far) {
+    float f = 1.0f / tanf(fov * (3.14159265358979323846f / 180.0f) / 2.0f);
+    float depth = f_near - f_far;
+
+    float perspective[16] = {
+        f / aspect, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (f_far + f_near) / depth, -1,
+        0, 0, (2 * f_far * f_near) / depth, 0
+    };
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(perspective);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+// Function to handle keyboard input
+void processInput(GLFWwindow* window) {
+    float _camX = camX;
+    float _camY = camY;
+    float _camZ = camZ;
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        camX += speed * sin(camYaw);
+        camZ += speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camX -= speed * sin(camYaw);
+        camZ -= speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camX -= speed * cos(camYaw);
+        camZ += speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camX += speed * cos(camYaw);
+        camZ -= speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        camY += speed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        camY -= speed;
+    }
+
+    if (camX != _camX || camY != _camY || camZ != _camZ) {
+        cout << "-> camX: " << camX << endl;
+        cout << "-> camY: " << camY << endl;
+        cout << "-> camZ: " << camZ << endl;
+    }
+}
+
+// Mouse callback function
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    static double lastX = xpos, lastY = ypos;
+    double xoffset = xpos - lastX;
+    double yoffset = lastY - ypos; // Reversed since y-coordinates range from bottom to top
+    lastX = xpos;
+    lastY = ypos;
+
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    camYaw += xoffset;
+    camPitch += yoffset;
+
+    if (camPitch > 89.0f) camPitch = 89.0f;
+    if (camPitch < -89.0f) camPitch = -89.0f;
+
+    cout << "camYaw: " << camYaw << endl;
+    cout << "camPitch: " << camPitch << endl;
+    cout << "///" << endl;
+}
+
+// Function to create a lookAt matrix
+void lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+    float forwardX = centerX - eyeX;
+    float forwardY = centerY - eyeY;
+    float forwardZ = centerZ - eyeZ;
+
+    // Normalize forward vector
+    float forwardMag = sqrt(forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ);
+    forwardX /= forwardMag;
+    forwardY /= forwardMag;
+    forwardZ /= forwardMag;
+
+    // Compute the right vector
+    float rightX = forwardY * upZ - forwardZ * upY;
+    float rightY = forwardZ * upX - forwardX * upZ;
+    float rightZ = forwardX * upY - forwardY * upX;
+
+    // Normalize right vector
+    float rightMag = sqrt(rightX * rightX + rightY * rightY + rightZ * rightZ);
+    rightX /= rightMag;
+    rightY /= rightMag;
+    rightZ /= rightMag;
+
+    // Compute the up vector
+    float upnX = rightY * forwardZ - rightZ * forwardY;
+    float upnY = rightZ * forwardX - rightX * forwardZ;
+    float upnZ = rightX * forwardY - rightY * forwardX;
+
+    float viewMatrix[16] = {
+        rightX,    upnX,    -forwardX,   0.0f,
+        rightY,    upnY,    -forwardY,   0.0f,
+        rightZ,    upnZ,    -forwardZ,   0.0f,
+        0.0f,      0.0f,    0.0f,        1.0f
+    };
+
+    // cout << "camera: " << eyeX << "\t" << eyeY << "\t" << eyeZ << endl;
+
+    glMultMatrixf(viewMatrix);
+    glTranslatef(-eyeX, -eyeY, -eyeZ);
+}
+
+void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    /*
+    if (r + g + b > 0) {
+        cout << "cube: (" << x << "\t" << y << "\t" << z << ")" << endl;
+    }
+    */
+    glColor3ub(r, g, b);
+
+    // Calculate brightness as the average of the RGB values
+    float brightness = (r + g + b) / 3.0f / 255.0f;
+
+    // Use brightness to scale the z-axis size
+    float zScale = 1.0f + brightness * 50.0f; // Example: elongate by up to 2 times the original size
+
+    glBegin(GL_QUADS);
+
+    // Front face
+    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
+
+    // Back face
+    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
+
+    // Top face
+    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
+
+    // Bottom face
+    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
+
+    // Right face
+    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
+
+    // Left face
+    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
+
+    glEnd();
+}
+
 int graphicsThread(int argc, char* argv[]) {
     if (!glfwInit()) {
         return -1;
@@ -162,86 +341,59 @@ int graphicsThread(int argc, char* argv[]) {
         return -1;
     }
 
-    glViewport(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    // Set up camera
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_BGRA, GL_UNSIGNED_BYTE, pixels.data());
+    setPerspective(45.0f, (float)PIXEL_WIDTH / (float)PIXEL_HEIGHT, 0.1f, 1000.0f);
+
+    // Set mouse callback
+    // glfwSetCursorPosCallback(window, mouseCallback);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide the cursor and capture it
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        // processInput(window); // Process keyboard input
 
-        {
-            std::lock_guard<std::mutex> guard(pixelsMutex);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_BGRA, GL_UNSIGNED_BYTE, pixels.data());
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+
+        // Calculate camera direction
+        float camDirX = cos(camPitch) * sin(camYaw);
+        float camDirY = sin(camPitch);
+        float camDirZ = cos(camPitch) * cos(camYaw);
+
+        // Apply the camera transformation
+        lookAt(camX, camY, camZ, camX + camDirX, camY + camDirY, camZ + camDirZ, 0.0f, 1.0f, 0.0f);
+
+        std::lock_guard<std::mutex> guard(pixelsMutex);
+
+        float cubeSize = 0.5f; // Adjust cube size for better visibility
+        for (int y = 0; y < PIXEL_HEIGHT/10; ++y) {
+            for (int x = 0; x < (PIXEL_WIDTH/10); ++x) {
+                int index = y * (PIXEL_WIDTH/10) + x;
+                uint32_t color = pixels[index];
+                uint8_t a = (color >> 24) & 0xFF;
+                uint8_t r = (color >> 16) & 0xFF;
+                uint8_t g = (color >> 8) & 0xFF;
+                uint8_t b = color & 0xFF;
+                drawCube(x * cubeSize - ((PIXEL_WIDTH/10) * cubeSize / 2),
+                         (((PIXEL_HEIGHT/2)-1) - y) * cubeSize - ((PIXEL_HEIGHT/2) * cubeSize / 2),
+                         0.0f, cubeSize, r, g, b, a);
+            }
         }
-
-        glClear(GL_COLOR_BUFFER_BIT);
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 0.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(PIXEL_WIDTH, 0.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(PIXEL_WIDTH, PIXEL_HEIGHT);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f, PIXEL_HEIGHT);
-        glEnd();
 
         glfwSwapBuffers(window);
         glfwWaitEventsTimeout(FRAME_DELAY / 1000.0);
     }
 
-    glDeleteTextures(1, &texture);
     glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;
 }
-/*
-int graphicsThread(int argc, char* argv[]) {
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window* window = SDL_CreateWindow("Pixels",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, PIXEL_WIDTH, PIXEL_HEIGHT, 0);  // Adjusted size for better visibility
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_Texture* texture = SDL_CreateTexture(renderer,
-        SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, PIXEL_WIDTH, PIXEL_HEIGHT);
 
-    SDL_Event event;
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = false;
-            }
-        }
-
-        {
-            std::lock_guard<std::mutex> guard(pixelsMutex);
-            SDL_UpdateTexture(texture, NULL, pixels.data(), PIXEL_WIDTH * sizeof(uint32_t)); 
-        }
-
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-        SDL_Delay(FRAME_DELAY);
-    }
-
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
-}
-*/
 
 int main(int argc, char* argv[]) {
     std::thread gThread(graphicsThread, argc, argv);
