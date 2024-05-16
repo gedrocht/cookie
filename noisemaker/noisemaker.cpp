@@ -340,10 +340,10 @@ int main() {
                 float averageFrequency = static_cast<float>(accumulate(frequencyValues.begin(), frequencyValues.end(), 0.0) / frequencyValues.size());
 
                 UINT32 ui_volume = static_cast<UINT32>(averageVolume);
-                cout << bitset<32>(ui_volume).to_string() << endl;
+                //cout << bitset<32>(ui_volume).to_string() << endl;
                 UINT32 ui_frequency = static_cast<UINT32>(averageFrequency);
                 ui_frequency <<= 8;
-                cout << bitset<32>(ui_frequency).to_string() << endl;
+                //cout << bitset<32>(ui_frequency).to_string() << endl;
                 sendUint32(sock, ui_volume | ui_frequency);
                 
                 volumeValues.clear();

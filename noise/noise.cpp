@@ -11,12 +11,12 @@
 #include <glfw3.h>
 
 #ifdef _WIN32
-    #include <winsock2.h>
-    #pragma comment(lib, "ws2_32.lib")  // Ensure linker includes Winsock library
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")  // Ensure linker includes Winsock library
 #else
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
 #endif
 
 using namespace std;
@@ -34,12 +34,20 @@ double d_prev = 0.0;
 
 // Camera position and direction
 float camX = -0.0f,
-      camY = 66.0f,
-      camZ = -50.0f;
+camY = 66.0f,
+camZ = -50.0f;
 float camYaw = -3.14159265358979323846264338f,
-      camPitch = 3.14159265358979323846264338f;
-const float speed = 0.05f; // Movement speed
+camPitch = 3.14159265358979323846264338f;
+
+// -30.5    82      -3.8147e-06
+float lightX = -30.5f,
+lightY = 82.0f,
+lightZ = 0.0f;
+const float speed = 0.1f; // Movement speed
 const float sensitivity = 0.0005f; // Mouse sensitivity
+
+// Light position
+GLfloat lightPos[] = { -0.0f, 66.0f, -50.0f, 1.0f };
 
 void receiveUint32(SOCKET clientSocket, uint32_t& value) {
     char buffer[sizeof(uint32_t)];
@@ -133,12 +141,12 @@ void handleClient(SOCKET clientSocket) {
 
         std::lock_guard<std::mutex> guard(pixelsMutex);
         // Update only one pixel at a time
-        
+
         // Xbox headset mic:
         // double volume = ((double)color - 1103250000.0) / 22420000.0;
-        
+
         pixels[currentIndex] = color;
-        
+
         // Increment the index and wrap around if necessary
         currentIndex = (currentIndex + 1) % pixels.size();
     }
@@ -171,38 +179,43 @@ void setPerspective(float fov, float aspect, float f_near, float f_far) {
 
 // Function to handle keyboard input
 void processInput(GLFWwindow* window) {
-    float _camX = camX;
-    float _camY = camY;
-    float _camZ = camZ;
+    float _lightX = lightX;
+    float _lightY = lightY;
+    float _lightZ = lightZ;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camX += speed * sin(camYaw);
-        camZ += speed * cos(camYaw);
+        lightX += speed * sin(camYaw);
+        lightZ += speed * cos(camYaw);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camX -= speed * sin(camYaw);
-        camZ -= speed * cos(camYaw);
+        lightX -= speed * sin(camYaw);
+        lightZ -= speed * cos(camYaw);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camX -= speed * cos(camYaw);
-        camZ += speed * sin(camYaw);
+        lightX -= speed * cos(camYaw);
+        lightZ += speed * sin(camYaw);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camX += speed * cos(camYaw);
-        camZ -= speed * sin(camYaw);
+        lightX += speed * cos(camYaw);
+        lightZ -= speed * sin(camYaw);
     }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        camY += speed;
+        lightY += speed;
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        camY -= speed;
+        lightY -= speed;
     }
 
-    if (camX != _camX || camY != _camY || camZ != _camZ) {
-        cout << "-> camX: " << camX << endl;
-        cout << "-> camY: " << camY << endl;
-        cout << "-> camZ: " << camZ << endl;
+    if (lightX != _lightX || lightY != _lightY || lightZ != _lightZ) {
+        cout << "-> lightX: " << lightX << endl;
+        cout << "-> lightY: " << lightY << endl;
+        cout << "-> lightZ: " << lightZ << endl;
     }
+
+    // Update the light position array
+    lightPos[0] = lightX;
+    lightPos[1] = lightY;
+    lightPos[2] = lightZ;
 }
 
 // Mouse callback function
@@ -268,59 +281,103 @@ void lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, fl
     glTranslatef(-eyeX, -eyeY, -eyeZ);
 }
 
+void setupLighting() {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    GLfloat ambientLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    // GLfloat diffuseLight[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+    // GLfloat specularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat lightPosition[] = { 1.0f, 1.0f, 1.0f, 0.0f }; // Directional light
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    // glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+}
+
+void setupMaterial() {
+    GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat mat_shininess[] = { 50.0f };
+
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+}
+
 void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    /*
-    if (r + g + b > 0) {
-        cout << "cube: (" << x << "\t" << y << "\t" << z << ")" << endl;
-    }
-    */
+    float half_size = size / 2;
     glColor3ub(r, g, b);
 
     // Calculate brightness as the average of the RGB values
-    float brightness = (r + g + b) / 3.0f / 255.0f;
+    float brightness = (r + g + b) / (765.0f);
 
     // Use brightness to scale the z-axis size
     float zScale = 1.0f + brightness * 50.0f; // Example: elongate by up to 2 times the original size
+    float half_size_times_zScale = half_size * zScale;
+
+    /*
+    if (r + g + b > 0) {
+        cout << "cube: (" << x << "\t" << y << "\t" << z << ") - zScale: " << zScale << endl;
+    }
+    */
 
     glBegin(GL_QUADS);
 
+    float x_m_hs = x - half_size;
+    float x_p_hs = x + half_size;
+    float y_m_hs = y - half_size;
+    float y_p_hs = y + half_size;
+    float topZ = z + half_size_times_zScale;
+    float botZ = z - half_size_times_zScale;
+
     // Front face
-    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
-    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
-    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
+    glVertex3f(x_m_hs, y_m_hs, topZ);
+    glVertex3f(x_p_hs, y_m_hs, topZ);
+    glVertex3f(x_p_hs, y_p_hs, topZ);
+    glVertex3f(x_m_hs, y_p_hs, topZ);
 
     // Back face
-    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
-    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
+    glVertex3f(x_m_hs, y_m_hs, botZ);
+    glVertex3f(x_m_hs, y_p_hs, botZ);
+    glVertex3f(x_p_hs, y_p_hs, botZ);
+    glVertex3f(x_p_hs, y_m_hs, botZ);
 
     // Top face
-    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
-    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x_m_hs, y_p_hs, botZ);
+    glVertex3f(x_m_hs, y_p_hs, topZ);
+    glVertex3f(x_p_hs, y_p_hs, topZ);
+    glVertex3f(x_p_hs, y_p_hs, botZ);
 
     // Bottom face
-    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
-    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x_m_hs, y_m_hs, botZ);
+    glVertex3f(x_p_hs, y_m_hs, botZ);
+    glVertex3f(x_p_hs, y_m_hs, topZ);
+    glVertex3f(x_m_hs, y_m_hs, topZ);
 
     // Right face
-    glVertex3f(x + size / 2, y - size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z - size / 2 * zScale);
-    glVertex3f(x + size / 2, y + size / 2, z + size / 2 * zScale);
-    glVertex3f(x + size / 2, y - size / 2, z + size / 2 * zScale);
+    glVertex3f(x_p_hs, y_m_hs, botZ);
+    glVertex3f(x_p_hs, y_p_hs, botZ);
+    glVertex3f(x_p_hs, y_p_hs, topZ);
+    glVertex3f(x_p_hs, y_m_hs, topZ);
 
     // Left face
-    glVertex3f(x - size / 2, y - size / 2, z - size / 2 * zScale);
-    glVertex3f(x - size / 2, y - size / 2, z + size / 2 * zScale);
-    glVertex3f(x - size / 2, y + size / 2, z + size / 2 * zScale);
-    glVertex3f(x - size / 2, y + size / 2, z - size / 2 * zScale);
+    glVertex3f(x_m_hs, y_m_hs, botZ);
+    glVertex3f(x_m_hs, y_m_hs, topZ);
+    glVertex3f(x_m_hs, y_p_hs, topZ);
+    glVertex3f(x_m_hs, y_p_hs, botZ);
 
     glEnd();
+}
+
+void drawLightSource() {
+      // glPushMatrix();
+      // glTranslatef(lightX, lightY, lightZ);
+      // glColor3f(1.0f, 1.0f, 1.0f); // White color
+    drawCube(lightX, lightY, lightZ, 0.5f, 0xFF, 0x0, 0x0, 0xFF);
+      // glPopMatrix();
 }
 
 int graphicsThread(int argc, char* argv[]) {
@@ -348,13 +405,16 @@ int graphicsThread(int argc, char* argv[]) {
 
     setPerspective(45.0f, (float)PIXEL_WIDTH / (float)PIXEL_HEIGHT, 0.1f, 1000.0f);
 
+    setupLighting(); // Setup lighting
+    setupMaterial(); // Setup material properties
+
     // Set mouse callback
     // glfwSetCursorPosCallback(window, mouseCallback);
     // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide the cursor and capture it
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
-        // processInput(window); // Process keyboard input
+        processInput(window); // Process keyboard input
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
@@ -367,20 +427,26 @@ int graphicsThread(int argc, char* argv[]) {
         // Apply the camera transformation
         lookAt(camX, camY, camZ, camX + camDirX, camY + camDirY, camZ + camDirZ, 0.0f, 1.0f, 0.0f);
 
+        // Set light position after setting the camera
+        // glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
+        // Draw the light source as an extended red cube
+        // drawLightSource();
+
         std::lock_guard<std::mutex> guard(pixelsMutex);
 
         float cubeSize = 0.5f; // Adjust cube size for better visibility
-        for (int y = 0; y < PIXEL_HEIGHT/10; ++y) {
-            for (int x = 0; x < (PIXEL_WIDTH/10); ++x) {
-                int index = y * (PIXEL_WIDTH/10) + x;
+        for (int y = 0; y < PIXEL_HEIGHT / 10; ++y) {
+            for (int x = 0; x < (PIXEL_WIDTH / 10); ++x) {
+                int index = y * (PIXEL_WIDTH / 10) + x;
                 uint32_t color = pixels[index];
                 uint8_t a = (color >> 24) & 0xFF;
                 uint8_t r = (color >> 16) & 0xFF;
                 uint8_t g = (color >> 8) & 0xFF;
                 uint8_t b = color & 0xFF;
-                drawCube(x * cubeSize - ((PIXEL_WIDTH/10) * cubeSize / 2),
-                         (((PIXEL_HEIGHT/2)-1) - y) * cubeSize - ((PIXEL_HEIGHT/2) * cubeSize / 2),
-                         0.0f, cubeSize, r, g, b, a);
+                drawCube(x * cubeSize - ((PIXEL_WIDTH / 10) * cubeSize / 2),
+                    (((PIXEL_HEIGHT / 2) - 1) - y) * cubeSize - ((PIXEL_HEIGHT / 2) * cubeSize / 2),
+                    0.0f, cubeSize, r, g, b, a);
             }
         }
 
@@ -393,7 +459,6 @@ int graphicsThread(int argc, char* argv[]) {
 
     return 0;
 }
-
 
 int main(int argc, char* argv[]) {
     std::thread gThread(graphicsThread, argc, argv);
