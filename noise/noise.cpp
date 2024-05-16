@@ -7,6 +7,9 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
+#include <glew.h>
+#include <glfw3.h>
+
 #ifdef _WIN32
     #include <winsock2.h>
     #pragma comment(lib, "ws2_32.lib")  // Ensure linker includes Winsock library
@@ -19,8 +22,8 @@
 using namespace std;
 
 #define FRAME_DELAY 60
-#define PIXEL_WIDTH 160
-#define PIXEL_HEIGHT 90
+#define PIXEL_WIDTH 144
+#define PIXEL_HEIGHT 81
 #define PIXEL_COUNT (PIXEL_WIDTH * PIXEL_HEIGHT)
 
 vector<uint32_t> pixels(PIXEL_COUNT, 0);  // Example for a 16x9 pixel screen
@@ -61,9 +64,9 @@ unsigned int HSLtoRGB(float hue, float saturation, float lightness) {
         float q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
         float p = 2 * lightness - q;
 
-        r = hue2rgb(p, q, hue + 1.0 / 3);
+        r = hue2rgb(p, q, hue + 1.0f / 3);
         g = hue2rgb(p, q, hue);
-        b = hue2rgb(p, q, hue - 1.0 / 3);
+        b = hue2rgb(p, q, hue - 1.0f / 3);
     }
 
     unsigned int R = static_cast<unsigned int>(r * 255);
@@ -116,11 +119,8 @@ void handleClient(SOCKET clientSocket) {
         std::cout << std::bitset<32>(frequencyColor).to_string() << std::endl;
         color &= frequencyColor;
         std::cout << std::bitset<32>(color).to_string() << std::endl;
+        color &= 4293980400; //11111111 11110000 11110000 11110000
         cout << "--------" << endl;
-
-        //char* converted = (char*)"";
-        //sscanf_s(converted, "%hhu", &)
-        //cout << bitset<32>(color).to_string() << endl;
 
         std::lock_guard<std::mutex> guard(pixelsMutex);
         // Update only one pixel at a time
@@ -128,47 +128,6 @@ void handleClient(SOCKET clientSocket) {
         // Xbox headset mic:
         // double volume = ((double)color - 1103250000.0) / 22420000.0;
         
-        /*
-        double volume = ((double)color) / 100.0;
-        cout << "[" << volume << "]" << endl;
-        cout << "[" << bitset<32>((UINT32)volume).to_string() << "]" << endl;
-        //double colorValue = ((double)color);
-        
-        
-        // UINT32 argb = (int)(colorValue * (double)0xFFFFFFFF);
-        // UINT8 a = 255 - ((argb & 0xFF000000) >> 24);
-        // UINT8 r = 255 - ((argb & 0x00FF0000) >> 16);
-        // UINT8 g = 255 - ((argb & 0x0000FF00) >> 8);
-        /// UINT8 b = 255 - ((argb & 0x000000FF));
-        // UINT8 selectedValue = ((UINT32)r + (UINT32)g + (UINT32)b) / 3; //average
-
-        cout << "volume: " << volume << endl;
-        double brightness = (volume * (double)0xFFFFFFFF);
-        cout << "brightness: " << bitset<32>((UINT32)brightness).to_string() << endl;
-        // UINT8 selectedValue = (UINT8)(((UINT32)brightness >> 24) & 0x000000FF);
-        // cout << "brightness uint8: " << bitset<8>(selectedValue).to_string() << endl;
-
-        d_cur = brightness;
-
-        cout << "d_prev: " << bitset<32>((UINT32)d_cur).to_string() << endl;
-        cout << "d_cur: " << bitset<32>((UINT32)d_prev).to_string() << endl;
-        
-        d_prev = d_cur;
-        
-        UINT32 color = 0xFF000000 + (((UINT32)colorByte) << 16) + (((UINT32)colorByte) << 8) + ((UINT32)colorByte);
-
-        //auto res = (std::stringstream{} << std::hex << (int)(colorValue * (double)0xFFFFFFFF)).str();
-        //cout << bitset<32>(argb).to_string() << endl;
-        //cout << bitset<8>(a).to_string() << endl;
-        //cout << bitset<8>(r).to_string() << endl;
-        //cout << bitset<8>(g).to_string() << endl;
-        //cout << bitset<8>(b).to_string() << endl;
-        cout << "color uint8:  " << bitset<8>(colorByte).to_string() << endl;
-        cout << "color uint32: " << bitset<32>(color).to_string() << endl;
-        std::cout << "============" << endl;
-        */
-
-
         pixels[currentIndex] = color;
         
         // Increment the index and wrap around if necessary
@@ -181,7 +140,73 @@ void handleClient(SOCKET clientSocket) {
 #endif
 }
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
 
+int graphicsThread(int argc, char* argv[]) {
+    if (!glfwInit()) {
+        return -1;
+    }
+
+    GLFWwindow* window = glfwCreateWindow(PIXEL_WIDTH, PIXEL_HEIGHT, "Pixels", NULL, NULL);
+    if (!window) {
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if (glewInit() != GLEW_OK) {
+        return -1;
+    }
+
+    glViewport(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_BGRA, GL_UNSIGNED_BYTE, pixels.data());
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+
+        {
+            std::lock_guard<std::mutex> guard(pixelsMutex);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_BGRA, GL_UNSIGNED_BYTE, pixels.data());
+        }
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(PIXEL_WIDTH, 0.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(PIXEL_WIDTH, PIXEL_HEIGHT);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f, PIXEL_HEIGHT);
+        glEnd();
+
+        glfwSwapBuffers(window);
+        glfwWaitEventsTimeout(FRAME_DELAY / 1000.0);
+    }
+
+    glDeleteTextures(1, &texture);
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
+}
+/*
 int graphicsThread(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindow("Pixels",
@@ -200,7 +225,7 @@ int graphicsThread(int argc, char* argv[]) {
 
         {
             std::lock_guard<std::mutex> guard(pixelsMutex);
-            SDL_UpdateTexture(texture, NULL, pixels.data(), PIXEL_WIDTH * sizeof(uint32_t));  // Correct pitch for 16 pixels wide
+            SDL_UpdateTexture(texture, NULL, pixels.data(), PIXEL_WIDTH * sizeof(uint32_t)); 
         }
 
         SDL_RenderClear(renderer);
@@ -216,7 +241,7 @@ int graphicsThread(int argc, char* argv[]) {
 
     return 0;
 }
-
+*/
 
 int main(int argc, char* argv[]) {
     std::thread gThread(graphicsThread, argc, argv);
