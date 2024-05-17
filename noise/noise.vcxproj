@@ -144,6 +144,10 @@
     <CopyFileToFolders Include="scene.fs.txt" />
     <CopyFileToFolders Include="scene.vs.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="fxaa.fs.txt" />
+    <CopyFileToFolders Include="fxaa.vs.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

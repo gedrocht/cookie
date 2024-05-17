@@ -34,28 +34,47 @@ using namespace std;
 #define SHADOW_WIDTH 1024
 #define SHADOW_HEIGHT 1024
 
+// #define KEYBOARD_INPUT
+// #define KEYBOARD_CONTROLS_CAMERA
+// #define KEYBOARD_CONTROLS_LIGHT
+// #define MOUSE_INPUT
+#define ANTIALIASING
+
 // Pixel data and synchronization
 vector<uint32_t> pixels(PIXEL_COUNT, 0);
+size_t currentIndex = 0;
 mutex pixelsMutex;
 bool running = true;
 
+/*
+* cam: 1.01008, 51.5, 61.6449
+camYaw: 3.1435, camPitch: -1.63751
+*/
+
 // Camera position and direction
-float camX = 0.0f, camY = 66.0f, camZ = 50.0f;
-float camYaw = 0.0f, camPitch = 3.14159265358979323846264338f;
+float camX = 0.0f, camY = 50.0f, camZ = 64.0f;
+float camYaw = 3.143f, camPitch = -1.58;
 
 // Constants for movement speed and mouse sensitivity
-const float speed = 10.0f;
+// Constants for movement speed and mouse sensitivity
+const float speed = 0.25f;
 const float sensitivity = 0.0005f;
+float lightAngle = 0;
+float lightDistance = 20.0f;
+float lightSpeed = 0.0174533;
 
 // Light position
-glm::vec3 lightPos(0.0f, 66.0f, 50.0f);
+glm::vec3 lightPos(-40.0f, 300.0f, 100.0f);
 
 // Shader and framebuffer objects
 GLuint depthMapFBO, depthMap;
+#ifdef ANTIALIASING
+GLuint fxaaFBO, texColorBuffer, fxaaShaderProgram;
+#endif
 GLuint depthShaderProgram, sceneShaderProgram;
 
 // Uniform locations for shaders
-GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, zScaleLoc;
+GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, yScaleLoc;
 
 // Vertex data for a simple cube (positions and normals)
 float vertices[] = {
@@ -66,7 +85,6 @@ float vertices[] = {
     -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-    // other faces...
     -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
      0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
      0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
@@ -162,7 +180,6 @@ float hues[16] = {
 // Function to handle client connections and update pixel data
 void handleClient(SOCKET clientSocket) {
     cout << "Handling new client" << endl;
-    static size_t currentIndex = 0;
 
     while (running) {
         uint32_t audioData;
@@ -207,19 +224,77 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+#ifdef MOUSE_INPUT
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    static double lastX = xpos, lastY = ypos;
+    double xoffset = xpos - lastX;
+    double yoffset = lastY - ypos; // Reversed since y-coordinates range from bottom to top
+    lastX = xpos;
+    lastY = ypos;
+
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    camYaw -= xoffset;
+    camPitch -= yoffset;
+
+    cout << "camYaw: " << camYaw << ", camPitch: " << camPitch << endl;
+
+    if (camPitch > 89.0f) camPitch = 89.0f;
+    if (camPitch < -89.0f) camPitch = -89.0f;
+}
+#endif
+
 // Function to handle keyboard input for camera movement
+#ifdef KEYBOARD_INPUT
 void processInput(GLFWwindow* window) {
+#ifdef KEYBOARD_CONTROLS_LIGHT
+    float _lightX = lightPos[0];
+    float _lightY = lightPos[1];
+    float _lightZ = lightPos[2];
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        _lightX -= speed * sin(camYaw);
+        _lightZ -= speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        _lightX += speed * sin(camYaw);
+        _lightZ += speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        _lightX -= speed * cos(camYaw);
+        _lightZ += speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        _lightX += speed * cos(camYaw);
+        _lightZ -= speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        _lightY += speed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        _lightY -= speed;
+    }
+
+    if (_lightX != lightPos[0] || _lightY != lightPos[1] || _lightZ != lightPos[2]) {
+        lightPos[0] = _lightX;
+        lightPos[1] = _lightY;
+        lightPos[2] = _lightZ;
+        cout << "light: " << _lightX << ", " << _lightY << ", " << _lightZ << endl;
+    }
+#endif
+#ifdef KEYBOARD_CONTROLS_CAMERA
     float _camX = camX;
     float _camY = camY;
     float _camZ = camZ;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camX += speed * sin(camYaw);
-        camZ += speed * cos(camYaw);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         camX -= speed * sin(camYaw);
         camZ -= speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camX += speed * sin(camYaw);
+        camZ += speed * cos(camYaw);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         camX -= speed * cos(camYaw);
@@ -237,11 +312,11 @@ void processInput(GLFWwindow* window) {
     }
 
     if (camX != _camX || camY != _camY || camZ != _camZ) {
-        cout << "-> camX: " << camX << endl;
-        cout << "-> camY: " << camY << endl;
-        cout << "-> camZ: " << camZ << endl;
+        cout << "cam: " << camX << ", " << camY << ", " << camZ << endl;
     }
+#endif
 }
+#endif
 
 // Function to compile a shader from source code
 GLuint compileShader(const char* source, GLenum type) {
@@ -304,6 +379,15 @@ void initGL() {
     GLuint sceneFragmentShader = compileShader(sceneFragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
     sceneShaderProgram = linkProgram(sceneVertexShader, sceneFragmentShader);
 
+#ifdef ANTIALIASING
+    // Compile and link FXAA shaders
+    string fxaaVertexShaderSource = readFile("fxaa.vs.txt");
+    string fxaaFragmentShaderSource = readFile("fxaa.fs.txt");
+    GLuint fxaaVertexShader = compileShader(fxaaVertexShaderSource.c_str(), GL_VERTEX_SHADER);
+    GLuint fxaaFragmentShader = compileShader(fxaaFragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
+    fxaaShaderProgram = linkProgram(fxaaVertexShader, fxaaFragmentShader);
+#endif
+
     // Get uniform locations for scene shader
     glUseProgram(sceneShaderProgram);
     modelLoc = glGetUniformLocation(sceneShaderProgram, "model");
@@ -312,8 +396,8 @@ void initGL() {
     lightPosLoc = glGetUniformLocation(sceneShaderProgram, "lightPos");
     viewPosLoc = glGetUniformLocation(sceneShaderProgram, "viewPos");
     lightSpaceMatrixLoc = glGetUniformLocation(sceneShaderProgram, "lightSpaceMatrix");
-    zScaleLoc = glGetUniformLocation(sceneShaderProgram, "zScale");
-    glGetUniformLocation(sceneShaderProgram, "cubeColor"); // Add this line to ensure cubeColor is recognized
+    yScaleLoc = glGetUniformLocation(sceneShaderProgram, "yScale");
+    glGetUniformLocation(sceneShaderProgram, "cubeColor");
 
     // Get uniform locations for depth shader
     glUseProgram(depthShaderProgram);
@@ -341,11 +425,39 @@ void initGL() {
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+#ifdef ANTIALIASING
+    // Create framebuffer for FXAA
+    glGenFramebuffers(1, &fxaaFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);
+
+    glGenTextures(1, &texColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+
+    GLuint rbo;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cerr << "FXAA Framebuffer not complete!" << endl;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#endif
+
     // Clean up shaders
     glDeleteShader(depthVertexShader);
     glDeleteShader(depthFragmentShader);
     glDeleteShader(sceneVertexShader);
     glDeleteShader(sceneFragmentShader);
+#ifdef ANTIALIASING
+    glDeleteShader(fxaaVertexShader);
+    glDeleteShader(fxaaFragmentShader);
+#endif
 
     // Initialize VBO and VAO
     glGenVertexArrays(1, &VAO);
@@ -412,13 +524,17 @@ void updateDepthUniforms() {
 
 // Function to draw a cube
 void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    if (r + g + b == 0) {
+        return;
+    }
+
     float half_size = size / 2;
 
     // Calculate brightness as the average of the RGB values
     float brightness = (r + g + b) / 765.0f;
 
-    // Use brightness to scale the z-axis size
-    float zScale = 1.0f + brightness * 50.0f;
+    // Use brightness to scale the y-axis size
+    float yScale = 1.0f + brightness * 50.0f;
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(x, y, z));
@@ -429,7 +545,7 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
 
     glUseProgram(sceneShaderProgram);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniform1f(zScaleLoc, zScale);
+    glUniform1f(yScaleLoc, yScale);
     glUniform3fv(glGetUniformLocation(sceneShaderProgram, "cubeColor"), 1, glm::value_ptr(color)); // Pass the color
 
     glBindVertexArray(VAO); // Bind the VAO
@@ -437,8 +553,46 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
     glBindVertexArray(0); // Unbind the VAO
 }
 
+void renderQuad() {
+    static unsigned int quadVAO = 0;
+    static unsigned int quadVBO;
+    if (quadVAO == 0) {
+        float quadVertices[] = {
+            // positions     // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+
+        glGenVertexArrays(1, &quadVAO);
+        glGenBuffers(1, &quadVBO);
+        glBindVertexArray(quadVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    }
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+}
+
 // Function to render the scene
 void renderScene(GLuint shaderProgram) {
+#ifdef ANTIALIASING
+    // If rendering the scene, bind the FXAA framebuffer first
+    if (shaderProgram == sceneShaderProgram) {
+        glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+#endif
+
     glUseProgram(shaderProgram);
 
     if (shaderProgram == sceneShaderProgram) {
@@ -450,19 +604,60 @@ void renderScene(GLuint shaderProgram) {
 
     std::lock_guard<std::mutex> guard(pixelsMutex);
 
-    float cubeSize = 0.5f; // Adjust cube size for better visibility
-    for (int y = 0; y < PIXEL_HEIGHT / 10; ++y) {
+    float cubeSize = 1.0f; // Adjust cube size for better visibility
+    for (int z = 0; z < PIXEL_HEIGHT / 10; ++z) {
         for (int x = 0; x < PIXEL_WIDTH / 10; ++x) {
-            int index = y * (PIXEL_WIDTH / 10) + x;
+            int index = z * (PIXEL_WIDTH / 10) + x;
             uint32_t color = pixels[index];
             uint8_t a = (color >> 24) & 0xFF;
             uint8_t r = (color >> 16) & 0xFF;
             uint8_t g = (color >> 8) & 0xFF;
             uint8_t b = color & 0xFF;
-            drawCube(x * cubeSize - ((PIXEL_WIDTH / 10) * cubeSize / 2) + cubeSize / 2,
-                (((PIXEL_HEIGHT / 2) - 1) - y) * cubeSize - ((PIXEL_HEIGHT / 2) * cubeSize / 2),
-                0.0f, cubeSize, r, g, b, a);
+            /*
+            if (index == currentIndex) {
+                lightPos[0] = (9*lightPos[0] + x * cubeSize - ((PIXEL_WIDTH / 10) * cubeSize / 2) + cubeSize / 2) / 10;
+                lightPos[1] = (6*lightPos[1] + (((PIXEL_HEIGHT / 2) - 1) - z) * cubeSize - ((PIXEL_HEIGHT / 2) * cubeSize / 2))/ 10;
+            }
+            */
+            drawCube(x * 0.5f - (118.4f * 0.5f / 2) + 0.5f / 2,
+                0.0f,
+                (((666.0f / 2) - 1) - z) * 0.5f - ((666.f/ 2) * 0.5f / 2),
+                cubeSize, r, g, b, a);
         }
+    }
+
+    // drawCube(lightPos[0], lightPos[1], lightPos[2], cubeSize, 64, 64, 64, 255);
+
+#ifdef ANTIALIASING
+    // If rendering the scene, apply FXAA
+    if (shaderProgram == sceneShaderProgram) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glUseProgram(fxaaShaderProgram);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+        glUniform1i(glGetUniformLocation(fxaaShaderProgram, "screenTexture"), 0);
+        glUniform2f(glGetUniformLocation(fxaaShaderProgram, "inverseScreenSize"), 1.0f / PIXEL_WIDTH, 1.0f / PIXEL_HEIGHT);
+
+        // Render a full-screen quad
+        renderQuad();
+    }
+#endif
+}
+
+void updateLightPosition() {
+    return;
+    lightPos[0] = lightDistance * cos(lightAngle);
+    lightPos[2] = lightDistance * sin(lightAngle) + 50.0f;
+
+    cout << "light: " << lightAngle << ", x: " << lightPos[0] << ", z: " << lightPos[2] << ", theta: " << lightAngle << endl;
+
+    lightAngle += lightSpeed;
+    if (lightAngle > 6.283185307179586) {
+        lightAngle -= 6.283185307179586;
+    } else if (lightAngle < 0) {
+        lightAngle += 6.283185307179586;
     }
 }
 
@@ -509,13 +704,20 @@ int graphicsThread(int argc, char* argv[]) {
         std::cerr << "GL ERROR: " << message << std::endl;
         }, nullptr);
 
+#ifdef MOUSE_INPUT
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide the cursor and capture it
+#endif
     // Main rendering loop
     while (!glfwWindowShouldClose(window)) {
         // Poll for and process events
         glfwPollEvents();
 
+#ifdef KEYBOARD_INPUT
         // Process keyboard input for camera movement
         processInput(window);
+#endif
+        updateLightPosition();
 
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
