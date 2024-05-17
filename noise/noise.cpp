@@ -31,6 +31,9 @@ using namespace std;
 #define PIXEL_WIDTH 1184
 #define PIXEL_HEIGHT 666
 #define PIXEL_COUNT ((PIXEL_WIDTH/10) * (PIXEL_HEIGHT/10))
+#define HORIZ_BARS 100
+#define VERT_BARS 100
+#define BARS_COUNT (HORIZ_BARS * VERT_BARS)
 #define SHADOW_WIDTH 1024
 #define SHADOW_HEIGHT 1024
 
@@ -41,19 +44,23 @@ using namespace std;
 #define ANTIALIASING
 
 // Pixel data and synchronization
-vector<uint32_t> pixels(PIXEL_COUNT, 0);
+vector<uint32_t> pixels(BARS_COUNT, 0);
 size_t currentIndex = 0;
 mutex pixelsMutex;
 bool running = true;
 
-/*
-* cam: 1.01008, 51.5, 61.6449
-camYaw: 3.1435, camPitch: -1.63751
-*/
+float cubeSize = 1.0f;
+float centerX = 0.0f;
+float centerZ = 0.0f;
 
 // Camera position and direction
-float camX = 0.0f, camY = 50.0f, camZ = 64.0f;
-float camYaw = 3.143f, camPitch = -1.58;
+float camX = 0.0f;
+float camY = 35.0f;
+float camZ = 64.0f;
+float camYaw = 0.0f;
+float camPitch = -2.77f;
+float camOrbitSpeed = 0.000174533f; // 0.01 degree in radians
+float camOrbitDistance = 120.0f;
 
 // Constants for movement speed and mouse sensitivity
 // Constants for movement speed and mouse sensitivity
@@ -70,6 +77,7 @@ glm::vec3 lightPos(-40.0f, 300.0f, 100.0f);
 GLuint depthMapFBO, depthMap;
 #ifdef ANTIALIASING
 GLuint fxaaFBO, texColorBuffer, fxaaShaderProgram;
+GLuint msaaColorBuffer, msaaFBO, msaaRBO;
 #endif
 GLuint depthShaderProgram, sceneShaderProgram;
 
@@ -133,7 +141,7 @@ void receiveUint32(SOCKET clientSocket, uint32_t& value) {
         memcpy(&value, buffer, sizeof(uint32_t));
     }
     else {
-        cerr << "Failed to receive uint32_t\n";
+        // cerr << "Failed to receive uint32_t\n";
     }
 }
 
@@ -426,6 +434,26 @@ void initGL() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #ifdef ANTIALIASING
+    // Create multisample framebuffer for scene rendering
+
+    glGenFramebuffers(1, &msaaFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);
+
+    glGenTextures(1, &msaaColorBuffer);
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer);
+    glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, GL_TRUE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer, 0);
+
+    glGenRenderbuffers(1, &msaaRBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, msaaRBO);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, msaaRBO);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cerr << "MSAA Framebuffer not complete!" << endl;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     // Create framebuffer for FXAA
     glGenFramebuffers(1, &fxaaFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);
@@ -527,8 +555,9 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
     if (r + g + b == 0) {
         return;
     }
+    // cout << x << ", " << y << ", " << z << endl;
 
-    float half_size = size / 2;
+    // float half_size = size / 2;
 
     // Calculate brightness as the average of the RGB values
     float brightness = (r + g + b) / 765.0f;
@@ -538,7 +567,7 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::scale(model, glm::vec3(half_size, half_size, half_size));
+    model = glm::scale(model, glm::vec3(size, size, size)); //vec3(half_size, half_size, half_size));
 
     // Convert RGB values to [0,1] range
     glm::vec3 color = glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f);
@@ -586,9 +615,9 @@ void renderQuad() {
 // Function to render the scene
 void renderScene(GLuint shaderProgram) {
 #ifdef ANTIALIASING
-    // If rendering the scene, bind the FXAA framebuffer first
+    // If rendering the scene, bind the MSAA framebuffer first
     if (shaderProgram == sceneShaderProgram) {
-        glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 #endif
@@ -604,10 +633,9 @@ void renderScene(GLuint shaderProgram) {
 
     std::lock_guard<std::mutex> guard(pixelsMutex);
 
-    float cubeSize = 1.0f; // Adjust cube size for better visibility
-    for (int z = 0; z < PIXEL_HEIGHT / 10; ++z) {
-        for (int x = 0; x < PIXEL_WIDTH / 10; ++x) {
-            int index = z * (PIXEL_WIDTH / 10) + x;
+    for (int z = 0; z < VERT_BARS; ++z) {
+        for (int x = 0; x < HORIZ_BARS; ++x) {
+            int index = z * HORIZ_BARS + x;
             uint32_t color = pixels[index];
             uint8_t a = (color >> 24) & 0xFF;
             uint8_t r = (color >> 16) & 0xFF;
@@ -619,9 +647,12 @@ void renderScene(GLuint shaderProgram) {
                 lightPos[1] = (6*lightPos[1] + (((PIXEL_HEIGHT / 2) - 1) - z) * cubeSize - ((PIXEL_HEIGHT / 2) * cubeSize / 2))/ 10;
             }
             */
-            drawCube(x * 0.5f - (118.4f * 0.5f / 2) + 0.5f / 2,
+            drawCube(
+                //(118.4f - x) * 0.5f - (118.4f * 0.5f / 2) + 0.5f / 2,
+                x - HORIZ_BARS/2,
                 0.0f,
-                (((666.0f / 2) - 1) - z) * 0.5f - ((666.f/ 2) * 0.5f / 2),
+                //(((118.4f / 2) - 1) - z) * 0.5f - ((118.4f/ 2) * 0.5f / 2),
+                z - VERT_BARS/2,
                 cubeSize, r, g, b, a);
         }
     }
@@ -629,11 +660,17 @@ void renderScene(GLuint shaderProgram) {
     // drawCube(lightPos[0], lightPos[1], lightPos[2], cubeSize, 64, 64, 64, 255);
 
 #ifdef ANTIALIASING
-    // If rendering the scene, apply FXAA
+    // Resolve multisampled framebuffer to a regular framebuffer
     if (shaderProgram == sceneShaderProgram) {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fxaaFBO);
+        glBlitFramebuffer(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+        // Unbind framebuffer to render to the default framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Apply FXAA
         glUseProgram(fxaaShaderProgram);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texColorBuffer);
@@ -661,6 +698,17 @@ void updateLightPosition() {
     }
 }
 
+// Make the camera orbit
+void rotateCameraAroundCenter() {
+    camX = camOrbitDistance * cos(-1*(camYaw - 1.57079632675)) + centerX;
+    camZ = camOrbitDistance * sin(-1*(camYaw - 1.57079632675)) + centerZ;
+    camYaw -= camOrbitSpeed;
+
+    if (camYaw < 0) {
+        camYaw += 6.28318;
+    }
+}
+
 // Main graphics rendering thread
 int graphicsThread(int argc, char* argv[]) {
     // Initialize GLFW
@@ -670,6 +718,7 @@ int graphicsThread(int argc, char* argv[]) {
     }
 
     // Create a GLFW window
+    glfwWindowHint(GLFW_SAMPLES, 8); // Request 8x MSAA
     GLFWwindow* window = glfwCreateWindow(PIXEL_WIDTH, PIXEL_HEIGHT, "Pixels", NULL, NULL);
     if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -699,6 +748,9 @@ int graphicsThread(int argc, char* argv[]) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // Enable MSAA
+    glEnable(GL_MULTISAMPLE);
+
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
         std::cerr << "GL ERROR: " << message << std::endl;
@@ -718,6 +770,8 @@ int graphicsThread(int argc, char* argv[]) {
         processInput(window);
 #endif
         updateLightPosition();
+
+        rotateCameraAroundCenter();
 
         // Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
