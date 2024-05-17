@@ -1,3 +1,4 @@
+#include <algorithm>            // For vector sorting
 #include <iostream>             // For standard input/output operations
 #include <bitset>               // For manipulating bits and performing bitwise operations
 #include <fstream>              // For file input/output operations
@@ -78,6 +79,7 @@ float lightSpeed = 0.0174533f;
 
 // Light position
 glm::vec3 lightPos(-40.0f, 300.0f, 100.0f);
+//glm::vec3 lightPos(0.0f, 50.0f, 0.0f);
 
 // Shader and framebuffer objects
 GLuint depthMapFBO, depthMap;
@@ -655,10 +657,10 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::scale(model, glm::vec3(size, size, size));
+    model = glm::scale(model, glm::vec3(size*0.9f, size*0.9f, size*0.9f));
 
-    // Convert RGB values to [0,1] range
-    glm::vec3 color = glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f);
+    // Convert RGBA values to [0,1] range
+    glm::vec4 color = glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 
     glUseProgram(sceneShaderProgram);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -731,26 +733,31 @@ void renderScene(GLuint shaderProgram) {
     // Lock the mutex to safely access the pixel data
     std::lock_guard<std::mutex> guard(pixelsMutex);
 
-    // Iterate through the vertical and horizontal bars to render each cube
-    for (int z = 0; z < VERT_BARS; ++z) {
-        float zCoord = z * cubeSize - (float)HALF_VERT_BARS;  // Calculate the z-coordinate for the current bar
-        for (int x = 0; x < HORIZ_BARS; ++x) {
-            int index = z * HORIZ_BARS + x;  // Calculate the index for the pixel array
-            uint32_t color = pixels[index];  // Get the color value from the pixel array
+    // Sort cubes based on their distance from the camera
+    std::vector<std::tuple<float, float, float, glm::vec4>> cubes;
 
-            // Extract the color components (alpha, red, green, blue) from the color value
+    for (int z = 0; z < VERT_BARS; ++z) {
+        float zCoord = z * cubeSize - (float)HALF_VERT_BARS;
+        for (int x = 0; x < HORIZ_BARS; ++x) {
+            int index = z * HORIZ_BARS + x;
+            uint32_t color = pixels[index];
+
             uint8_t a = (color >> 24) & 0xFF;
             uint8_t r = (color >> 16) & 0xFF;
             uint8_t g = (color >> 8) & 0xFF;
             uint8_t b = color & 0xFF;
 
-            // Draw a cube at the specified position with the extracted color components
-            drawCube(
-                x * cubeSize - (float)HALF_HORIZ_BARS,  // x-coordinate
-                0.0f,  // y-coordinate (fixed at 0.0f)
-                zCoord,  // z-coordinate
-                cubeSize, r, g, b, a);  // Cube size and color components
+            float distance = glm::length(glm::vec3(camX, camY, camZ) - glm::vec3(x * cubeSize - (float)HALF_HORIZ_BARS, 0.0f, zCoord));
+            cubes.push_back(std::make_tuple(distance, x * cubeSize - (float)HALF_HORIZ_BARS, zCoord, glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f)));
         }
+    }
+
+    std::sort(cubes.begin(), cubes.end(), [](const auto& a, const auto& b) {
+        return std::get<0>(a) > std::get<0>(b);  // Sort by distance in descending order
+        });
+
+    for (const auto& cube : cubes) {
+        drawCube(std::get<1>(cube), 0.0f, std::get<2>(cube), cubeSize, std::get<3>(cube).r * 255, std::get<3>(cube).g * 255, std::get<3>(cube).b * 255, std::get<3>(cube).a * 255);
     }
 
 #ifdef ANTIALIASING
