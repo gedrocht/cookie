@@ -15,8 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="noise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="scene.vs.txt" />
+    <CopyFileToFolders Include="depth.fs.txt" />
+    <CopyFileToFolders Include="depth.vs.txt" />
+    <CopyFileToFolders Include="scene.fs.txt" />
   </ItemGroup>
 </Project>
