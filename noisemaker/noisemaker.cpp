@@ -27,10 +27,10 @@
 
 using namespace std;
 
-#define FRAME_DELAY 15
+#define FRAME_DELAY 30
 #define BUFFER_SIZE 48000
 
-bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** captureClient, IMMDevice* device) {
+bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** captureClient, IMMDevice* device, bool loopback) {
     HRESULT hr;
 
     // Activate audio client
@@ -49,8 +49,8 @@ bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** ca
         return false;
     }
 
-    // Initialize audio client in loopback mode
-    hr = (*audioClient)->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK, 10000000, 0, waveFormat, nullptr);
+    // Initialize audio client
+    hr = (*audioClient)->Initialize(AUDCLNT_SHAREMODE_SHARED, loopback ? AUDCLNT_STREAMFLAGS_LOOPBACK : 0, 10000000, 0, waveFormat, nullptr);
     if (FAILED(hr)) {
         cerr << "Failed to initialize audio client." << endl;
         CoTaskMemFree(waveFormat);
@@ -81,9 +81,9 @@ bool initializeAudioCapture(IAudioClient** audioClient, IAudioCaptureClient** ca
     return true;
 }
 
-void listAudioDevices(IMMDeviceEnumerator* deviceEnumerator, vector<IMMDevice*>& devices) {
+void listAudioDevices(IMMDeviceEnumerator* deviceEnumerator, vector<IMMDevice*>& devices, EDataFlow dataFlow) {
     IMMDeviceCollection* deviceCollection = nullptr;
-    HRESULT hr = deviceEnumerator->EnumAudioEndpoints(eRender, DEVICE_STATE_ACTIVE, &deviceCollection);
+    HRESULT hr = deviceEnumerator->EnumAudioEndpoints(dataFlow, DEVICE_STATE_ACTIVE, &deviceCollection);
     if (FAILED(hr)) {
         cerr << "Failed to enumerate audio endpoints." << endl;
         return;
@@ -194,20 +194,34 @@ int calculateLogarithmicFrequency(const BYTE* data, UINT32 numFrames, WAVEFORMAT
     return logFrequencyValue;
 }
 
-void sendUint32(SOCKET sock, uint32_t value) {
+bool sendUint32(SOCKET sock, uint32_t value) {
     int sendRes = send(sock, reinterpret_cast<const char*>(&value), sizeof(value), 0);
     if (sendRes == SOCKET_ERROR) {
         std::cerr << "Send failed: " << WSAGetLastError() << std::endl;
+        return false;
     }
+    return true;
 }
 
 int main() {
     // Initialize COM library
-    CoInitialize(nullptr);
+    HRESULT hr = CoInitialize(nullptr);
+    if (FAILED(hr)) {
+        // Handle the COM initialization error
+        fprintf(stderr, "CoInitialize failed with error: 0x%lx\n", hr);
+        // Cleanup Winsock if COM initialization fails
+        WSACleanup();
+        exit(EXIT_FAILURE); // or return from the function if it is not the main function
+    }
 
     // Initialize Winsock for network communication
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (result != 0) {
+        // Handle the error, for example, by printing an error message and exiting the program
+        fprintf(stderr, "WSAStartup failed with error: %d\n", result);
+        exit(EXIT_FAILURE); // or return from the function if it is not the main function
+    }
 
     // Create a TCP socket
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -220,7 +234,7 @@ int main() {
     // Configure server address
     string ipAddress = "127.0.0.1"; // Localhost
     int port = 1989; // Port number
-    sockaddr_in hint;
+    sockaddr_in hint = {};
     hint.sin_family = AF_INET;
     hint.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
@@ -235,7 +249,7 @@ int main() {
 
     // Create device enumerator
     IMMDeviceEnumerator* deviceEnumerator = nullptr;
-    HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_INPROC_SERVER, __uuidof(IMMDeviceEnumerator), (void**)&deviceEnumerator);
+    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_INPROC_SERVER, __uuidof(IMMDeviceEnumerator), (void**)&deviceEnumerator);
     if (FAILED(hr)) {
         cerr << "Failed to create device enumerator." << endl;
         closesocket(sock);
@@ -243,20 +257,27 @@ int main() {
         return 1;
     }
 
-    // List available playback devices
+    // Ask the user to select input or output devices
+    int deviceType;
+    cout << "Select device type:\n1. Output\n2. Input\nChoice: ";
+    cin >> deviceType;
+    EDataFlow dataFlow = (deviceType == 1) ? eRender : eCapture;
+    bool loopback = (deviceType == 1);
+
+    // List available devices based on user selection
     vector<IMMDevice*> devices;
-    listAudioDevices(deviceEnumerator, devices);
+    listAudioDevices(deviceEnumerator, devices, dataFlow);
     if (devices.empty()) {
-        cerr << "No playback devices found." << endl;
+        cerr << "No devices found." << endl;
         deviceEnumerator->Release();
         closesocket(sock);
         CoUninitialize();
         return 1;
     }
 
-    // Select the desired playback device
+    // Select the desired device
     int selectedDeviceIndex;
-    cout << "Select playback device index: ";
+    cout << "Select device index: ";
     cin >> selectedDeviceIndex;
     if (selectedDeviceIndex < 0 || selectedDeviceIndex >= static_cast<int>(devices.size())) {
         cerr << "Invalid device index." << endl;
@@ -270,7 +291,7 @@ int main() {
     // Initialize audio capture
     IAudioClient* audioClient = nullptr;
     IAudioCaptureClient* captureClient = nullptr;
-    if (!initializeAudioCapture(&audioClient, &captureClient, selectedDevice)) {
+    if (!initializeAudioCapture(&audioClient, &captureClient, selectedDevice, loopback)) {
         cerr << "Audio capture initialization failed." << endl;
         deviceEnumerator->Release();
         closesocket(sock);
@@ -278,8 +299,6 @@ int main() {
         return 1;
     }
 
-    // Buffer for audio data
-    BYTE buffer[BUFFER_SIZE];
     UINT32 packetLength = 0;
     DWORD flags;
 
@@ -314,7 +333,6 @@ int main() {
             double frequency = calculateLogarithmicFrequency(data, numFrames, waveFormat);
             frequencyValues.push_back(frequency);
 
-
             hr = captureClient->ReleaseBuffer(numFrames);
             if (FAILED(hr)) {
                 cerr << "Failed to release buffer." << endl;
@@ -344,8 +362,10 @@ int main() {
                 UINT32 ui_frequency = static_cast<UINT32>(averageFrequency);
                 ui_frequency <<= 8;
                 //cout << bitset<32>(ui_frequency).to_string() << endl;
-                sendUint32(sock, ui_volume | ui_frequency);
-                
+                if (!sendUint32(sock, ui_volume | ui_frequency)) {
+                    break;
+                }
+
                 volumeValues.clear();
                 frequencyValues.clear();
             }

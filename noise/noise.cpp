@@ -1,4 +1,5 @@
-#include <algorithm>            // For vector sorting
+#pragma once
+#include <algorithm>            // For sort funcionality
 #include <iostream>             // For standard input/output operations
 #include <bitset>               // For manipulating bits and performing bitwise operations
 #include <fstream>              // For file input/output operations
@@ -17,18 +18,25 @@
 #include <gtx/string_cast.hpp>  // For converting GLM types to strings
 
 #ifdef _WIN32
-    #include <winsock2.h>           // For Windows-specific socket operations
-    #pragma comment(lib, "ws2_32.lib") // Link with the Windows Sockets library
-#else
-    #include <sys/socket.h>         // For Unix/Linux socket operations
-    #include <netinet/in.h>         // For internet address family
-    #include <unistd.h>             // For POSIX operating system API
+
+#ifdef APIENTRY
+#undef APIENTRY
 #endif
+#include <winsock2.h>           // For Windows-specific socket operations
+#pragma comment(lib, "ws2_32.lib") // Link with the Windows Sockets library
+#else
+#include <sys/socket.h>         // For Unix/Linux socket operations
+#include <netinet/in.h>         // For internet address family
+#include <unistd.h>             // For POSIX operating system API
+#endif
+
+#include "block.h"
+#include "shaderProgram.h"
 
 using namespace std;
 
 // Constants for window and shadow map dimensions
-#define FRAME_DELAY 15
+#define FRAME_DELAY 30
 #define FRAME_DELAY_IN_SECONDS (FRAME_DELAY / 1000.0f)
 #define PIXEL_WIDTH 1184
 #define PIXEL_HEIGHT 666
@@ -48,28 +56,32 @@ using namespace std;
 // #define MOUSE_INPUT
 #define ANTIALIASING
 #define MSAA
+// #define RAYTRACING
+#define DEBUG
+
+vector<tuple<float, float, float, glm::vec4>>* cubes = new vector<tuple<float, float, float, glm::vec4>>();
 
 // Pixel data and synchronization
-vector<uint32_t> pixels(BARS_COUNT, 0);
+vector<uint32_t>* pixels = new vector<uint32_t>(BARS_COUNT, 0);
 size_t currentIndex = 0;
 mutex pixelsMutex;
 bool running = true;
 
-const float cubeSize = 1.5f;
-const float halfCubeSize = cubeSize / 2;
+int numClients = 0;
+
 float centerX = 0.0f;
 float centerZ = 0.0f;
 
 // Camera position and direction
-float camX = 0.0f;
-float camY = 35.0f;
-float camZ = 64.0f;
-float camYaw = 0.0f;
-float camPitch = -2.77f;
+float camX = 46.4018f;
+float camY = 142.5f;
+float camZ = 89.3235f;
+float camYaw = -5.89561f;
+float camPitch = 4.23407f;
+//float camPitch = -2.77f;
 float camOrbitSpeed = 0.000174533f * 5; // 0.01 degree in radians
 float camOrbitDistance = 120.0f;
 
-// Constants for movement speed and mouse sensitivity
 // Constants for movement speed and mouse sensitivity
 const float speed = 0.25f;
 const float sensitivity = 0.0005f;
@@ -84,12 +96,21 @@ glm::vec3 lightPos(-40.0f, 300.0f, 100.0f);
 // Shader and framebuffer objects
 GLuint depthMapFBO, depthMap;
 #ifdef ANTIALIASING
-    GLuint fxaaFBO, texColorBuffer, fxaaShaderProgram;
-    #ifdef MSAA
-        GLuint msaaColorBuffer, msaaFBO, msaaRBO;
-    #endif
+ShaderProgram* fxaaShaderProgram;
+GLuint fxaaFBO, texColorBuffer;
+#ifdef MSAA
+GLuint msaaColorBuffer, msaaFBO, msaaRBO;
 #endif
-GLuint depthShaderProgram, sceneShaderProgram;
+#endif
+ShaderProgram* depthShaderProgram;
+ShaderProgram* sceneShaderProgram;
+
+#ifdef RAYTRACING
+GLuint rayTracingShaderProgram;
+GLuint ssboSpheres;
+GLuint ssboResult;
+GLuint resultTexture;
+#endif
 
 // Uniform locations for shaders
 GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, yScaleLoc;
@@ -142,16 +163,150 @@ float vertices[] = {
     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
+struct Sphere {
+    glm::vec3 center;
+    float radius;
+    glm::vec3 color;
+};
+
+int numSpheres = 1; // Adjust the number of spheres as needed
+
+
+// Function to link a compute shader into a program
+GLuint linkComputeProgram(GLuint computeShader) {
+    GLuint program = glCreateProgram();
+    glAttachShader(program, computeShader);
+    glLinkProgram(program);
+
+    int success;
+    char infoLog[512];
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        cerr << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << endl;
+    }
+    return program;
+}
+
+void renderQuad() {
+    static unsigned int quadVAO = 0;
+    static unsigned int quadVBO;
+    if (quadVAO == 0) {
+        float quadVertices[] = {
+            // positions     // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+
+        glGenVertexArrays(1, &quadVAO);
+        glGenBuffers(1, &quadVBO);
+        glBindVertexArray(quadVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 16, (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    }
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+}
+
+#ifdef RAYTRACING
+void initRayTracing() {
+    // Load and compile the compute shader
+    std::string raytracingComputeShaderSource = readFile("raytracing.comp");
+    GLuint raytracingComputeShader = compileShader(raytracingComputeShaderSource.c_str(), GL_COMPUTE_SHADER);
+    rayTracingShaderProgram = linkComputeProgram(raytracingComputeShader);
+    if (!rayTracingShaderProgram) {
+        std::cerr << "Compute shader program is not valid." << std::endl;
+        return;
+    }
+
+    glDeleteShader(raytracingComputeShader);
+
+    // Initialize SSBO for spheres
+    glGenBuffers(1, &ssboSpheres);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboSpheres);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(Sphere) * numSpheres, NULL, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssboSpheres);
+
+    // Initialize SSBO for result
+    glGenBuffers(1, &ssboResult);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboResult);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(glm::vec4) * PIXEL_WIDTH * PIXEL_HEIGHT, NULL, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssboResult);
+
+    // Initialize result texture
+    glGenTextures(1, &resultTexture);
+    glBindTexture(GL_TEXTURE_2D, resultTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void renderRayTracedScene() {
+    // Use the compute shader program
+    glUseProgram(rayTracingShaderProgram);
+
+    // Update SSBOs with sphere data
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboSpheres);
+    Sphere spheres[] = {
+        { glm::vec3(0.0f, 0.0f, -5.0f), 1.0f, glm::vec3(1.0f, 0.0f, 0.0f) }
+        // Add more spheres here
+    };
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(spheres), spheres);
+
+    // Set uniforms
+    glUniform3fv(glGetUniformLocation(rayTracingShaderProgram, "cameraPos"), 1, glm::value_ptr(glm::vec3(camX, camY, camZ)));
+    glUniform2f(glGetUniformLocation(rayTracingShaderProgram, "resolution"), PIXEL_WIDTH, PIXEL_HEIGHT);
+
+    // Dispatch compute shader
+    glDispatchCompute((GLuint)PIXEL_WIDTH / 16, (GLuint)PIXEL_HEIGHT / 16, 1);
+
+    // Ensure compute shader has completed
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+    // Copy SSBO result to texture
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboResult);
+    glBindTexture(GL_TEXTURE_2D, resultTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_RGBA, GL_FLOAT, NULL);
+
+    // Render the result texture
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindTexture(GL_TEXTURE_2D, resultTexture);
+    renderQuad();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void cleanup(GLFWwindow* window) {
+    glDeleteProgram(rayTracingShaderProgram);
+    glDeleteBuffers(1, &ssboSpheres);
+    glDeleteBuffers(1, &ssboResult);
+    glDeleteTextures(1, &resultTexture);
+    glfwDestroyWindow(window);
+    glfwTerminate();
+}
+#endif 
+
 // Function to receive a uint32_t value over a socket
-void receiveUint32(SOCKET clientSocket, uint32_t& value) {
+bool receiveUint32(SOCKET clientSocket, uint32_t& value) {
     char buffer[sizeof(uint32_t)];
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
 
     if (bytesReceived == sizeof(uint32_t)) {
         memcpy(&value, buffer, sizeof(uint32_t));
+        return true;
     }
     else {
         // cerr << "Failed to receive uint32_t\n";
+        return false;
     }
 }
 
@@ -199,9 +354,22 @@ float hues[16] = {
 void handleClient(SOCKET clientSocket) {
     cout << "Handling new client" << endl;
 
+    numClients++;
     while (running) {
         uint32_t audioData;
-        receiveUint32(clientSocket, audioData);
+        if (!receiveUint32(clientSocket, audioData)) {
+            numClients--;
+            break;
+        }
+
+        uint8_t volumeByte = (uint8_t)audioData;
+
+        volumeByte &= 224;
+        if (numClients > 1 && volumeByte == 0) {
+            continue;
+        }
+
+        volumeByte |= volumeByte >> 3;
 
         uint8_t frequencyByte = (uint8_t)(audioData >> 8);
 
@@ -214,26 +382,22 @@ void handleClient(SOCKET clientSocket) {
 
         uint32_t frequencyColor = HSLtoRGB(hues[hueIndex], saturation, lightness);
 
-        uint8_t volumeByte = (uint8_t)audioData;
-        volumeByte &= 224;
-        volumeByte |= volumeByte >> 3;
-
         uint32_t color = 0xFF000000 + (((uint32_t)volumeByte) << 16) + (((uint32_t)volumeByte) << 8) + ((uint32_t)volumeByte);
         color &= frequencyColor;
         color &= 4293980400; // 11111111 11110000 11110000 11110000
 
         lock_guard<mutex> guard(pixelsMutex);
         // Update only one pixel at a time
-        pixels[currentIndex] = color;
+        (*pixels)[currentIndex] = color;
 
         // Increment the index and wrap around if necessary
-        currentIndex = (currentIndex + 1) % pixels.size();
+        currentIndex = (currentIndex + 1) % pixels->size();
     }
 
 #ifdef _WIN32
-        closesocket(clientSocket);
+    closesocket(clientSocket);
 #else
-        close(clientSocket);
+    close(clientSocket);
 #endif
 }
 
@@ -243,206 +407,130 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 #ifdef MOUSE_INPUT
-    void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-        static double lastX = xpos, lastY = ypos;
-        double xoffset = xpos - lastX;
-        double yoffset = lastY - ypos; // Reversed since y-coordinates range from bottom to top
-        lastX = xpos;
-        lastY = ypos;
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    static double lastX = xpos, lastY = ypos;
+    double xoffset = xpos - lastX;
+    double yoffset = lastY - ypos; // Reversed since y-coordinates range from bottom to top
+    lastX = xpos;
+    lastY = ypos;
 
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
 
-        camYaw -= xoffset;
-        camPitch -= yoffset;
+    camYaw -= xoffset;
+    camPitch -= yoffset;
 
-        cout << "camYaw: " << camYaw << ", camPitch: " << camPitch << endl;
+    cout << "camYaw: " << camYaw << ", camPitch: " << camPitch << endl;
 
-        if (camPitch > 89.0f) camPitch = 89.0f;
-        if (camPitch < -89.0f) camPitch = -89.0f;
-    }
+    if (camPitch > 89.0f) camPitch = 89.0f;
+    if (camPitch < -89.0f) camPitch = -89.0f;
+}
 #endif
 
 // Function to handle keyboard input for camera movement
 #ifdef KEYBOARD_INPUT
-    void processInput(GLFWwindow* window) {
-    #ifdef KEYBOARD_CONTROLS_LIGHT
-            float _lightX = lightPos[0];
-            float _lightY = lightPos[1];
-            float _lightZ = lightPos[2];
+void processInput(GLFWwindow* window) {
+#ifdef KEYBOARD_CONTROLS_LIGHT
+    float _lightX = lightPos[0];
+    float _lightY = lightPos[1];
+    float _lightZ = lightPos[2];
 
-            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-                _lightX -= speed * sin(camYaw);
-                _lightZ -= speed * cos(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-                _lightX += speed * sin(camYaw);
-                _lightZ += speed * cos(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-                _lightX -= speed * cos(camYaw);
-                _lightZ += speed * sin(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-                _lightX += speed * cos(camYaw);
-                _lightZ -= speed * sin(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-                _lightY += speed;
-            }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-                _lightY -= speed;
-            }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        _lightX -= speed * sin(camYaw);
+        _lightZ -= speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        _lightX += speed * sin(camYaw);
+        _lightZ += speed * cos(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        _lightX -= speed * cos(camYaw);
+        _lightZ += speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        _lightX += speed * cos(camYaw);
+        _lightZ -= speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        _lightY += speed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        _lightY -= speed;
+    }
 
-            if (_lightX != lightPos[0] || _lightY != lightPos[1] || _lightZ != lightPos[2]) {
-                lightPos[0] = _lightX;
-                lightPos[1] = _lightY;
-                lightPos[2] = _lightZ;
-                cout << "light: " << _lightX << ", " << _lightY << ", " << _lightZ << endl;
-            }
-    #endif
-    #ifdef KEYBOARD_CONTROLS_CAMERA
-            float _camX = camX;
-            float _camY = camY;
-            float _camZ = camZ;
-
-            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-                camX -= speed * sin(camYaw);
-                camZ -= speed * cos(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-                camX += speed * sin(camYaw);
-                camZ += speed * cos(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-                camX -= speed * cos(camYaw);
-                camZ += speed * sin(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-                camX += speed * cos(camYaw);
-                camZ -= speed * sin(camYaw);
-            }
-            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-                camY += speed;
-            }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-                camY -= speed;
-            }
-
-            if (camX != _camX || camY != _camY || camZ != _camZ) {
-                cout << "cam: " << camX << ", " << camY << ", " << camZ << endl;
-            }
-    #endif
+    if (_lightX != lightPos[0] || _lightY != lightPos[1] || _lightZ != lightPos[2]) {
+        lightPos[0] = _lightX;
+        lightPos[1] = _lightY;
+        lightPos[2] = _lightZ;
+        cout << "light: " << _lightX << ", " << _lightY << ", " << _lightZ << endl;
     }
 #endif
+#ifdef KEYBOARD_CONTROLS_CAMERA
+    float _camX = camX;
+    float _camY = camY;
+    float _camZ = camZ;
 
-// Function to compile a shader from source code
-GLuint compileShader(const char* source, GLenum type) {
-    GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &source, NULL);
-    glCompileShader(shader);
-
-    int success;
-    char infoLog[512];
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << endl;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        camX -= speed * sin(camYaw);
+        camZ -= speed * cos(camYaw);
     }
-    return shader;
-}
-
-// Function to link shaders into a program
-GLuint linkProgram(GLuint vertexShader, GLuint fragmentShader) {
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-
-    int success;
-    char infoLog[512];
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
-        cerr << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << endl;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camX += speed * sin(camYaw);
+        camZ += speed * cos(camYaw);
     }
-    return program;
-}
-
-// Function to read shader source code from a file
-string readFile(const char* filePath) {
-    ifstream file(filePath);
-    if (!file.is_open()) {
-        cerr << "Failed to open file: " << filePath << endl;
-        return "";
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camX -= speed * cos(camYaw);
+        camZ += speed * sin(camYaw);
     }
-    stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camX += speed * cos(camYaw);
+        camZ -= speed * sin(camYaw);
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        camY += speed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        camY -= speed;
+    }
+
+    if (camX != _camX || camY != _camY || camZ != _camZ) {
+        cout << "cam: " << camX << ", " << camY << ", " << camZ << endl;
+    }
+#endif
 }
+#endif
+
 // Function to initialize OpenGL settings
 void initGL() {
-    // Compile and link depth shaders
-    // Read vertex and fragment shader source code for depth shader from files
-    string depthVertexShaderSource = readFile("depth.vs.txt");
-    string depthFragmentShaderSource = readFile("depth.fs.txt");
-    // Compile vertex shader for depth using the source code
-    // GL_VERTEX_SHADER specifies that the shader is a vertex shader
-    GLuint depthVertexShader = compileShader(depthVertexShaderSource.c_str(), GL_VERTEX_SHADER);
-    // Compile fragment shader for depth using the source code
-    // GL_FRAGMENT_SHADER specifies that the shader is a fragment shader
-    GLuint depthFragmentShader = compileShader(depthFragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
-    // Link the compiled vertex and fragment shaders into a shader program for depth
-    // This shader program will be used for rendering the depth map
-    depthShaderProgram = linkProgram(depthVertexShader, depthFragmentShader);
-
-    // Compile and link scene shaders
-    // Read vertex and fragment shader source code for scene shader from files
-    string sceneVertexShaderSource = readFile("scene.vs.txt");
-    string sceneFragmentShaderSource = readFile("scene.fs.txt");
-    // Compile vertex shader for scene using the source code
-    GLuint sceneVertexShader = compileShader(sceneVertexShaderSource.c_str(), GL_VERTEX_SHADER);
-    // Compile fragment shader for scene using the source code
-    GLuint sceneFragmentShader = compileShader(sceneFragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
-    // Link the compiled vertex and fragment shaders into a shader program for the scene
-    // This shader program will be used for rendering the main scene
-    sceneShaderProgram = linkProgram(sceneVertexShader, sceneFragmentShader);
+    depthShaderProgram = new ShaderProgram("depth.vs.txt", "depth.fs.txt");
+    sceneShaderProgram = new ShaderProgram("scene.vs.txt", "scene.fs.txt");
 
 #ifdef ANTIALIASING
-        // If ANTIALIASING is defined, compile and link FXAA shaders
-        // FXAA (Fast Approximate Anti-Aliasing) is a post-processing technique to smooth jagged edges
-        // Read vertex and fragment shader source code for FXAA shader from files
-        string fxaaVertexShaderSource = readFile("fxaa.vs.txt");
-        string fxaaFragmentShaderSource = readFile("fxaa.fs.txt");
-        // Compile vertex shader for FXAA using the source code
-        GLuint fxaaVertexShader = compileShader(fxaaVertexShaderSource.c_str(), GL_VERTEX_SHADER);
-        // Compile fragment shader for FXAA using the source code
-        GLuint fxaaFragmentShader = compileShader(fxaaFragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
-        // Link the compiled vertex and fragment shaders into a shader program for FXAA
-        // This shader program will be used for applying FXAA to the rendered scene
-        fxaaShaderProgram = linkProgram(fxaaVertexShader, fxaaFragmentShader);
+    // If ANTIALIASING is defined, compile and link FXAA shaders
+    // FXAA (Fast Approximate Anti-Aliasing) is a post-processing technique to smooth jagged edges
+    fxaaShaderProgram = new ShaderProgram("fxaa.vs.txt", "fxaa.fs.txt");
 #endif
 
     // Get uniform locations for scene shader
     // Use the scene shader program
-    glUseProgram(sceneShaderProgram);
+    glUseProgram(sceneShaderProgram->program);
     // Retrieve uniform locations for transformation matrices and lighting parameters
     // These locations are used to set the values of the corresponding uniforms in the shader
-    modelLoc = glGetUniformLocation(sceneShaderProgram, "model");
-    viewLoc = glGetUniformLocation(sceneShaderProgram, "view");
-    projectionLoc = glGetUniformLocation(sceneShaderProgram, "projection");
-    lightPosLoc = glGetUniformLocation(sceneShaderProgram, "lightPos");
-    viewPosLoc = glGetUniformLocation(sceneShaderProgram, "viewPos");
-    lightSpaceMatrixLoc = glGetUniformLocation(sceneShaderProgram, "lightSpaceMatrix");
-    yScaleLoc = glGetUniformLocation(sceneShaderProgram, "yScale");
-    glGetUniformLocation(sceneShaderProgram, "cubeColor");
+    modelLoc = glGetUniformLocation(sceneShaderProgram->program, "model");
+    viewLoc = glGetUniformLocation(sceneShaderProgram->program, "view");
+    projectionLoc = glGetUniformLocation(sceneShaderProgram->program, "projection");
+    lightPosLoc = glGetUniformLocation(sceneShaderProgram->program, "lightPos");
+    viewPosLoc = glGetUniformLocation(sceneShaderProgram->program, "viewPos");
+    lightSpaceMatrixLoc = glGetUniformLocation(sceneShaderProgram->program, "lightSpaceMatrix");
+    yScaleLoc = glGetUniformLocation(sceneShaderProgram->program, "yScale");
+    glGetUniformLocation(sceneShaderProgram->program, "cubeColor");
 
     // Get uniform locations for depth shader
     // Use the depth shader program
-    glUseProgram(depthShaderProgram);
+    glUseProgram(depthShaderProgram->program);
     // Retrieve uniform locations for transformation matrices specific to the depth shader
-    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram, "lightSpaceMatrix");
-    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram, "model");
+    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram->program, "lightSpaceMatrix");
+    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram->program, "model");
 
     // Create framebuffer object for shadow mapping
     // A framebuffer is an OpenGL object that contains buffers for color, depth, and stencil data
@@ -482,87 +570,84 @@ void initGL() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #ifdef ANTIALIASING
-    #ifdef MSAA
-            // If both ANTIALIASING and MSAA are defined, create a multisample framebuffer for scene rendering
-            // MSAA (Multisample Anti-Aliasing) is a technique to reduce aliasing by sampling multiple times per pixel
-            glGenFramebuffers(1, &msaaFBO);  // Generate one framebuffer object
-            glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);  // Bind the framebuffer
-    
-            // Create a multisample texture for color attachment
-            glGenTextures(1, &msaaColorBuffer);  // Generate one texture object
-            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer);  // Bind the texture as a multisample 2D texture
-            // Allocate storage for the multisample texture
-            // GL_TEXTURE_2D_MULTISAMPLE specifies a multisample 2D texture
-            // 8 specifies the number of samples per pixel
-            // GL_RGB specifies the texture format
-            // PIXEL_WIDTH and PIXEL_HEIGHT define the resolution of the texture
-            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, GL_TRUE);
-            // Attach the multisample texture as the color attachment of the framebuffer
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer, 0);
-    
-            // Create a renderbuffer object for depth and stencil attachment
-            glGenRenderbuffers(1, &msaaRBO);  // Generate one renderbuffer object
-            glBindRenderbuffer(GL_RENDERBUFFER, msaaRBO);  // Bind the renderbuffer
-            // Allocate storage for the renderbuffer
-            // GL_RENDERBUFFER specifies a renderbuffer object
-            // GL_DEPTH24_STENCIL8 specifies a combined depth and stencil buffer with 24-bit depth and 8-bit stencil
-            glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
-            // Attach the renderbuffer as the depth and stencil attachment of the framebuffer
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, msaaRBO);
-    
-            // Check if the multisample framebuffer is complete
-            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-                cerr << "MSAA Framebuffer not complete!" << endl;  // Print an error message if the framebuffer is not complete
-            }
-            // Unbind the framebuffer
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    #endif
-        // Create a framebuffer for FXAA
-        glGenFramebuffers(1, &fxaaFBO);  // Generate one framebuffer object
-        glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);  // Bind the framebuffer
+#ifdef MSAA
+    // If both ANTIALIASING and MSAA are defined, create a multisample framebuffer for scene rendering
+    // MSAA (Multisample Anti-Aliasing) is a technique to reduce aliasing by sampling multiple times per pixel
+    glGenFramebuffers(1, &msaaFBO);  // Generate one framebuffer object
+    glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);  // Bind the framebuffer
 
-        // Create a texture for color attachment
-        glGenTextures(1, &texColorBuffer);  // Generate one texture object
-        glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture as a 2D texture
-        // Allocate storage for the texture
-        // GL_RGB specifies the texture format
-        // PIXEL_WIDTH and PIXEL_HEIGHT define the resolution of the texture
-        // GL_UNSIGNED_BYTE specifies the data type of the texture data
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-        // Set texture parameters for the texture
-        // GL_LINEAR specifies linear filtering (interpolation)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // Attach the texture as the color attachment of the framebuffer
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+    // Create a multisample texture for color attachment
+    glGenTextures(1, &msaaColorBuffer);  // Generate one texture object
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer);  // Bind the texture as a multisample 2D texture
+    // Allocate storage for the multisample texture
+    // GL_TEXTURE_2D_MULTISAMPLE specifies a multisample 2D texture
+    // 8 specifies the number of samples per pixel
+    // GL_RGB specifies the texture format
+    // PIXEL_WIDTH and PIXEL_HEIGHT define the resolution of the texture
+    glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, GL_TRUE);
+    // Attach the multisample texture as the color attachment of the framebuffer
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, msaaColorBuffer, 0);
 
-        // Create a renderbuffer object for depth and stencil attachment
-        GLuint rbo;  // Renderbuffer object
-        glGenRenderbuffers(1, &rbo);  // Generate one renderbuffer object
-        glBindRenderbuffer(GL_RENDERBUFFER, rbo);  // Bind the renderbuffer
-        // Allocate storage for the renderbuffer
-        // GL_DEPTH24_STENCIL8 specifies a combined depth and stencil buffer with 24-bit depth and 8-bit stencil
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
-        // Attach the renderbuffer as the depth and stencil attachment of the framebuffer
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+    // Create a renderbuffer object for depth and stencil attachment
+    glGenRenderbuffers(1, &msaaRBO);  // Generate one renderbuffer object
+    glBindRenderbuffer(GL_RENDERBUFFER, msaaRBO);  // Bind the renderbuffer
+    // Allocate storage for the renderbuffer
+    // GL_RENDERBUFFER specifies a renderbuffer object
+    // GL_DEPTH24_STENCIL8 specifies a combined depth and stencil buffer with 24-bit depth and 8-bit stencil
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
+    // Attach the renderbuffer as the depth and stencil attachment of the framebuffer
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, msaaRBO);
 
-        // Check if the FXAA framebuffer is complete
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            cerr << "FXAA Framebuffer not complete!" << endl;  // Print an error message if the framebuffer is not complete
-        }
-        // Unbind the framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // Check if the multisample framebuffer is complete
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cerr << "MSAA Framebuffer not complete!" << endl;  // Print an error message if the framebuffer is not complete
+    }
+    // Unbind the framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#endif
+    // Create a framebuffer for FXAA
+    glGenFramebuffers(1, &fxaaFBO);  // Generate one framebuffer object
+    glBindFramebuffer(GL_FRAMEBUFFER, fxaaFBO);  // Bind the framebuffer
+
+    // Create a texture for color attachment
+    glGenTextures(1, &texColorBuffer);  // Generate one texture object
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture as a 2D texture
+    // Allocate storage for the texture
+    // GL_RGB specifies the texture format
+    // PIXEL_WIDTH and PIXEL_HEIGHT define the resolution of the texture
+    // GL_UNSIGNED_BYTE specifies the data type of the texture data
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    // Set texture parameters for the texture
+    // GL_LINEAR specifies linear filtering (interpolation)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Attach the texture as the color attachment of the framebuffer
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+
+    // Create a renderbuffer object for depth and stencil attachment
+    GLuint rbo;  // Renderbuffer object
+    glGenRenderbuffers(1, &rbo);  // Generate one renderbuffer object
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);  // Bind the renderbuffer
+    // Allocate storage for the renderbuffer
+    // GL_DEPTH24_STENCIL8 specifies a combined depth and stencil buffer with 24-bit depth and 8-bit stencil
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, PIXEL_WIDTH, PIXEL_HEIGHT);
+    // Attach the renderbuffer as the depth and stencil attachment of the framebuffer
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+    // Check if the FXAA framebuffer is complete
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        cerr << "FXAA Framebuffer not complete!" << endl;  // Print an error message if the framebuffer is not complete
+    }
+    // Unbind the framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #endif
 
-        // Clean up shaders by deleting them after linking
-        // Shaders are no longer needed once they are linked into a program
-        glDeleteShader(depthVertexShader);
-        glDeleteShader(depthFragmentShader);
-        glDeleteShader(sceneVertexShader);
-        glDeleteShader(sceneFragmentShader);
+    // Clean up shaders by deleting them after linking
+    // Shaders are no longer needed once they are linked into a program
+    depthShaderProgram->deleteShaders();
+    sceneShaderProgram->deleteShaders();
 #ifdef ANTIALIASING
-            glDeleteShader(fxaaVertexShader);
-            glDeleteShader(fxaaFragmentShader);
+    fxaaShaderProgram->deleteShaders();
 #endif
 
     // Initialize Vertex Buffer Object (VBO) and Vertex Array Object (VAO)
@@ -606,6 +691,10 @@ void initGL() {
     // Unbind VBO and VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0);  // Unbind the VBO
     glBindVertexArray(0);  // Unbind the VAO
+
+#ifdef RAYTRACING
+    initRayTracing();
+#endif
 }
 
 // Function to update shader uniforms
@@ -623,7 +712,7 @@ void updateSceneUniforms() {
     glm::mat4 projection = glm::perspective(0.785398f, PIXEL_ASPECT_RATIO, 0.1f, 1000.0f);
     glm::mat4 lightSpaceMatrix = glm::mat4(1.0f); // Placeholder, should be calculated based on light's view/projection matrices
 
-    glUseProgram(sceneShaderProgram);
+    glUseProgram(sceneShaderProgram->program);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -636,9 +725,9 @@ void updateDepthUniforms() {
     glm::mat4 lightSpaceMatrix = glm::mat4(1.0f); // Placeholder, should be calculated based on light's view/projection matrices
     glm::mat4 model = glm::mat4(1.0f);
 
-    glUseProgram(depthShaderProgram);
-    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram, "lightSpaceMatrix");
-    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram, "model");
+    glUseProgram(depthShaderProgram->program);
+    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram->program, "lightSpaceMatrix");
+    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram->program, "model");
 
     glUniformMatrix4fv(lightSpaceMatrixLocDepth, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
     glUniformMatrix4fv(modelLocDepth, 1, GL_FALSE, glm::value_ptr(model));
@@ -657,68 +746,38 @@ void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::scale(model, glm::vec3(size*0.9f, size*0.9f, size*0.9f));
+    model = glm::scale(model, glm::vec3(size * 0.9f, size * 0.9f, size * 0.9f));
 
     // Convert RGBA values to [0,1] range
     glm::vec4 color = glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 
-    glUseProgram(sceneShaderProgram);
+    glUseProgram(sceneShaderProgram->program);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniform1f(yScaleLoc, yScale);
-    glUniform3fv(glGetUniformLocation(sceneShaderProgram, "cubeColor"), 1, glm::value_ptr(color)); // Pass the color
+    glUniform3fv(glGetUniformLocation(sceneShaderProgram->program, "cubeColor"), 1, glm::value_ptr(color)); // Pass the color
 
     glBindVertexArray(VAO); // Bind the VAO
     glDrawArrays(GL_TRIANGLES, 0, 36); // Draw the cube
     glBindVertexArray(0); // Unbind the VAO
 }
 
-void renderQuad() {
-    static unsigned int quadVAO = 0;
-    static unsigned int quadVBO;
-    if (quadVAO == 0) {
-        float quadVertices[] = {
-            // positions     // texCoords
-            -1.0f,  1.0f,  0.0f, 1.0f,
-            -1.0f, -1.0f,  0.0f, 0.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-
-            -1.0f,  1.0f,  0.0f, 1.0f,
-             1.0f, -1.0f,  1.0f, 0.0f,
-             1.0f,  1.0f,  1.0f, 1.0f
-        };
-
-        glGenVertexArrays(1, &quadVAO);
-        glGenBuffers(1, &quadVBO);
-        glBindVertexArray(quadVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 16, (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-    }
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
-}
-
 // Function to render the scene
 // This function is responsible for rendering the entire scene using the specified shader program
-void renderScene(GLuint shaderProgram) {
+void renderScene(ShaderProgram* shaderProgram) {
 #ifdef ANTIALIASING
-    #ifdef MSAA
-            // If both ANTIALIASING and MSAA are defined and the scene shader program is used
-            // Bind the MSAA framebuffer to start rendering with multisample anti-aliasing
-            if (shaderProgram == sceneShaderProgram) {
-                glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);  // Bind the MSAA framebuffer
-                // Clear the color and depth buffers to prepare for new frame rendering
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            }
-    #endif
+#ifdef MSAA
+    // If both ANTIALIASING and MSAA are defined and the scene shader program is used
+    // Bind the MSAA framebuffer to start rendering with multisample anti-aliasing
+    if (shaderProgram == sceneShaderProgram) {
+        glBindFramebuffer(GL_FRAMEBUFFER, msaaFBO);  // Bind the MSAA framebuffer
+        // Clear the color and depth buffers to prepare for new frame rendering
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+#endif
 #endif
 
     // Use the specified shader program for rendering
-    glUseProgram(shaderProgram);
+    glUseProgram(shaderProgram->program);
 
     // Update uniforms based on the shader program being used
     if (shaderProgram == sceneShaderProgram) {
@@ -733,62 +792,68 @@ void renderScene(GLuint shaderProgram) {
     // Lock the mutex to safely access the pixel data
     std::lock_guard<std::mutex> guard(pixelsMutex);
 
-    // Sort cubes based on their distance from the camera
-    std::vector<std::tuple<float, float, float, glm::vec4>> cubes;
-
+    auto it = pixels->begin();
     for (int z = 0; z < VERT_BARS; ++z) {
-        float zCoord = z * cubeSize - (float)HALF_VERT_BARS;
-        for (int x = 0; x < HORIZ_BARS; ++x) {
+        float zCoord = z * Block::size - static_cast<float>(HALF_VERT_BARS);
+        for (int x = 0; x < HORIZ_BARS; ++x, ++it) {
             int index = z * HORIZ_BARS + x;
-            uint32_t color = pixels[index];
+            uint32_t color = *it;
 
             uint8_t a = (color >> 24) & 0xFF;
             uint8_t r = (color >> 16) & 0xFF;
             uint8_t g = (color >> 8) & 0xFF;
             uint8_t b = color & 0xFF;
 
-            float distance = glm::length(glm::vec3(camX, camY, camZ) - glm::vec3(x * cubeSize - (float)HALF_HORIZ_BARS, 0.0f, zCoord));
-            cubes.push_back(std::make_tuple(distance, x * cubeSize - (float)HALF_HORIZ_BARS, zCoord, glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f)));
+            float distance = glm::length(glm::vec3(camX, camY, camZ) - glm::vec3(x * Block::size - (float)HALF_HORIZ_BARS, 0.0f, zCoord));
+            cubes->push_back(std::make_tuple(distance, x * Block::size - (float)HALF_HORIZ_BARS, zCoord, glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f)));
         }
     }
 
-    std::sort(cubes.begin(), cubes.end(), [](const auto& a, const auto& b) {
-        return std::get<0>(a) > std::get<0>(b);  // Sort by distance in descending order
-        });
+    sort(cubes->begin(), cubes->end(), [](const auto& a, const auto& b) {
+        return get<0>(a) > get<0>(b);  // Sort by distance in descending order
+    });
 
-    for (const auto& cube : cubes) {
-        drawCube(std::get<1>(cube), 0.0f, std::get<2>(cube), cubeSize, std::get<3>(cube).r * 255, std::get<3>(cube).g * 255, std::get<3>(cube).b * 255, std::get<3>(cube).a * 255);
+    for (const auto& cube : *cubes) {
+        drawCube(std::get<1>(cube),
+                 0.0f,
+                 std::get<2>(cube),
+                 Block::size,
+                 static_cast<uint8_t>(std::get<3>(cube).r * 255),
+                 static_cast<uint8_t>(std::get<3>(cube).g * 255),
+                 static_cast<uint8_t>(std::get<3>(cube).b * 255),
+                 static_cast<uint8_t>(std::get<3>(cube).a * 255));
     }
+    cubes->clear();
 
 #ifdef ANTIALIASING
-        // Resolve multisampled framebuffer to a regular framebuffer if antialiasing is enabled
-        if (shaderProgram == sceneShaderProgram) {
-    #ifdef MSAA
-                // Bind the MSAA framebuffer for reading
-                glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
-    #endif
-            // Bind the FXAA framebuffer for drawing
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fxaaFBO);
-            // Blit (copy) the multisampled framebuffer to the regular framebuffer
-            // This resolves the multisampled image to a single-sample image
-            glBlitFramebuffer(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-            // Unbind the framebuffer to render to the default framebuffer
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            // Clear the color and depth buffers to prepare for new frame rendering
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Resolve multisampled framebuffer to a regular framebuffer if antialiasing is enabled
+    if (shaderProgram == sceneShaderProgram) {
+#ifdef MSAA
+        // Bind the MSAA framebuffer for reading
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
+#endif
+        // Bind the FXAA framebuffer for drawing
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fxaaFBO);
+        // Blit (copy) the multisampled framebuffer to the regular framebuffer
+        // This resolves the multisampled image to a single-sample image
+        glBlitFramebuffer(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        // Unbind the framebuffer to render to the default framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        // Clear the color and depth buffers to prepare for new frame rendering
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            // Apply FXAA (Fast Approximate Anti-Aliasing)
-            glUseProgram(fxaaShaderProgram);  // Use the FXAA shader program
-            glActiveTexture(GL_TEXTURE0);  // Activate texture unit 0
-            glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture containing the resolved image
-            // Set the screen texture uniform in the FXAA shader
-            glUniform1i(glGetUniformLocation(fxaaShaderProgram, "screenTexture"), 0);
-            // Set the inverse screen size uniform in the FXAA shader
-            glUniform2f(glGetUniformLocation(fxaaShaderProgram, "inverseScreenSize"), 1.0f / PIXEL_WIDTH, 1.0f / PIXEL_HEIGHT);
+        // Apply FXAA (Fast Approximate Anti-Aliasing)
+        glUseProgram(fxaaShaderProgram->program);  // Use the FXAA shader program
+        glActiveTexture(GL_TEXTURE0);  // Activate texture unit 0
+        glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture containing the resolved image
+        // Set the screen texture uniform in the FXAA shader
+        glUniform1i(glGetUniformLocation(fxaaShaderProgram->program, "screenTexture"), 0);
+        // Set the inverse screen size uniform in the FXAA shader
+        glUniform2f(glGetUniformLocation(fxaaShaderProgram->program, "inverseScreenSize"), 1.0f / PIXEL_WIDTH, 1.0f / PIXEL_HEIGHT);
 
-            // Render a full-screen quad to apply FXAA to the entire image
-            renderQuad();
-        }
+        // Render a full-screen quad to apply FXAA to the entire image
+        renderQuad();
+    }
 #endif
 }
 void updateLightPosition() {
@@ -799,7 +864,8 @@ void updateLightPosition() {
     lightAngle += lightSpeed;
     if (lightAngle > 6.283185307179586F) {
         lightAngle -= 6.283185307179586F;
-    } else if (lightAngle < 0) {
+    }
+    else if (lightAngle < 0) {
         lightAngle += 6.283185307179586F;
     }
 }
@@ -826,14 +892,14 @@ int graphicsThread(int argc, char* argv[]) {
     }
 
 #ifdef ANTIALIASING
-    #ifdef MSAA
-            // If both ANTIALIASING and MSAA are defined, request 8x MSAA (Multisample Anti-Aliasing)
-            glfwWindowHint(GLFW_SAMPLES, 8);  // Set the number of samples per pixel to 8 for MSAA
-    #endif
-    #ifndef MSAA
-            // If ANTIALIASING is defined but not MSAA, request 4x FXAA (Fast Approximate Anti-Aliasing)
-            glfwWindowHint(GLFW_SAMPLES, 4);  // Set the number of samples per pixel to 4 for FXAA
-    #endif
+#ifdef MSAA
+    // If both ANTIALIASING and MSAA are defined, request 8x MSAA (Multisample Anti-Aliasing)
+    glfwWindowHint(GLFW_SAMPLES, 8);  // Set the number of samples per pixel to 8 for MSAA
+#endif
+#ifndef MSAA
+    // If ANTIALIASING is defined but not MSAA, request 4x FXAA (Fast Approximate Anti-Aliasing)
+    glfwWindowHint(GLFW_SAMPLES, 4);  // Set the number of samples per pixel to 4 for FXAA
+#endif
 #endif
 
     // Create a GLFW window
@@ -876,8 +942,8 @@ int graphicsThread(int argc, char* argv[]) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // Set the blending function for transparency
 
 #ifdef MSAA
-        // If MSAA is defined, enable multisample anti-aliasing
-        glEnable(GL_MULTISAMPLE);  // Enable MSAA, which helps smooth out edges in the rendered image
+    // If MSAA is defined, enable multisample anti-aliasing
+    glEnable(GL_MULTISAMPLE);  // Enable MSAA, which helps smooth out edges in the rendered image
 #endif
 
     // Enable debug output
@@ -890,11 +956,11 @@ int graphicsThread(int argc, char* argv[]) {
         }, nullptr);
 
 #ifdef MOUSE_INPUT
-        // If MOUSE_INPUT is defined, set the cursor position callback and hide the cursor
-        // This callback is called whenever the mouse moves
-        glfwSetCursorPosCallback(window, mouseCallback);
-        // Hide the cursor and capture it within the window
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // If MOUSE_INPUT is defined, set the cursor position callback and hide the cursor
+    // This callback is called whenever the mouse moves
+    glfwSetCursorPosCallback(window, mouseCallback);
+    // Hide the cursor and capture it within the window
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 #endif
 
     // Main rendering loop
@@ -905,15 +971,19 @@ int graphicsThread(int argc, char* argv[]) {
         glfwPollEvents();
 
 #ifdef KEYBOARD_INPUT
-            // If KEYBOARD_INPUT is defined, process keyboard input for camera movement
-            processInput(window);  // Function to handle keyboard input
+        // If KEYBOARD_INPUT is defined, process keyboard input for camera movement
+        processInput(window);  // Function to handle keyboard input
 #endif
+
         // Update the position of the light source in the scene
-        updateLightPosition();
+        // updateLightPosition();
 
         // Rotate the camera around the center of the scene
-        rotateCameraAroundCenter();
+        // rotateCameraAroundCenter();
 
+#ifdef RAYTRACING
+        renderRayTracedScene();
+#else
         // Clear the color and depth buffers
         // This prepares the buffers for the next frame by clearing old data
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -936,7 +1006,10 @@ int graphicsThread(int argc, char* argv[]) {
         // Clear the color and depth buffers to prepare for rendering the scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Render the scene using the scene shader program
+
         renderScene(sceneShaderProgram);
+#endif
+
 
         // Swap front and back buffers
         // This displays the rendered image on the screen
@@ -945,13 +1018,17 @@ int graphicsThread(int argc, char* argv[]) {
         // Wait for the specified frame delay
         // This controls the frame rate by pausing for a specified amount of time
         glfwWaitEventsTimeout(FRAME_DELAY_IN_SECONDS);
-}
+    }
 
     // Clean up and terminate GLFW
     // Destroy the window and free associated resources
     glfwDestroyWindow(window);
     // Terminate GLFW and free any remaining resources
     glfwTerminate();
+
+#ifdef RAYTRACING
+    cleanup(window);
+#endif
 
     return 0;  // Return success code indicating the program ended without errors
 }
@@ -962,8 +1039,12 @@ int main(int argc, char* argv[]) {
     thread gThread(graphicsThread, argc, argv);
 
 #ifdef _WIN32
-        WSADATA wsaData;
-        WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSADATA wsaData;
+    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (result != 0) {
+        fprintf(stderr, "WSAStartup failed with error: %d\n", result);
+        exit(EXIT_FAILURE); // or return from the function if it is not the main function
+    }
 #endif
 
     cout << "initializing server socket" << endl;
@@ -973,7 +1054,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    sockaddr_in serverHint;
+    sockaddr_in serverHint = {};
     serverHint.sin_family = AF_INET;
     serverHint.sin_port = htons(1989);
     serverHint.sin_addr.s_addr = INADDR_ANY;
@@ -994,7 +1075,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    sockaddr_in client;
+    sockaddr_in client = {};
     int clientSize = sizeof(client);
 
     while (true) {
@@ -1008,7 +1089,7 @@ int main(int argc, char* argv[]) {
     }
 
 #ifdef _WIN32
-        WSACleanup();
+    WSACleanup();
 #endif
 
     gThread.join();

@@ -1,0 +1,87 @@
+#version 430
+
+layout (local_size_x = 16, local_size_y = 16) in;
+
+struct Ray {
+    vec3 origin;
+    vec3 direction;
+};
+
+struct Sphere {
+    vec3 center;
+    float radius;
+    vec3 color;
+};
+
+layout (std430, binding = 0) buffer Spheres {
+    Sphere spheres[];
+};
+
+layout (std430, binding = 1) buffer Result {
+    vec4 pixels[];
+};
+
+uniform int numSpheres;
+uniform vec3 cameraPos;
+uniform mat4 view;
+uniform mat4 projection;
+uniform vec2 resolution;
+
+const float INF = 1e20;
+const int MAX_DEPTH = 5;
+
+bool intersect(Ray ray, Sphere sphere, out float t) {
+    vec3 oc = ray.origin - sphere.center;
+    float a = dot(ray.direction, ray.direction);
+    float b = 2.0 * dot(oc, ray.direction);
+    float c = dot(oc, oc) - sphere.radius * sphere.radius;
+    float discriminant = b * b - 4 * a * c;
+    if (discriminant < 0) {
+        t = -1.0;
+        return false;
+    } else {
+        t = (-b - sqrt(discriminant)) / (2.0 * a);
+        return true;
+    }
+}
+
+vec3 trace(Ray ray, int depth) {
+    float tMin = INF;
+    int hitIndex = -1;
+    for (int i = 0; i < numSpheres; ++i) {
+        float t;
+        if (intersect(ray, spheres[i], t) && t < tMin) {
+            tMin = t;
+            hitIndex = i;
+        }
+    }
+
+    if (hitIndex == -1) {
+        return vec3(0.0); // Background color
+    }
+
+    Sphere hitSphere = spheres[hitIndex];
+    vec3 hitPoint = ray.origin + tMin * ray.direction;
+    vec3 normal = normalize(hitPoint - hitSphere.center);
+    vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0)); // Light direction
+
+    float diffuse = max(dot(normal, lightDir), 0.0);
+    return hitSphere.color * diffuse;
+}
+
+void main() {
+    ivec2 pixelCoords = ivec2(gl_GlobalInvocationID.xy);
+    if (pixelCoords.x >= int(resolution.x) || pixelCoords.y >= int(resolution.y)) {
+        return;
+    }
+
+    vec2 uv = (vec2(pixelCoords) / resolution) * 2.0 - 1.0;
+    uv.x *= resolution.x / resolution.y;
+
+    Ray ray;
+    ray.origin = cameraPos;
+    ray.direction = normalize(vec3(uv, -1.0)); // Simple camera setup
+
+    vec3 color = trace(ray, 0);
+    pixels[pixelCoords.y * int(resolution.x) + pixelCoords.x] = vec4(color, 1.0);
+}

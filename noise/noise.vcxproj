@@ -113,6 +113,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -136,7 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="block.cpp" />
     <ClCompile Include="noise.cpp" />
+    <ClCompile Include="shaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="depth.fs.txt" />
@@ -147,6 +150,15 @@
   <ItemGroup>
     <CopyFileToFolders Include="fxaa.fs.txt" />
     <CopyFileToFolders Include="fxaa.vs.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="raytracing.comp">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="block.h" />
+    <ClInclude Include="shaderProgram.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

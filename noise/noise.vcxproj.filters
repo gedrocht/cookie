@@ -18,6 +18,12 @@
     <ClCompile Include="noise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="scene.vs.txt" />
@@ -26,5 +32,14 @@
     <CopyFileToFolders Include="scene.fs.txt" />
     <CopyFileToFolders Include="fxaa.vs.txt" />
     <CopyFileToFolders Include="fxaa.fs.txt" />
+    <CopyFileToFolders Include="raytracing.comp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
