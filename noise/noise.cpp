@@ -59,10 +59,8 @@ using namespace std;
 // #define RAYTRACING
 #define DEBUG
 
-vector<tuple<float, float, float, glm::vec4>>* cubes = new vector<tuple<float, float, float, glm::vec4>>();
+vector<Block*>* blocks = new vector<Block*>();
 
-// Pixel data and synchronization
-vector<uint32_t>* pixels = new vector<uint32_t>(BARS_COUNT, 0);
 size_t currentIndex = 0;
 mutex pixelsMutex;
 bool running = true;
@@ -188,6 +186,19 @@ GLuint linkComputeProgram(GLuint computeShader) {
     return program;
 }
 
+void checkGLError(const char* stmt, const char* fname, int line) {
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR) {
+        std::cerr << "OpenGL error " << err << " at " << stmt << " in " << fname << " line " << line << std::endl;
+        exit(1);
+    }
+}
+
+#define GL_CHECK(stmt) do { \
+    stmt; \
+    checkGLError(#stmt, __FILE__, __LINE__); \
+} while (0)
+
 void renderQuad() {
     static unsigned int quadVAO = 0;
     static unsigned int quadVBO;
@@ -197,35 +208,41 @@ void renderQuad() {
             -1.0f,  1.0f,  0.0f, 1.0f,
             -1.0f, -1.0f,  0.0f, 0.0f,
              1.0f, -1.0f,  1.0f, 0.0f,
-
             -1.0f,  1.0f,  0.0f, 1.0f,
              1.0f, -1.0f,  1.0f, 0.0f,
              1.0f,  1.0f,  1.0f, 1.0f
         };
 
-        glGenVertexArrays(1, &quadVAO);
-        glGenBuffers(1, &quadVBO);
-        glBindVertexArray(quadVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 16, (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        GL_CHECK(glGenVertexArrays(1, &quadVAO));
+        GL_CHECK(glGenBuffers(1, &quadVBO));
+        GL_CHECK(glBindVertexArray(quadVAO));
+        GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, quadVBO));
+        GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW));
+        GL_CHECK(glEnableVertexAttribArray(0));
+        GL_CHECK(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0));
+        GL_CHECK(glEnableVertexAttribArray(1));
+        GL_CHECK(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float))));
     }
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+    GL_CHECK(glBindVertexArray(quadVAO));
+    GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
+    GL_CHECK(glBindVertexArray(0));
 }
 
 #ifdef RAYTRACING
 void initRayTracing() {
+    cout << "initializing ray tracing" << endl;
     // Load and compile the compute shader
-    std::string raytracingComputeShaderSource = readFile("raytracing.comp");
-    GLuint raytracingComputeShader = compileShader(raytracingComputeShaderSource.c_str(), GL_COMPUTE_SHADER);
+    std::string raytracingComputeShaderSource = ShaderProgram::readFile("raytracing.comp");
+    GLuint raytracingComputeShader = ShaderProgram::compileShader(raytracingComputeShaderSource.c_str(), GL_COMPUTE_SHADER);
+    if (!raytracingComputeShader) {
+        std::cerr << "ERROR: Compute shader compilation failed." << std::endl;
+        return;
+    }
+
+    // Link compute shader program
     rayTracingShaderProgram = linkComputeProgram(raytracingComputeShader);
     if (!rayTracingShaderProgram) {
-        std::cerr << "Compute shader program is not valid." << std::endl;
+        std::cerr << "ERROR: Compute shader program linking failed." << std::endl;
         return;
     }
 
@@ -251,6 +268,12 @@ void initRayTracing() {
 }
 
 void renderRayTracedScene() {
+    cout << "rendering ray traced scene" << endl;
+    if (rayTracingShaderProgram == 0) {
+        std::cerr << "ERROR: rayTracingShaderProgram is not valid." << std::endl;
+        return;
+    }
+
     // Use the compute shader program
     glUseProgram(rayTracingShaderProgram);
 
@@ -262,15 +285,34 @@ void renderRayTracedScene() {
     };
     glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(spheres), spheres);
 
+    // Check for any OpenGL errors
+    GLenum err;
+    while ((err = glGetError()) != GL_NO_ERROR) {
+        std::cerr << "OpenGL error after updating SSBOs: " << err << std::endl;
+    }
+
     // Set uniforms
-    glUniform3fv(glGetUniformLocation(rayTracingShaderProgram, "cameraPos"), 1, glm::value_ptr(glm::vec3(camX, camY, camZ)));
-    glUniform2f(glGetUniformLocation(rayTracingShaderProgram, "resolution"), PIXEL_WIDTH, PIXEL_HEIGHT);
+    GLint cameraPosLoc = glGetUniformLocation(rayTracingShaderProgram, "cameraPos");
+    GLint resolutionLoc = glGetUniformLocation(rayTracingShaderProgram, "resolution");
+
+    if (cameraPosLoc == -1 || resolutionLoc == -1) {
+        std::cerr << "ERROR: Failed to get uniform locations." << std::endl;
+        return;
+    }
+
+    glUniform3fv(cameraPosLoc, 1, glm::value_ptr(glm::vec3(camX, camY, camZ)));
+    glUniform2f(resolutionLoc, PIXEL_WIDTH, PIXEL_HEIGHT);
 
     // Dispatch compute shader
-    glDispatchCompute((GLuint)PIXEL_WIDTH / 16, (GLuint)PIXEL_HEIGHT / 16, 1);
+    glDispatchCompute((GLuint)(PIXEL_WIDTH + 15) / 16, (GLuint)(PIXEL_HEIGHT + 15) / 16, 1);
 
     // Ensure compute shader has completed
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
+
+    // Check for any OpenGL errors
+    while ((err = glGetError()) != GL_NO_ERROR) {
+        std::cerr << "OpenGL error after dispatching compute shader: " << err << std::endl;
+    }
 
     // Copy SSBO result to texture
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboResult);
@@ -364,11 +406,12 @@ void handleClient(SOCKET clientSocket) {
 
         uint8_t volumeByte = (uint8_t)audioData;
 
-        volumeByte &= 224;
+        if ((volumeByte & 224) == 0) {
+            volumeByte = 0;
+        }
         if (numClients > 1 && volumeByte == 0) {
             continue;
         }
-
         volumeByte |= volumeByte >> 3;
 
         uint8_t frequencyByte = (uint8_t)(audioData >> 8);
@@ -384,14 +427,20 @@ void handleClient(SOCKET clientSocket) {
 
         uint32_t color = 0xFF000000 + (((uint32_t)volumeByte) << 16) + (((uint32_t)volumeByte) << 8) + ((uint32_t)volumeByte);
         color &= frequencyColor;
-        color &= 4293980400; // 11111111 11110000 11110000 11110000
+        // color &= 4293980400; // 11111111 11110000 11110000 11110000
 
-        lock_guard<mutex> guard(pixelsMutex);
-        // Update only one pixel at a time
-        (*pixels)[currentIndex] = color;
-
-        // Increment the index and wrap around if necessary
-        currentIndex = (currentIndex + 1) % pixels->size();
+        {
+            std::lock_guard<std::mutex> guard(pixelsMutex);
+            // Update only one pixel at a time
+            blocks->at(currentIndex)->setColor(
+                (color >> 16) & 0xFF,
+                (color >> 8)  & 0xFF,
+                        color & 0xFF,
+                (color >> 24) & 0xFF);
+            cout << currentIndex << endl;
+            // Increment the index and wrap around if necessary
+            currentIndex = (currentIndex + 1) % (BARS_COUNT);
+        }
     }
 
 #ifdef _WIN32
@@ -733,34 +782,6 @@ void updateDepthUniforms() {
     glUniformMatrix4fv(modelLocDepth, 1, GL_FALSE, glm::value_ptr(model));
 }
 
-// Function to draw a cube
-void drawCube(float x, float y, float z, float size, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    if (r + g + b == 0) {
-        return;
-    }
-    // Calculate brightness as the average of the RGB values
-    float brightness = (r + g + b) / 765.0f;
-
-    // Use brightness to scale the y-axis size
-    float yScale = 1.0f + brightness * 50.0f;
-
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::scale(model, glm::vec3(size * 0.9f, size * 0.9f, size * 0.9f));
-
-    // Convert RGBA values to [0,1] range
-    glm::vec4 color = glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
-
-    glUseProgram(sceneShaderProgram->program);
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniform1f(yScaleLoc, yScale);
-    glUniform3fv(glGetUniformLocation(sceneShaderProgram->program, "cubeColor"), 1, glm::value_ptr(color)); // Pass the color
-
-    glBindVertexArray(VAO); // Bind the VAO
-    glDrawArrays(GL_TRIANGLES, 0, 36); // Draw the cube
-    glBindVertexArray(0); // Unbind the VAO
-}
-
 // Function to render the scene
 // This function is responsible for rendering the entire scene using the specified shader program
 void renderScene(ShaderProgram* shaderProgram) {
@@ -790,40 +811,45 @@ void renderScene(ShaderProgram* shaderProgram) {
     }
 
     // Lock the mutex to safely access the pixel data
-    std::lock_guard<std::mutex> guard(pixelsMutex);
 
-    auto it = pixels->begin();
-    for (int z = 0; z < VERT_BARS; ++z) {
-        float zCoord = z * Block::size - static_cast<float>(HALF_VERT_BARS);
-        for (int x = 0; x < HORIZ_BARS; ++x, ++it) {
-            int index = z * HORIZ_BARS + x;
-            uint32_t color = *it;
+    {
+        std::lock_guard<std::mutex> guard(pixelsMutex);
 
-            uint8_t a = (color >> 24) & 0xFF;
-            uint8_t r = (color >> 16) & 0xFF;
-            uint8_t g = (color >> 8) & 0xFF;
-            uint8_t b = color & 0xFF;
+        auto block_iterator = blocks->begin();
+        uint32_t color = 0;
+        int pixelIndex = 0;
+        glm::vec3 camPositionVec3 = glm::vec3(camX, camY, camZ);
+        for (int z = 0; z < VERT_BARS; ++z) {
+            float zCoord = z * Block::size - (float)(HALF_VERT_BARS);
+            for (int x = 0; x < HORIZ_BARS; ++x, ++block_iterator) {
+                pixelIndex = z * HORIZ_BARS + x;
 
-            float distance = glm::length(glm::vec3(camX, camY, camZ) - glm::vec3(x * Block::size - (float)HALF_HORIZ_BARS, 0.0f, zCoord));
-            cubes->push_back(std::make_tuple(distance, x * Block::size - (float)HALF_HORIZ_BARS, zCoord, glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f)));
+                (*block_iterator)->x = x * Block::size - (float)HALF_HORIZ_BARS;
+                // block->y = 0.0f;
+                (*block_iterator)->z = zCoord;
+
+                (*block_iterator)->distance = glm::length(camPositionVec3 - glm::vec3((*block_iterator)->x, (*block_iterator)->y, (*block_iterator)->z));
+                // cubes->push_back(std::make_tuple(distance, x * Block::size - (float)HALF_HORIZ_BARS, zCoord, glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f)));
+            }
         }
+        /*
+        sort(blocks->begin(), blocks->end(), [](Block* a, Block* b) {
+            return a->distance > b->distance;  // Sort by distance in descending order
+            });
+        */
+        for (int i = 0; i < blocks->size(); i++) {
+            blocks->at(i)->draw(sceneShaderProgram, &modelLoc, &yScaleLoc, &VAO);
+        }
+        
     }
-
-    sort(cubes->begin(), cubes->end(), [](const auto& a, const auto& b) {
-        return get<0>(a) > get<0>(b);  // Sort by distance in descending order
-    });
-
-    for (const auto& cube : *cubes) {
-        drawCube(std::get<1>(cube),
-                 0.0f,
-                 std::get<2>(cube),
-                 Block::size,
-                 static_cast<uint8_t>(std::get<3>(cube).r * 255),
-                 static_cast<uint8_t>(std::get<3>(cube).g * 255),
-                 static_cast<uint8_t>(std::get<3>(cube).b * 255),
-                 static_cast<uint8_t>(std::get<3>(cube).a * 255));
+    /*
+    block_iterator = blocks->begin();
+    while (block_iterator != blocks->end()) {
+        block = *block_iterator;
+        block->draw(sceneShaderProgram, &modelLoc, &yScaleLoc, &VAO);
+        block_iterator++;
     }
-    cubes->clear();
+    */
 
 #ifdef ANTIALIASING
     // Resolve multisampled framebuffer to a regular framebuffer if antialiasing is enabled
@@ -1035,6 +1061,10 @@ int graphicsThread(int argc, char* argv[]) {
 
 // Main function
 int main(int argc, char* argv[]) {
+    for (int i = 0; i < BARS_COUNT; i++) {
+        blocks->push_back(new Block());
+    }
+
     // Create a thread for the graphics rendering
     thread gThread(graphicsThread, argc, argv);
 

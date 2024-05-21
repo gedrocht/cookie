@@ -14,14 +14,14 @@ ShaderProgram::ShaderProgram() {
 ShaderProgram::ShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath) {
     // Compile and link shaders
     // Read vertex and fragment shader source code from files
-    vertexShaderSource = readFile(vertexShaderPath);
-    fragmentShaderSource = readFile(fragmentShaderPath);
+    vertexShaderSource = ShaderProgram::readFile(vertexShaderPath);
+    fragmentShaderSource = ShaderProgram::readFile(fragmentShaderPath);
     // Compile vertex shader using the source code
     // GL_VERTEX_SHADER specifies that the shader is a vertex shader
-    compiledVertexShader = compileShader(vertexShaderSource.c_str(), GL_VERTEX_SHADER);
+    compiledVertexShader = ShaderProgram::compileShader(vertexShaderSource.c_str(), GL_VERTEX_SHADER);
     // Compile fragment shader using the source code
     // GL_FRAGMENT_SHADER specifies that the shader is a fragment shader
-    compiledFragmentShader = compileShader(fragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
+    compiledFragmentShader = ShaderProgram::compileShader(fragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
     // Link the compiled vertex and fragment shaders into a shader program
     program = linkProgram(compiledVertexShader, compiledFragmentShader);
 }
