@@ -33,6 +33,12 @@
 // #define RAYTRACING
 #define DEBUG
 
+struct Sphere {
+    glm::vec3 center;
+    float radius;
+    glm::vec3 color;
+};
+
 class GraphicsHandler {
 public:
     mutex* pixelsMutex;
@@ -41,13 +47,10 @@ public:
 
     Camera* camera;
 
-    float lightAngle = 0;
-    float lightDistance = 20.0f;
-    float lightSpeed = 0.0174533f;
-
-    // Light position
+    float lightAngle;
+    float lightDistance;
+    float lightSpeed;
     glm::vec3 lightPos;
-    //glm::vec3 lightPos(0.0f, 50.0f, 0.0f);
 
     // Shader and framebuffer objects
     GLuint depthMapFBO, depthMap;
@@ -70,6 +73,8 @@ public:
 
     // Uniform locations for shaders
     GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, yScaleLoc;
+    
+    GLFWwindow* window;
 
     // VBO and VAO
     unsigned int VBO, VAO;
@@ -80,40 +85,43 @@ public:
         glm::vec3 color;
     };
 
-    int numSpheres = 1; // Adjust the number of spheres as needed
+    int numSpheres; // Adjust the number of spheres as needed
 
     GraphicsHandler(mutex* pixelsMutex, vector<Block*>* blocks);
+    
+    void calculateShadows();
+    void processAntiAliasing();
+    void setUpSceneForMSAA();
     void renderScene(ShaderProgram* shaderProgram);
-
-    // Function to link a compute shader into a program
-    GLuint linkComputeProgram(GLuint computeShader);
-
-    void checkGLError(const char* stmt, const char* fname, int line);
-
-#define GL_CHECK(stmt) do { \
-    stmt; \
-    checkGLError(#stmt, __FILE__, __LINE__); \
-} while (0)
-
+    void drawBlocks();
     void renderQuad();
 
-#ifdef RAYTRACING
-    void initRayTracing();
-    void renderRayTracedScene();
-    void cleanup(GLFWwindow* window);
-#endif 
-
-    // Function to initialize OpenGL settings
+    int initializeGraphics();
     void initGL();
+    void initShadows();
     void initMSAA();
     void initFXAA();
+    void cleanup();
+
+    void checkGLError(const char* stmt, const char* fname, int line);
 
     // Function to update shader uniforms
     void updateSceneUniforms();
     void updateDepthUniforms();
 
-    void drawBlocks();
-
     // Main graphics rendering thread
     int graphicsThread(int argc, char* argv[]);
+    void update();
+
+#ifdef RAYTRACING
+    GLuint linkComputeProgram(GLuint computeShader);
+    void initRayTracing();
+    void renderRayTracedScene();
+    void cleanupRayTracing(GLFWwindow* window);
+#endif 
+
+#define GL_CHECK(stmt) do { \
+    stmt; \
+    checkGLError(#stmt, __FILE__, __LINE__); \
+} while (0)
 };

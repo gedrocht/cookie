@@ -51,10 +51,8 @@ public:
 // Function to receive a uint32_t value over a socket
 template <typename T>
 bool ClientHandler<T>::receiveUint32(SOCKET clientSocket, uint32_t& value) {
-    cout << "receiving data from client" << endl;
     char buffer[sizeof(uint32_t)];
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
-    cout << "data has been received" << endl;
 
     if (bytesReceived == sizeof(uint32_t)) {
         memcpy(&value, buffer, sizeof(uint32_t));
