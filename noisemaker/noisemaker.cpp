@@ -351,7 +351,7 @@ int main() {
         if (duration >= FRAME_DELAY) {
             if (!volumeValues.empty()) {
                 float averageVolume = static_cast<float>(accumulate(volumeValues.begin(), volumeValues.end(), 0.0) / volumeValues.size());
-                averageVolume /= 0.00012f;
+                averageVolume /= 0.00025f;
                 if (averageVolume > 255) {
                     averageVolume = 255;
                 }

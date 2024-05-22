@@ -17,21 +17,11 @@
 #include <gtc/type_ptr.hpp>     // For converting GLM types to pointers
 #include <gtx/string_cast.hpp>  // For converting GLM types to strings
 
-#ifdef _WIN32
-
-#ifdef APIENTRY
-#undef APIENTRY
-#endif
-#include <winsock2.h>           // For Windows-specific socket operations
-#pragma comment(lib, "ws2_32.lib") // Link with the Windows Sockets library
-#else
-#include <sys/socket.h>         // For Unix/Linux socket operations
-#include <netinet/in.h>         // For internet address family
-#include <unistd.h>             // For POSIX operating system API
-#endif
-
 #include "block.h"
 #include "shaderProgram.h"
+#include "camera.h"
+#include "colorHandler.h"
+#include "clientHandler.h"
 
 using namespace std;
 
@@ -63,26 +53,11 @@ vector<Block*>* blocks = new vector<Block*>();
 
 size_t currentIndex = 0;
 mutex pixelsMutex;
-bool running = true;
-
-int numClients = 0;
-
-float centerX = 0.0f;
-float centerZ = 0.0f;
-
-// Camera position and direction
-float camX = 46.4018f;
-float camY = 142.5f;
-float camZ = 89.3235f;
-float camYaw = -5.89561f;
-float camPitch = 4.23407f;
-//float camPitch = -2.77f;
-float camOrbitSpeed = 0.000174533f * 5; // 0.01 degree in radians
-float camOrbitDistance = 120.0f;
 
 // Constants for movement speed and mouse sensitivity
 const float speed = 0.25f;
 const float sensitivity = 0.0005f;
+
 float lightAngle = 0;
 float lightDistance = 20.0f;
 float lightSpeed = 0.0174533f;
@@ -336,119 +311,6 @@ void cleanup(GLFWwindow* window) {
     glfwTerminate();
 }
 #endif 
-
-// Function to receive a uint32_t value over a socket
-bool receiveUint32(SOCKET clientSocket, uint32_t& value) {
-    char buffer[sizeof(uint32_t)];
-    int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
-
-    if (bytesReceived == sizeof(uint32_t)) {
-        memcpy(&value, buffer, sizeof(uint32_t));
-        return true;
-    }
-    else {
-        // cerr << "Failed to receive uint32_t\n";
-        return false;
-    }
-}
-
-// Function to convert HSL to RGB
-unsigned int HSLtoRGB(float hue, float saturation, float lightness) {
-    float r, g, b;
-
-    if (saturation == 0) {
-        r = g = b = lightness;
-    }
-    else {
-        auto hue2rgb = [](float p, float q, float t) {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-            if (t < 0.167f) return p + (q - p) * 6 * t;
-            if (t < 0.500f) return q;
-            if (t < 0.667f) return p + (q - p) * (0.667f - t) * 6;
-            return p;
-            };
-
-        float q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-        float p = 2 * lightness - q;
-
-        r = hue2rgb(p, q, hue + 0.333f);
-        g = hue2rgb(p, q, hue);
-        b = hue2rgb(p, q, hue - 0.333f);
-    }
-
-    unsigned int R = static_cast<unsigned int>(r * 255);
-    unsigned int G = static_cast<unsigned int>(g * 255);
-    unsigned int B = static_cast<unsigned int>(b * 255);
-
-    return 0xFF000000 | (R << 16) | (G << 8) | B;
-}
-
-// Array of 16 hues representing a full rainbow
-float hues[16] = {
-     0.0f / 16,  1.0f / 16,  2.0f / 16,  3.0f / 16,
-     4.0f / 16,  5.0f / 16,  6.0f / 16,  7.0f / 16,
-     8.0f / 16,  9.0f / 16, 10.0f / 16, 11.0f / 16,
-    12.0f / 16, 13.0f / 16, 14.0f / 16, 15.0f / 16
-};
-
-// Function to handle client connections and update pixel data
-void handleClient(SOCKET clientSocket) {
-    cout << "Handling new client" << endl;
-
-    numClients++;
-    while (running) {
-        uint32_t audioData;
-        if (!receiveUint32(clientSocket, audioData)) {
-            numClients--;
-            break;
-        }
-
-        uint8_t volumeByte = (uint8_t)audioData;
-
-        if ((volumeByte & 224) == 0) {
-            volumeByte = 0;
-        }
-        if (numClients > 1 && volumeByte == 0) {
-            continue;
-        }
-        volumeByte |= volumeByte >> 3;
-
-        uint8_t frequencyByte = (uint8_t)(audioData >> 8);
-
-        // Determine the hue index
-        int hueIndex = frequencyByte / 16;
-
-        // Convert the hue to RGB with constant saturation and lightness
-        float saturation = 1.0f;
-        float lightness = 0.5f;
-
-        uint32_t frequencyColor = HSLtoRGB(hues[hueIndex], saturation, lightness);
-
-        uint32_t color = 0xFF000000 + (((uint32_t)volumeByte) << 16) + (((uint32_t)volumeByte) << 8) + ((uint32_t)volumeByte);
-        color &= frequencyColor;
-        // color &= 4293980400; // 11111111 11110000 11110000 11110000
-
-        {
-            std::lock_guard<std::mutex> guard(pixelsMutex);
-            // Update only one pixel at a time
-            blocks->at(currentIndex)->setColor(
-                (color >> 16) & 0xFF,
-                (color >> 8)  & 0xFF,
-                        color & 0xFF,
-                (color >> 24) & 0xFF);
-            cout << currentIndex << endl;
-            // Increment the index and wrap around if necessary
-            currentIndex = (currentIndex + 1) % (BARS_COUNT);
-        }
-    }
-
-#ifdef _WIN32
-    closesocket(clientSocket);
-#else
-    close(clientSocket);
-#endif
-}
 
 // Function to handle window resize
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -747,15 +609,15 @@ void initGL() {
 }
 
 // Function to update shader uniforms
-void updateSceneUniforms() {
-    float cosCamPitch = cos(camPitch);
+void updateSceneUniforms(Camera* camera) {
+    float cosCamPitch = cos(camera->xRotation);
 
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(
-        glm::vec3(camX, camY, camZ),
-        glm::vec3(camX + cosCamPitch * sin(camYaw),
-            camY + sin(camPitch),
-            camZ + cosCamPitch * cos(camYaw)),
+        glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition),
+        glm::vec3(camera->xPosition + cosCamPitch * sin(camera->yRotation),
+            camera->yPosition + sin(camera->xRotation),
+            camera->zPosition + cosCamPitch * cos(camera->yRotation)),
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
     glm::mat4 projection = glm::perspective(0.785398f, PIXEL_ASPECT_RATIO, 0.1f, 1000.0f);
@@ -766,7 +628,7 @@ void updateSceneUniforms() {
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
-    glUniform3fv(viewPosLoc, 1, glm::value_ptr(glm::vec3(camX, camY, camZ)));
+    glUniform3fv(viewPosLoc, 1, glm::value_ptr(glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition)));
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
@@ -784,7 +646,7 @@ void updateDepthUniforms() {
 
 // Function to render the scene
 // This function is responsible for rendering the entire scene using the specified shader program
-void renderScene(ShaderProgram* shaderProgram) {
+void renderScene(ShaderProgram* shaderProgram, Camera* camera) {
 #ifdef ANTIALIASING
 #ifdef MSAA
     // If both ANTIALIASING and MSAA are defined and the scene shader program is used
@@ -803,7 +665,7 @@ void renderScene(ShaderProgram* shaderProgram) {
     // Update uniforms based on the shader program being used
     if (shaderProgram == sceneShaderProgram) {
         // If the scene shader program is used, update the scene-related uniforms
-        updateSceneUniforms();
+        updateSceneUniforms(camera);
     }
     else if (shaderProgram == depthShaderProgram) {
         // If the depth shader program is used, update the depth-related uniforms
@@ -818,7 +680,7 @@ void renderScene(ShaderProgram* shaderProgram) {
         auto block_iterator = blocks->begin();
         uint32_t color = 0;
         int pixelIndex = 0;
-        glm::vec3 camPositionVec3 = glm::vec3(camX, camY, camZ);
+        glm::vec3 camPositionVec3 = glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition);
         for (int z = 0; z < VERT_BARS; ++z) {
             float zCoord = z * Block::size - (float)(HALF_VERT_BARS);
             for (int x = 0; x < HORIZ_BARS; ++x, ++block_iterator) {
@@ -896,20 +758,9 @@ void updateLightPosition() {
     }
 }
 
-// Make the camera orbit
-void rotateCameraAroundCenter() {
-    float newCamAngle = -1 * (camYaw - 1.65f);
-    camX = camOrbitDistance * cos(newCamAngle) + centerX;
-    camZ = camOrbitDistance * sin(newCamAngle) + centerZ;
-    camYaw -= camOrbitSpeed;
-
-    if (camYaw < 0) {
-        camYaw += 6.28318f;
-    }
-}
-
 // Main graphics rendering thread
 int graphicsThread(int argc, char* argv[]) {
+    Camera* camera = new Camera();
     // Initialize GLFW
     // GLFW is a library that creates windows with OpenGL contexts and manages input/events
     if (!glfwInit()) {  // Initialize the GLFW library
@@ -1005,7 +856,7 @@ int graphicsThread(int argc, char* argv[]) {
         // updateLightPosition();
 
         // Rotate the camera around the center of the scene
-        // rotateCameraAroundCenter();
+        // camera->rotateAroundCenter();
 
 #ifdef RAYTRACING
         renderRayTracedScene();
@@ -1022,7 +873,7 @@ int graphicsThread(int argc, char* argv[]) {
         // Clear the depth buffer to prepare for new depth data
         glClear(GL_DEPTH_BUFFER_BIT);
         // Render the scene using the depth shader program
-        renderScene(depthShaderProgram);
+        renderScene(depthShaderProgram, camera);
         // Unbind the framebuffer to return to the default framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -1033,7 +884,7 @@ int graphicsThread(int argc, char* argv[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // Render the scene using the scene shader program
 
-        renderScene(sceneShaderProgram);
+        renderScene(sceneShaderProgram, camera);
 #endif
 
 
@@ -1061,66 +912,16 @@ int graphicsThread(int argc, char* argv[]) {
 
 // Main function
 int main(int argc, char* argv[]) {
+    static int numClients = 0;
     for (int i = 0; i < BARS_COUNT; i++) {
         blocks->push_back(new Block());
     }
 
     // Create a thread for the graphics rendering
     thread gThread(graphicsThread, argc, argv);
-
-#ifdef _WIN32
-    WSADATA wsaData;
-    int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (result != 0) {
-        fprintf(stderr, "WSAStartup failed with error: %d\n", result);
-        exit(EXIT_FAILURE); // or return from the function if it is not the main function
-    }
-#endif
-
-    cout << "initializing server socket" << endl;
-    SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverSocket == INVALID_SOCKET) {
-        cerr << "Can't create a socket!";
-        return 1;
-    }
-
-    sockaddr_in serverHint = {};
-    serverHint.sin_family = AF_INET;
-    serverHint.sin_port = htons(1989);
-    serverHint.sin_addr.s_addr = INADDR_ANY;
-
-    cout << "binding" << endl;
-    if (bind(serverSocket, (sockaddr*)&serverHint, sizeof(serverHint)) == SOCKET_ERROR) {
-        cerr << "Bind failed with error: " << WSAGetLastError() << endl;
-        closesocket(serverSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    cout << "listening" << endl;
-    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
-        cerr << "Listen failed with error: " << WSAGetLastError() << endl;
-        closesocket(serverSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    sockaddr_in client = {};
-    int clientSize = sizeof(client);
-
-    while (true) {
-        cout << "ready to accept clients" << endl;
-        SOCKET clientSocket = accept(serverSocket, (sockaddr*)&client, &clientSize);
-        cout << "accepted client connection" << endl;
-        thread clientThread(handleClient, clientSocket);
-        cout << "initialized client thread" << endl;
-        clientThread.detach();
-        cout << "client thread detached" << endl;
-    }
-
-#ifdef _WIN32
-    WSACleanup();
-#endif
+    int x = BARS_COUNT;
+    ClientHandler<Block>* clientHandler = new ClientHandler<Block>(&pixelsMutex, blocks, x, reinterpret_cast<int*>(&currentIndex), &numClients);
+    clientHandler->initialize();
 
     gThread.join();
     return 0;

@@ -138,6 +138,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="block.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="colorHandler.cpp" />
     <ClCompile Include="noise.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
   </ItemGroup>
@@ -158,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="clientHandler.h" />
+    <ClInclude Include="colorHandler.h" />
     <ClInclude Include="shaderProgram.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

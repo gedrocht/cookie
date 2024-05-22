@@ -41,14 +41,16 @@ void Block::setColor(uint8_t rVal, uint8_t gVal, uint8_t bVal, uint8_t aVal) {
     this->target_a = aVal;
 }
 
-int get_tween(int current, int target) {
-    if (current < target) {
-        return (target - current) / 5;
+float get_tween(int current, int target) {
+    float f_current = (float)current;
+    float f_target = (float)target;
+    if (f_current < f_target) {
+        return (f_target - f_current) / 7.0f;
     }
-    else if (current > target) {
-        return -1 * ((current - target) / 5);
+    else if (f_current > f_target) {
+        return -1 * ((f_current - f_target) / 7.0f);
     }
-    return 0;
+    return 0.0f;
 }
 
 void Block::draw(ShaderProgram *shaderProgram, GLint* modelLoc, GLint* yScaleLoc, unsigned int* VAO) {
@@ -62,9 +64,9 @@ void Block::draw(ShaderProgram *shaderProgram, GLint* modelLoc, GLint* yScaleLoc
     //if (this->current_b != this->target_b) {
       
 
-    int r_tween = get_tween(current_r, target_r);
-    int g_tween = get_tween(current_g, target_g);
-    int b_tween = get_tween(current_b, target_b);
+    float r_tween = get_tween(current_r, target_r);
+    float g_tween = get_tween(current_g, target_g);
+    float b_tween = get_tween(current_b, target_b);
 
     if (abs(r_tween) < 1) {
         this->current_r = this->target_r;
@@ -79,9 +81,9 @@ void Block::draw(ShaderProgram *shaderProgram, GLint* modelLoc, GLint* yScaleLoc
         b_tween = 0;
     }
 
-    this->current_r += r_tween;
-    this->current_g += g_tween;
-    this->current_b += b_tween;
+    this->current_r = (uint8_t)(((float)this->current_r) + r_tween);
+    this->current_g = (uint8_t)(((float)this->current_g) + g_tween);
+    this->current_b = (uint8_t)(((float)this->current_b) + b_tween);
 
     /*
     this->current_r = this->target_r;
