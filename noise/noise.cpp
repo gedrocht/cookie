@@ -35,8 +35,8 @@ mutex pixelsMutex;
 InputHandler* inputHandler;
 GraphicsHandler* graphicsHandler;
 
-int graphicsThread(int argc, char* argv[]) {
-    return graphicsHandler->graphicsThread(argc, argv);
+int graphicsThread(int argc, char* argv[], int* currentIndex) {
+    return graphicsHandler->graphicsThread(argc, argv, currentIndex);
 }
 
 // Main function
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
     graphicsHandler = new GraphicsHandler(&pixelsMutex, blocks);
 
     // Create a thread for the graphics rendering
-    thread gThread(graphicsThread, argc, argv);
+    thread gThread(graphicsThread, argc, argv, reinterpret_cast<int*>(&currentIndex));
     ClientHandler<Block>* clientHandler = new ClientHandler<Block>(&pixelsMutex, blocks, BARS_COUNT, reinterpret_cast<int*>(&currentIndex), &numClients);
     clientHandler->initialize();
 

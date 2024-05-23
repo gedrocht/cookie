@@ -71,7 +71,6 @@ void ClientHandler<T>::handleClient(ClientHandler<T>* clientHandler) {
 
     (*clientHandler->numClients)++;
     while (clientHandler->running) {
-        cout << "client handler is running" << endl;
         uint32_t audioData;
         if (!receiveUint32(*clientHandler->clientSocket, audioData)) {
             (*clientHandler->numClients)--;

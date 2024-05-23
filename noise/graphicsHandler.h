@@ -9,6 +9,7 @@
 #include <gtc/matrix_transform.hpp> // For transformations such as translation, rotation, and scaling
 #include <gtc/type_ptr.hpp>     // For converting GLM types to pointers
 #include <gtx/string_cast.hpp>  // For converting GLM types to strings
+#include "stb_image.h"
 #include "shaderProgram.h"
 #include "camera.h"
 #include "block.h"
@@ -20,7 +21,7 @@
 #define PIXEL_HEIGHT 666
 #define PIXEL_COUNT ((PIXEL_WIDTH/10) * (PIXEL_HEIGHT/10))
 #define PIXEL_ASPECT_RATIO 1.777777777777778f
-#define SHADOW_WIDTH 666
+#define SHADOW_WIDTH 1000
 #define SHADOW_HEIGHT 666
 #define HORIZ_BARS 66
 #define VERT_BARS 66
@@ -30,7 +31,6 @@
 
 #define ANTIALIASING
 #define MSAA
-// #define RAYTRACING
 #define DEBUG
 
 struct Sphere {
@@ -45,7 +45,9 @@ public:
 
     vector<Block*>* blocks = new vector<Block*>();
 
-    Camera* camera;
+    Camera* mainCamera;
+    Camera* reflectionCamera;
+    Camera* refractionCamera;
 
     float lightAngle;
     float lightDistance;
@@ -61,15 +63,12 @@ public:
     GLuint msaaColorBuffer, msaaFBO, msaaRBO;
 #endif
 #endif
+
+    GLuint reflectionFBO, refractionFBO;
+    GLuint reflectionTexture, refractionTexture, shadowMap;
+
     ShaderProgram* depthShaderProgram;
     ShaderProgram* sceneShaderProgram;
-
-#ifdef RAYTRACING
-    GLuint rayTracingShaderProgram;
-    GLuint ssboSpheres;
-    GLuint ssboResult;
-    GLuint resultTexture;
-#endif
 
     // Uniform locations for shaders
     GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, yScaleLoc;
@@ -85,6 +84,8 @@ public:
         glm::vec3 color;
     };
 
+    GLuint envMap;
+
     int numSpheres; // Adjust the number of spheres as needed
 
     GraphicsHandler(mutex* pixelsMutex, vector<Block*>* blocks);
@@ -92,6 +93,8 @@ public:
     void calculateShadows();
     void processAntiAliasing();
     void setUpSceneForMSAA();
+    void renderRefractionTexture();
+    void renderReflectionTexture();
     void renderScene(ShaderProgram* shaderProgram);
     void drawBlocks();
     void renderQuad();
@@ -101,24 +104,24 @@ public:
     void initShadows();
     void initMSAA();
     void initFXAA();
+    void initReflectionRefraction();
+    void initEnvironmentMap();
+    GLuint loadCubemap(std::vector<std::string> faces);
+
     void cleanup();
+
+    void updateLightOrbit(float centerX, float centerY, float centerZ);
 
     void checkGLError(const char* stmt, const char* fname, int line);
 
+    glm::mat4 calculateLightSpaceMatrix();
     // Function to update shader uniforms
-    void updateSceneUniforms();
+    void updateSceneUniforms(Camera* selectedCamera);
     void updateDepthUniforms();
 
     // Main graphics rendering thread
-    int graphicsThread(int argc, char* argv[]);
-    void update();
-
-#ifdef RAYTRACING
-    GLuint linkComputeProgram(GLuint computeShader);
-    void initRayTracing();
-    void renderRayTracedScene();
-    void cleanupRayTracing(GLFWwindow* window);
-#endif 
+    int graphicsThread(int argc, char* argv[], int* currentIndex);
+    void update(int* currentIndex);
 
 #define GL_CHECK(stmt) do { \
     stmt; \

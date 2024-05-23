@@ -111,7 +111,7 @@ void Block::draw(ShaderProgram *shaderProgram, GLint* modelLoc, GLint* yScaleLoc
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(this->x, this->y, this->z));
-    model = glm::scale(model, glm::vec3(ninetyPercentSize, ninetyPercentSize, ninetyPercentSize));
+    model = glm::scale(model, glm::vec3(ninetyPercentSize, ninetyPercentSize * current_yScale, ninetyPercentSize));
 
     // Convert RGBA values to [0,1] range
     glm::vec4 current_color = glm::vec4(

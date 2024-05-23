@@ -10,17 +10,23 @@ Camera::Camera() {
 	this->yRotation = -5.89561f;
 	this->xRotation = 4.23407f;
 	//this->camPitch = -2.77f;
-	this->orbitSpeed = 0.000174533f * 5; // 0.01 degree in radians
+	this->orbitSpeed = 0.000174533f * 20; // 0.01 degree in radians
 	this->orbitDistance = 120.0f;
+    this->orbitAngle = 0.0f; // Start angle for the orbit
 }
 
-void Camera::rotateAroundCenter(float xCenter, float zCenter) {
-	float newAngle = -1 * (yRotation - 1.65f);
-	xPosition = orbitDistance * cos(newAngle) + xCenter;
-	zPosition = orbitDistance * sin(newAngle) + zCenter;
-	yRotation -= orbitSpeed;
+void Camera::updateOrbit(float centerX, float centerY, float centerZ) {
+    this->orbitAngle += this->orbitSpeed; // Update the angle for the orbit
 
-	if (yRotation < 0) {
-		yRotation += 6.28318f;
-	}
+    // Calculate new camera position using polar coordinates
+    this->xPosition = centerX + orbitDistance * cos(orbitAngle);
+    this->zPosition = centerZ + orbitDistance * sin(orbitAngle);
+    this->yPosition = centerY; // Maintain the same height (or adjust as needed)
+
+    // Ensure the camera is pointing at the center
+    float cosCamPitch = cos(this->xRotation);
+    glm::vec3 cameraPos = glm::vec3(this->xPosition, this->yPosition, this->zPosition);
+    glm::vec3 cameraTarget = glm::vec3(centerX, centerY, centerZ);
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::mat4 view = glm::lookAt(cameraPos, cameraTarget, up);
 }

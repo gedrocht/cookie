@@ -9,15 +9,7 @@ GLuint fxaaFBO, texColorBuffer;
 GLuint msaaColorBuffer, msaaFBO, msaaRBO;
 #endif
 #endif
-ShaderProgram* depthShaderProgram;
 ShaderProgram* sceneShaderProgram;
-
-#ifdef RAYTRACING
-GLuint rayTracingShaderProgram;
-GLuint ssboSpheres;
-GLuint ssboResult;
-GLuint resultTexture;
-#endif
 
 // Uniform locations for shaders
 GLint modelLoc, viewLoc, projectionLoc, lightPosLoc, viewPosLoc, lightSpaceMatrixLoc, yScaleLoc;
@@ -71,32 +63,15 @@ float vertices[] = {
 };
 
 GraphicsHandler::GraphicsHandler(mutex* pixelsMutex, vector<Block*>* blocks) {
-    this->lightPos = glm::vec3(-40.0f, 300.0f, 100.0f);
+    this->lightPos = glm::vec3(-40.0f, 100.0f, 100.0f);
+    this->lightPos = glm::vec3(-40, 80, 0);
     this->pixelsMutex = pixelsMutex;
     this->blocks = blocks;
     this->lightAngle = 0;
-    this->lightDistance = 20.0f;
+    this->lightDistance = 100.0f;
     this->lightSpeed = 0.0174533f;
     this->numSpheres = 1;
 }
-
-#ifdef RAYTRACING
-// Function to link a compute shader into a program
-GLuint GraphicsHandler::linkComputeProgram(GLuint computeShader) {
-    GLuint program = glCreateProgram();
-    glAttachShader(program, computeShader);
-    glLinkProgram(program);
-
-    int success;
-    char infoLog[512];
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
-        cerr << "ERROR::PROGRAM::LINKING_FAILED\n" << infoLog << endl;
-    }
-    return program;
-}
-#endif
 
 void GraphicsHandler::checkGLError(const char* stmt, const char* fname, int line) {
     GLenum err = glGetError();
@@ -215,54 +190,36 @@ void GraphicsHandler::initFXAA() {
 }
 
 void GraphicsHandler::initShadows() {
-    // Get uniform locations for depth shader
-        // Use the depth shader program
-    glUseProgram(depthShaderProgram->program);
-    // Retrieve uniform locations for transformation matrices specific to the depth shader
-    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram->program, "lightSpaceMatrix");
-    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram->program, "model");
-
-    // Create framebuffer object for shadow mapping
-    // A framebuffer is an OpenGL object that contains buffers for color, depth, and stencil data
-    glGenFramebuffers(1, &depthMapFBO);  // Generate one framebuffer object
-    // Create a texture to store the depth map
-    glGenTextures(1, &depthMap);  // Generate one texture object
-    glBindTexture(GL_TEXTURE_2D, depthMap);  // Bind the texture as a 2D texture
-    // Allocate storage for the depth map texture
-    // SHADOW_WIDTH and SHADOW_HEIGHT define the resolution of the shadow map
-    // GL_DEPTH_COMPONENT specifies that the texture will store depth values
+    glGenFramebuffers(1, &depthMapFBO);
+    glGenTextures(1, &depthMap);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    // Set texture parameters for the depth map
-    // GL_NEAREST specifies nearest-neighbor filtering (no interpolation)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    // GL_CLAMP_TO_BORDER clamps the texture coordinates to the edge of the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    // Define border color for the depth map texture
-    // The border color is used when texture coordinates are outside the [0, 1] range
     GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-    // Attach the depth map texture to the framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);  // Bind the framebuffer
-    // Attach the depth map texture as the depth attachment of the framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    // Disable color buffer drawing and reading
-    // GL_NONE disables both drawing to and reading from the color buffer
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
-    // Check if the framebuffer is complete
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        cerr << "Framebuffer not complete!" << endl;  // Print an error message if the framebuffer is not complete
-    }
-    // Unbind the framebuffer
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        std::cerr << "Framebuffer not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GraphicsHandler::calculateShadows() {
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    renderScene(sceneShaderProgram);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT);
 }
 
 // Function to initialize OpenGL settings
 void GraphicsHandler::initGL() {
-    depthShaderProgram = new ShaderProgram("depth.vs.txt", "depth.fs.txt");
     sceneShaderProgram = new ShaderProgram("scene.vs.txt", "scene.fs.txt");
 
 #ifdef ANTIALIASING
@@ -296,7 +253,6 @@ void GraphicsHandler::initGL() {
 
     // Clean up shaders by deleting them after linking
     // Shaders are no longer needed once they are linked into a program
-    depthShaderProgram->deleteShaders();
     sceneShaderProgram->deleteShaders();
 #ifdef ANTIALIASING
     fxaaShaderProgram->deleteShaders();
@@ -354,45 +310,147 @@ void GraphicsHandler::initGL() {
     glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
         std::cerr << "GL ERROR: " << message << std::endl;
         }, nullptr);
-#ifdef RAYTRACING
-    initRayTracing();
-#endif
+}
+
+void GraphicsHandler::initReflectionRefraction() {
+    // Reflection FBO
+    glGenFramebuffers(1, &reflectionFBO);
+    glGenTextures(1, &reflectionTexture);
+    glBindTexture(GL_TEXTURE_2D, reflectionTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindFramebuffer(GL_FRAMEBUFFER, reflectionFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, reflectionTexture, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Refraction FBO
+    glGenFramebuffers(1, &refractionFBO);
+    glGenTextures(1, &refractionTexture);
+    glBindTexture(GL_TEXTURE_2D, refractionTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindFramebuffer(GL_FRAMEBUFFER, refractionFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, refractionTexture, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GraphicsHandler::renderReflectionTexture() {
+    // Set up reflection camera
+    reflectionCamera->xPosition = mainCamera->xPosition;
+    reflectionCamera->yPosition = -mainCamera->yPosition; // Reflect the y position
+    reflectionCamera->zPosition = mainCamera->zPosition;
+    reflectionCamera->yRotation = mainCamera->yRotation;
+    reflectionCamera->xRotation = -mainCamera->xRotation; // Reflect the x rotation
+
+    glBindFramebuffer(GL_FRAMEBUFFER, reflectionFBO);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(sceneShaderProgram->program);
+    updateSceneUniforms(reflectionCamera);
+    drawBlocks();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GraphicsHandler::renderRefractionTexture() {
+    // Set up refraction camera (similar to the main camera, but adjusted as needed)
+    refractionCamera->xPosition = mainCamera->xPosition;
+    refractionCamera->yPosition = mainCamera->yPosition;
+    refractionCamera->zPosition = mainCamera->zPosition;
+    refractionCamera->yRotation = mainCamera->yRotation;
+    refractionCamera->xRotation = mainCamera->xRotation;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, refractionFBO);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(sceneShaderProgram->program);
+    updateSceneUniforms(refractionCamera);
+    drawBlocks();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+GLuint GraphicsHandler::loadCubemap(std::vector<std::string> faces) {
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    int width, height, nrChannels;
+    for (GLuint i = 0; i < faces.size(); i++) {
+        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        if (data) {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+            );
+            stbi_image_free(data);
+        }
+        else {
+            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+            stbi_image_free(data);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
+}
+
+glm::mat4 GraphicsHandler::calculateLightSpaceMatrix() {
+    glm::mat4 lightProjection, lightView;
+    float near_plane = 1.0f, far_plane = 1000.0f;
+    lightProjection = glm::ortho(-333.0f, 333.0f, -333.0f, 333.0f, near_plane, far_plane);
+    lightView = glm::lookAt(lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0, 1.0, 0.0));
+    return lightProjection * lightView;
 }
 
 // Function to update shader uniforms
-void GraphicsHandler::updateSceneUniforms() {
-    float cosCamPitch = cos(camera->xRotation);
-
+void GraphicsHandler::updateSceneUniforms(Camera* camera) {
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition),
-        glm::vec3(camera->xPosition + cosCamPitch * sin(camera->yRotation),
-            camera->yPosition + sin(camera->xRotation),
-            camera->zPosition + cosCamPitch * cos(camera->yRotation)),
-        glm::vec3(0.0f, 1.0f, 0.0f)
+
+    // Calculate the camera direction based on xRotation and yRotation
+    float cosCamPitch = cos(camera->xRotation);
+    glm::vec3 cameraFront = glm::vec3(
+        cosCamPitch * sin(camera->yRotation),
+        sin(camera->xRotation),
+        cosCamPitch * cos(camera->yRotation)
     );
+    glm::vec3 cameraPos = glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition);
+    glm::vec3 cameraTarget = cameraPos + cameraFront;
+    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    // Create the view matrix using the camera position and direction
+    glm::mat4 view = glm::lookAt(cameraPos, cameraTarget, up);
+
     glm::mat4 projection = glm::perspective(0.785398f, PIXEL_ASPECT_RATIO, 0.1f, 1000.0f);
-    glm::mat4 lightSpaceMatrix = glm::mat4(1.0f); // Placeholder, should be calculated based on light's view/projection matrices
+    glm::mat4 lightSpaceMatrix = calculateLightSpaceMatrix();
 
     glUseProgram(sceneShaderProgram->program);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(lightPos));
-    glUniform3fv(viewPosLoc, 1, glm::value_ptr(glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition)));
+    glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-}
 
-void GraphicsHandler::updateDepthUniforms() {
-    glm::mat4 lightSpaceMatrix = glm::mat4(1.0f); // Placeholder, should be calculated based on light's view/projection matrices
-    glm::mat4 model = glm::mat4(1.0f);
+    // Bind shadow map texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, shadowMap);
+    glUniform1i(glGetUniformLocation(sceneShaderProgram->program, "shadowMap"), 0);
 
-    glUseProgram(depthShaderProgram->program);
-    GLint lightSpaceMatrixLocDepth = glGetUniformLocation(depthShaderProgram->program, "lightSpaceMatrix");
-    GLint modelLocDepth = glGetUniformLocation(depthShaderProgram->program, "model");
+    // Bind reflection and refraction textures
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, reflectionTexture);
+    glUniform1i(glGetUniformLocation(sceneShaderProgram->program, "reflectionTexture"), 1);
 
-    glUniformMatrix4fv(lightSpaceMatrixLocDepth, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-    glUniformMatrix4fv(modelLocDepth, 1, GL_FALSE, glm::value_ptr(model));
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, refractionTexture);
+    glUniform1i(glGetUniformLocation(sceneShaderProgram->program, "refractionTexture"), 2);
+
+    // Bind environment map texture
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, envMap);
+    glUniform1i(glGetUniformLocation(sceneShaderProgram->program, "envMap"), 3);
 }
 
 void GraphicsHandler::drawBlocks() {
@@ -401,7 +459,7 @@ void GraphicsHandler::drawBlocks() {
     auto block_iterator = blocks->begin();
     uint32_t color = 0;
     int pixelIndex = 0;
-    glm::vec3 camPositionVec3 = glm::vec3(camera->xPosition, camera->yPosition, camera->zPosition);
+    glm::vec3 camPositionVec3 = glm::vec3(mainCamera->xPosition, mainCamera->yPosition, mainCamera->zPosition);
     for (int z = 0; z < VERT_BARS; ++z) {
         float zCoord = z * Block::size - (float)(HALF_VERT_BARS);
         for (int x = 0; x < HORIZ_BARS; ++x, ++block_iterator) {
@@ -419,28 +477,28 @@ void GraphicsHandler::drawBlocks() {
 
 void GraphicsHandler::processAntiAliasing() {
 #ifdef MSAA
-        // Bind the MSAA framebuffer for reading
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
+    // Bind the MSAA framebuffer for reading
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFBO);
 #endif
-        // Bind the FXAA framebuffer for drawing
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fxaaFBO);
-        // Blit (copy) the multisampled framebuffer to the regular framebuffer
-        // This resolves the multisampled image to a single-sample image
-        glBlitFramebuffer(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        // Unbind the framebuffer to render to the default framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        // Clear the color and depth buffers to prepare for new frame rendering
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // Apply FXAA (Fast Approximate Anti-Aliasing)
-        glUseProgram(fxaaShaderProgram->program);  // Use the FXAA shader program
-        glActiveTexture(GL_TEXTURE0);  // Activate texture unit 0
-        glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture containing the resolved image
-        // Set the screen texture uniform in the FXAA shader
-        glUniform1i(glGetUniformLocation(fxaaShaderProgram->program, "screenTexture"), 0);
-        // Set the inverse screen size uniform in the FXAA shader
-        glUniform2f(glGetUniformLocation(fxaaShaderProgram->program, "inverseScreenSize"), 1.0f / PIXEL_WIDTH, 1.0f / PIXEL_HEIGHT);
-        // Render a full-screen quad to apply FXAA to the entire image
-        renderQuad();
+    // Bind the FXAA framebuffer for drawing
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fxaaFBO);
+    // Blit (copy) the multisampled framebuffer to the regular framebuffer
+    // This resolves the multisampled image to a single-sample image
+    glBlitFramebuffer(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    // Unbind the framebuffer to render to the default framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // Clear the color and depth buffers to prepare for new frame rendering
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Apply FXAA (Fast Approximate Anti-Aliasing)
+    glUseProgram(fxaaShaderProgram->program);  // Use the FXAA shader program
+    glActiveTexture(GL_TEXTURE0);  // Activate texture unit 0
+    glBindTexture(GL_TEXTURE_2D, texColorBuffer);  // Bind the texture containing the resolved image
+    // Set the screen texture uniform in the FXAA shader
+    glUniform1i(glGetUniformLocation(fxaaShaderProgram->program, "screenTexture"), 0);
+    // Set the inverse screen size uniform in the FXAA shader
+    glUniform2f(glGetUniformLocation(fxaaShaderProgram->program, "inverseScreenSize"), 1.0f / PIXEL_WIDTH, 1.0f / PIXEL_HEIGHT);
+    // Render a full-screen quad to apply FXAA to the entire image
+    renderQuad();
 }
 
 void GraphicsHandler::setUpSceneForMSAA() {
@@ -469,10 +527,7 @@ void GraphicsHandler::renderScene(ShaderProgram* shaderProgram) {
     glUseProgram(shaderProgram->program);
 
     if (shaderProgram == sceneShaderProgram) {
-        updateSceneUniforms();
-    }
-    else if (shaderProgram == depthShaderProgram) {
-        updateDepthUniforms();
+        updateSceneUniforms(mainCamera);
     }
 
     drawBlocks();
@@ -489,25 +544,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void GraphicsHandler::calculateShadows() {
-    // Clear the color and depth buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // 1. Render depth map from light's perspective
-    // Set the viewport to the size of the shadow map
-    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-    // Bind the framebuffer for depth map rendering
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    // Clear the depth buffer to prepare for new depth data
-    glClear(GL_DEPTH_BUFFER_BIT);
-    // Render the scene using the depth shader program
-    renderScene(depthShaderProgram);
-    // Unbind the framebuffer to return to the default framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // 2. Render scene with shadows
-}
-
 int GraphicsHandler::initializeGraphics() {
-    camera = new Camera();
+    mainCamera = new Camera();
+    reflectionCamera = new Camera();
+    refractionCamera = new Camera();
 
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -544,14 +584,50 @@ int GraphicsHandler::initializeGraphics() {
     return 0;
 }
 
-void GraphicsHandler::update() {
+void GraphicsHandler::initEnvironmentMap() {
+    std::vector<std::string> faces{
+        "right.jpg",
+        "left.jpg",
+        "top.jpg",
+        "bottom.jpg",
+        "front.jpg",
+        "back.jpg"
+    };
+    envMap = loadCubemap(faces);
+}
+
+void GraphicsHandler::updateLightOrbit(float centerX, float centerY, float centerZ) {
+    static float orbitAngle = 0.0f;
+    static float orbitSpeed = 0.03f;
+    static float orbitDistance = 120.0f;
+    orbitAngle += orbitSpeed; // Update the angle for the orbit
+    if (orbitAngle > 6.283185307) {
+        orbitAngle -= 6.283185307;
+    }
+    
+    lightPos[0] = centerX + orbitDistance * cos(orbitAngle);
+    lightPos[1] = centerY; // Maintain the same height (or adjust as needed)
+    lightPos[2] = centerZ + orbitDistance * sin(orbitAngle);
+}
+
+void GraphicsHandler::update(int* currentIndex) {
     glfwPollEvents();
-#ifdef RAYTRACING
-    renderRayTracedScene();
-#else
+
+    // mainCamera->updateOrbit(0, 142.5f, 0);
+    // updateLightOrbit(0, 142.5f, 0);
+    /*
+    float newTarget = (*currentIndex / VERT_BARS) * Block::size - (float)(HALF_VERT_BARS);
+    float difference = newTarget - lightPos[2];
+    if (abs(difference) > 10.0f) {
+
+    }
+    lightPos[2] = (lightPos[2] * 9.0f + newTarget) / 10.0f;
+    */
+
+    renderReflectionTexture();
+    renderRefractionTexture();
     calculateShadows();
     renderScene(sceneShaderProgram);
-#endif
     // Swap front and back buffers
     // This displays the rendered image on the screen
     glfwSwapBuffers(window);
@@ -566,131 +642,19 @@ void GraphicsHandler::cleanup() {
     glfwDestroyWindow(window);
     // Terminate GLFW and free any remaining resources
     glfwTerminate();
-#ifdef RAYTRACING
-    cleanupRayTracing(window);
-#endif
 }
 
 // Main graphics rendering thread
-int GraphicsHandler::graphicsThread(int argc, char* argv[]) {
+int GraphicsHandler::graphicsThread(int argc, char* argv[], int* currentIndex) {
     if (initializeGraphics() != 0) {
         return -1;
     }
 
     while (!glfwWindowShouldClose(window)) {
-        update();
+        update(currentIndex);
     }
-    
+
     cleanup();
 
     return 0;  // Return success code indicating the program ended without errors
 }
-
-#ifdef RAYTRACING
-void GraphicsHandler::initRayTracing() {
-    cout << "initializing ray tracing" << endl;
-    // Load and compile the compute shader
-    std::string raytracingComputeShaderSource = ShaderProgram::readFile("raytracing.comp");
-    GLuint raytracingComputeShader = ShaderProgram::compileShader(raytracingComputeShaderSource.c_str(), GL_COMPUTE_SHADER);
-    if (!raytracingComputeShader) {
-        std::cerr << "ERROR: Compute shader compilation failed." << std::endl;
-        return;
-    }
-
-    // Link compute shader program
-    rayTracingShaderProgram = linkComputeProgram(raytracingComputeShader);
-    if (!rayTracingShaderProgram) {
-        std::cerr << "ERROR: Compute shader program linking failed." << std::endl;
-        return;
-    }
-
-    glDeleteShader(raytracingComputeShader);
-
-    // Initialize SSBO for spheres
-    glGenBuffers(1, &ssboSpheres);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboSpheres);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(Sphere) * numSpheres, NULL, GL_DYNAMIC_DRAW);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssboSpheres);
-
-    // Initialize SSBO for result
-    glGenBuffers(1, &ssboResult);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboResult);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(glm::vec4) * PIXEL_WIDTH * PIXEL_HEIGHT, NULL, GL_DYNAMIC_DRAW);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssboResult);
-
-    // Initialize result texture
-    glGenTextures(1, &resultTexture);
-    glBindTexture(GL_TEXTURE_2D, resultTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, PIXEL_WIDTH, PIXEL_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void GraphicsHandler::renderRayTracedScene() {
-    cout << "rendering ray traced scene" << endl;
-    if (rayTracingShaderProgram == 0) {
-        std::cerr << "ERROR: rayTracingShaderProgram is not valid." << std::endl;
-        return;
-    }
-
-    // Use the compute shader program
-    glUseProgram(rayTracingShaderProgram);
-
-    // Update SSBOs with sphere data
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboSpheres);
-    Sphere spheres[] = {
-        { glm::vec3(0.0f, 0.0f, -5.0f), 1.0f, glm::vec3(1.0f, 0.0f, 0.0f) }
-        // Add more spheres here
-    };
-    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(spheres), spheres);
-
-    // Check for any OpenGL errors
-    GLenum err;
-    while ((err = glGetError()) != GL_NO_ERROR) {
-        std::cerr << "OpenGL error after updating SSBOs: " << err << std::endl;
-    }
-
-    // Set uniforms
-    GLint cameraPosLoc = glGetUniformLocation(rayTracingShaderProgram, "cameraPos");
-    GLint resolutionLoc = glGetUniformLocation(rayTracingShaderProgram, "resolution");
-
-    if (cameraPosLoc == -1 || resolutionLoc == -1) {
-        std::cerr << "ERROR: Failed to get uniform locations." << std::endl;
-        return;
-    }
-
-    glUniform3fv(cameraPosLoc, 1, glm::value_ptr(glm::vec3(camX, camY, camZ)));
-    glUniform2f(resolutionLoc, PIXEL_WIDTH, PIXEL_HEIGHT);
-
-    // Dispatch compute shader
-    glDispatchCompute((GLuint)(PIXEL_WIDTH + 15) / 16, (GLuint)(PIXEL_HEIGHT + 15) / 16, 1);
-
-    // Ensure compute shader has completed
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
-
-    // Check for any OpenGL errors
-    while ((err = glGetError()) != GL_NO_ERROR) {
-        std::cerr << "OpenGL error after dispatching compute shader: " << err << std::endl;
-    }
-
-    // Copy SSBO result to texture
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboResult);
-    glBindTexture(GL_TEXTURE_2D, resultTexture);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, GL_RGBA, GL_FLOAT, NULL);
-
-    // Render the result texture
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindTexture(GL_TEXTURE_2D, resultTexture);
-    renderQuad();
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void GraphicsHandler::cleanupRayTracing(GLFWwindow* window) {
-    glDeleteProgram(rayTracingShaderProgram);
-    glDeleteBuffers(1, &ssboSpheres);
-    glDeleteBuffers(1, &ssboResult);
-    glDeleteTextures(1, &resultTexture);
-    glfwDestroyWindow(window);
-    glfwTerminate();
-}
-#endif 

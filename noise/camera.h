@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <glm.hpp>              // For using OpenGL Mathematics library
+#include <gtc/matrix_transform.hpp> // For transformations such as translation, rotation, and scaling
 
 class Camera {
 public:
@@ -11,10 +13,9 @@ public:
 	float xRotation;
 	float orbitSpeed;
 	float orbitDistance;
+	float orbitAngle;
 
 	Camera();
 
-
-	// Make the camera orbit
-	void rotateAroundCenter(float xCenter, float zCenter);
+	void updateOrbit(float centerX, float centerY, float centerZ);
 };

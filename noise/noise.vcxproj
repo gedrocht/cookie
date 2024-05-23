@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\vclib\SDL2-2.30.3\include;C:\GLFW\include\GLFW;C:\GLEW\include\GL;C:\vclib\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\vclib\SDL2-2.30.3\include;C:\GLFW\include\GLFW;C:\GLEW\include\GL;C:\vclib\stb_image;C:\vclib\glm;$(IncludePath)</IncludePath>
     <LibraryPath>C:\GLFW\lib-vc2022;C:\GLEW\lib\Release\x64;C:\vclib\OpenGL;C:\vclib\SDL2-2.30.3\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -144,6 +144,7 @@
     <ClCompile Include="inputHandler.cpp" />
     <ClCompile Include="noise.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
+    <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="depth.fs.txt" />
