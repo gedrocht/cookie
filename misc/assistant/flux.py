@@ -8,7 +8,7 @@ def queue_prompt(prompt):
     data = json.dumps(p).encode('utf-8')
     req = request.Request("http://192.168.0.164:8188/prompt", data=data)
     response = request.urlopen(req)
-    print(f"Response: {response.read()}")
+    # print(f"Response: {response.read()}")
 
 # Function to load the JSON workflow from a file
 def load_json_from_file(filepath):
@@ -32,7 +32,9 @@ def generate_image(json, prompt):
     json["6"]["inputs"]["text"] = prompt
 
     # Set the seed for our KSampler node (Key: 31)
-    json["31"]["inputs"]["seed"] = 5
+    json["31"]["inputs"]["seed"] = round(random.random()*1000000)
+
+    json["31"]["inputs"]["steps"] = 4 # random.randint(3,5)
 
     # Queue the prompt to the API
     queue_prompt(json)
