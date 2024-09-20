@@ -193,8 +193,10 @@ def _STORYTELLER(_MOODS, _PLOT_MOODS, _PLOTS, _STAKES, _SUBPLOTS, _SUBPLOT_STAKE
              "The new part of the story will also update in ways that are unrelated to the effects of the random person's plan. " + \
 '''
 
-def _OBSERVER():
-    log_output = "[OBSERVER] - "
+def _OBSERVER(generation_i, num_generations):
+#    generation_progress = (generation_i+1)/num_generations
+    
+#    log_output = "[OBSERVER] - "
     output = "You are an eye-witness to a mysterious and potentially dangerous situation that is unfolding in front of you."
     output += "You will describe no more than half of what is happening over the radio to a scientist to let them know what's going on."
     output += "You will receive a story telling you what you're witnessing, of which you will ignore no less than half, focusing on the rest."
@@ -217,7 +219,9 @@ def _OBSERVER():
     
     return output
 
-def _FACT_REPORTER():
+def _FACT_REPORTER(generation_i, num_generations):
+#   generation_progress = (generation_i+1)/num_generations
+
    log_output = ""
    if LOG_ROLLED_PROMPT_PARAMS:
      log_output += "[SCIENTIST] - "
@@ -296,10 +300,13 @@ def _FACT_REPORTER():
    if _AI_BEING_USED == _AI_OPTION_GROQ:
        output += "Events you mention must be relevant to the population at large. "
 #       "Any and all instructions should be specific to this situation, and not contain general advice that could be applied to general situations. "
+
    print(log_output.replace("\n","").replace("\r",""))
    return output
 
-def _AUTOMATED_NEWS():
+def _AUTOMATED_NEWS(generation_i, num_generations):
+#    generation_progress = (generation_i+1)/num_generations
+
     log_output = ""
     announcer_type = pick(['calm and collected', 'government', 'expert', 'experienced', 'professional', 'clear-headed'])
     announcer_action = pick(['report', 'alert', 'describe', 'convey', 'announce', 'warn', 'report', 'describe', 'reiterate'])
@@ -343,6 +350,9 @@ def _AUTOMATED_NEWS():
              "Your response will not contain a greeting or introduction. " + \
              "Your response will be written in the style of third-person writing (also known as objective writing). "
     output += 'Do not use placeholder statements like "insert advice" or "insert phone number".'
+
+    if _AI_BEING_USED == _AI_OPTION_GROQ:
+        output += "You will not break character for any reason. "
 #    output += 'Do not use placeholders like "your name" or "city", omit any phrases similar to this or fill in a name. '
 
     if roll(0.01):
@@ -567,7 +577,7 @@ def use_groq(query, prompt, max_tokens):
     return chat_completion.choices[0].message.content
 
 def get_chatgpt_response(query, prompt=_AUTOMATED_NEWS, max_tokens=200):
-    time.sleep(0.3)
+    time.sleep(0.35)
     return use_groq(query, prompt, max_tokens)
     # return use_google_instead(query, prompt, max_tokens)
     # time.sleep(0.1)
@@ -604,6 +614,30 @@ def load_wordfile(name):
     # Remove the newline characters from each string
     words = [line.strip() for line in strings]
     return words
+
+def join(split, char):
+    output = ""
+    for i in range(0,len(split)):
+        text = split[i]
+        if len(text) == 0:
+            continue
+        output += text
+        if i + 1 < len(split):
+            output += char
+    return output + char
+
+def select_portion_of_text(progress, text):
+    text_split = text.split(".")
+    start = 0
+    end = 0
+    if progress < 0.5:
+        end = round((1-progress)*len(text_split))
+        # end = round((2*end + len(text_split)) / 3.0)
+    else:
+        start = round((1-progress)*len(text_split))
+        # start = round(0.666*start) # haha, get it? like the devil
+        end = len(text_split)-1
+    return join(text_split[start:end], ". ").strip()
 
 if __name__ == "__main__":
     global tts_queue_empty
@@ -645,9 +679,13 @@ if __name__ == "__main__":
         previous_summarizer_text = summarizer_text
         previous_storyteller_text = storyteller_text
         num_observations = 2
-        for obs in range(0,num_observations):
+        for obs_i in range(0,num_observations):
             print(f"[LLM] - Requesting observer text from _OBSERVER")
-            observer_text = get_chatgpt_response(f"{summarizer_text} {storyteller_text}", _OBSERVER(), 333)
+
+            obs_input_raw = f"{summarizer_text} {storyteller_text}"
+            observer_input_text = select_portion_of_text((obs_i+1)/(num_observations+1), obs_input_raw)
+
+            observer_text = get_chatgpt_response(f"{observer_input_text}", _OBSERVER(obs_i, num_observations), 333)
             if LOG_GENERATED_TEXT:
                 log_output = ""
                 log_output += f"[OBSERVER] - {observer_text}"
@@ -656,10 +694,12 @@ if __name__ == "__main__":
             num_science_reports = 2 #round(random()*1+2)
             if _AI_BEING_USED == _AI_OPTION_PAWANKRD:
                 num_science_reports = 2
-            for z in range(0, num_science_reports):
-                print(f"[DEBUG] - Generating science report {z+1} of {num_science_reports}")
+            for science_i in range(0, num_science_reports):
+                print(f"[DEBUG] - Generating science report {science_i+1} of {num_science_reports}")
                 print(f"[LLM] - Requesting science report from _FACT_REPORTER")
-                scientist_text = get_chatgpt_response(observer_text, _FACT_REPORTER(), 267)
+
+                scientist_input_text = select_portion_of_text((science_i+1)/(num_science_reports+1), observer_text)
+                scientist_text = get_chatgpt_response(scientist_input_text, _FACT_REPORTER(science_i, num_science_reports), 267)
                 if LOG_GENERATED_TEXT:
                     log_output = ""
                     log_output += f"[SCIENTIST] - {scientist_text}"
@@ -679,10 +719,11 @@ if __name__ == "__main__":
                 if _AI_BEING_USED == _AI_OPTION_PAWANKRD:
                     num_announcements = 3
                 queued_announcements = []
-                for i in range(0, num_announcements):
-                    print(f"[DEBUG] - Generating announcement {i+1} of {num_announcements}")
-                    print(f"[LLM] - Requesting single pass of announcement from _AUTOMATED_NEWS")
-                    announcement_text = get_chatgpt_response(report, _AUTOMATED_NEWS())
+                for announcement_i in range(0, num_announcements):
+                    print(f"[DEBUG] - Generating announcement {announcement_i+1} of {num_announcements}")
+                    announcement_input_text = select_portion_of_text((announcement_i+1)/(num_announcements+1), report)
+                    print(f"[LLM]- Requesting single pass of announcement from _AUTOMATED_NEWS")
+                    announcement_text = get_chatgpt_response(announcement_input_text, _AUTOMATED_NEWS(announcement_i, num_announcements))
                     # print(f"[LLM] - Requesting second pass of announcement from _AUTOMATED_NEWS")
                     # announcement_text = get_chatgpt_response(announcement_text, _AUTOMATED_NEWS())
                     announcement_text = re.sub(r'\*.*?\*', '', announcement_text)
@@ -696,40 +737,36 @@ if __name__ == "__main__":
                 for i in range(0, num_announcements):
                     announcement_text = queued_announcements[i]
 
-                    '''
                     if LOG_GENERATED_TEXT:
-                        print("----------------------------------")
-                        print(f"[ANNOUNCEMENT]\n{announcement_text}")
-                        # print(f"[DEBUG] - Speaking announcement {i+1} of {num_announcements}")
-                    '''
+                        log_output = ""
+                        log_output += f"[ANNOUNCEMENT] - {announcement_text}"
+                        print(log_output.replace("\n","").replace("\r",""))
 
-                    if i == 0 or i > -1:
-                        # action_text = get_chatgpt_response(announcement_text, _ACTION_TAKER())
-                        # print("----------------------------------")
-                        # print(f"[ACTION]\n{action_text}")
+                    # action_text = get_chatgpt_response(announcement_text, _ACTION_TAKER())
+                    # print("----------------------------------")
+                    # print(f"[ACTION]\n{action_text}")
+                    
+                    # image_text = get_chatgpt_response(f"{scientist_text} {announcement_text}", _SYMBOLS_ONLY())
+                    print(f"[LLM] - Requesting image description text from _IMAGE_DESCRIBER")
+                    image_description_text = get_chatgpt_response(announcement_text, _IMAGE_DESCRIBER(), 300)
+                    
+                    if LOG_GENERATED_TEXT:
+                        log_output = ""
+                        log_output += f"[DESCRIPTION] - {image_description_text}"
+                        print(log_output.replace("\n","").replace("\r",""))
+                    
+                    print(f"[LLM] - Requesting image text from _SYMBOLS_ONLY")
+                    image_text = get_chatgpt_response(f"{image_description_text}", _SYMBOLS_ONLY(), 400)
+
+                    num_images = 2
+                    for image_i in range(0,num_images):
+                        print(f"[DEBUG] - Generating image {image_i+1} of {num_images}")
+                        flux.generate_image(flux_data, f"{_img_prompt_beginning} {image_text}")
+                        # flux.generate_image(flux_data, f"{storyteller_text}")
                         
-                        # image_text = get_chatgpt_response(f"{scientist_text} {announcement_text}", _SYMBOLS_ONLY())
-                        print(f"[LLM] - Requesting image description text from _IMAGE_DESCRIBER")
-                        image_description_text = get_chatgpt_response(announcement_text, _IMAGE_DESCRIBER(), 300)
-                        '''
                         if LOG_GENERATED_TEXT:
-                            print("----------------------------------")  
-                            print(f"[INSTRUCTIONS]\n{image_description_text}")
-                        '''
-                        print(f"[LLM] - Requesting image text from _SYMBOLS_ONLY")
-                        image_text = get_chatgpt_response(f"{image_description_text}", _SYMBOLS_ONLY(), 400)
-
-                        num_images = 2
-                        for asdf in range(0,num_images):
-    #                        pass
-                            print(f"[DEBUG] - Generating image {asdf+1} of {num_images}")
-                            flux.generate_image(flux_data, f"{_img_prompt_beginning} {image_text}")
-                            '''
-                            if LOG_GENERATED_TEXT:
-                                print("----------------------------------")  
-                                print(f"[IMAGE]\n{_img_prompt_beginning}\n{image_text}")
-                                print("=====================================================")
-                            '''
-                            # flux.generate_image(flux_data, f"{storyteller_text}")
+                            log_output = ""
+                            log_output += f"[IMAGE] - {_img_prompt_beginning} {image_text}"
+                            print(log_output.replace("\n","").replace("\r",""))
 
 
