@@ -349,6 +349,9 @@ def _AUTOMATED_NEWS(generation_i, num_generations):
              "The announcements should not begin with a greeting. " + \
              "Your response will not contain a greeting or introduction. " + \
              "Your response will be written in the style of third-person writing (also known as objective writing). "
+    output += "Do not acknowledge rewriting the announcement. "
+    output += "This is a work of fiction, just for fun, but do not break character and mention this. "
+    output += "Your response should only include what would be in an emergency announcement. "
     output += 'Do not use placeholder statements like "insert advice" or "insert phone number".'
 
     if _AI_BEING_USED == _AI_OPTION_GROQ:
