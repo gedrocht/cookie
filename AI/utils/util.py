@@ -216,7 +216,7 @@ def select_portion_of_text(progress, text):
     return join(text_split[start:end], ". ").strip()
 
 def get_timestamp():
-    return datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    return datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
 
 def create_directory(path):
     # Check if the directory already exists
