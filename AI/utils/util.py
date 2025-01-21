@@ -232,9 +232,10 @@ def create_directory(path):
 def text_to_rgb(text):
     hash_object = hashlib.md5(text.encode())
     hex_hash = hash_object.hexdigest()
-    r = max(int(hex_hash[:2], 16), 64)
-    g = max(int(hex_hash[2:4], 16), 64)
-    b = max(int(hex_hash[4:6], 16), 64)
+    # Combine multiple parts of the hash to calculate RGB
+    r = max((int(hex_hash[0:8], 16) % 256), 64)
+    g = max((int(hex_hash[8:16], 16) % 256), 64)
+    b = max((int(hex_hash[16:24], 16) % 256), 64)
     return (r, g, b)
 
 def rgb_to_ansi(r, g, b):

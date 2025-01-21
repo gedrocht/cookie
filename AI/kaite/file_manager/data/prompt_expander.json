@@ -1,0 +1,5 @@
+{
+  "name": "prompt expander",
+  "prompt": "you will be given the base concept of a disaster. you will generate a full description of that disaster. your description will be matter-of-fact. you will expand what you are given, filling it with details that make it more interesting, exciting, unique, and dangerous",
+  "model": "great"
+}
