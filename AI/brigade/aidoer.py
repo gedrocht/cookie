@@ -10,7 +10,7 @@ import re
 import os
 import AI.brigade.aicomm
 
-_VERBOSE = True
+_VERBOSE = False
 
 def log(msg, color=Fore.WHITE):
     # Append Style.RESET_ALL to ensure each line resets color
@@ -22,17 +22,16 @@ def try_and_evaluate(query, prompt, log_color=Fore.WHITE):
         original_result = ai_api_caller.use_api_great(query, prompt)
         evaluator_result = evaluate_result(original_query=query, original_prompt=prompt, response=original_result)
 
-        while True:
+        for i in range(0,3):
             choose_result = choose(evaluator_result)
 
             if choose_result[0:3].upper() == "YES":
-                log(f"Original result was identified as valid. Returning original result.", log_color)
+                log(f"Interpreted evaluation as positive", log_color)
                 return [False, original_result]
             elif choose_result[0:2].upper() == "NO":
-                log(f"Original result was identified as invalid. Returning evaluation.", log_color)
+                log(f"Interpreted evaluation as negative", Fore.RED)
                 return [True, evaluator_result]
-            log(f"Choose result was invalid. Retrying evaluation.", Fore.RED)
-            break
+            log(f"Interpretation failed, retrying (Attempt {i+1} of 3)", Fore.RED)
 
 def instruct(original_prompt, evaluator_result):
     this_prompt = '''
@@ -69,7 +68,10 @@ Do not deviate from these instructions.
         if should_retry:
             log(f"Improvement of prompt failed. Retrying.", Fore.RED)
         else:
-            log(f"Prompt modified based on critiques. New prompt: {result_data}")
+            if _VERBOSE:
+                log(f"Prompt modified based on critiques. New prompt: {result_data}")
+            else:
+                log(f"Prompt modified based on critiques.")
             return result_data
 
 def do(query, prompt):
@@ -80,10 +82,14 @@ def do(query, prompt):
         result_data = result[1]
         if should_retry:
             # prompt = instruct(original_prompt=prompt, evaluator_result=result_data)
+            log(f"Retrying...")
             continue
         final_result = result_data
         break
-    log(f"Final result: {final_result}", Fore.GREEN)
+    if _VERBOSE:
+        log(f"Final result: {final_result}", Fore.GREEN)
+    else:
+        log("API result successfully passed quality tests", Fore.GREEN)
     return final_result
 
 def main():
@@ -101,7 +107,10 @@ Do not deviate from these instructions.
 
     query = input("What would you like me to make a haiku about? ")
     result = do(query=query, prompt=prompt)
-    log(result)
+    if _VERBOSE:
+        log(result)
+    else:
+        print("Done")
 
 if __name__ == "__main__":
     main()

@@ -24,9 +24,7 @@ function parsePlaceholders(text, chainResults) {
 function App() {
   // For debugging, let's default to 3 AIs: #1, #2, #3
   const [aiList, setAiList] = useState([
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
+    { id: 1 }
   ]);
   const [nextId, setNextId] = useState(4);
 

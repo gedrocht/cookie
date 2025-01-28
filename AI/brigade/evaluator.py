@@ -10,7 +10,7 @@ def log(msg, color=Fore.WHITE):
     msg_with_reset = f"{msg}"
     util.log(msg_with_reset, 'AIEVAL', color)
 
-_VERBOSE = True
+_VERBOSE = False
 
 def evaluate_result(original_query, original_prompt, response):
     this_prompt = '''
@@ -18,8 +18,9 @@ You are an evaluator tasked with ensuring alignment between prompts, queries, an
 Your role is to analyze whether the given query and result are consistent with the intent and expectations of the original prompt.
 You will be given the original prompt, the applied query, and the resulting output.
 You must determine if the query fits the purpose of the original prompt and if the result satisfies its requirements.
-You will provide a clear and detailed explanation of your evaluation,
-highlighting any areas where the query or result aligns or deviates from the original prompt.
+You will provide a short explanation of your evaluation,
+highlighting any areas where the query or result aligns or deviates from the original prompt. 
+Your response must be concise and only a few sentences.
 '''.strip()
     this_query = f'''
 The original prompt was: \"{original_prompt}\".
@@ -31,8 +32,10 @@ The response was: \"{response}\".
         log(f"Original prompt: {original_prompt}")
         log(f"Original query: {original_query}")
         log(f"Response: {response}")
+    else:
+        log("Evaluating result")
 
-    return use_api_great(this_query, this_prompt)
+    return use_api_good(this_query, this_prompt)
 
 def choose(evaluator_result):
     this_prompt = '''
@@ -49,9 +52,11 @@ Do not deviate from these instructions.
 '''.strip()
     if _VERBOSE:
         log(f"Evaluation: {evaluator_result}")
-    log("Interpreting evaluation as positive or negative")
+    else:
+        print("Evaluation complete")
+    log("Interpreting evaluation")
     
-    result = use_api_great(query=evaluator_result, prompt=this_prompt)
+    result = use_api_good(query=evaluator_result, prompt=this_prompt)
     if _VERBOSE:
         log(f"Result: {result}")
     return result

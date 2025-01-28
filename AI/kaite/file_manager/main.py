@@ -5,6 +5,8 @@ from typing import Optional
 import os
 import json
 
+from chat_schemas import PromptData
+
 app = FastAPI()
 
 # If you want to restrict origins in production, replace "*" with the specific domain(s)
@@ -25,8 +27,8 @@ app.add_middleware(
 # Pydantic model matching the desired JSON structure
 class JsonData(BaseModel):
     name: str
-    prompt: str
-    model: str
+    prompt: PromptData
+    voice: str
 
 # Directory to store and read JSON files
 DATA_DIR = "data"

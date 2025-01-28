@@ -1,0 +1,21 @@
+Metadata-Version: 2.2
+Name: ai_chat
+Version: 0.1.0
+Keywords: prompt,message,character
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: flake8>=5.0; extra == "dev"
+
+# ai_chat
+
+- **Prompt**: Holds core, flux, and memories.
+- **Message**: Holds a source and message.
+- **Character**: Holds a Prompt, an ID, and other properties.
+
+## Installation
+
+```bash
+pip install .
+```
